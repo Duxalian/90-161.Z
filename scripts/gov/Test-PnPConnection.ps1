@@ -4,11 +4,19 @@
 # It changes nothing. It prints no site name, URL, user name or list name.
 #
 # How to run: open PowerShell (not as admin), paste everything from "#region CHECK" to "#endregion CHECK".
-# When asked, type the site URL. A sign-in window opens: sign in with your CAC as usual.
+# When asked, type the site URL (https://usaf.dps.mil/sites/<your-site>); it can be saved in your profile folder. A sign-in window opens: sign in with your CAC as usual.
 # Copy the lines between the ===== markers into the chat.
 
 #region CHECK
-$SiteUrl = Read-Host 'Site URL (https://...sharepoint-mil.us/sites/...)'
+# Site URL: kept only on this device, in your profile folder. It is never in the repo (public).
+$siteFile = Join-Path $env:USERPROFILE '90161Z.site.txt'
+$SiteUrl = $null
+if (Test-Path -LiteralPath $siteFile) { $SiteUrl = (Get-Content -LiteralPath $siteFile -Raw).Trim() }
+if (-not $SiteUrl) {
+  $SiteUrl = (Read-Host 'Site URL, e.g. https://usaf.dps.mil/sites/<your-site>').Trim()
+  if ((Read-Host 'Save this URL on this device for next time? (Y/N)') -eq 'Y') { Set-Content -LiteralPath $siteFile -Value $SiteUrl }
+}
+if ($SiteUrl -notmatch '^https://') { $SiteUrl = 'https://' + $SiteUrl }
 $r = [ordered]@{}
 try {
   Import-Module PnP.PowerShell -ErrorAction Stop
