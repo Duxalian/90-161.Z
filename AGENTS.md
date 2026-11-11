@@ -1,16 +1,17 @@
 # 90-161.Z: agent instructions
 
-This file is the source of truth for every agent on this repo: Claude, GPT, Codex and sub-agents. CLAUDE.md imports it. Put rules specific to this project in "Project rules" at the end.
+This file is the source of truth for every agent on this repo: Claude, GPT, Codex and sub-agents. CLAUDE.md imports it. Put rules specific to this project in "Project rules" at the end. "Owner" is the name agents use for the person who decides; a public repo uses a role (for example "the PFM") instead of a real name.
 
 - Repo: rhope-ops/90-161.Z
 - Purpose: Track and manage DAF publications through the DAFMAN 90-161 publishing process at wing/installation level: status tracking, document cleanup and formatting, and endorsement routing.
+- Owner: the PFM
 
 ## Order of authority
 
-1. the PFM's current request.
-2. PFM decisions in docs/DECISIONS.md. A newer decision overrides older text.
+1. The PFM's current request.
+2. The PFM's decisions in docs/DECISIONS.md. A newer decision overrides older text.
 3. This file.
-4. the PFM's personal preferences (Claude only).
+4. The PFM's personal preferences (Claude only).
 5. docs/NEXT_PROMPT.md (the handoff).
 
 Chat history, Project files and remembered copies are not authority. If you cannot read this repo, say so and stop.
@@ -66,7 +67,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Before you report "verified", run the checks in Commands and report the results.
 - For UI work, verify by measuring, not by looking: screenshots at 375 px and 1440 px width, light and dark, measured spacing, and contrast against WCAG AA (4.5:1 text, 3:1 large text and UI parts). Report the numbers.
 
-- GitHub Actions (PFM, 2026-11-11): private repos share 2,000 Actions minutes a month. Trigger workflows on `pull_request` and `workflow_dispatch` only, never on `push`. Agents run the checks in Commands in their own workspace before they report; CI is a second check, not the first. Public repos run Actions free.
+- GitHub Actions (the PFM, 2026-11-11): private repos share 2,000 Actions minutes a month. Trigger workflows on `pull_request` and `workflow_dispatch` only, never on `push`. Agents run the checks in Commands in their own workspace before they report; CI is a second check, not the first. Public repos run Actions free.
 
 ## Checks
 
@@ -75,8 +76,8 @@ Chat history, Project files and remembered copies are not authority. If you cann
 
 ## Decisions
 
-- Record each PFM decision, with its date, in docs/DECISIONS.md or its canonical document.
-- Mark agent recommendations as recommendations, not as PFM decisions.
+- Record each decision by the PFM, with its date, in docs/DECISIONS.md or its canonical document.
+- Mark agent recommendations as recommendations, not as the PFM's decisions.
 - Do not silently change approved decisions or sources. Raise open items with options. Never invent values.
 
 ## Handoff
@@ -87,7 +88,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 
 ## Project log
 
-The project log feeds a timeline of milestones, breakthroughs and narratives for readers outside the project (PFM, 2026-11-11). Decisions alone go in docs/DECISIONS.md; the log records how the project got there.
+The project log feeds a timeline of milestones, breakthroughs and narratives for readers outside the project (the PFM, 2026-11-11). Decisions alone go in docs/DECISIONS.md; the log records how the project got there.
 
 - Location: docs/LOG.md, unless "Project rules" names another place. A public repo must name a private place (for example a private Claude doc), because entries can hold environment or security detail.
 - Append an entry in the same turn the event happens. Backfill the same turn if you missed one.
@@ -99,7 +100,7 @@ The project log feeds a timeline of milestones, breakthroughs and narratives for
   - `miss`: a wrong assumption, failed test or dead end. Record it honestly for both sides.
   - `decision`: the PFM decides, or overrules a recommendation. Also record it in docs/DECISIONS.md.
 - Arc: a short kebab-case name for the narrative thread (for example `email-delivery`). Each arc has one row in the Arcs table: Arc | Span | Summary (one sentence) | Outcome.
-- Raised by: who first said it (PFM, Claude, a named agent or person). "What the other missed": the gap on the other side, or `-`.
+- Raised by: who first said it (the PFM, Claude, a named agent or person). "What the other missed": the gap on the other side, or `-`.
 - Evidence: a commit, file, test or measurement. Never chat text alone.
 - If you cannot write to the log (no tool for it), put the full entry in your turn summary under Copy, with "Paste into: project log".
 

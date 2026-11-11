@@ -1,6 +1,6 @@
 # Orchestration: more than one agent
 
-Read this file when you delegate work or run more than one agent. AGENTS.md "Delegation" points here. PFM decisions (2026-11-10): the orchestrator stays on Opus; models are chosen per task with the routing table below.
+Read this file when you delegate work or run more than one agent. AGENTS.md "Delegation" points here. the PFM's decisions (2026-11-10): the orchestrator stays on Opus; models are chosen per task with the routing table below.
 
 ## Agents (.claude/agents/)
 

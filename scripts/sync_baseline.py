@@ -8,6 +8,8 @@ Run it from inside the project repo:
 Options:
     --baseline PATH_OR_URL   Baseline repo (default: https://github.com/rhope-ops/standard_project)
     --name, --repo, --purpose   Header values, needed only when the project AGENTS.md has none.
+    --owner NAME             Name agents use for the decider (default: the project's "- Owner:" line, else the owner).
+                             A public repo sets a role, for example --owner "the PFM", so no real name is synced in.
 
 What it changes:
     AGENTS.md              Baseline text above "## Project rules", with this project's header values.
@@ -21,6 +23,9 @@ What it changes:
                            Keeps all other settings.
     .gitignore             Adds the baseline lines. Keeps all other lines.
     .baseline              Records the baseline commit that was used.
+    Owner name             In baseline text only (AGENTS.md above "## Project rules" and the copied files, not this
+                           script), "the owner" becomes the project owner. Project text is never renamed. A lowercase owner
+                           ("the PFM") is capitalized at the start of a list item. Owner: letters, digits, space . _ , ( ) -
 What it never changes: docs/, README.md and all other files.
 Standard library only. Needs git.
 """
@@ -41,6 +46,10 @@ COPY_FILES = ["scripts/session_checkin.sh", "scripts/sync_baseline.py", "scripts
               "scripts/worker_guard.py", ".claude/orchestration.md"]
 # Agent definitions: copied only when the project has no file with that name (projects may tune them).
 COPY_IF_MISSING = [".claude/agents/worker.md", ".claude/agents/scout.md", ".claude/agents/reviewer.md"]
+BASELINE_OWNER = "the owner"
+# Never rename the owner inside this script: it holds BASELINE_OWNER as a literal.
+NO_OWNER_RENAME = {"scripts/sync_baseline.py"}
+OWNER_RE = r"[A-Za-z0-9 ._,()-]+"  # safe inside Python strings, JSON and Markdown
 
 
 def die(msg):
@@ -101,7 +110,23 @@ def header_values(text):
     return (name and name.group(1), repo and repo.group(1), purpose and purpose.group(1))
 
 
-def build_agents(base_text, proj_text, args):
+def header_owner(text):
+    owner = re.search(r"^- Owner: (.+?)\s*$", text or "", re.M)
+    return owner and owner.group(1)
+
+
+def apply_owner(text, owner):
+    """Replace the baseline owner name with the project owner."""
+    if owner == BASELINE_OWNER:
+        return text
+    text = text.replace(BASELINE_OWNER, owner)
+    if owner[:1].islower():
+        cap = owner[:1].upper() + owner[1:]
+        text = re.sub(r"(?m)^(\s*(?:\d+\.|-)\s+)" + re.escape(owner), lambda m: m.group(1) + cap, text)
+    return text
+
+
+def build_agents(base_text, proj_text, args, owner):
     found = header_values(proj_text) if proj_text else (None, None, None)
     name = args.name or found[0]
     repo = args.repo or found[1]
@@ -116,6 +141,10 @@ def build_agents(base_text, proj_text, args):
     head = base_text[:cut]
     for key, val in (("PROJECT_NAME", name), ("REPO", repo), ("PURPOSE", purpose)):
         head = head.replace("{{" + key + "}}", val)
+    if "{{OWNER}}" in head:
+        head = head.replace("{{OWNER}}", BASELINE_OWNER)
+
+    head = apply_owner(head, owner)  # baseline text only; the project's own Commands and rules stay as written
 
     rules_at = find_heading(proj_text, RULES_HEADING) if proj_text else -1
     legacy = proj_text is not None and rules_at < 0
@@ -183,6 +212,7 @@ def main():
     ap.add_argument("--name")
     ap.add_argument("--repo")
     ap.add_argument("--purpose")
+    ap.add_argument("--owner")
     args = ap.parse_args()
 
     try:
@@ -209,11 +239,15 @@ def main():
                 die(f"{rel} still has template placeholders; run scripts/bootstrap.sh first")
 
         proj_agents = root / "AGENTS.md"
+        owner = args.owner or header_owner(proj_agents.read_text() if proj_agents.exists() else "") or BASELINE_OWNER
+        if not re.fullmatch(OWNER_RE, owner) or BASELINE_OWNER in owner and owner != BASELINE_OWNER:
+            die(f"owner {owner!r}: use letters, digits, space . _ , ( ) - only, and not a name that contains {BASELINE_OWNER!r}")
         new = {}
         new["AGENTS.md"] = build_agents(
             (base / "AGENTS.md").read_text(),
             proj_agents.read_text() if proj_agents.exists() else None,
             args,
+            owner,
         )
         claude = root / "CLAUDE.md"
         old_claude = claude.read_text() if claude.exists() else ""
@@ -221,15 +255,17 @@ def main():
             new["CLAUDE.md"] = "@AGENTS.md\n" + ("\n" + old_claude if old_claude.strip() else "")
         for rel in COPY_FILES:
             if (base / rel).exists():
-                new[rel] = (base / rel).read_text()
+                text = (base / rel).read_text()
+                new[rel] = text if rel in NO_OWNER_RENAME else apply_owner(text, owner)
         for rel in COPY_IF_MISSING:
             if (base / rel).exists() and not (root / rel).exists():
-                new[rel] = (base / rel).read_text()
+                new[rel] = apply_owner((base / rel).read_text(), owner)
         if (base / ".claude/settings.json").exists():
             new[".claude/settings.json"] = merge_settings(base / ".claude/settings.json", root / ".claude/settings.json")
         if (base / ".gitignore").exists():
             new[".gitignore"] = merge_lines(base / ".gitignore", root / ".gitignore")
         new[".baseline"] = f"rhope-ops/standard_project {base_sha}\n"
+
 
         changed = []
         for rel, text in new.items():
