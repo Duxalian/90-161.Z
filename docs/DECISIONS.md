@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Trial: GitHub Pages front page (rhope-ops.github.io/90-161.Z, branch gh-pages) renders go.md from main with clickable links; go.md stays the source. | PFM | go.md plain text only |
 | 2026-11-11 | Hand-off page moves to go.md at the repo root (short address the PFM types once and bookmarks); plain-text URLs, no GitHub Pages. | PFM | docs/HANDOFF.md |
 | 2026-11-11 | Gov-device hand-off via a bookmarked docs/HANDOFF.md raw page; no more emails to the military address. | PFM | Plain-text hand-off emails |
 | 2026-11-11 | Hand-off emails are plain text only (no HTML part). | PFM | explicit HTML links |

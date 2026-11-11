@@ -12,7 +12,7 @@ p{margin:4px 0}a{color:var(--acc);word-break:break-all}.mut{color:var(--mut);fon
 <script>
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function link(s){return esc(s).replace(/(https?:\/\/[^\s<]+|raw\.githubusercontent\.com\/[^\s<]+)/g,function(u){var h=u.indexOf('http')===0?u:'https://'+u;return '<a href="'+h+'">'+u+'</a>'})}
-fetch('go.md',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.text()}).then(function(t){
+fetch('https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.text()}).then(function(t){
 var o='';t.split('\n').forEach(function(l){if(/^## /.test(l))o+='<h2>'+link(l.slice(3))+'</h2>';else if(/^# /.test(l))o+='<h1>'+link(l.slice(2))+'</h1>';else if(l.trim())o+='<p>'+link(l)+'</p>'});
 document.getElementById('m').innerHTML=o+'<p class="mut">Source: go.md in rhope-ops/90-161.Z</p>'}).catch(function(e){document.getElementById('m').innerHTML='<p>Could not load go.md ('+esc(String(e.message))+').</p>'})
 </script></body></html>
