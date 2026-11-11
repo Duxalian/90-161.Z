@@ -54,6 +54,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 ## Commands
 
 <!-- Fill in when the project has them. Give exact commands. -->
+- Gov-device check: scripts/gov/Test-Environment.ps1 (paste the CHECK region into PowerShell).
 - Build: not set yet.
 - Test: not set yet.
 - Lint: not set yet.
@@ -102,7 +103,8 @@ Chat history, Project files and remembered copies are not authority. If you cann
 
 - Data boundary (the owner, 2026-11-10): government data stays in DoD365 and GenAI.mil only. Never put real drafts, publication content, names, emails, office symbols or comments in this repo or in a Claude chat. Use fake sample data. Sanitize bug reports.
 - Platform (the owner, 2026-11-10): frontend and data on SharePoint Lists, Power Automate and Power Apps in DoD365. the owner is a site collection administrator with PowerShell access to SharePoint (2026-11-10). Assume no tenant admin rights and standard connectors only, until the owner confirms otherwise.
-- Scope (the owner, 2026-11-10): wing/installation publications (supplements, OIs, local publications and forms).
+- Scope (the owner, 2026-11-10): ANG wing publications (supplements, OIs, local publications and forms). the owner is the PFM. ANG wing publications post to the wing's own site, not through AFIMPT (DAFMAN 90-161 1.1.3.2, 6.4). No wing supplement exists.
+- Gov device (the owner, 2026-11-10): GitHub login is blocked; the owner cannot open a private repo there. Anything the owner must run on the gov device also goes in a Copy block in chat.
 - Source authority: DAFMAN 90-161 is the rule source. Cite the paragraph for every stage, time limit and format rule. Never invent a value. See docs/DECISIONS.md for the approved edition.
 - Formatting (the owner, 2026-11-10): rules force output to look like DAFMAN 90-161. Format comes from code, never from the model. Rule catalog: docs/format-rules.md. Do not use AFIMPT for formatting or tracking.
 - System of record (the owner, 2026-11-10): 90-161.Z owns endorsement tracking (no TMT).

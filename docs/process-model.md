@@ -13,8 +13,8 @@ Source: DAFMAN 90-161, 18 Oct 2023, Change 1, Corrective Action 1 May 2026. Stat
 | 5 | Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication | 5.1.8.2, 3.4 | Legal concur |
 | 6 | Certification: certifying official endorses DAF Form 673 | 5.6 | Endorsed |
 | 7 | Approval: approving official endorses DAF Form 673; delegation letter on file | 5.7 | Endorsed |
-| 8 | Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM; PFM submits | 6.6.1–6.6.2 | Submitted |
-| 9 | Published | — | On e-Publishing |
+| 8 | Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM | 6.6.1 | PFM has package |
+| 9 | Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI | 6.4.1–6.4.2, 1.1.3.2 | Posted on wing site |
 
 Variants: Rewrite and interim change = stages 4–8 (7.6, 7.7.9). Administrative change = no coordination; 3-Ltr/L3 approves (7.8.10). GM at wing level = local legal review (5.1.7). Periodic review: OPR responds in 30+ days; actions complete within 180 days (7.4.4).
 
@@ -41,4 +41,4 @@ Tables A3.1 / A3.2 not yet extracted. Records manager coordinates during formal 
 
 ## System boundary
 
-Final submission to e-Publishing goes through AFIMPT per 6.6 (T-1). 90-161.Z tracks up to and including that step; it does not replace it.
+ANG wing (the owner, 2026-11-10): publications post to the wing's own site (1.1.3.2, 6.4), not e-Publishing through AFIMPT. 90-161.Z tracks through posting and keeps the PI (6.4.2).

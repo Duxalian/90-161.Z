@@ -1,9 +1,11 @@
 # Format and writing rules: 90-161.Z
 
 Source: DAFMAN 90-161, 18 Oct 2023, Change 1 (14 Jul 2025), Corrective Action (1 May 2026).
-Extraction status: **draft, not verified**. Agent extracted these through a web summary, not the literal PDF text. Before any rule is used as a hard check, verify its wording against the PDF and set `Verified` to the date.
+Extraction status: **draft, partly verified**. Literal text: ref/dafman90-161.txt (from ref/dafman90-161.pdf, 199 pages). Rows with a date in `Verified` were checked against that text. Before any rule is used as a hard check, verify its wording against the PDF and set `Verified` to the date.
 
 Goal (the owner, 2026-11-10): the rules force output to look like DAFMAN 90-161 itself. AFIMPT is not used for formatting or tracking.
+
+Context (the owner, 2026-11-10): ANG wing. ANG wing publications are not processed by AFDPO (1.1.3.2, 6.6.3), so the renderer's `final` mode must produce the camera-ready publication, including the TOC (F-027) and manual margin bars for ICs (4.5.6 note).
 
 ## How the rules are enforced
 
@@ -46,7 +48,7 @@ Severity: `hard` = blocks output; `warn` = reported only.
 | F-024 | Opening paragraph: first sentence names the immediate antecedent publication in full, title italic | 4.5.5.1 | lint | hard | — |
 | F-025 | Opening paragraph statements as applicable: applicability, Privacy Act, copyright, PRA, punitive, statutory, records, recommending changes (DAF Form 847), supplementing, waiver authority, trademark disclaimer last | 4.5.5.2–13 | schema | hard | — |
 | F-026 | Summary of changes: heading bold italic all caps; brief; rewrites and ICs only; IC last sentence "A margin bar (\|) indicates newly revised material." | 4.5.6 | render | hard | — |
-| F-027 | TOC: required by OPR for 20+ pages not processed by AFDPO and for below-wing publications; first-level headings only | 4.5.8 | render | hard | — |
+| F-027 | TOC: OPR adds a TOC for 20+ pages not processed by AFDPO, and for publications classified, not electronically posted, or issued below wing/base/delta level or at ANG wing or subunit level (T-1); first-level headings only (X.X with chapters, X without) | 4.5.8.2–4.5.8.3 | render | hard | 2026-11-10 |
 | F-028 | Main headings bold, significant words capitalized | 4.5.9.2 | render | hard | — |
 | F-029 | Directive publications: no bullets. Non-directive: simple, non-nested bullets only | 4.5.9.3 | schema | hard | — |
 | F-030 | Responsibilities assigned to positions, not individuals | 4.5.9.6 | lint | warn | — |

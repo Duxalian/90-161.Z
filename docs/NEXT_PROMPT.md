@@ -5,11 +5,11 @@ Updated: 2026-11-10 by Claude. Keep this file at 40 lines or fewer. The current 
 ## State
 
 - main: bootstrapped; project rules; DECISIONS; ARCHITECTURE (3-layer format engine); format-rules.md (44 rules, draft, not verified); process-model.md (draft, not verified).
-- Rule extraction came from a web summary of the PDF, not literal text.
+- Literal DAFMAN text in ref/ (PDF + txt). format-rules.md: 1 of 44 rows verified so far.
 
 ## Open (in order)
 
-1. Verify format-rules.md and process-model.md against the literal DAFMAN 90-161 PDF; add Tables 4.2–4.5 wording and Tables A3.1/A3.2 (mandatory coordinators).
+1. Verify format-rules.md and process-model.md against ref/dafman90-161.txt; add Tables 4.2–4.5 wording and Tables A3.1/A3.2 (mandatory coordinators).
 2. Write schemas/publication.schema.json (L1) and fake sample publication.
 3. Build L2 renderer + L3 validator (platform per Decide).
 4. List schemas (Publications, Endorsements, Stages) + provisioning script (per PowerShell module check).
@@ -17,9 +17,9 @@ Updated: 2026-11-10 by Claude. Keep this file at 40 lines or fewer. The current 
 
 ## Needs the owner
 
-- Attach the DAFMAN 90-161 PDF (public, no releasability restrictions) and the wing supplement if one exists.
-- Run the PowerShell capability check (read-only) and paste the output.
-- Renderer platform decision.
+- Transfer path: GitHub login blocked on gov device. Decide: public repo / .mil email / other.
+- Run scripts/gov/Test-Environment.ps1 (paste into console; read-only) and paste the output.
+- Check Power Automate license for "Populate a Microsoft Word template" (renderer option C).
 
 ## Do not
 
