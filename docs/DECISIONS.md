@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Gov-device tasks: send raw GitHub links by email to the PFM's military address. | PFM | Copy blocks in chat |
 | 2026-11-11 | Cover line reads "Certified by:" (as printed on published covers), not "Certified By:". | PFM | Rec |
 | 2026-11-11 | New CRM template from DAFMAN 90-161 Figure A12.1 (Word, measured column widths): templates/CRM_A12-1.docx. Replaces the PFM's old CRM. | PFM | Old CRM |
 | 2026-11-11 | CRM resolution codes A/R/M (Figure A12.1 key), not A/R/P (its column header). | PFM | — |
