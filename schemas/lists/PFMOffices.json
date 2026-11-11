@@ -1,7 +1,7 @@
 {
   "list": "PFMOffices",
   "title": "PFM Offices",
-  "description": "One row per coordinating office: endorser and coordination role. Endorsement routing reuses it. Office data stays in SharePoint.",
+  "description": "Publications and Forms Manager (PFM) list of coordinating offices: one row per office, with its endorser and coordination role. Endorsement routing reuses it. Office data stays in SharePoint.",
   "template": "GenericList",
   "ref": "PFM 2026-11-11 (naming doc: PFM Offices); DAFMAN 90-161 5.1 (offices with functional interest), 5.1.8.2 (Legal after all others)",
   "fields": [
@@ -37,7 +37,8 @@
         "Higher Headquarters OPR",
         "Functional",
         "Other"
-      ]
+      ],
+      "description": "Who the office coordinates for. Legal, Freedom of Information Act (FOIA), Privacy, Records and Information Collections come from Table A3.1 item 3 and item 1; Guard and Reserve Applicability from items 4 and 5; Higher Headquarters OPR is the office of primary responsibility (OPR) of the higher headquarters publication; Functional from Table A3.2."
     },
     {
       "internalName": "MandatoryCoordinator",

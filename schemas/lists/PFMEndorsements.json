@@ -1,7 +1,7 @@
 {
   "list": "PFMEndorsements",
   "title": "PFM Endorsements",
-  "description": "One row per coordinator per action: stage, role, status, suspense, response and nonconcur resolution (DAFMAN 90-161 3.4, 5.1-5.5).",
+  "description": "Publications and Forms Manager (PFM) record of coordination: one row per coordinator per action, with stage, role, status, suspense, response and nonconcur resolution (Department of the Air Force Manual (DAFMAN) 90-161, 3.4 and 5.1-5.5).",
   "template": "GenericList",
   "ref": "ARCHITECTURE s3 (Endorsements list) and s4 (endorsement flow)",
   "fields": [
@@ -61,7 +61,8 @@
         "Higher Headquarters OPR",
         "Functional",
         "Other"
-      ]
+      ],
+      "description": "Who the office coordinates for. Legal, Freedom of Information Act (FOIA), Privacy, Records and Information Collections come from Table A3.1 item 3 and item 1; Guard and Reserve Applicability from items 4 and 5; Higher Headquarters OPR is the office of primary responsibility (OPR) of the higher headquarters publication; Functional from Table A3.2."
     },
     {
       "internalName": "Endorser",
@@ -83,15 +84,15 @@
       "type": "Choice",
       "required": true,
       "choices": [
-        "Not started",
+        "Not Started",
         "Concur",
         "Concur With Comment",
         "Concur—No Response",
         "Nonconcur",
         "No Comment"
       ],
-      "default": "Not started",
-      "ref": "DAFMAN 90-161 5.4.1-5.4.5 (Concur; Concur With Comment; Concur—No Response; Nonconcur; No Comment); ARCHITECTURE s4 step 2 (Not started); renamed from Status (PFM 2026-11-11: one meaning per label). Concur—No Response is not valid for Legal (5.4.3): the app and flows block it"
+      "default": "Not Started",
+      "ref": "DAFMAN 90-161 5.4.1-5.4.5 (Concur; Concur With Comment; Concur—No Response; Nonconcur; No Comment); ARCHITECTURE s4 step 2 (Not Started; capitalized per docs/style-standard.md (PFM 2026-11-11: DAFMAN 90-161 and The Tongue and Quill)); renamed from Status (PFM 2026-11-11: one meaning per label). Concur—No Response is not valid for Legal (5.4.3): the app and flows block it"
     },
     {
       "internalName": "DueDate",
@@ -146,7 +147,8 @@
       "displayName": "CRM Link",
       "type": "URL",
       "required": false,
-      "ref": "ARCHITECTURE s4 step 4 (comments go to the CRM); DAFMAN 90-161 5.3"
+      "ref": "ARCHITECTURE s4 step 4 (comments go to the CRM); DAFMAN 90-161 5.3",
+      "description": "Link to the comment resolution matrix (CRM) file (DAFMAN 90-161 5.3)."
     }
   ],
   "views": [
@@ -193,10 +195,10 @@
         "field": "EndorsementStatus",
         "op": "Eq",
         "type": "Choice",
-        "value": "Not started"
+        "value": "Not Started"
       },
       "default": false,
-      "ref": "ARCHITECTURE s4 step 2 (status Not started)"
+      "ref": "ARCHITECTURE s4 step 2 (status Not Started)"
     },
     {
       "name": "PFM - Nonconcurs",

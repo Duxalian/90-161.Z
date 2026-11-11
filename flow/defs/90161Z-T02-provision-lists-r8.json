@@ -1,6 +1,6 @@
 {
-  "displayName": "90161Z T02 Provision Lists r7",
-  "description": "Creates the 9 PFM lists, their fields, views and indexes from flow/provisioning-payload.json (embedded at build), adds the series and settings rows, then sets display titles. Asks for the site URL and the site title; stops before creating anything if the title does not match. One request at a time, in payload order. Process step seed rows are not sent (steps not yet approved).",
+  "displayName": "90161Z T02 Provision Lists r8",
+  "description": "Creates the nine Publications and Forms Manager (PFM) lists, their columns, views and indexes from flow/provisioning-payload.json (embedded at build), adds the series and settings rows, then sets display titles. Asks for the site address and the site title; stops before creating anything if the title does not match. One request at a time, in payload order. Process step rows are not sent (steps not yet approved).",
   "connections": [
     "shared_sharepointonline"
   ],
@@ -414,7 +414,7 @@
         ]
       },
       "type": "Compose",
-      "inputs": "@concat('Lists: ', string(length(outputs('Payload')?['lists'])), ', fields and views: ', string(length(outputs('Payload')?['fields'])), ', rows: ', string(length(outputs('Payload')?['rows'])), ', updates: ', string(length(outputs('Payload')?['updates'])), ' - provisioning finished')"
+      "inputs": "@concat('Lists: ', string(length(outputs('Payload')?['lists'])), ', fields and views: ', string(length(outputs('Payload')?['fields'])), ', rows: ', string(length(outputs('Payload')?['rows'])), ', updates: ', string(length(outputs('Payload')?['updates'])), '. Provisioning finished.')"
     }
   }
 }

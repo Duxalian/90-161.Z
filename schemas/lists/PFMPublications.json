@@ -1,7 +1,7 @@
 {
   "list": "PFMPublications",
   "title": "PFM Publications",
-  "description": "One row per action on a publication or form (DAFMAN 90-161 1.1.4): the action, its process step, certification and approval. Each action points to its PFM Product Index row.",
+  "description": "Publications and Forms Manager (PFM) record of actions: one row per action on a publication or form (Department of the Air Force Manual (DAFMAN) 90-161, 1.1.4), with its process step, certification and approval. Each action points to its PFM Product Index row.",
   "template": "GenericList",
   "ref": "ARCHITECTURE s3 (Publications list)",
   "fields": [
@@ -93,7 +93,8 @@
       "displayName": "IC Number",
       "type": "Text",
       "required": false,
-      "ref": "DAFMAN 90-161 4.3.9 (interim changes numbered IC-1, IC-2 in order); PFM 2026-11-11 (r7, design check decision 1A)"
+      "ref": "DAFMAN 90-161 4.3.9 (interim changes numbered IC-1, IC-2 in order); PFM 2026-11-11 (r7, design check decision 1A)",
+      "description": "Interim change (IC) number, IC-1, IC-2 in order (DAFMAN 90-161 4.3.9)."
     },
     {
       "internalName": "ProcessStep",
@@ -136,7 +137,8 @@
         "list": "PFMOffices",
         "showField": "Title"
       },
-      "ref": "Office symbol of the office of primary responsibility, from PFM Offices so each symbol has one spelling (PFM 2026-11-11); DAFMAN 90-161 5.1.5"
+      "ref": "Office symbol of the office of primary responsibility, from PFM Offices so each symbol has one spelling (PFM 2026-11-11); DAFMAN 90-161 5.1.5",
+      "description": "The office of primary responsibility (OPR) for the action, from PFM Offices."
     },
     {
       "internalName": "Requester",
@@ -151,7 +153,8 @@
       "displayName": "AO",
       "type": "User",
       "required": false,
-      "ref": "DAFMAN 90-161 (action officer, AO); PFM 2026-11-11 (person from the GAL, shows the user's card)"
+      "ref": "DAFMAN 90-161 (action officer, AO); PFM 2026-11-11 (person from the GAL, shows the user's card)",
+      "description": "The action officer (AO) who prepares the action."
     },
     {
       "internalName": "DraftLink",
@@ -214,7 +217,8 @@
       "displayName": "DAF Form 673 or 399 Link",
       "type": "URL",
       "required": false,
-      "ref": "DAFMAN 90-161 5.6-5.7 (DAF Form 673), 7.5.1 (DAF Form 399 for Certify Current); PFM 2026-11-11 (r7, design check decision 1A)"
+      "ref": "DAFMAN 90-161 5.6-5.7 (DAF Form 673), 7.5.1 (DAF Form 399 for Certify Current); PFM 2026-11-11 (r7, design check decision 1A)",
+      "description": "Link to the signed Department of the Air Force (DAF) Form 673, or DAF Form 399 for Certify Current."
     }
   ],
   "views": [

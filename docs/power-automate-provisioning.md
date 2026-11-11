@@ -22,7 +22,7 @@ Columns, views and their DAFMAN references: `schemas/lists/*.json` (one file per
 
 ## 2. Import and run
 
-Package: `flow/packages/90161Z-T02-provision-lists-r7.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r7.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
+Package: `flow/packages/90161Z-T02-provision-lists-r8.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r8.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
 
 The flow asks for 2 inputs:
 - **Site URL**: the full address of the site that will hold the lists.
@@ -41,13 +41,14 @@ Order of work:
 
 | Check | Pass |
 |---|---|
-| Run | Succeeded; Result shows "Lists: 9, fields and views: 213, rows: 41, updates: 15 - provisioning finished" |
+| Run | Succeeded; Result shows "Lists: 9, fields and views: 213, rows: 41, updates: 15. Provisioning finished." |
 | Site contents | The 9 display titles in section 1 exist; PFM Series has 39 rows; PFM Settings has 2 rows |
 | List address | Open PFM Publications: the address ends in /Lists/PFMPublications |
 | PFM Endorsements, Endorser column | Type Person or Group, people only |
-| PFM Endorsements, Endorsement Status column | Choices: Not started, Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment; default Not started |
+| PFM Endorsements, Endorsement Status column | Choices: Not Started, Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment; default Not Started |
 | PFM Endorsements, Coordination Stage column | Choices: Privacy Review, Formal Coordination, Legal; default Formal Coordination |
 | PFM Publications, Product column | Lookup to PFM Product Index, shows Publication Number |
+| PFM Publications, OPR column | List settings > OPR shows the description "The office of primary responsibility (OPR) for the action, from PFM Offices." (columns with abbreviations spell them out; docs/style-standard.md) |
 | PFM Publications, Status Notes column | List settings > Status Notes shows "Append Changes to Existing Text: Yes" |
 
 Run it once. A second run fails on lists and fields that already exist and ends red; that is expected.
