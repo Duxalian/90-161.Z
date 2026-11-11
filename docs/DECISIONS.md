@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Hand-off emails are plain text only (no HTML part). | PFM | explicit HTML links |
 | 2026-11-11 | Hand-off emails: exact raw URLs as explicit links (no wrapper); written in the PFM's voice ("my computer"). | PFM | — |
 | 2026-11-11 | Build order C (renderer) > D (app) > B (getting-started doc). | PFM | — |
 | 2026-11-11 | TOC always for ANG wing publications (4.5.8.2, built per 4.5.8.3); no option to disable. | PFM | Rec "switch, default on" |
