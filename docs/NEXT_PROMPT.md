@@ -2,29 +2,31 @@
 
 Updated: 2026-11-11 by Claude. Keep this file at 40 lines or fewer. The current request overrides it.
 
-## State
+## State (main)
 
-- Rules: DAFMAN 90-161 wins every contradiction; wing files shape process only (AGENTS.md).
-- Phase A done: covers measured (docs/reviews/2026-11-11-cover-consistency.md).
-- Phase C done (agent workspace): renderer cover per measurements, certifier name line, 0.75 pt rules, opening paragraph built from openingParts (4.5.5 order, verbatim fixed text), two-space sentences, TOC always, Attachment 1 (ATT1) report. tests/run.sh 19/19. Independent review: 12 findings, 0 high; fixed.
-- Gov-device tasks live in go.md (repo root) (never email the military address).
-- Flow import route verified on the gov device 2026-11-11: scripts/build_flow_package.py zip, raw link, Import Package (Legacy), run passed.
-- SharePoint connection in an imported package verified on the gov device 2026-11-11 (Task 4 r2).
-- Names decided 2026-11-11 (DECISIONS.md; doc https://claude.ai/artifact/WU7A3UXrmr9tFf2sy18Ptk): 7 PFM lists, Title Case, tests/check_names.py. Provisioning package T02 r2 has a site-title guard. go.md Task 2 r2.
-- Design goal (PFM): successor can troubleshoot and fix; maintainer how-to required.
-- Not yet run on the gov device: Task 1 r3 (SaveAs fix), Task 2 r2.
+- Cloud sessions: start on the environment "90-161.Z" (pwsh + PSScriptAnalyzer setup script; PII_GUARD_DENYLIST set).
+- Names and columns decided 2026-11-11 (docs/DECISIONS.md): 8 PFM lists (Offices, Series, Process Steps, Settings, Publications, Activity Log, Endorsements, Product Index); Title Case; tests/check_names.py.
+- Provisioning: flow/defs/90161Z-T02-provision-lists-r6.json -> flow/packages/90161Z-T02-provision-lists-r6.zip (113,271 bytes); site-title guard; series rows from DAFMAN Table A2.1. Docs: docs/power-automate-provisioning.md.
+- Mockup of all lists: https://claude.ai/artifact/2CtD3ASmmmzkz1EPErgCvh (generated from schemas/lists).
+- Access: all site members read all rows; no item-level permissions; the app filters by Requester and AO.
+- Records: AFRIMS T 33-38 R 07 (destroy record set - DAF Forms 673/399 and paperwork - when superseded or rescinded). Publications stay browsable. Working files: rule open.
+- 15 business days (DAFMAN 5.2): a measure, not a hard deadline; reminders, warnings and escalation emails in a measured, professional tone; weekdays only.
+- Continuity: co-owners on every flow and the app; maintainer how-to written last, step by step for a non-expert.
+- Gap review: https://claude.ai/artifact/Ta3utvkZGP5aKXWWeRh7vU (open: test site, Accessibility Checker gate, CUI check for working files).
 
-## Open (in order)
+## Waiting on the PFM (go.md)
 
-1. PFM runs the gov test plan and the flow; fix failures.
-2. Phase D: customer process in the app (periodic review per 7.4.2, drafting, PFM review, informal coordination, formal coordination with Legal last, certify, approve, post), endorsement flows, on-demand status report email.
-3. Phase B: one short Word getting-started document (after the app has a link).
+1. Task 2 r6 on a test site, then the real site: Result text or failed step + HTTP status + error code.
+2. Task 5: a real Dataverse solution export (publisher prefix pfm) emailed as file texts.
+3. Task 1 r3 renderer test (Word SaveAs fix).
 
-## Needs PFM
+## Next design (after Task 5)
 
-- Gov-device results (renderer test plan, flow section 3 checks).
+1. Build flows as solution-aware flows with connection references (match the real export), not legacy packages.
+2. First flows: write every event to PFM Activity Log; endorsement routing from PFM Offices (Legal last); suspense reminders and escalation (weekdays); Next Review Due = 4 years after the later of Effective Date and Last Certified Current Date, review task 6 months before, prescribed forms with their publication; on-demand status report email.
+3. Then the Power Apps canvas app (customer intake, status, PFM queue; OPR opens the office record), Accessibility Checker 0 errors.
 
 ## Do not
 
-- Put government data, the wing's name or site path in this repo or in Claude chats.
+- Put government data, the wing's name, site path, DODIDs or office symbols in this repo or in Claude chats.
 - Take rules from the wing files. Format comes from code and DAFMAN 90-161.
