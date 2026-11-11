@@ -54,7 +54,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 ## Commands
 
 <!-- Fill in when the project has them. Give exact commands. -->
-- Gov-device checks: scripts/gov/Test-Environment.ps1, scripts/gov/Test-PnPConnection.ps1, scripts/gov/Test-PSGallery.ps1 (read-only). The PFM opens them on the gov device from the public repo; email to .mil gets filtered.
+- Gov-device checks: scripts/gov/Test-Environment.ps1, scripts/gov/Test-PnPConnection.ps1, scripts/gov/Test-PSGallery.ps1 (read-only). The PFM opens them on the gov device from docs/HANDOFF.md.
 - Credentials: never store, print, log or ask for passwords in chat. Scripts take them only through Get-Credential at run time.
 - Gov-device code target: Windows PowerShell 5.1, Word 16 COM, PnP.PowerShell 1.12.0. No other modules (PSGallery blocked).
 - Build: `python3 scripts/build_flow_payload.py` regenerates flow/provisioning-payload.json from schemas/lists (never hand-edit the payload). `node templates/build_crm_template.js` rebuilds templates/CRM_A12-1.docx.
@@ -106,7 +106,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Data boundary (PFM, 2026-11-10): government data stays in DoD365 and GenAI.mil only. Never put real drafts, publication content, names, emails, office symbols or comments in this repo or in a Claude chat. Use fake sample data. Sanitize bug reports.
 - Platform (PFM, 2026-11-10): frontend and data on SharePoint Lists, Power Automate and Power Apps in DoD365. The PFM is a site collection administrator with PowerShell access to SharePoint (2026-11-10). Assume no tenant admin rights and standard connectors only, until the PFM confirms otherwise.
 - Scope (PFM, 2026-11-10): ANG wing publications (supplements, OIs, local publications and forms). ANG wing publications post to the wing's own site, not through AFIMPT (DAFMAN 90-161 1.1.3.2, 6.4). No wing supplement exists.
-- Gov-device hand-off (PFM, 2026-11-11): when a task needs the PFM's work computer, email raw.githubusercontent.com links (no code in the body) from the PFM's Gmail to his military address. The PFM replies by email; read the reply in Gmail. Email format (PFM, 2026-11-11): plain text only, no HTML part; each raw URL on its own line; write in the PFM's voice ("my computer", not "your computer").
+- Gov-device hand-off (PFM, 2026-11-11): tasks for the PFM's work computer go in docs/HANDOFF.md (his voice, raw.githubusercontent.com URLs one per line, no code). He opens its bookmarked raw URL. Do not email the military address: Gmail-to-.mil mail is filtered (7 of 7 sent after 05:22 CT 2026-11-11 never arrived, no bounce). Keep open tasks at the top; move finished ones to Done.
 - Gov device (PFM, 2026-11-10): GitHub login is blocked on the gov device. The repo is public (PFM, 2026-11-10), so the gov device reads it without login. This repo is public: never commit the wing's name or location, the wing's site path, people's names, emails, office symbols or any government data.
 - Wing files (PFM, 2026-11-11): the wing template, AO guide and ANG checklist shape the customer process 90-161.Z takes a customer through. They never supply rules; on any contradiction DAFMAN 90-161 wins.
 - Source authority: DAFMAN 90-161 is the rule source. Cite the paragraph for every stage, time limit and format rule. Never invent a value. See docs/DECISIONS.md for the approved edition.
