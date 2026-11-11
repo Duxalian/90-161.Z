@@ -47,9 +47,9 @@ Severity: `hard` = blocks output; `warn` = reported only.
 | F-022 | "Supersedes:" month spelled out, entries separated by semicolons; line omitted if none | 4.5.4.12 | render | hard | 2026-11-10 |
 | F-023 | "Pages:" with page count | 4.5.4.13 | render | hard | 2026-11-10 |
 | F-024 | Opening paragraph: first sentence names the immediate antecedent publication in full, title italic | 4.5.5.1 | lint | hard | 2026-11-10 |
-| F-025 | Opening paragraph statements as applicable: applicability, Privacy Act, copyright, PRA, punitive, statutory, records, recommending changes (DAF Form 847), supplementing, waiver authority, trademark disclaimer last | 4.5.5.2–13 | schema | hard | 2026-11-10 |
+| F-025 | Opening paragraph built by code from openingParts (fixed statements verbatim: 4.5.5.8, 4.5.5.9, Table 4.5, 4.5.5.11; conditional 4.5.5.3-7, 4.5.5.12 last). Statements as applicable: applicability, Privacy Act, copyright, PRA, punitive, statutory, records, recommending changes (DAF Form 847), supplementing, waiver authority, trademark disclaimer last | 4.5.5.2–13 | schema | hard | 2026-11-10 |
 | F-026 | Summary of changes: heading bold italic all caps; brief; rewrites and ICs only; IC last sentence "A margin bar (\|) indicates newly revised material." | 4.5.6 | render | hard | 2026-11-10 |
-| F-027 | TOC: OPR adds a TOC for 20+ pages not processed by AFDPO, and for publications classified, not electronically posted, or issued below wing/base/delta level or at ANG wing or subunit level (T-1); first-level headings only (X.X with chapters, X without) | 4.5.8.2–4.5.8.3 | render | hard | 2026-11-10 |
+| F-027 | TOC always for ANG wing publications (4.5.8.2, T-1), built from main paragraph headings, chapters and attachments (4.5.8.3); no switch (PFM, 2026-11-11) | 4.5.8.2–4.5.8.3 | render | hard | 2026-11-11 |
 | F-028 | Main headings bold, significant words capitalized | 4.5.9.2 | render | hard | 2026-11-10 |
 | F-029 | Directive publications: no bullets. Non-directive: simple, non-nested bullets only | 4.5.9.3 | schema | hard | 2026-11-10 |
 | F-030 | Responsibilities assigned to positions, not individuals | 4.5.9.6 | lint | warn | 2026-11-10 |

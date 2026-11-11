@@ -14,6 +14,7 @@ param(
 
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'Publication.Common.ps1')
 
 $script:Findings = New-Object System.Collections.Generic.List[object]
 function Add-Finding([string]$Level, [string]$Rule, [string]$Where, [string]$Message) {
@@ -38,6 +39,7 @@ function Get-Sentence([string]$Text) {
 
 $months = 'January|February|March|April|May|June|July|August|September|October|November|December'
 $allText = New-Object System.Collections.Generic.List[string]
+$locText = New-Object System.Collections.Generic.List[object]   # @(location, text) for the Attachment 1 report
 
 # ---------- load ----------
 try {
@@ -52,7 +54,7 @@ try {
 $meta = Get-Prop $pub 'meta'
 if ($null -eq $meta) { Add-Finding 'FAIL' 'SCHEMA' 'meta' 'meta object is missing' ; $meta = [pscustomobject]@{} }
 
-foreach ($f in 'action', 'directive', 'byOrderOf', 'issuerLine', 'typeAndNumber', 'designator', 'date', 'seriesTitle', 'title', 'accessibility', 'releasability', 'opr', 'certifiedBy') {
+foreach ($f in 'action', 'directive', 'byOrderOf', 'issuerLine', 'typeAndNumber', 'designator', 'date', 'seriesTitle', 'title', 'accessibility', 'releasability', 'opr', 'certifiedBy', 'certifiedByName') {
   $v = Get-Prop $meta $f
   if ($null -eq $v -or ($v -is [string] -and $v.Trim() -eq '')) { Add-Finding 'FAIL' 'SCHEMA' "meta.$f" 'required field is missing or empty' }
 }
@@ -110,7 +112,12 @@ foreach ($s in $sup) {
 }
 
 # F-024 / opening paragraph (4.5.5)
-$opening = [string](Get-Prop $pub 'opening')
+$parts = Get-Prop $pub 'openingParts'
+if ($null -ne $parts) {
+  if ([string](Get-Prop $parts 'antecedent') -notmatch '\{i\}') { Add-Finding 'FAIL' 'F-024' 'openingParts.antecedent' 'name the antecedent publication with its title in italics ({i}...{/i}) (4.5.5.1)' }
+  if (-not [string](Get-Prop $parts 'applicability')) { Add-Finding 'FAIL' 'F-025' 'openingParts.applicability' 'applicability statement is required (4.5.5.2)' }
+}
+$opening = [string](Get-OpeningParagraph $pub)
 if ($directive -and $opening.Trim() -eq '') { Add-Finding 'FAIL' 'F-024' 'opening' 'directive publications need an opening paragraph (4.5.5)' }
 if ($opening) {
   $allText.Add($opening)
@@ -152,6 +159,7 @@ function Test-Paragraph($P, [string]$Number, [int]$Parts, [bool]$TopLevel) {
   $x = [string](Get-Prop $P 'text')
   if ($t) { $allText.Add($t) }
   if ($x) { $allText.Add($x) }
+  $locText.Add(@($Number.TrimEnd('.'), ($t + ' ' + $x)))
   if ($t -match '^\s*core content\.?\s*$') { Add-Finding 'FAIL' 'F-031' $where 'do not title a section "Core Content" (4.5.9.7)' }
   if ($TopLevel -and -not $t) { Add-Finding 'WARN' 'F-028' $where 'main paragraphs should have a bold heading (4.5.9.2)' }
   if ($t -and $t -notmatch '[.?]$') { Add-Finding 'WARN' 'F-028' $where 'headings end with a period (example "7.5. Certification of Publication as Current.") (4.5.9.2)' }
@@ -257,7 +265,7 @@ foreach ($t in $allText) {
   $plain = Get-PlainText $t
   if ($plain -match '\bshall\b') { Add-Finding 'FAIL' 'W-001' "text block $pi" 'use "must", not "shall" (Table 1.1)' }
   $sent = @(Get-Sentence $t)
-  if ($sent.Count -gt 7) { Add-Finding 'WARN' 'W-002' "text block $pi" "paragraph has $($sent.Count) sentences; use seven or fewer (Table 1.1)" }
+  if ($sent.Count -gt 7 -and $t -ne $opening) { Add-Finding 'WARN' 'W-002' "text block $pi" "paragraph has $($sent.Count) sentences; use seven or fewer (Table 1.1)" }
   foreach ($s in $sent) {
     $wc = @($s -split '\s+' | Where-Object { $_ -match '\w' -and $_ -notmatch '^\(T-[0-3]\)$' }).Count
     if ($wc -gt 20 -and $t -ne $opening) { Add-Finding 'WARN' 'W-002' "text block $pi" "sentence has $wc words; use 20 or fewer: '$($s.Substring(0, [Math]::Min(60, $s.Length)))...'" }
@@ -268,6 +276,38 @@ foreach ($t in $allText) {
   foreach ($m in [regex]::Matches($plain, '\b[A-Z]{7,}\b')) { Add-Finding 'WARN' 'W-003' "text block $pi" "'$($m.Value)': do not use capital letters for emphasis (Table 1.1)" }
   $opens = ([regex]::Matches($t, '\{([ib])\}')).Count; $closes = ([regex]::Matches($t, '\{/([ib])\}')).Count
   if ($opens -ne $closes) { Add-Finding 'FAIL' 'SCHEMA' "text block $pi" 'unbalanced {i}/{b} markup' }
+}
+
+# ---------- Attachment 1 tracking report (4.5.11.1): what the text uses vs what the glossary lists ----------
+$listedRefs = @(); $listedForms = @()
+if ($null -ne $gloss) {
+  $listedRefs = @(Get-Prop $gloss 'references' | Where-Object { $null -ne $_ } | ForEach-Object { Get-PlainText ([string]$_) })
+  $listedForms = @((@(Get-Prop $gloss 'prescribedForms') + @(Get-Prop $gloss 'adoptedForms')) | Where-Object { $null -ne $_ } | ForEach-Object { Get-PlainText ([string]$_) })
+}
+$locText.Insert(0, @('opening', $opening))
+$seen = @{}
+foreach ($lt in $locText) {
+  $where = [string]$lt[0]; $plain = Get-PlainText ([string]$lt[1])
+  foreach ($m in [regex]::Matches($plain, '\(([A-Z][A-Za-z0-9/&-]{1,11})\)')) {
+    $k = 'ACR ' + $m.Groups[1].Value
+    if ($m.Groups[1].Value -match '^T-[0-3]$') { continue }
+    if (-not $seen.ContainsKey($k)) { $seen[$k] = $where; $listed = $abbr.ContainsKey($m.Groups[1].Value)
+      Write-Output ("ATT1 acronym {0} first={1} listed={2}" -f $m.Groups[1].Value, $where, $(if ($listed) { 'yes' } else { 'no' })) }
+  }
+  foreach ($m in [regex]::Matches($plain, '\b((?:DAF|AF|DD|SF|OF|[A-Z0-9]{2,8}) Form [0-9][0-9A-Z-]*)')) {
+    $k = 'FORM ' + $m.Groups[1].Value
+    if (-not $seen.ContainsKey($k)) { $seen[$k] = $where; $listed = @($listedForms | Where-Object { $_ -like ($m.Groups[1].Value + '*') }).Count -gt 0
+      Write-Output ("ATT1 form {0} first={1} listed={2}" -f $m.Groups[1].Value, $where, $(if ($listed) { 'yes' } else { 'no' }))
+      if (-not $listed) { Add-Finding 'WARN' 'F-035' $where "form '$($m.Groups[1].Value)' is used but not listed in Attachment 1 (4.5.11.1)" } }
+  }
+  foreach ($m in [regex]::Matches($plain, '\b(DoD[DIM]?|DAF(?:PD|I|MAN|PAM|H)|AF(?:PD|I|MAN|PAM|H)|SPF(?:PD|I|MAN))\)?\s?([0-9]{1,2}-[0-9]{2,4}(?:V[0-9]+)?)')) {
+    $ref = $m.Groups[1].Value + ' ' + $m.Groups[2].Value
+    $k = 'REF ' + ($ref -replace '\s', '')
+    if (-not $seen.ContainsKey($k)) { $seen[$k] = $where
+      $listed = @($listedRefs | Where-Object { ($_ -replace '\s', '') -like (($ref -replace '\s', '') + '*') }).Count -gt 0
+      Write-Output ("ATT1 reference {0} first={1} listed={2}" -f $ref, $where, $(if ($listed) { 'yes' } else { 'no' }))
+      if (-not $listed) { Add-Finding 'WARN' 'F-035' $where "reference '$ref' is cited but not listed in Attachment 1 (4.5.11.1)" } }
+  }
 }
 
 # ---------- report ----------

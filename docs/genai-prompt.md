@@ -19,8 +19,9 @@ Rules:
 7. Notes and exceptions go in "notes" / "exceptions" without the "Note:" label.
 8. Italic publication titles: wrap with {i} and {/i}. No other markup.
 9. Spell out each acronym at first use with the acronym in parentheses; list every acronym and office symbol in Attachment 1 in alphabetical order.
-10. Opening paragraph (directive): antecedent publication with its title in italics, applicability, records management statement (DAFMAN 90-161 4.5.5.8 wording), DAF Form 847 statement, supplement statement, waiver authority statement.
-11. Use "(Date)" for the date. Use office symbols, never names, for OPR and Certified By.
+10. Opening paragraph: do NOT write it. Fill "openingParts" only: antecedent (publication with its title in {i}italics{/i}), purpose (one or two sentences), applicability, privacyAct (authority + SORN) only if PII is collected, copyright / paperworkReduction / tradeNames true only if they apply, punitiveScope only if the draft has punitive language, supplement "may" or "mayNot". Code adds the fixed DAFMAN 90-161 statements.
+11. Use "(Date)" for the date. Use office symbols, never names, for "opr" and "certifiedBy". Put the certifying official's rank and name in "certifiedByName" without parentheses.
+12. Use one space between sentences; code sets the spacing.
 
 After the JSON, nothing else. The PFM runs the validator; fix any FAIL lines it reports when they are pasted back to you.
 ```
