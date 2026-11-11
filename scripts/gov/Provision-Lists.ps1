@@ -49,6 +49,8 @@ function Get-SafeMessage {
   if (-not $Text) { return '' }
   $t = [regex]::Replace($Text, 'https?://\S+', '<url>')
   if ($SiteUrl) { $t = $t.Replace($SiteUrl, '<url>') }
+  $t = [regex]::Replace($t, '\b[\w.-]+\.(us|mil|com|gov|net)\b', '<host>')
+  $t = [regex]::Replace($t, '/(sites|teams)/\S+', '/$1/<site>')
   return $t
 }
 
@@ -392,8 +394,8 @@ try {
   if ($SignIn -eq 'Credential') {
     # Get-Credential shows a Windows prompt. The password stays in memory only; it is never saved or printed.
     $cred = Get-Credential -Message '90-161.Z: SharePoint account'
-    Connect-PnPOnline -Url $SiteUrl -Credentials $cred -ErrorAction Stop
-    Remove-Variable cred
+    try { Connect-PnPOnline -Url $SiteUrl -Credentials $cred -ErrorAction Stop }
+    finally { Remove-Variable cred -ErrorAction SilentlyContinue }
   } else {
     Connect-PnPOnline -Url $SiteUrl -UseWebLogin -ErrorAction Stop
   }

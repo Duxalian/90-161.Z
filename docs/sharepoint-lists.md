@@ -1,5 +1,7 @@
 # SharePoint lists and provisioning script
 
+> Status (PFM, 2026-11-10): the PowerShell path did not work on the gov device (PnP sign-in window never opened). Create the lists with Power Automate instead: docs/power-automate-provisioning.md. Provision-Lists.ps1 is kept for reference and is not verified; open review findings: unsanitized terminating errors, no -AzureEnvironment option, exit code on bad JSON.
+
 Status: draft (Agent, 2026-11-10). Implements docs/ARCHITECTURE.md sections 3 and 4, docs/process-model.md, and the Publication Index (DAFMAN 90-161 6.4.2). Nothing here is a PFM decision. No site, person or office data is in the repo.
 
 ## What the script needs

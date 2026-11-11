@@ -1,0 +1,737 @@
+{
+ "generatedFrom": "schemas/lists/*.json",
+ "listOrder": [
+  "Stages",
+  "Publications",
+  "Endorsements",
+  "PublicationIndex"
+ ],
+ "lookupPlaceholders": [
+  "Publications",
+  "Stages"
+ ],
+ "lists": [
+  {
+   "method": "POST",
+   "uri": "_api/web/lists",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "Stages",
+    "BaseTemplate": 100,
+    "Description": "Stage model for one publication action, derived from DAFMAN 90-161. Status: draft, not verified (docs/process-model.md).",
+    "ContentTypesEnabled": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "Publications",
+    "BaseTemplate": 100,
+    "Description": "One row per publication action (ARCHITECTURE s3).",
+    "ContentTypesEnabled": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "Endorsements",
+    "BaseTemplate": 100,
+    "Description": "One row per endorser per publication: order, role, status, due date, response (ARCHITECTURE s3).",
+    "ContentTypesEnabled": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PublicationIndex",
+    "BaseTemplate": 100,
+    "Description": "Publication Index (PI) of all applicable organizational publications and forms that the PFM maintains (DAFMAN 90-161 6.4.2, T-3).",
+    "ContentTypesEnabled": false
+   }
+  }
+ ],
+ "fields": [
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"StageNumber\" StaticName=\"StageNumber\" DisplayName=\"Stage number\" Required=\"TRUE\" Type=\"Number\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"DafmanRef\" StaticName=\"DafmanRef\" DisplayName=\"DAFMAN reference\" Required=\"TRUE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ExitCondition\" StaticName=\"ExitCondition\" DisplayName=\"Exit condition\" Required=\"FALSE\" Type=\"Note\" NumLines=\"6\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"IsOptional\" StaticName=\"IsOptional\" DisplayName=\"Optional stage\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "By stage number",
+    "PersonalView": false,
+    "ViewQuery": "<OrderBy><FieldRef Name=\"StageNumber\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('StageNumber')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('DafmanRef')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('IsOptional')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('ExitCondition')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ActionType\" StaticName=\"ActionType\" DisplayName=\"Action type\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>New</CHOICE><CHOICE>Rewrite</CHOICE><CHOICE>Change</CHOICE><CHOICE>Supplement</CHOICE><CHOICE>OI</CHOICE><CHOICE>Certify as current</CHOICE><CHOICE>Rescind</CHOICE></CHOICES></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"PublicationNumber\" StaticName=\"PublicationNumber\" DisplayName=\"Publication number\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"IsDirective\" StaticName=\"IsDirective\" DisplayName=\"Directive publication\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Stage\" StaticName=\"Stage\" DisplayName=\"Stage\" Required=\"TRUE\" Type=\"Lookup\" List=\"{__Stages_ID__}\" ShowField=\"Title\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Opr\" StaticName=\"Opr\" DisplayName=\"OPR\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"DraftLink\" StaticName=\"DraftLink\" DisplayName=\"Draft link\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"CoordinationSuspense\" StaticName=\"CoordinationSuspense\" DisplayName=\"Coordination suspense\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM queue",
+    "PersonalView": false,
+    "ViewQuery": "<OrderBy><FieldRef Name=\"CoordinationSuspense\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('ActionType')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('Stage')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('Opr')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('CoordinationSuspense')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Publication\" StaticName=\"Publication\" DisplayName=\"Publication\" Required=\"TRUE\" Type=\"Lookup\" List=\"{__Publications_ID__}\" ShowField=\"Title\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"EndorserOrder\" StaticName=\"EndorserOrder\" DisplayName=\"Order\" Required=\"TRUE\" Type=\"Number\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Role\" StaticName=\"Role\" DisplayName=\"Role\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Endorser\" StaticName=\"Endorser\" DisplayName=\"Endorser\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Execution\" StaticName=\"Execution\" DisplayName=\"Sequential or parallel\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Sequential</CHOICE><CHOICE>Parallel</CHOICE></CHOICES></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"IsRequired\" StaticName=\"IsRequired\" DisplayName=\"Required endorsement\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Status\" StaticName=\"Status\" DisplayName=\"Status\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Not started</CHOICE><CHOICE>Concur</CHOICE><CHOICE>Concur With Comment</CHOICE><CHOICE>Concur—No Response</CHOICE><CHOICE>Nonconcur</CHOICE><CHOICE>No Comment</CHOICE></CHOICES><Default>Not started</Default></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"DueDate\" StaticName=\"DueDate\" DisplayName=\"Due date\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ExtensionDate\" StaticName=\"ExtensionDate\" DisplayName=\"Extension estimated completion\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ResponseDate\" StaticName=\"ResponseDate\" DisplayName=\"Response date\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"CrmLink\" StaticName=\"CrmLink\" DisplayName=\"CRM link\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "By publication",
+    "PersonalView": false,
+    "ViewQuery": "<OrderBy><FieldRef Name=\"Publication\" Ascending=\"TRUE\"/><FieldRef Name=\"EndorserOrder\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('Publication')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('EndorserOrder')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('Role')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('Status')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('DueDate')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "Not started",
+    "PersonalView": false,
+    "ViewQuery": "<Where><Eq><FieldRef Name=\"Status\"/><Value Type=\"Choice\">Not started</Value></Eq></Where><OrderBy><FieldRef Name=\"DueDate\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('Publication')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('EndorserOrder')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('Status')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('DueDate')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PublicationIndex')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"PublicationNumber\" StaticName=\"PublicationNumber\" DisplayName=\"Publication number\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PublicationIndex')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Publication\" StaticName=\"Publication\" DisplayName=\"Tracked publication\" Required=\"FALSE\" Type=\"Lookup\" List=\"{__Publications_ID__}\" ShowField=\"Title\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PublicationIndex')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"PostedLink\" StaticName=\"PostedLink\" DisplayName=\"Posted location\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "By number",
+    "PersonalView": false,
+    "ViewQuery": "<OrderBy><FieldRef Name=\"PublicationNumber\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/addviewfield('PublicationNumber')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/addviewfield('Publication')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/addviewfield('PostedLink')",
+   "body": {}
+  }
+ ],
+ "seed": [
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "body": {
+    "__metadata": {
+     "type": "SP.Data.StagesListItem"
+    },
+    "StageNumber": 1,
+    "Title": "Preparation: directive or not, existing pubs, prior record set, contact PCM/PFM",
+    "DafmanRef": "3.1",
+    "ExitCondition": "DAF Form 673 started",
+    "IsOptional": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "body": {
+    "__metadata": {
+     "type": "SP.Data.StagesListItem"
+    },
+    "StageNumber": 2,
+    "Title": "Drafting with SMEs",
+    "DafmanRef": "3.2, 4.2.2.1",
+    "ExitCondition": "Draft meets format rules (draft mode)",
+    "IsOptional": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "body": {
+    "__metadata": {
+     "type": "SP.Data.StagesListItem"
+    },
+    "StageNumber": 3,
+    "Title": "Pre-coordination (optional)",
+    "DafmanRef": "3.3",
+    "ExitCondition": "",
+    "IsOptional": true
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "body": {
+    "__metadata": {
+     "type": "SP.Data.StagesListItem"
+    },
+    "StageNumber": 4,
+    "Title": "Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673",
+    "DafmanRef": "3.4, 5.1, 5.1.5",
+    "ExitCondition": "All coordinators responded; all nonconcurs resolved (5.5.1)",
+    "IsOptional": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "body": {
+    "__metadata": {
+     "type": "SP.Data.StagesListItem"
+    },
+    "StageNumber": 5,
+    "Title": "Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication",
+    "DafmanRef": "5.1.8.2, 3.4",
+    "ExitCondition": "Legal concur",
+    "IsOptional": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "body": {
+    "__metadata": {
+     "type": "SP.Data.StagesListItem"
+    },
+    "StageNumber": 6,
+    "Title": "Certification: certifying official endorses DAF Form 673",
+    "DafmanRef": "5.6",
+    "ExitCondition": "Endorsed",
+    "IsOptional": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "body": {
+    "__metadata": {
+     "type": "SP.Data.StagesListItem"
+    },
+    "StageNumber": 7,
+    "Title": "Approval: approving official endorses DAF Form 673; delegation letter on file",
+    "DafmanRef": "5.7",
+    "ExitCondition": "Endorsed",
+    "IsOptional": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "body": {
+    "__metadata": {
+     "type": "SP.Data.StagesListItem"
+    },
+    "StageNumber": 8,
+    "Title": "Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM",
+    "DafmanRef": "6.6.1",
+    "ExitCondition": "PFM has package",
+    "IsOptional": false
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "body": {
+    "__metadata": {
+     "type": "SP.Data.StagesListItem"
+    },
+    "StageNumber": 9,
+    "Title": "Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI",
+    "DafmanRef": "6.4.1-6.4.2, 1.1.3.2",
+    "ExitCondition": "Posted on wing site",
+    "IsOptional": false
+   }
+  }
+ ]
+}
