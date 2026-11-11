@@ -1,0 +1,49 @@
+{
+  "list": "PFMSettings",
+  "title": "PFM Settings",
+  "description": "One row per setting the app and flows read (wing name for the subtitle, PFM mailbox, defaults). Values are entered on the gov device, never in the repo.",
+  "template": "GenericList",
+  "ref": "PFM 2026-11-11 (naming doc: PFM Settings)",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Setting",
+      "type": "Text",
+      "required": true,
+      "builtIn": true,
+      "ref": "Setting key, for example WingName"
+    },
+    {
+      "internalName": "SettingValue",
+      "displayName": "Setting Value",
+      "type": "Note",
+      "required": false,
+      "ref": "Entered on the gov device"
+    },
+    {
+      "internalName": "SettingNotes",
+      "displayName": "Setting Notes",
+      "type": "Note",
+      "required": false,
+      "ref": "What the setting does and who reads it"
+    }
+  ],
+  "views": [
+    {
+      "name": "PFM - All Settings",
+      "fields": [
+        "Title",
+        "SettingValue",
+        "SettingNotes"
+      ],
+      "orderBy": [
+        {
+          "field": "Title",
+          "ascending": true
+        }
+      ],
+      "default": false,
+      "ref": "PFM 2026-11-11"
+    }
+  ]
+}

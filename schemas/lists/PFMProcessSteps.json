@@ -1,0 +1,130 @@
+{
+  "list": "PFMProcessSteps",
+  "title": "PFM Process Steps",
+  "description": "Process steps for one publication action, derived from DAFMAN 90-161. Status: draft, not verified (docs/process-model.md).",
+  "template": "GenericList",
+  "ref": "ARCHITECTURE s3 (Stages list); docs/process-model.md Stages table",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Title",
+      "type": "Text",
+      "required": true,
+      "builtIn": true,
+      "ref": "docs/process-model.md Stages table, column Stage"
+    },
+    {
+      "internalName": "StepNumber",
+      "displayName": "Step Number",
+      "type": "Number",
+      "required": true,
+      "ref": "docs/process-model.md Stages table, column #"
+    },
+    {
+      "internalName": "DAFMANRef",
+      "displayName": "DAFMAN Reference",
+      "type": "Text",
+      "required": true,
+      "ref": "docs/process-model.md Stages table, column Ref (ARCHITECTURE s3: Stages carries paragraph references)"
+    },
+    {
+      "internalName": "ExitCondition",
+      "displayName": "Exit Condition",
+      "type": "Note",
+      "required": false,
+      "ref": "docs/process-model.md Stages table, column Exit condition"
+    },
+    {
+      "internalName": "IsOptional",
+      "displayName": "Optional Step",
+      "type": "Boolean",
+      "required": false,
+      "ref": "DAFMAN 90-161 3.3 (pre-coordination is optional)"
+    }
+  ],
+  "views": [
+    {
+      "name": "PFM - By Step Number",
+      "fields": [
+        "StepNumber",
+        "Title",
+        "DAFMANRef",
+        "IsOptional",
+        "ExitCondition"
+      ],
+      "orderBy": [
+        {
+          "field": "StepNumber",
+          "ascending": true
+        }
+      ],
+      "default": false,
+      "ref": "ARCHITECTURE s3 (List views: PFM admin views)"
+    }
+  ],
+  "seed": [
+    {
+      "StepNumber": 1,
+      "Title": "Preparation: directive or not, existing pubs, prior record set, contact PCM/PFM",
+      "DAFMANRef": "3.1",
+      "ExitCondition": "DAF Form 673 started",
+      "IsOptional": false
+    },
+    {
+      "StepNumber": 2,
+      "Title": "Drafting with SMEs",
+      "DAFMANRef": "3.2, 4.2.2.1",
+      "ExitCondition": "Draft meets format rules (draft mode)",
+      "IsOptional": false
+    },
+    {
+      "StepNumber": 3,
+      "Title": "Pre-coordination (optional)",
+      "DAFMANRef": "3.3",
+      "ExitCondition": "",
+      "IsOptional": true
+    },
+    {
+      "StepNumber": 4,
+      "Title": "Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673",
+      "DAFMANRef": "3.4, 5.1, 5.1.5",
+      "ExitCondition": "All coordinators responded; all nonconcurs resolved (5.5.1)",
+      "IsOptional": false
+    },
+    {
+      "StepNumber": 5,
+      "Title": "Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication",
+      "DAFMANRef": "5.1.8.2, 3.4",
+      "ExitCondition": "Legal concur",
+      "IsOptional": false
+    },
+    {
+      "StepNumber": 6,
+      "Title": "Certification: certifying official endorses DAF Form 673",
+      "DAFMANRef": "5.6",
+      "ExitCondition": "Endorsed",
+      "IsOptional": false
+    },
+    {
+      "StepNumber": 7,
+      "Title": "Approval: approving official endorses DAF Form 673; delegation letter on file",
+      "DAFMANRef": "5.7",
+      "ExitCondition": "Endorsed",
+      "IsOptional": false
+    },
+    {
+      "StepNumber": 8,
+      "Title": "Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM",
+      "DAFMANRef": "6.6.1",
+      "ExitCondition": "PFM has package",
+      "IsOptional": false
+    },
+    {
+      "StepNumber": 9,
+      "Title": "Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI",
+      "DAFMANRef": "6.4.1-6.4.2, 1.1.3.2",
+      "ExitCondition": "Posted on wing site",
+      "IsOptional": false
+    }
+  ]
+}

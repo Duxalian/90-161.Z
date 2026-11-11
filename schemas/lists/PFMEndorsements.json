@@ -1,0 +1,176 @@
+{
+  "list": "PFMEndorsements",
+  "title": "PFM Endorsements",
+  "description": "One row per endorser per publication action: order, role, status, suspense, response (DAFMAN 90-161 5.1; ARCHITECTURE s3).",
+  "template": "GenericList",
+  "itemLevelPermissions": "creatorOnly",
+  "ref": "ARCHITECTURE s3 (Endorsements list) and s4 (endorsement flow)",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Title",
+      "type": "Text",
+      "required": true,
+      "builtIn": true,
+      "ref": "ARCHITECTURE s3 (one row per endorser per publication)"
+    },
+    {
+      "internalName": "Publication",
+      "displayName": "Publication",
+      "type": "Lookup",
+      "required": true,
+      "lookup": {
+        "list": "PFMPublications",
+        "showField": "Title"
+      },
+      "ref": "ARCHITECTURE s3 (Endorsements -> Publications)"
+    },
+    {
+      "internalName": "EndorserOrder",
+      "displayName": "Endorser Order",
+      "type": "Number",
+      "required": true,
+      "ref": "ARCHITECTURE s3 (order) and s4 step 1 (ordered endorser list)"
+    },
+    {
+      "internalName": "CoordinationRole",
+      "displayName": "Coordination Role",
+      "type": "Text",
+      "required": false,
+      "ref": "ARCHITECTURE s3 (role). Mandatory coordinator roles not extracted yet (docs/process-model.md, Tables A3.1/A3.2)"
+    },
+    {
+      "internalName": "Endorser",
+      "displayName": "Endorser",
+      "type": "User",
+      "required": false,
+      "ref": "ARCHITECTURE s1 G3 (customers enter their endorsers); Person field so flows can alert the endorser (PFM, 2026-11-10)"
+    },
+    {
+      "internalName": "Execution",
+      "displayName": "Sequential or Parallel",
+      "type": "Choice",
+      "required": false,
+      "choices": [
+        "Sequential",
+        "Parallel"
+      ],
+      "ref": "ARCHITECTURE s4 step 3 (sequential or parallel per row)"
+    },
+    {
+      "internalName": "IsRequired",
+      "displayName": "Required Endorsement",
+      "type": "Boolean",
+      "required": false,
+      "ref": "ARCHITECTURE s4 step 7 (all required endorsements complete)"
+    },
+    {
+      "internalName": "EndorsementStatus",
+      "displayName": "Endorsement Status",
+      "type": "Choice",
+      "required": true,
+      "choices": [
+        "Not started",
+        "Concur",
+        "Concur With Comment",
+        "Concur—No Response",
+        "Nonconcur",
+        "No Comment"
+      ],
+      "default": "Not started",
+      "ref": "DAFMAN 90-161 5.4.1-5.4.5 (Concur; Concur With Comment; Concur—No Response; Nonconcur; No Comment); ARCHITECTURE s4 step 2 (Not started); renamed from Status (PFM 2026-11-11: one meaning per label)"
+    },
+    {
+      "internalName": "DueDate",
+      "displayName": "Due Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.2 (suspense); ARCHITECTURE s3 and s4 step 3 (due date)"
+    },
+    {
+      "internalName": "ExtensionDate",
+      "displayName": "Extension Estimated Completion",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.2.1 (extension request includes estimated completion date)"
+    },
+    {
+      "internalName": "ResponseDate",
+      "displayName": "Response Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "ARCHITECTURE s3 (response) and s4 step 4"
+    },
+    {
+      "internalName": "CRMLink",
+      "displayName": "CRM Link",
+      "type": "URL",
+      "required": false,
+      "ref": "ARCHITECTURE s4 step 4 (comments go to the CRM); DAFMAN 90-161 5.3"
+    }
+  ],
+  "views": [
+    {
+      "name": "PFM - By Publication",
+      "fields": [
+        "Title",
+        "Publication",
+        "EndorserOrder",
+        "CoordinationRole",
+        "EndorsementStatus",
+        "DueDate"
+      ],
+      "orderBy": [
+        {
+          "field": "Publication",
+          "ascending": true
+        },
+        {
+          "field": "EndorserOrder",
+          "ascending": true
+        }
+      ],
+      "default": false,
+      "ref": "ARCHITECTURE s3 (List views: PFM admin views)"
+    },
+    {
+      "name": "PFM - Not Started",
+      "fields": [
+        "Title",
+        "Publication",
+        "EndorserOrder",
+        "EndorsementStatus",
+        "DueDate"
+      ],
+      "orderBy": [
+        {
+          "field": "DueDate",
+          "ascending": true
+        }
+      ],
+      "where": {
+        "field": "EndorsementStatus",
+        "op": "Eq",
+        "type": "Choice",
+        "value": "Not started"
+      },
+      "default": false,
+      "ref": "ARCHITECTURE s4 step 2 (status Not started)"
+    }
+  ],
+  "crmColumns": {
+    "note": "Reference only; not provisioned. The CRM is a Word file linked from CrmLink (5.3). See Open choices in docs/sharepoint-lists.md.",
+    "ref": "DAFMAN 90-161 5.3 (T-1)",
+    "columns": [
+      "Item number",
+      "Source (office symbol, first and last name, rank/grade, telephone number and e-mail address)",
+      "Type of comment (administrative, substantive, or critical)",
+      "Page number",
+      "Paragraph number",
+      "Line number",
+      "Comment",
+      "Rationale",
+      "Decision"
+    ]
+  }
+}

@@ -24,7 +24,7 @@ Status: draft (Agent, 2026-11-10). Items marked **Rec:** are not decisions until
 |---|---|---|---|
 | Data | `Publications` list | SharePoint site | One row per publication action (new, rewrite, change, supplement, OI, certify-as-current, rescind) |
 | Data | `Endorsements` list | SharePoint site | One row per endorser per publication: order, role, status, due date, response |
-| Data | `Stages` list | SharePoint site | Stage model derived from DAFMAN 90-161, with paragraph references |
+| Data | `PFM Process Steps` list (PFMProcessSteps) | SharePoint site | Process steps derived from DAFMAN 90-161, with paragraph references. All list names: docs/power-automate-provisioning.md section 1 |
 | Data | `Drafts` library | SharePoint site | Draft versions, AF Form 673, CRM files; versioning on |
 | Logic | Power Automate flows | DoD365 | Endorsement requests, reminders, escalation, stage advance, status notices to customers |
 | UI | Power Apps canvas app | DoD365 | Customer intake (new request, endorser entry), status view, the PFM's work queue |

@@ -1,0 +1,105 @@
+{
+  "list": "PFMProductIndex",
+  "title": "PFM Product Index",
+  "description": "Product Index (PI) of all applicable organizational publications and forms that the PFM maintains (DAFMAN 90-161 6.4.2, T-3).",
+  "template": "GenericList",
+  "ref": "DAFMAN 90-161 6.4.2; docs/process-model.md stage 9 (updates the PI)",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Title",
+      "type": "Text",
+      "required": true,
+      "builtIn": true,
+      "ref": "DAFMAN 90-161 6.4.2 (PI lists publications and forms by title)"
+    },
+    {
+      "internalName": "ProductType",
+      "displayName": "Product Type",
+      "type": "Choice",
+      "required": true,
+      "choices": [
+        "Publication",
+        "Form"
+      ],
+      "default": "Publication",
+      "ref": "DAFMAN 90-161 6.4.2 (publications and forms)"
+    },
+    {
+      "internalName": "PublicationNumber",
+      "displayName": "Publication Number",
+      "type": "Text",
+      "required": false,
+      "ref": "DAFMAN 90-161 6.4.2 (PI entries identify each publication)"
+    },
+    {
+      "internalName": "Publication",
+      "displayName": "Tracked Publication",
+      "type": "Lookup",
+      "required": false,
+      "lookup": {
+        "list": "PFMPublications",
+        "showField": "Title"
+      },
+      "ref": "docs/process-model.md stage 9 (posting updates the PI); ties a PI entry to its tracked action"
+    },
+    {
+      "internalName": "PostedLink",
+      "displayName": "Posted Location",
+      "type": "URL",
+      "required": false,
+      "ref": "DAFMAN 90-161 6.4.1 (PFMs distribute on approved websites or other approved methods)"
+    },
+    {
+      "internalName": "LastReviewDate",
+      "displayName": "Last Review Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.4.2 (periodic review)"
+    },
+    {
+      "internalName": "NextReviewDue",
+      "displayName": "Next Review Due",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.4.2 (periodic review); reminders and the status report read it"
+    }
+  ],
+  "views": [
+    {
+      "name": "PFM - By Number",
+      "fields": [
+        "PublicationNumber",
+        "Title",
+        "ProductType",
+        "Publication",
+        "PostedLink"
+      ],
+      "orderBy": [
+        {
+          "field": "PublicationNumber",
+          "ascending": true
+        }
+      ],
+      "default": false,
+      "ref": "DAFMAN 90-161 6.4.2"
+    },
+    {
+      "name": "PFM - Review Due",
+      "fields": [
+        "PublicationNumber",
+        "Title",
+        "LastReviewDate",
+        "NextReviewDue"
+      ],
+      "orderBy": [
+        {
+          "field": "NextReviewDue",
+          "ascending": true
+        }
+      ],
+      "default": false,
+      "ref": "DAFMAN 90-161 7.4.2"
+    }
+  ]
+}

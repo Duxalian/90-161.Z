@@ -1,0 +1,167 @@
+{
+  "list": "PFMPublications",
+  "title": "PFM Publications",
+  "description": "One row per publication or form action the PFM tracks (ARCHITECTURE s3).",
+  "template": "GenericList",
+  "itemLevelPermissions": "creatorOnly",
+  "ref": "ARCHITECTURE s3 (Publications list)",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Title",
+      "type": "Text",
+      "required": true,
+      "builtIn": true,
+      "ref": "ARCHITECTURE s3 (one row per publication action)"
+    },
+    {
+      "internalName": "ActionType",
+      "displayName": "Action Type",
+      "type": "Choice",
+      "required": true,
+      "choices": [
+        "New",
+        "Rewrite",
+        "Change",
+        "Supplement",
+        "OI",
+        "Certify as current",
+        "Rescind"
+      ],
+      "ref": "ARCHITECTURE s3 (action list: new, rewrite, change, supplement, OI, certify-as-current, rescind)"
+    },
+    {
+      "internalName": "ProductType",
+      "displayName": "Product Type",
+      "type": "Choice",
+      "required": true,
+      "choices": [
+        "Publication",
+        "Form"
+      ],
+      "default": "Publication",
+      "ref": "DAFMAN 90-161 6.4.2 (the PI covers publications and forms); PFM 2026-11-11 (column, not a separate list)"
+    },
+    {
+      "internalName": "PublicationNumber",
+      "displayName": "Publication Number",
+      "type": "Text",
+      "required": false,
+      "ref": "DAFMAN 90-161 6.4.2 (PI entries identify each publication)"
+    },
+    {
+      "internalName": "IsDirective",
+      "displayName": "Directive Publication",
+      "type": "Boolean",
+      "required": false,
+      "ref": "DAFMAN 90-161 3.1 and docs/process-model.md stage 1 (directive or not)"
+    },
+    {
+      "internalName": "ProcessStep",
+      "displayName": "Process Step",
+      "type": "Lookup",
+      "required": true,
+      "lookup": {
+        "list": "PFMProcessSteps",
+        "showField": "Title"
+      },
+      "ref": "ARCHITECTURE s3 (Publications -> process steps); docs/process-model.md"
+    },
+    {
+      "internalName": "ActionStatus",
+      "displayName": "Action Status",
+      "type": "Choice",
+      "required": true,
+      "choices": [
+        "On Track",
+        "On Hold",
+        "Stalled"
+      ],
+      "default": "On Track",
+      "ref": "PFM 2026-11-11 (flag a stalled action); separate from Process Step and from Endorsement Status (one meaning per label)"
+    },
+    {
+      "internalName": "StatusNotes",
+      "displayName": "Status Notes",
+      "type": "Note",
+      "required": false,
+      "appendOnly": true,
+      "ref": "PFM 2026-11-11 (notes when an action is stalled); append-only so each note keeps its date and author"
+    },
+    {
+      "internalName": "OPR",
+      "displayName": "OPR",
+      "type": "Text",
+      "required": false,
+      "ref": "ARCHITECTURE s1 G1 (customers: OPRs, authors); DAFMAN 90-161 5.1.5 (OPR runs coordination)"
+    },
+    {
+      "internalName": "AO",
+      "displayName": "AO",
+      "type": "User",
+      "required": false,
+      "ref": "DAFMAN 90-161 (action officer, AO); PFM 2026-11-11 (person from the GAL, shows the user's card)"
+    },
+    {
+      "internalName": "DraftLink",
+      "displayName": "Draft Link",
+      "type": "URL",
+      "required": false,
+      "ref": "ARCHITECTURE s3 (Drafts library) and s4 step 3 (draft link sent to endorser)"
+    },
+    {
+      "internalName": "CoordinationSuspense",
+      "displayName": "Coordination Suspense",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.2 (OPR sets suspense; coordinators get 15 business days, T-3)"
+    }
+  ],
+  "views": [
+    {
+      "name": "PFM - Queue",
+      "fields": [
+        "Title",
+        "ProductType",
+        "ActionType",
+        "ProcessStep",
+        "ActionStatus",
+        "OPR",
+        "AO",
+        "CoordinationSuspense"
+      ],
+      "orderBy": [
+        {
+          "field": "CoordinationSuspense",
+          "ascending": true
+        }
+      ],
+      "default": false,
+      "ref": "ARCHITECTURE s3 (Power Apps: the PFM's work queue; List views: PFM admin views)"
+    },
+    {
+      "name": "PFM - Stalled or On Hold",
+      "fields": [
+        "Title",
+        "ProcessStep",
+        "ActionStatus",
+        "AO",
+        "StatusNotes"
+      ],
+      "orderBy": [
+        {
+          "field": "Modified",
+          "ascending": true
+        }
+      ],
+      "where": {
+        "field": "ActionStatus",
+        "op": "Neq",
+        "type": "Choice",
+        "value": "On Track"
+      },
+      "default": false,
+      "ref": "PFM 2026-11-11 (find stalled actions)"
+    }
+  ]
+}

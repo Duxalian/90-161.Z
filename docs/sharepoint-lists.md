@@ -2,7 +2,7 @@
 
 > Status (PFM, 2026-11-10): the PowerShell path did not work on the gov device (PnP sign-in window never opened). Create the lists with Power Automate instead: docs/power-automate-provisioning.md. Provision-Lists.ps1 is kept for reference and is not verified; open review findings: unsanitized terminating errors, no -AzureEnvironment option, exit code on bad JSON.
 
-Status: draft (Agent, 2026-11-10). Implements docs/ARCHITECTURE.md sections 3 and 4, docs/process-model.md, and the Publication Index (DAFMAN 90-161 6.4.2). Nothing here is a PFM decision. No site, person or office data is in the repo.
+Status: draft (Agent, 2026-11-10; names updated per PFM 2026-11-11). Implements docs/ARCHITECTURE.md sections 3 and 4, docs/process-model.md, and the Product Index (DAFMAN 90-161 6.4.2). Nothing here is a PFM decision. No site, person or office data is in the repo.
 
 ## What the script needs
 
@@ -14,7 +14,7 @@ Status: draft (Agent, 2026-11-10). Implements docs/ARCHITECTURE.md sections 3 an
 
 1. On the gov device open the public repo in a browser. Open each file below, use "Raw", select all, copy.
    - `scripts/gov/Provision-Lists.ps1`
-   - `schemas/lists/Stages.json`, `Publications.json`, `Endorsements.json`, `PublicationIndex.json`
+   - every file in `schemas/lists/` (7 files, named by list URL name)
 2. Create this folder layout and save each file in it as UTF-8 (Notepad: Save as, Encoding UTF-8):
 
 ```powershell
@@ -41,7 +41,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 & "$HOME\90-161.Z\scripts\gov\Provision-Lists.ps1" -DryRun
 ```
 
-6. Provision (creates lists in order Stages, Publications, Endorsements, PublicationIndex; skips anything that exists):
+6. Provision (creates the 7 PFM lists in lookup order; skips anything that exists):
 
 ```powershell
 & "$HOME\90-161.Z\scripts\gov\Provision-Lists.ps1"
@@ -59,17 +59,20 @@ Copy the lines between the `=====` markers (created and skipped counts) into the
 
 Field lists below are the schema files; each field has a `ref` there.
 
-| List | Rows | Fields (internal name) | Lookups | Views |
+| List (URL name) | Rows | Fields (internal name) | Lookups | Views |
 |---|---|---|---|---|
-| Stages | one per stage of the process model | Title, StageNumber, DafmanRef, ExitCondition, IsOptional | none | By stage number |
-| Publications | one per publication action | Title, ActionType (New, Rewrite, Change, Supplement, OI, Certify as current, Rescind), PublicationNumber, IsDirective, Stage, Opr, DraftLink, CoordinationSuspense | Stage -> Stages | PFM queue |
-| Endorsements | one per endorser per publication | Title, Publication, EndorserOrder, Role, Endorser, Execution (Sequential, Parallel), IsRequired, Status, DueDate, ExtensionDate, ResponseDate, CrmLink | Publication -> Publications | By publication, Not started |
-| PublicationIndex | the PI the PFM keeps (6.4.2) | Title, PublicationNumber, Publication, PostedLink | Publication -> Publications | By number |
+| PFM Activity Log (PFMActivityLog) | One row per event: status change, endorsement requested, reminder sent, status report emailed | Title, Publication, EventType, EventBy, EventDetails | Publication -> PFMPublications | PFM - Recent |
+| PFM Endorsements (PFMEndorsements) | One row per endorser per publication action: order, role, status, suspense, response (DAFMAN 90-161 5 | Title, Publication, EndorserOrder, CoordinationRole, Endorser, Execution, IsRequired, EndorsementStatus, DueDate, ExtensionDate, ResponseDate, CRMLink | Publication -> PFMPublications | PFM - By Publication, PFM - Not Started |
+| PFM Offices (PFMOffices) | One row per coordinating office: endorser and coordination role | Title, Endorser, CoordinationRole, CoordinateLast, IsActive | none | PFM - Active Offices |
+| PFM Process Steps (PFMProcessSteps) | Process steps for one publication action, derived from DAFMAN 90-161 | Title, StepNumber, DAFMANRef, ExitCondition, IsOptional | none | PFM - By Step Number |
+| PFM Product Index (PFMProductIndex) | Product Index (PI) of all applicable organizational publications and forms that the PFM maintains (DAFMAN 90-161 6 | Title, ProductType, PublicationNumber, Publication, PostedLink, LastReviewDate, NextReviewDue | Publication -> PFMPublications | PFM - By Number, PFM - Review Due |
+| PFM Publications (PFMPublications) | One row per publication or form action the PFM tracks (ARCHITECTURE s3) | Title, ActionType, ProductType, PublicationNumber, IsDirective, ProcessStep, ActionStatus, StatusNotes, OPR, AO, DraftLink, CoordinationSuspense | ProcessStep -> PFMProcessSteps | PFM - Queue, PFM - Stalled or On Hold |
+| PFM Settings (PFMSettings) | One row per setting the app and flows read (wing name for the subtitle, PFM mailbox, defaults) | Title, SettingValue, SettingNotes | none | PFM - All Settings |
 
-- Endorsements.Status choices are exactly the DAFMAN 90-161 5.4 responses plus `Not started` (default): Not started, Concur, Concur With Comment, Concur—No Response (em dash, as in 5.4.3), Nonconcur, No Comment.
-- Stages rows come from the docs/process-model.md Stages table (verbatim stage text, paragraph refs). That table is marked draft, not verified.
-- The CRM columns (5.3, T-1) are stored as reference data in `Endorsements.json` under `crmColumns` and are not provisioned. CrmLink points to the CRM file.
-- Samples with fake data: `samples/lists/*.csv` (lookup columns hold the target row's Title). Import by hand or from a flow; the script does not import them.
+- PFM Endorsements, EndorsementStatus choices are exactly the DAFMAN 90-161 5.4 responses plus `Not started` (default): Not started, Concur, Concur With Comment, Concur—No Response (em dash, as in 5.4.3), Nonconcur, No Comment.
+- PFM Process Steps rows come from the docs/process-model.md Stages table (verbatim stage text, paragraph refs). That table is marked draft, not verified.
+- The CRM columns (5.3, T-1) are stored as reference data in `PFMEndorsements.json` under `crmColumns` and are not provisioned. CRMLink points to the CRM file.
+- Samples with fake data: `samples/lists/<URL name>.csv`, headers = internal names (lookup columns hold the target row's Title). Import by hand or from a flow; the script does not import them.
 
 ## Open choices
 

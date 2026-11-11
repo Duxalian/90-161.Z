@@ -1,0 +1,71 @@
+{
+  "list": "PFMOffices",
+  "title": "PFM Offices",
+  "description": "One row per coordinating office: endorser and coordination role. Endorsement routing reuses it. Office data stays in SharePoint.",
+  "template": "GenericList",
+  "ref": "PFM 2026-11-11 (naming doc: PFM Offices); DAFMAN 90-161 5.1 (offices with functional interest), 5.1.8.2 (Legal after all others)",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Office",
+      "type": "Text",
+      "required": true,
+      "builtIn": true,
+      "ref": "Office name as the wing writes it"
+    },
+    {
+      "internalName": "Endorser",
+      "displayName": "Endorser",
+      "type": "User",
+      "required": false,
+      "ref": "Person who endorses for the office"
+    },
+    {
+      "internalName": "CoordinationRole",
+      "displayName": "Coordination Role",
+      "type": "Text",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.1 (functional interest, technical expertise, oversight, statutory review)"
+    },
+    {
+      "internalName": "CoordinateLast",
+      "displayName": "Coordinate Last",
+      "type": "Boolean",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.1.8.2 (Legal after all other coordination)"
+    },
+    {
+      "internalName": "IsActive",
+      "displayName": "Active",
+      "type": "Boolean",
+      "required": false,
+      "default": "1",
+      "ref": "Hide offices no longer used"
+    }
+  ],
+  "views": [
+    {
+      "name": "PFM - Active Offices",
+      "fields": [
+        "Title",
+        "Endorser",
+        "CoordinationRole",
+        "CoordinateLast"
+      ],
+      "orderBy": [
+        {
+          "field": "Title",
+          "ascending": true
+        }
+      ],
+      "where": {
+        "field": "IsActive",
+        "op": "Eq",
+        "type": "Boolean",
+        "value": "1"
+      },
+      "default": false,
+      "ref": "PFM 2026-11-11"
+    }
+  ]
+}

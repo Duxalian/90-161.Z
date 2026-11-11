@@ -1,0 +1,81 @@
+{
+  "list": "PFMActivityLog",
+  "title": "PFM Activity Log",
+  "description": "One row per event: status change, endorsement requested, reminder sent, status report emailed. Flow run history expires after 28 days; this list keeps the record.",
+  "template": "GenericList",
+  "ref": "PFM 2026-11-11 (naming doc: PFM Activity Log)",
+  "indexBuiltIn": [
+    "Created"
+  ],
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Event",
+      "type": "Text",
+      "required": true,
+      "builtIn": true,
+      "ref": "Short event summary"
+    },
+    {
+      "internalName": "Publication",
+      "displayName": "Publication",
+      "type": "Lookup",
+      "required": false,
+      "lookup": {
+        "list": "PFMPublications",
+        "showField": "Title"
+      },
+      "indexed": true,
+      "ref": "Ties the event to its action"
+    },
+    {
+      "internalName": "EventType",
+      "displayName": "Event Type",
+      "type": "Choice",
+      "required": true,
+      "choices": [
+        "Status Changed",
+        "Endorsement Requested",
+        "Reminder Sent",
+        "Endorsement Received",
+        "Status Report Emailed",
+        "Other"
+      ],
+      "ref": "PFM 2026-11-11 (events the flows record)"
+    },
+    {
+      "internalName": "EventBy",
+      "displayName": "Event By",
+      "type": "User",
+      "required": false,
+      "ref": "Who caused the event (the flow's user for automatic events)"
+    },
+    {
+      "internalName": "EventDetails",
+      "displayName": "Event Details",
+      "type": "Note",
+      "required": false,
+      "ref": "Free text; no publication content"
+    }
+  ],
+  "views": [
+    {
+      "name": "PFM - Recent",
+      "fields": [
+        "Created",
+        "Title",
+        "EventType",
+        "Publication",
+        "EventBy"
+      ],
+      "orderBy": [
+        {
+          "field": "Created",
+          "ascending": false
+        }
+      ],
+      "default": false,
+      "ref": "PFM 2026-11-11"
+    }
+  ]
+}

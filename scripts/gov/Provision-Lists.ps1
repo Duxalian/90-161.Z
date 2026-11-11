@@ -85,7 +85,8 @@ function Test-ListSchema {
       if (-not (Test-HasProp $s $k)) { $problems.Add("$where : missing '$k'") }
     }
     if (-not (Test-HasProp $s 'fields')) { continue }
-    $seen = @{}
+    # Created and Modified exist on every list; views may show or sort by them.
+    $seen = @{ 'Created' = $true; 'Modified' = $true }
     foreach ($f in @($s.fields)) {
       foreach ($k in @('internalName', 'displayName', 'type', 'required', 'ref')) {
         if (-not (Test-HasProp $f $k)) { $problems.Add("$where : a field is missing '$k'") }

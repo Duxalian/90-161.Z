@@ -1,78 +1,74 @@
 # Create the 90-161.Z lists with Power Automate
 
-Decided (PFM, 2026-11-10): lists are created by a Power Automate flow, not PowerShell (PnP sign-in did not open on the gov device). The flow runs under your own sign-in. It uses only the SharePoint connector ("Send an HTTP request to SharePoint"), a standard connector: no premium license, no admin.
+Decided (PFM, 2026-11-10): lists are created by a Power Automate flow, not PowerShell. The flow runs under your own sign-in and uses only the SharePoint connector ("Send an HTTP request to SharePoint"): no premium license, no admin.
 
-The flow reads one generated file, `flow/provisioning-payload.json`, and sends each request in order. The site URL is chosen inside the flow; it is never in this repo.
+Names (PFM, 2026-11-11, docs/DECISIONS.md): every list has the prefix PFM. Each list is created under its URL name without spaces, then gets its display title.
 
-## 0. Import route (use this first)
+## 1. What the flow creates
 
-The flow comes as a package built from this payload: `flow/defs/90161Z-T02-provision-lists-r1.json` + `python3 scripts/build_flow_package.py` → `flow/packages/90161Z-T02-provision-lists-r1.zip`. Steps are in go.md, Task 2. The package asks for the site URL at run time, runs every request one at a time in payload order, and does not send the stage seed rows. Sections 1–2 are the manual fallback if the import fails.
-
-## 1. Get the payload
-
-Open on the gov device and copy all of it (Ctrl+A, Ctrl+C):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/provisioning-payload.json
-
-## 2. Build the flow (7 actions)
-
-Power Automate → Create → Instant cloud flow → name `90-161.Z provision lists` → trigger **Manually trigger a flow** → Create.
-
-| # | Action | Rename to | Settings |
+| Display title | URL name | Holds | Who sees rows |
 |---|---|---|---|
-| 1 | Data Operation → **Compose** | `Payload` | Inputs: paste the whole payload file |
-| 2 | Control → **Apply to each** | `Create lists` | Select an output: expression `outputs('Payload')?['lists']` |
-| 2a | inside 2: SharePoint → **Send an HTTP request to SharePoint** | `Create list` | see "HTTP action settings", Body expression `items('Create_lists')?['body']`, Uri expression `items('Create_lists')?['uri']` |
-| 3 | SharePoint → **Send an HTTP request to SharePoint** | `Get Stages ID` | Method GET; Uri `_api/web/lists/getbytitle('Stages')?$select=Id`; header `Accept` = `application/json;odata=verbose`. Settings → Configure run after: tick **is successful** and **has failed** |
-| 4 | SharePoint → **Send an HTTP request to SharePoint** | `Get Publications ID` | Same as 3 with `'Publications'` |
-| 5 | Control → **Apply to each** | `Create fields and views` | Select an output: expression `outputs('Payload')?['fields']` |
-| 5a | inside 5: **Send an HTTP request to SharePoint** | `Create field or view` | Uri expression `items('Create_fields_and_views')?['uri']`; Body expression below |
-| 6 | (optional) Control → **Apply to each** | `Seed stages` | Select an output: `outputs('Payload')?['seed']`; inside: HTTP action with Uri `items('Seed_stages')?['uri']`, Body `items('Seed_stages')?['body']` |
+| PFM Offices | PFMOffices | One row per coordinating office | All site members |
+| PFM Process Steps | PFMProcessSteps | The process steps (draft; not seeded) | All site members |
+| PFM Settings | PFMSettings | One row per setting (wing name, PFM mailbox, defaults) | All site members |
+| PFM Publications | PFMPublications | One row per publication or form action | Creator only (section 4) |
+| PFM Activity Log | PFMActivityLog | One row per event; Created and Publication indexed | All site members |
+| PFM Endorsements | PFMEndorsements | One row per endorser per action | Creator only (section 4) |
+| PFM Product Index | PFMProductIndex | The Product Index (DAFMAN 6.4.2) | All site members |
 
-HTTP action settings (2a, 5a, 6): Site Address = your site (choose it or "Enter custom value": `https://usaf.dps.mil/sites/<your-site>`); Method = POST; Headers:
+Columns, views and their DAFMAN references: `schemas/lists/*.json` (one file per list, named by URL name). The payload `flow/provisioning-payload.json` is generated from them.
 
-```
-Accept: application/json;odata=verbose
-Content-Type: application/json;odata=verbose
-```
+## 2. Import and run
 
-Body expression for 5a (it fills in the list IDs that lookup fields need):
+Package: `flow/packages/90161Z-T02-provision-lists-r2.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r2.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
 
-```
-replace(replace(string(items('Create_fields_and_views')?['body']), '__Stages_ID__', body('Get_Stages_ID')?['d']?['Id']), '__Publications_ID__', body('Get_Publications_ID')?['d']?['Id'])
-```
+The flow asks for 2 inputs:
+- **Site URL**: the full address of the site that will hold the lists.
+- **Site Title**: the site's title exactly as it shows at the top of the site.
 
-On every Apply to each: Settings → **Concurrency control** on, **Degree of parallelism** 1, so requests run in payload order (Logic Apps runs loop iterations in parallel by default).
+Order of work:
+1. **Check Site Title** reads the site's title. If it does not match what you typed (ignoring capital letters and outer spaces), the run stops with "SiteTitleMismatch" and creates nothing.
+2. **Create Lists**: 7 lists under their URL names, versioning on.
+3. **Get Process Steps ID**, **Get Publications ID**: the IDs that lookup columns need.
+4. **Create Fields And Views**: columns, views and view columns, one request at a time.
+5. **Apply Updates**: index Created on the Activity Log, rename the Title column where a list uses another label (Setting, Event, Office), then set each list's display title. This runs last because steps 2-4 find lists by URL name.
+6. **Result** shows the counts.
 
-Seed stages (6) is optional: the stage list in docs/process-model.md is a draft. Skip it until the stages are approved.
-
-## 3. Run and check
-
-Save → Test → Manually → Run flow. In the run history every iteration should be green.
+## 3. Checks after the run
 
 | Check | Pass |
 |---|---|
-| Create lists | 4 of 4 iterations succeeded |
-| Get Stages ID / Get Publications ID | succeeded |
-| Create fields and views | 60 of 60 iterations succeeded |
-| Site contents | Lists Stages, Publications, Endorsements, PublicationIndex exist |
-| Endorsements → Endorser column | Type Person or Group, people only |
-| Endorsements → Status column | Choices: Not started, Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment; default Not started |
+| Run | Succeeded; Result shows "Lists: 7, fields and views: 112, updates: 11 - provisioning finished" |
+| Site contents | The 7 display titles in section 1 exist |
+| List address | Open PFM Publications: the address ends in /Lists/PFMPublications |
+| PFM Endorsements, Endorser column | Type Person or Group, people only |
+| PFM Endorsements, Endorsement Status column | Choices: Not started, Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment; default Not started |
+| PFM Publications, Status Notes column | List settings > Status Notes shows "Append Changes to Existing Text: Yes" |
 
-Run it once. A second run fails on lists and fields that already exist; that is expected and changes nothing.
+Run it once. A second run fails on lists and fields that already exist and ends red; that is expected.
 
-If an iteration fails, open it and send only the HTTP status code and the error code (for example `400 / -2130575342`). Do not send URLs or names.
+If a run fails part way (any step red, Result not shown), do not run it again on top. Recover:
+1. Note the failed step's name, HTTP status and error code.
+2. Site contents: delete every list whose name starts with PFM (they are empty after provisioning). Some may still show their URL name (for example PFMPublications) because titles are set last.
+3. Empty the site recycle bin of those lists (Recycle bin > select > Delete), so the URL names are free again.
+4. Run the flow again.
+
+If a step fails, open it and send only the HTTP status code and the error code (for example `400 / -2130575342`). Do not send URLs or names.
 
 ## 4. Set item-level permissions (manual, 2 lists)
 
-Decided (PFM, 2026-11-10): customers see only the rows they created. You (site owner) still see all rows. For **Publications** and **Endorsements**:
+Decided (PFM, 2026-11-10): customers see only the rows they created. You (site owner) still see all rows. For **PFM Publications** and **PFM Endorsements**:
 
-List → Settings (gear) → List settings → Advanced settings → Item-level Permissions:
+List > Settings (gear) > List settings > Advanced settings > Item-level Permissions:
 - Read access: **Read items that were created by the user**
 - Create and Edit access: **Create items and edit items that were created by the user**
-→ OK.
+> OK.
 
-Leave Stages and PublicationIndex readable by all site members.
+Known gap: an AO who did not create a row cannot see it. A later flow will give the AO access to that row.
 
-## Regenerate the payload
+## Change a list or column
 
-Never hand-edit `flow/provisioning-payload.json`. Change `schemas/lists/*.json`, then run `python3 scripts/build_flow_payload.py`. `python3 scripts/build_flow_payload.py --check` fails when the file is stale.
+1. Edit `schemas/lists/<URL name>.json`. Names follow the rules in docs/DECISIONS.md (2026-11-11); `tests/check_names.py` fails on a name that breaks them.
+2. Run `python3 scripts/build_flow_payload.py`, then `python3 scripts/build_flow_package.py`. Never hand-edit the payload or the zip.
+3. Run `tests/run.sh` (pass = `TESTS pass=N fail=0`).
+4. A list that already exists on the site is not changed by a re-run. Add a new column by hand in List settings, with the same internal name, or plan a change flow.
