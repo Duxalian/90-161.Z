@@ -1,12 +1,13 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 2026-11-11 08:20 CT. Bookmark on my work computer (clickable links):
+Updated: 2026-11-11 14:15 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 
 Reload to see new tasks (GitHub can serve a copy up to 5 minutes old).
 Copy each URL below into the address bar. Save files with Ctrl+S.
+New files are named 90161Z-T<task>-<name>-r<revision> so they sort by task in my folders. Use the highest r number.
 Reply with results in the Claude chat or by email to my Gmail. Never send real publication content.
 
 ## Task 1: renderer test (open)
@@ -34,17 +35,20 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/provisioning-payl
 
 Report: pass or fail for each check in section 3. For a failure, only the HTTP status and error code.
 
-## Task 4: SharePoint connection test (open, 2026-11-11 10:20 CT)
+## Task 4: SharePoint connection test, r2 (open, 2026-11-11 14:15 CT)
+
+r1 result: import ok, Get items ok, Item count failed (Null). r2 fixes the Item count expression.
 
 Download (raw link only):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/sp-get-items.zip
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T04-sp-get-items-r2.zip
 
-The file must be 6,337 bytes.
+The file must be 6,344 bytes.
 
-In Power Automate: My flows > Import > Import Package (Legacy) > Upload > sp-get-items.zip.
+In Power Automate: My flows > Import > Import Package (Legacy) > Upload > 90161Z-T04-sp-get-items-r2.zip.
 Import setup: flow = Create as new. SharePoint connection = Select during import > pick my existing SharePoint connection > Save. Then Import.
-Open the flow, Test > Manually > Run flow. Type the full site address and the display name of any list on that site.
+Open the flow "90161Z T04 SharePoint test r2", Test > Manually > Run flow. Type the full site address and the display name of any list on that site.
 Pass: the run succeeds and "Item count" shows "Items read: N - SharePoint connection worked".
+Then delete the r1 flow "90-161.Z SharePoint test".
 
 Report: file size; import ok or the exact error text; run result (only the Item count text or the error code, no list contents).
 

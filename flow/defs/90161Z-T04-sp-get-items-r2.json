@@ -1,5 +1,5 @@
 {
-  "displayName": "90-161.Z SharePoint test",
+  "displayName": "90161Z T04 SharePoint test r2",
   "description": "Import test with a SharePoint connection. Asks for the site URL and a list name at run time (no site path in the repo). Reads up to 5 items and reports the count.",
   "connections": ["shared_sharepointonline"],
   "triggers": {
@@ -31,7 +31,7 @@
     "Item_count": {
       "runAfter": { "Get_items": ["Succeeded"] },
       "type": "Compose",
-      "inputs": "@concat('Items read: ', string(length(outputs('Get_items')?['body/value'])), ' - SharePoint connection worked')"
+      "inputs": "@concat('Items read: ', string(length(body('Get_items')?['value'])), ' - SharePoint connection worked')"
     }
   }
 }
