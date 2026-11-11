@@ -36,7 +36,7 @@ Status: draft (Agent, 2026-11-10). Items marked **Rec:** are not decisions until
 
 1. Customer submits the publication request and an ordered endorser list in the app.
 2. Flow creates one `Endorsements` row per endorser, status `Not started`.
-3. Flow sends the request to the next endorser(s) (sequential or parallel per row), with the draft link and due date.
+3. Flow sends the request to every endorser in the open Coordination Stage at the same time (Privacy Review, then Formal Coordination, then Legal; DAFMAN 3.4, 5.1.8.1, Table A3.1 note 2; PFM 2026-11-11), with the draft link and due date. A stage opens when the previous one is complete and has no open nonconcur (5.5).
 4. Endorser responds: `Concur`, `Concur with comment`, `Non-concur`. Comments go to the CRM.
 5. Reminder at due date minus 2 workdays; escalation to customer and PFM when overdue.
 6. `Non-concur` stops the chain and notifies customer and PFM.

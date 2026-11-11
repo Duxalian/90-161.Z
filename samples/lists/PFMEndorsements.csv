@@ -1,4 +1,5 @@
-Title,Publication,EndorserOrder,CoordinationRole,Endorser,Execution,IsRequired,EndorsementStatus,DueDate,ExtensionDate,ResponseDate,CRMLink
-Sample endorsement 1,Sample OI 99-1,1,Sample role A,Endorser-A,Sequential,true,Concur With Comment,2030-01-15,,2030-01-10,https://example.invalid/crm/sample-oi-99-1-a.docx
-Sample endorsement 2,Sample OI 99-1,2,Sample role B,Endorser-B,Sequential,true,Not started,2030-01-15,2030-01-25,,
-Sample endorsement 3,Sample Form 99-2,1,Sample role C,Endorser-C,Parallel,false,Nonconcur,2030-02-01,,2030-01-28,https://example.invalid/crm/sample-form-99-2-c.docx
+Title,Publication,CoordinationStage,EndorserOrder,CoordinationRole,Endorser,IsRequired,EndorsementStatus,DueDate,ExtensionDate,ExtensionRationale,ResponseDate,NonconcurResolution,ResolutionDate,CRMLink
+Sample OI 99-101 IC-1 - Privacy,Sample OI 99-101 IC-1,Privacy Review,,Privacy,Endorser-A,true,Concur,2030-02-15,,,2030-02-10,,,
+Sample OI 99-101 IC-1 - Records,Sample OI 99-101 IC-1,Formal Coordination,,Records,Endorser-B,true,Nonconcur,2030-03-15,,,2030-03-10,Comments Incorporated,2030-03-12,https://example.invalid/crm/sampleoi99-101-b.docx
+Sample OI 99-101 IC-1 - Functional,Sample OI 99-101 IC-1,Formal Coordination,,Functional,Endorser-C,false,Not started,2030-03-15,2030-03-25,Sample rationale,,,,
+Sample OI 99-101 IC-1 - Legal,Sample OI 99-101 IC-1,Legal,,Legal,Endorser-D,true,Not started,,,,,,,

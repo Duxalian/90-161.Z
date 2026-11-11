@@ -1,7 +1,7 @@
 {
   "list": "PFMPublications",
   "title": "PFM Publications",
-  "description": "One row per publication or form action the PFM tracks (ARCHITECTURE s3).",
+  "description": "One row per action on a publication or form (DAFMAN 90-161 1.1.4): the action, its process step, certification and approval. Each action points to its PFM Product Index row.",
   "template": "GenericList",
   "ref": "ARCHITECTURE s3 (Publications list)",
   "fields": [
@@ -14,6 +14,18 @@
       "ref": "ARCHITECTURE s3 (one row per publication action)"
     },
     {
+      "internalName": "Product",
+      "displayName": "Product",
+      "type": "Lookup",
+      "required": false,
+      "lookup": {
+        "list": "PFMProductIndex",
+        "showField": "PublicationNumber"
+      },
+      "indexed": true,
+      "ref": "The PFM Product Index row this action is on: one product, many actions over its life (PFM 2026-11-11, design check 3A). Blank for a New action until the product gets its index row"
+    },
+    {
       "internalName": "ActionType",
       "displayName": "Action Type",
       "type": "Choice",
@@ -21,11 +33,14 @@
       "choices": [
         "New",
         "Rewrite",
-        "Change",
-        "Certify as Current",
-        "Rescind"
+        "Interim Change",
+        "Administrative Change",
+        "Guidance Memorandum",
+        "Certify Current",
+        "Rescind",
+        "Transfer"
       ],
-      "ref": "ARCHITECTURE s3 (action list: new, rewrite, change, supplement, OI, certify-as-current, rescind); Supplement and OI moved to Publication Type (PFM 2026-11-11)"
+      "ref": "DAFMAN 90-161 1.1.4.1-1.1.4.8 (action types); Interim Change needs full coordination, Administrative Change none (7.8.10.2); PFM 2026-11-11 (r7, design check decision 1A)"
     },
     {
       "internalName": "ProductType",
@@ -72,6 +87,13 @@
       "type": "Text",
       "required": false,
       "ref": "DAFMAN 90-161 6.4.2 (PI entries identify each publication)"
+    },
+    {
+      "internalName": "ICNumber",
+      "displayName": "IC Number",
+      "type": "Text",
+      "required": false,
+      "ref": "DAFMAN 90-161 4.3.9 (interim changes numbered IC-1, IC-2 in order); PFM 2026-11-11 (r7, design check decision 1A)"
     },
     {
       "internalName": "ProcessStep",
@@ -144,6 +166,55 @@
       "type": "DateTime",
       "required": false,
       "ref": "DAFMAN 90-161 5.2 (OPR sets suspense; coordinators get 15 business days, T-3)"
+    },
+    {
+      "internalName": "CoordinationCompletedDate",
+      "displayName": "Coordination Completed Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 2.8.2.2 (coordination older than 1 year needs re-coordination unless the DAF Form 673 says otherwise); PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "CertifyingOfficial",
+      "displayName": "Certifying Official",
+      "type": "User",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.6 (certifying official signs the DAF Form 673); PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "CertifiedDate",
+      "displayName": "Certified Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.6; PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "ApprovingOfficial",
+      "displayName": "Approving Official",
+      "type": "User",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.7 (approving official signs the DAF Form 673); PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "ApprovedDate",
+      "displayName": "Approved Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.7; PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "DelegationLetterLink",
+      "displayName": "Delegation Letter Link",
+      "type": "URL",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.6-5.7 (delegation letter for certifying or approving official on file with the PFM); PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "DAFFormLink",
+      "displayName": "DAF Form 673 or 399 Link",
+      "type": "URL",
+      "required": false,
+      "ref": "DAFMAN 90-161 5.6-5.7 (DAF Form 673), 7.5.1 (DAF Form 399 for Certify Current); PFM 2026-11-11 (r7, design check decision 1A)"
     }
   ],
   "views": [
@@ -151,7 +222,7 @@
       "name": "PFM - Queue",
       "fields": [
         "Title",
-        "ProductType",
+        "Product",
         "ActionType",
         "ProcessStep",
         "ActionStatus",

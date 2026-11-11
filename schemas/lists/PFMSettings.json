@@ -45,5 +45,18 @@
       "default": false,
       "ref": "PFM 2026-11-11"
     }
+  ],
+  "seedOnProvision": true,
+  "seed": [
+    {
+      "Title": "CoordinationSuspenseBusinessDays",
+      "SettingValue": "15",
+      "SettingNotes": "Business days a coordinator gets to respond (DAFMAN 90-161 5.2). Flows count weekdays only; holidays not excluded."
+    },
+    {
+      "Title": "GuardReserveApplicabilityCalendarDays",
+      "SettingValue": "30",
+      "SettingNotes": "Calendar days for Guard Applicability and Reserve Applicability coordinators below MAJCOM level (DAFMAN 90-161 5.2.2)."
+    }
   ]
 }

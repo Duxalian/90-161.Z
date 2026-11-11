@@ -83,15 +83,26 @@
       "ref": "DAFMAN 90-161 4.5.11.1.2 (prescribed forms; the prescribing publication), 7.4.2 (OPRs review publications and associated prescribed forms together). Set on form rows only; the app shows each publication's Prescribed Forms from it (PFM 2026-11-11)"
     },
     {
-      "internalName": "Publication",
-      "displayName": "Tracked Publication",
+      "internalName": "ParentPublication",
+      "displayName": "Parent Publication",
       "type": "Lookup",
       "required": false,
       "lookup": {
-        "list": "PFMPublications",
-        "showField": "Title"
+        "list": "PFMProductIndex",
+        "showField": "PublicationNumber"
       },
-      "ref": "docs/process-model.md stage 9 (posting updates the PI); ties a PI entry to its tracked action"
+      "ref": "DAFMAN 90-161 4.3.8.1 (a supplement uses its parent's number + _<unit>SUP), 7.9 (a guidance memorandum changes its parent publication); PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "SupersededBy",
+      "displayName": "Superseded By",
+      "type": "Lookup",
+      "required": false,
+      "lookup": {
+        "list": "PFMProductIndex",
+        "showField": "PublicationNumber"
+      },
+      "ref": "DAFMAN 90-161 7.11.3 (obsolete products listed with a link to the superseding product); PFM 2026-11-11 (r7, design check decision 1A)"
     },
     {
       "internalName": "PostedLink",
@@ -109,10 +120,11 @@
         "Active",
         "Inactive",
         "Superseded",
-        "Rescinded"
+        "Rescinded",
+        "Expired"
       ],
       "default": "Active",
-      "ref": "Inactive = past the four-year periodic review without certify-as-current (DAFMAN 90-161 7.4.2; PFM 2026-11-11, the PFM's existing practice). Superseded and Rescinded trigger AFRIMS RDS T 33-38 R 07 for the record set (DAF Forms 673 and 399 and accompanying documentation); the publication and its index entry stay browsable"
+      "ref": "Inactive = past the four-year periodic review without certify-as-current (DAFMAN 90-161 7.4.2; PFM 2026-11-11, the PFM's existing practice). Superseded and Rescinded trigger AFRIMS RDS T 33-38 R 07 for the record set (DAF Forms 673 and 399 and accompanying documentation); the publication and its index entry stay browsable. Expired = a guidance memorandum past its 1-year life (DAFMAN glossary \"obsolete\": rescinded, superseded or expired; 7.9.3); PFM 2026-11-11 (r7, design check decision 1A)"
     },
     {
       "internalName": "InactiveDate",
@@ -141,6 +153,34 @@
       "type": "DateTime",
       "required": false,
       "ref": "DAFMAN 90-161 7.4.2: four years after the later of Effective Date and Last Certified Current Date; the review task starts six months earlier. Set by a flow"
+    },
+    {
+      "internalName": "ExpirationDate",
+      "displayName": "Expiration Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.9.3 (guidance memorandums valid 1 year); set for guidance memorandums only; PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "CollectsPII",
+      "displayName": "Collects PII",
+      "type": "Boolean",
+      "required": false,
+      "ref": "DAFMAN 90-161 8.9.1.2 (forms that collect PII need privacy coordination); forms only; PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "PublicationRecordSetLink",
+      "displayName": "Publication Record Set Link",
+      "type": "URL",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.2.1 (publication and form record sets kept in separate files); PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "FormRecordSetLink",
+      "displayName": "Form Record Set Link",
+      "type": "URL",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.2.1; PFM 2026-11-11 (r7, design check decision 1A)"
     }
   ],
   "views": [
@@ -194,7 +234,7 @@
         "PublicationNumber",
         "Title",
         "ProductType",
-        "Publication",
+        "ParentPublication",
         "PostedLink"
       ],
       "orderBy": [
@@ -231,7 +271,7 @@
         "Title",
         "ProductStatus",
         "InactiveDate",
-        "Publication"
+        "SupersededBy"
       ],
       "orderBy": [
         {
