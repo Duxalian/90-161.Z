@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Report how a project repo differs from the standard_project baseline. Report only: it never writes.
+"""Report how a project repo differs from the archimedes_lever baseline. Report only: it never writes.
 
 Usage:
-    python3 scripts/drift.py [--project DIR] [--baseline PATH_OR_URL] [--strict]
+    python3 scripts/drift.py [--project DIR] [--baseline PATH_OR_URL] [--owner NAME] [--strict]
     python3 scripts/drift.py --test        # self-test; prints DRIFT TEST PASS
 
 For each "## " section of the baseline AGENTS.md above "## Project rules" (owner name and header placeholders
-applied as sync_baseline.py would), it prints one of:
+applied as sync_baseline.py would; --owner NAME for a repo with no "- Owner:" line, as for sync), it prints one of:
     same       the project has the section with the same text (whitespace ignored)
     changed    the project has a section with that heading but other text; NN% = text similarity,
                "missing lines" = baseline lines not found anywhere in the project AGENTS.md
@@ -61,12 +61,12 @@ def baseline_head(base_text, proj_text, owner):
     return sb.apply_owner(head, owner)
 
 
-def report(project, base):
+def report(project, base, owner=None):
     """Return (rows, not_same_count). rows = list of (area, item, status, detail)."""
     rows = []
     proj_agents = project / "AGENTS.md"
     proj_text = proj_agents.read_text() if proj_agents.exists() else ""
-    owner = sb.header_owner(proj_text) or sb.BASELINE_OWNER
+    owner = owner or sb.header_owner(proj_text) or sb.BASELINE_OWNER
     base_text = (base / "AGENTS.md").read_text()
     head = baseline_head(base_text, proj_text, owner)
     proj_secs = sections(proj_text)
@@ -162,7 +162,7 @@ def self_test():
     ok = True
     base = pathlib.Path(__file__).resolve().parent.parent
     if "{{PROJECT_NAME}}" not in (base / "AGENTS.md").read_text():
-        print("DRIFT TEST SKIP: the self-test needs the baseline repo (rhope-ops/standard_project); run it there")
+        print("DRIFT TEST SKIP: the self-test needs the baseline repo (rhope-ops/archimedes_lever); run it there")
         return 0
     with tempfile.TemporaryDirectory() as d:
         proj = pathlib.Path(d)
@@ -184,14 +184,20 @@ def self_test():
         expect("missing copied file", get(("file", "scripts/stop_check.py")), "missing")
         expect("never synced", get(("pin", ".baseline")), "missing")
         text = (base / "AGENTS.md").read_text()
-        for k, v in (("PROJECT_NAME", "Demo"), ("REPO", "D/d"), ("PURPOSE", "P"), ("OWNER", "the PFM")):
+        for k, v in (("PROJECT_NAME", "Demo"), ("REPO", "D/d"), ("PURPOSE", "P"), ("OWNER", "the maintainer")):
             text = text.replace("{{" + k + "}}", v)
-        (proj / "AGENTS.md").write_text(sb.apply_owner(text, "the PFM"))
+        (proj / "AGENTS.md").write_text(sb.apply_owner(text, "the maintainer"))
         expect("synced section, owner renamed", get(("AGENTS.md", "Delegation")), "same")
         expect("Project rules present", get(("AGENTS.md", "Project rules")), "absent")
         (proj / "scripts").mkdir()
-        (proj / "scripts/stop_check.py").write_text(sb.apply_owner((base / "scripts/stop_check.py").read_text(), "the PFM"))
+        (proj / "scripts/stop_check.py").write_text(sb.apply_owner((base / "scripts/stop_check.py").read_text(), "the maintainer"))
         expect("copied file, owner renamed", get(("file", "scripts/stop_check.py")), "same")
+        text = (base / "AGENTS.md").read_text().replace("- Owner: {{OWNER}}\n", "")
+        for k, v in (("PROJECT_NAME", "Demo"), ("REPO", "D/d"), ("PURPOSE", "P")):
+            text = text.replace("{{" + k + "}}", v)
+        (proj / "AGENTS.md").write_text(sb.apply_owner(text, "Sam"))
+        rows, _ = report(proj, base, "Sam")
+        expect("no Owner line, --owner Sam", {(a, i): (s, d) for a, i, s, d in rows}[("AGENTS.md", "Order of authority")], "same")
     print("DRIFT TEST " + ("PASS" if ok else "FAIL"))
     return 0 if ok else 1
 
@@ -200,6 +206,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--project", default=".", help="project repo folder (default: current folder)")
     ap.add_argument("--baseline", default=sb.DEFAULT_BASELINE, help="baseline folder or git URL")
+    ap.add_argument("--owner", help="owner name for a project AGENTS.md without a \"- Owner:\" line")
     ap.add_argument("--strict", action="store_true", help="exit 1 when anything is not the same")
     ap.add_argument("--test", action="store_true", help="run the self-test")
     a = ap.parse_args()
@@ -208,7 +215,7 @@ def main():
     project = pathlib.Path(a.project).resolve()
     with tempfile.TemporaryDirectory() as tmp:
         base = sb.get_baseline(a.baseline, tmp)
-        rows, not_same = report(project, base)
+        rows, not_same = report(project, base, a.owner)
         print_report(project, rows, not_same)
     return 1 if a.strict and not_same else 0
 
