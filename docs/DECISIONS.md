@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-10 | Build both lanes in parallel: (A) renderer + validator, (B) SharePoint lists + PnP provisioning. | PFM | — |
 | 2026-11-10 | **Rec:** Renderer = PowerShell + Word COM (option A); environment check passed (docs/reviews/2026-11-10-gov-env-check.md). Option C stays open until the Premium check. | Agent | — |
 | 2026-11-10 | Public repo uses "PFM", not the PFM's name. | PFM | — |
 | 2026-11-10 | Repo is public, so the gov device reads it without a GitHub login. Rule: nothing that names the wing, people or office symbols goes in the repo. | PFM | Rec "make the repo public" |
