@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Baseline sync to archimedes_lever 2452a16: "Personal data" rule, first-use check (SessionStart hook), docs/FIRST_USE.md, pii_guard.py. Owner stays "the PFM". The guard (.pii-guard) waits for the allow list: 79 findings today, 62 of them in the public DAFMAN text ref/dafman90-161.txt. | PFM (1A) | — |
 | 2026-11-11 | Cloud sessions for this repo use the personal environment "90-161.Z" (setup script installs pwsh 7.4.6 + PSScriptAnalyzer 1.23.0; network as Default). The PII guard variable PII_GUARD_DENYLIST goes on every environment that baseline repos use (Default, ICF, NMB, 90-161.Z); the PFM adds it in Settings, never in the repo or chat. | PFM (1A 2A) | Default environment, manual pwsh install |
 | 2026-11-11 | Task scripts' DODID prompt: Enter uses this computer's profile folder name; a typed DODID overrides it. | PFM (2A, proposed by Agent) | Prompt only, no default |
 | 2026-11-11 | Gov-device task folders: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<NN>, one per task. Task scripts ask for the DODID and change to the task folder themselves. | PFM | Any folder, e.g. C:\90161Z |

@@ -1,6 +1,6 @@
 # 90-161.Z: agent instructions
 
-This file is the source of truth for every agent on this repo: Claude, GPT/Codex, Gemini, any other model, and sub-agents. Codex, Copilot, Cursor and most other tools read AGENTS.md directly; CLAUDE.md (Claude Code) and GEMINI.md (Gemini CLI) import it. If your tool reads none of these, read this file first. Where a rule names a Claude-only feature, use the fallback in `.claude/orchestration.md` "Fallbacks". Put rules specific to this project in "Project rules" at the end. "Owner" is the name agents use for the person who decides; a public repo uses a role (for example "the PFM") instead of a real name.
+This file is the source of truth for every agent on this repo: Claude, GPT/Codex, Gemini, any other model, and sub-agents. Codex, Copilot, Cursor and most other tools read AGENTS.md directly; CLAUDE.md (Claude Code) and GEMINI.md (Gemini CLI) import it. If your tool reads none of these, read this file first. Where a rule names a Claude-only feature, use the fallback in `.claude/orchestration.md` "Fallbacks". Put rules specific to this project in "Project rules" at the end. "Owner" is the name agents use for the person who decides; a public repo uses a role (for example "the maintainer") instead of a real name.
 
 - Repo: rhope-ops/90-161.Z
 - Purpose: Track and manage DAF publications through the DAFMAN 90-161 publishing process at wing/installation level: status tracking, document cleanup and formatting, and endorsement routing.
@@ -18,6 +18,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 
 ## Start of session
 
+- Run `python3 scripts/first_use_check.py` (Claude Code runs it as a SessionStart hook). If it says FIRST USE, follow docs/FIRST_USE.md before any other work. If it says DENYLIST, tell the PFM which place is missing.
 - Run `scripts/session_checkin.sh`. Report the branch, uncommitted files, and the ahead/behind count against origin/main.
 - Read docs/NEXT_PROMPT.md and docs/DECISIONS.md.
 - Find the tools you have and read the environment docs before you say a capability is not available.
@@ -32,7 +33,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 ## Delivery
 
 - Deliver every change without being asked: commit, merge to main, push, verify that origin/main has the commit, and republish the affected artifacts.
-- Exception: for a UI or design change that the PFM has not approved, show a preview first (a preview artifact or a branch). Merge after he approves. Delete previews after they ship.
+- Exception: for a UI or design change that the PFM has not approved, show a preview first (a preview artifact or a branch). Merge after the PFM approves. Delete previews after they ship.
 - For changes that are not UI or design, this rule overrides the personal "preview first" rule.
 - If a step is blocked, name the step and the cause. If permissions block a step, give the exact commands to paste, one code block for each command.
 - Put every deliverable where it survives (repo, doc, artifact) as soon as it exists.
@@ -42,7 +43,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Report actual checks, counts and limits.
 - Keep these states separate: done, published, verified; self-review and independent review; delivery state and checkout state.
 - Give full clickable links to files on main, to artifacts and to pull requests. Never give a bare path.
-- Give text that the PFM must paste in full, in a code block. Never tell him to find it in git.
+- Give text that the PFM must paste in full, in a code block. Never tell the PFM to find it in git.
 - End each work turn with a summary: Decide (lettered options, your recommendation marked **Rec:**), Copy (full text for the PFM to paste), then a table with Step (X of Y), Status (done / published / verified), Risks, Running, Not running, Next step (one recommendation), Links. Leave out empty rows, except Step. An agent that has the PFM's personal preferences follows them for the exact format.
 
 ## Git safety
@@ -53,6 +54,14 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Enforcement for every agent: `scripts/git-hooks/pre-push` blocks force-pushes, pushes that are not a fast-forward, and deleting main. `scripts/session_checkin.sh` installs it (core.hooksPath). Never push with `--no-verify`.
 - Claude Code also has .claude/settings.json: a deny list, and a Stop hook (scripts/stop_check.py) that blocks the end of a turn while work is uncommitted or unpushed. Agents without a Stop hook run `echo '{}' | python3 scripts/stop_check.py` before they end a turn and fix what it reports (exit 2 = not done).
 - Do not weaken a hook or its settings to get past a block: ask the PFM.
+
+## Personal data
+
+- Never commit personal data: real names, email addresses, phone numbers, home or work addresses, ID numbers, or the PFM's job details. Use a role (for example "the maintainer") and fake sample data. A private repo may put its owner's real name in the `- Owner:` line (or pass `sync_baseline.py --owner`).
+- Commit with a GitHub noreply address (`ID+USER@users.noreply.github.com`) or the agent's own noreply identity, never a personal email.
+- A repo with a `.pii-guard` file at its root runs `scripts/pii_guard.py` in the pre-push hook and in the pull-request Action (.github/workflows/pii-guard.yml). It blocks emails, phone numbers, .mil addresses, ID-number shapes, and names from a denylist kept outside the repo (environment variable `PII_GUARD_DENYLIST` in a cloud environment, the file `~/.config/pii-guard/denylist.txt`, or the Actions secret `PII_GUARD_DENYLIST`). Never commit the denylist.
+- With the guard on, a push or pull-request check with no denylist fails (the PFM, 2026-11-11). Never ask for the names in chat: the PFM adds them in the places docs/FIRST_USE.md lists. Check with `python3 scripts/pii_guard.py --status` (it prints a count, never names).
+- When the guard blocks: remove the data, fix the unpushed commit, and push again. Only the PFM adds allow entries to `.pii-guard`. Never push with `--no-verify`.
 
 ## Commands
 
@@ -116,7 +125,7 @@ The project log feeds a timeline of milestones, breakthroughs and narratives for
 
 ## Unattended work
 
-- Work the PFM expects done while he is away needs a running owner before the turn ends: a started agent or a one-time scheduled task.
+- Work the PFM expects done while away needs a running owner before the turn ends: a started agent or a one-time scheduled task.
 - A scheduled task needs a prompt that stands alone and permission to commit, push to main and republish without a person.
 - Background work stops at the usage limit. Say when that can interrupt it.
 
