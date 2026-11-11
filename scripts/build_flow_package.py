@@ -3,7 +3,9 @@
 
 Output: flow/packages/<name>.zip. Deterministic (IDs from uuid5 of the name, fixed zip timestamps, stored not deflated),
 so --check can compare the committed zip with a fresh build. Never hand-edit the zip.
-Supports flows without connections only; connector support comes after the import test passes.
+Connections: a def lists connector names in "connections" (e.g. ["shared_sharepointonline"]); the package then
+matches the real export in tests/fixtures/real-export-sharepoint (connector + connection resources, maps,
+connectionReferences). At import the PFM picks an existing connection (creationType "Existing").
 """
 import argparse, io, json, pathlib, sys, uuid, zipfile
 
@@ -12,6 +14,13 @@ DEFS, OUT = ROOT / "flow" / "defs", ROOT / "flow" / "packages"
 NS = uuid.UUID("6f1c2b4e-9d0a-4c5e-8b7a-90161a000000")
 SCHEMA = "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#"
 STAMP = (2026, 1, 1, 0, 0, 0)
+# Values from the real export (tests/fixtures/real-export-sharepoint).
+CONNECTORS = {
+    "shared_sharepointonline": {
+        "displayName": "SharePoint", "apiName": "sharepointonline",
+        "iconUri": "https://gov.static.powerapps.us/resource/ppcr/releases/v1.0.1769/1.0.1769.4361/sharepointonline/icon.png",
+    },
+}
 
 
 def dumps(o):
@@ -23,14 +32,48 @@ def build(src: pathlib.Path) -> bytes:
     for k in ("displayName", "triggers", "actions"):
         if k not in d:
             raise ValueError(f"{src.name}: missing '{k}'")
-    if d.get("connections"):
-        raise ValueError(f"{src.name}: connections are not supported yet")
+    conns = d.get("connections", [])
+    for c in conns:
+        if c not in CONNECTORS:
+            raise ValueError(f"{src.name}: unknown connector {c}")
     name = src.stem
     # Matches a real export from the PFM's tenant (2026-11-11): the manifest resource key, the
     # assetPaths entry and the folder name are one ID (asset_id); definition.json "name" is a
     # different ID (the flow's own). A key/folder mismatch made the import hang.
     flow_id = str(uuid.uuid5(NS, "flow:" + name))
     asset_id = str(uuid.uuid5(NS, "asset:" + name))
+    resources = {asset_id: {
+        "type": "Microsoft.Flow/flows",
+        "suggestedCreationType": "New",
+        "creationType": "Existing, New, Update",
+        "details": {"displayName": d["displayName"]},
+        "configurableBy": "User",
+        "hierarchy": "Root",
+        "dependsOn": [],
+    }}
+    apis_map, conns_map, conn_refs = {}, {}, {}
+    for c in conns:
+        info = CONNECTORS[c]
+        api_res = str(uuid.uuid5(NS, f"api:{name}:{c}"))
+        conn_res = str(uuid.uuid5(NS, f"conn:{name}:{c}"))
+        resources[asset_id]["dependsOn"] += [api_res, conn_res]
+        resources[api_res] = {
+            "id": f"/providers/Microsoft.PowerApps/apis/{c}", "name": c, "type": "Microsoft.PowerApps/apis",
+            "suggestedCreationType": "Existing",
+            "details": {"displayName": info["displayName"], "iconUri": info["iconUri"]},
+            "configurableBy": "System", "hierarchy": "Child", "dependsOn": [],
+        }
+        resources[conn_res] = {
+            "type": "Microsoft.PowerApps/apis/connections", "suggestedCreationType": "Existing", "creationType": "Existing",
+            "details": {"displayName": info["displayName"] + " connection", "iconUri": info["iconUri"]},
+            "configurableBy": "User", "hierarchy": "Child", "dependsOn": [api_res],
+        }
+        apis_map[c], conns_map[c] = api_res, conn_res
+        conn_refs[c] = {
+            "connectionName": c.replace("_", "-")[:20] + "-" + str(uuid.uuid5(NS, f"connname:{name}:{c}")),
+            "source": "Invoker", "id": f"/providers/Microsoft.PowerApps/apis/{c}", "tier": "NotSpecified",
+            "apiName": info["apiName"], "isProcessSimpleApiReferenceConversionAlreadyDone": False,
+        }
     files = {
         "manifest.json": {
             "schema": "1.0",
@@ -42,17 +85,7 @@ def build(src: pathlib.Path) -> bytes:
                 "creator": "N/A",
                 "sourceEnvironment": "",
             },
-            "resources": {
-                asset_id: {
-                    "type": "Microsoft.Flow/flows",
-                    "suggestedCreationType": "New",
-                    "creationType": "Existing, New, Update",
-                    "details": {"displayName": d["displayName"]},
-                    "configurableBy": "User",
-                    "hierarchy": "Root",
-                    "dependsOn": [],
-                }
-            },
+            "resources": resources,
         },
         "Microsoft.Flow/flows/manifest.json": {
             "packageSchemaVersion": "1.0",
@@ -75,13 +108,13 @@ def build(src: pathlib.Path) -> bytes:
                     "triggers": d["triggers"],
                     "actions": d["actions"],
                 },
-                "connectionReferences": {},
+                "connectionReferences": conn_refs,
                 "flowFailureAlertSubscribed": False,
                 "isManaged": False,
             },
         },
-        f"Microsoft.Flow/flows/{asset_id}/apisMap.json": {},
-        f"Microsoft.Flow/flows/{asset_id}/connectionsMap.json": {},
+        f"Microsoft.Flow/flows/{asset_id}/apisMap.json": apis_map,
+        f"Microsoft.Flow/flows/{asset_id}/connectionsMap.json": conns_map,
     }
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_STORED) as z:

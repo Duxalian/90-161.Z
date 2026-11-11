@@ -1,0 +1,37 @@
+{
+  "displayName": "90-161.Z SharePoint test",
+  "description": "Import test with a SharePoint connection. Asks for the site URL and a list name at run time (no site path in the repo). Reads up to 5 items and reports the count.",
+  "connections": ["shared_sharepointonline"],
+  "triggers": {
+    "manual": {
+      "type": "Request",
+      "kind": "Button",
+      "inputs": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "text": { "title": "Site URL", "type": "string", "x-ms-dynamically-added": true, "description": "Full site address, https://.../sites/...", "x-ms-content-hint": "TEXT" },
+            "text_1": { "title": "List name", "type": "string", "x-ms-dynamically-added": true, "description": "Display name of any list on that site", "x-ms-content-hint": "TEXT" }
+          },
+          "required": ["text", "text_1"]
+        }
+      }
+    }
+  },
+  "actions": {
+    "Get_items": {
+      "runAfter": {},
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": { "dataset": "@triggerBody()['text']", "table": "@triggerBody()['text_1']", "$top": 5 },
+        "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "GetItems" },
+        "authentication": { "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']", "type": "Raw" }
+      }
+    },
+    "Item_count": {
+      "runAfter": { "Get_items": ["Succeeded"] },
+      "type": "Compose",
+      "inputs": "@concat('Items read: ', string(length(outputs('Get_items')?['body/value'])), ' - SharePoint connection worked')"
+    }
+  }
+}
