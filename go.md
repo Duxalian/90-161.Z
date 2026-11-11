@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 2026-11-11 07:55 CT. Bookmark on my work computer (clickable links):
+Updated: 2026-11-11 08:20 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -34,7 +34,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/provisioning-payl
 
 Report: pass or fail for each check in section 3. For a failure, only the HTTP status and error code.
 
-## Task 3: flow import test (open)
+## Task 3: flow import test (open; package fixed 08:20 CT, download again)
 
 Download this file (Ctrl+S if it opens as text; keep the .zip name):
 https://rhope-ops.github.io/90-161.Z/flow/packages/hello-test.zip

@@ -18,17 +18,6 @@ def dumps(o):
     return json.dumps(o, indent=2, ensure_ascii=False) + "\n"
 
 
-def summary(d):
-    acts = []
-    def walk(a):
-        for v in a.values():
-            acts.append({"type": v["type"]})
-            walk(v.get("actions", {}))
-    walk(d["actions"])
-    trig = [{"type": t["type"], **({"kind": t["kind"]} if "kind" in t else {})} for t in d["triggers"].values()]
-    return {"triggers": trig, "actions": acts}
-
-
 def build(src: pathlib.Path) -> bytes:
     d = json.loads(src.read_text(encoding="utf-8"))
     for k in ("displayName", "triggers", "actions"):
@@ -37,8 +26,11 @@ def build(src: pathlib.Path) -> bytes:
     if d.get("connections"):
         raise ValueError(f"{src.name}: connections are not supported yet")
     name = src.stem
+    # Matches a real export from the PFM's tenant (2026-11-11): the manifest resource key, the
+    # assetPaths entry and the folder name are one ID (asset_id); definition.json "name" is a
+    # different ID (the flow's own). A key/folder mismatch made the import hang.
     flow_id = str(uuid.uuid5(NS, "flow:" + name))
-    res_id = str(uuid.uuid5(NS, "resource:" + name))
+    asset_id = str(uuid.uuid5(NS, "asset:" + name))
     files = {
         "manifest.json": {
             "schema": "1.0",
@@ -51,9 +43,7 @@ def build(src: pathlib.Path) -> bytes:
                 "sourceEnvironment": "",
             },
             "resources": {
-                res_id: {
-                    "id": f"/providers/Microsoft.Flow/flows/{flow_id}",
-                    "name": flow_id,
+                asset_id: {
                     "type": "Microsoft.Flow/flows",
                     "suggestedCreationType": "New",
                     "creationType": "Existing, New, Update",
@@ -66,9 +56,9 @@ def build(src: pathlib.Path) -> bytes:
         },
         "Microsoft.Flow/flows/manifest.json": {
             "packageSchemaVersion": "1.0",
-            "flowAssets": {"assetPaths": [flow_id]},
+            "flowAssets": {"assetPaths": [asset_id]},
         },
-        f"Microsoft.Flow/flows/{flow_id}/definition.json": {
+        f"Microsoft.Flow/flows/{asset_id}/definition.json": {
             "name": flow_id,
             "id": f"/providers/Microsoft.Flow/flows/{flow_id}",
             "type": "Microsoft.Flow/flows",
@@ -86,18 +76,17 @@ def build(src: pathlib.Path) -> bytes:
                     "actions": d["actions"],
                 },
                 "connectionReferences": {},
-                "definitionSummary": summary(d),
-                "templateName": "",
                 "flowFailureAlertSubscribed": False,
                 "isManaged": False,
             },
         },
-        f"Microsoft.Flow/flows/{flow_id}/apisMap.json": {},
-        f"Microsoft.Flow/flows/{flow_id}/connectionsMap.json": {},
+        f"Microsoft.Flow/flows/{asset_id}/apisMap.json": {},
+        f"Microsoft.Flow/flows/{asset_id}/connectionsMap.json": {},
     }
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_STORED) as z:
-        for path in sorted(files):
+        # Root manifest first, as in a real export.
+        for path in sorted(files, key=lambda x: (x != "manifest.json", x)):
             info = zipfile.ZipInfo(path, STAMP)
             info.compress_type = zipfile.ZIP_STORED
             info.create_system = 3
