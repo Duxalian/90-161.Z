@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Collaboration log becomes the "Project log" from the standard_project baseline (Type, Arc, CT timestamps, Arcs table) to feed a timeline; it stays in the private Claude doc because this repo is public. Baseline synced; "PFM" kept in place of the name. | PFM | Collaboration log rule (turning points only) |
 | 2026-11-11 | Repo stays public (the gov device reads raw links and Pages without login). Gov-network test details move out of the repo into the private collaboration log; the repo keeps only working rules. | PFM | Rec B: private repo + public drop repo |
 | 2026-11-11 | The future SharePoint page on the collaboration gives general lessons only: no specific addresses, file sizes or filter behavior. | PFM | full detail |
 | 2026-11-11 | Collaboration log moves to a private Claude doc (https://claude.ai/artifact/9zLxe6e9vJPKtRQv5xSSzk) so chats outside the Project can read it; the Project doc only points there. | PFM | Project doc claude/collab-log.md |

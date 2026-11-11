@@ -7,10 +7,10 @@ This file is the source of truth for every agent on this repo: Claude, GPT, Code
 
 ## Order of authority
 
-1. The PFM's current request.
+1. the PFM's current request.
 2. PFM decisions in docs/DECISIONS.md. A newer decision overrides older text.
 3. This file.
-4. The PFM's personal preferences (Claude only).
+4. the PFM's personal preferences (Claude only).
 5. docs/NEXT_PROMPT.md (the handoff).
 
 Chat history, Project files and remembered copies are not authority. If you cannot read this repo, say so and stop.
@@ -66,6 +66,8 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Before you report "verified", run the checks in Commands and report the results.
 - For UI work, verify by measuring, not by looking: screenshots at 375 px and 1440 px width, light and dark, measured spacing, and contrast against WCAG AA (4.5:1 text, 3:1 large text and UI parts). Report the numbers.
 
+- GitHub Actions (PFM, 2026-11-11): private repos share 2,000 Actions minutes a month. Trigger workflows on `pull_request` and `workflow_dispatch` only, never on `push`. Agents run the checks in Commands in their own workspace before they report; CI is a second check, not the first. Public repos run Actions free.
+
 ## Checks
 
 - Never repin an approval, add an exemption, skip a test or edit a generated report to make a check pass.
@@ -82,6 +84,24 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - The current request overrides an older handoff.
 - Keep status in repo files, never only in chat.
 - Keep docs/NEXT_PROMPT.md short (40 lines or fewer). Put detailed evidence in docs/reviews/.
+
+## Project log
+
+The project log feeds a timeline of milestones, breakthroughs and narratives for readers outside the project (PFM, 2026-11-11). Decisions alone go in docs/DECISIONS.md; the log records how the project got there.
+
+- Location: docs/LOG.md, unless "Project rules" names another place. A public repo must name a private place (for example a private Claude doc), because entries can hold environment or security detail.
+- Append an entry in the same turn the event happens. Backfill the same turn if you missed one.
+- One row per event. Columns, in this order: # | When (CT) | Type | Arc | Topic | Raised by | What the other missed | Evidence | Result.
+- When: `YYYY-MM-DD HH:MM` in America/Chicago. A range: `YYYY-MM-DD HH:MM–HH:MM`. Mark an estimate with `~`.
+- Type, one of:
+  - `milestone`: a deliverable exists or a goal is met (first import works, v1 published).
+  - `breakthrough`: a test or idea removes a blocker or changes direction.
+  - `miss`: a wrong assumption, failed test or dead end. Record it honestly for both sides.
+  - `decision`: the PFM decides, or overrules a recommendation. Also record it in docs/DECISIONS.md.
+- Arc: a short kebab-case name for the narrative thread (for example `email-delivery`). Each arc has one row in the Arcs table: Arc | Span | Summary (one sentence) | Outcome.
+- Raised by: who first said it (PFM, Claude, a named agent or person). "What the other missed": the gap on the other side, or `-`.
+- Evidence: a commit, file, test or measurement. Never chat text alone.
+- If you cannot write to the log (no tool for it), put the full entry in your turn summary under Copy, with "Paste into: project log".
 
 ## Delegation
 
@@ -114,6 +134,6 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Formatting (PFM, 2026-11-10): rules force output to look like DAFMAN 90-161. Format comes from code, never from the model. Rule catalog: docs/format-rules.md. Do not use AFIMPT for formatting or tracking.
 - System of record (PFM, 2026-11-10): 90-161.Z owns endorsement tracking (no TMT).
 - Architecture: docs/ARCHITECTURE.md. Process: docs/process-model.md.
-- Collaboration log (PFM, 2026-11-11): log each turning point (new idea, missed assumption, direction-changing test, overruled recommendation) in the private Claude doc https://claude.ai/artifact/9zLxe6e9vJPKtRQv5xSSzk (Claude Docs tools; readable from any chat, moved from the Project doc claude/collab-log.md on 2026-11-11), not in this repo: who raised it, what the other side missed, evidence, result. Append in the same turn it happens.
+- Project log location (PFM, 2026-11-11): this repo is public, so the "Project log" lives in the private Claude doc https://claude.ai/artifact/9zLxe6e9vJPKtRQv5xSSzk (Claude Docs tools; any chat can open it by link), never in this repo. It uses the "Project log" columns and an Arcs table. Agents without Docs tools give the entry under Copy, "Paste into: project log".
 
 <!-- Add rules for this project below. Date each PFM decision, for example "(PFM, 2026-11-09)". -->
