@@ -8,7 +8,7 @@ matches the real export in tests/fixtures/real-export-sharepoint (connector + co
 connectionReferences). At import the PFM picks an existing connection (creationType "Existing").
 Embeds: a def may map action names to repo files in "embed" (e.g. {"Payload": "flow/provisioning-payload.json"});
 the build puts that file's JSON in the action's "inputs", so generated data has one source and --check sees changes.
-Strings that start with "@" are escaped to "@@" so the flow engine reads them as text, not expressions.
+Strings that start with "@", and "@{" anywhere, are escaped to "@@" so the flow engine reads them as text, not expressions.
 """
 import argparse, io, json, pathlib, sys, uuid, zipfile
 
@@ -31,10 +31,12 @@ def dumps(o):
 
 
 def literal(o):
-    """Escape a JSON value so the flow engine treats every string as text ("@x" -> "@@x")."""
+    """Escape a JSON value so the flow engine treats every string as text ("@x" -> "@@x", "a @{b}" -> "a @@{b}")."""
     if isinstance(o, dict): return {k: literal(v) for k, v in o.items()}
     if isinstance(o, list): return [literal(v) for v in o]
-    if isinstance(o, str) and o.startswith("@"): return "@" + o
+    if isinstance(o, str):
+        # Leading "@" = whole-string expression; "@{" anywhere = interpolation. Escape both.
+        return "@" + o if o.startswith("@") else o.replace("@{", "@@{")
     return o
 
 

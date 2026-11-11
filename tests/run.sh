@@ -37,10 +37,12 @@ python3 tests/check_flow_defs.py && ok "flow def names and expressions" || bad "
 for f in flow/defs/*.json; do python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" && ok "json $f" || bad "json $f"; done
 
 python3 - <<'PY' && ok "T02 package embeds the current payload; loops run 1 at a time" || bad "T02 package payload or loop concurrency"
-import json, zipfile, glob
+import json, zipfile, glob, sys
+sys.path.insert(0, 'scripts'); from build_flow_package import literal
 z = zipfile.ZipFile(sorted(glob.glob('flow/packages/90161Z-T02-provision-lists-r*.zip'))[-1])
 d = json.loads(z.read([n for n in z.namelist() if n.endswith('/definition.json')][0]))['properties']['definition']['actions']
-assert d['Payload']['inputs'] == json.load(open('flow/provisioning-payload.json'))
+assert d['Payload']['inputs'] == literal(json.load(open('flow/provisioning-payload.json')))
+assert literal({'a': ['@x', 'y @{z}', 'ok']}) == {'a': ['@@x', 'y @@{z}', 'ok']}
 for k in ('Create_lists', 'Create_fields_and_views'):
     assert d[k]['runtimeConfiguration']['concurrency']['repetitions'] == 1, k
 PY
