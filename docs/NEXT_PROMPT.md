@@ -17,8 +17,7 @@ Updated: 2026-11-10 by Claude. Keep this file at 40 lines or fewer. The current 
 
 ## Needs the owner
 
-- Transfer path: GitHub login blocked on gov device. Decide: public repo / .mil email / other.
-- Run scripts/gov/Test-Environment.ps1 (paste into console; read-only) and paste the output.
+- Paste the output of scripts/gov/Test-Environment.ps1 (the owner ran it 2026-11-10; output not received yet).
 - Check Power Automate license for "Populate a Microsoft Word template" (renderer option C).
 
 ## Do not

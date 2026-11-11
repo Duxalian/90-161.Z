@@ -4,7 +4,7 @@ Newest first. "By" = the owner for a decision. "By" = Agent for a recommendation
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
-| 2026-11-10 | **Rec:** Make the repo public so the gov device can read it without a GitHub login (repo holds no government data by rule). Open: see NEXT_PROMPT. | Agent | — |
+| 2026-11-10 | Repo is public, so the gov device reads it without a GitHub login. Rule: nothing that names the wing, people or office symbols goes in the repo. | the owner | Rec "make the repo public" |
 | 2026-11-10 | GitHub login is blocked on the gov device (GitHub itself is reachable). | the owner | Transfer path "the owner opens the repo on the gov device" |
 | 2026-11-10 | Renderer: try both A (PowerShell + Word COM) and C (Power Automate "Populate a Microsoft Word template"). | the owner | — |
 | 2026-11-10 | the owner is not a tenant admin. | the owner | — |
