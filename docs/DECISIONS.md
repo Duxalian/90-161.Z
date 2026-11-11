@@ -4,6 +4,10 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | The 90-161.Z app replaces the checklist, AO guide, template and Attachment 1 workbook. Old files are retired; one short Word doc gives a process summary and how to start in the app. | PFM | Fixed copies of each wing file |
+| 2026-11-11 | The app can email a publication status report to anyone at any time (for example a supervisor). | PFM | — |
+| 2026-11-11 | Phase A route: built-in browser (done); plan order A > B > C > D. | PFM | — |
+| 2026-11-11 | **Rec:** TOC switch defaults ON for ANG wing publications (4.5.8.2, T-1), PFM can switch off. PFM view: TOC only for long, many-chapter publications. Open. | Agent | — |
 | 2026-11-11 | DAFMAN 90-161 is the source of truth whenever any wing file (template, AO guide, checklist) or practice contradicts it. Wing files shape the customer process only; they never supply rules. | PFM | — |
 | 2026-11-11 | Resolved by that rule: indent 0.25 in per level; signature block at 4.0 in; TOC per 4.5.8.2 (ANG wing level); waiver wording per 4.5.5.11 example. | PFM | wing template variants |
 | 2026-11-11 | Two spaces before each new sentence (DAFMAN 90-161 measured: 6.55 pt between sentences vs 3.14 pt between words, n=53/1625, pages 40-46). | PFM | — |

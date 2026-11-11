@@ -85,10 +85,12 @@ DAFMAN 90-161 itself is the template (4.5.4). These values are measured with pdf
 | L-004 | Gaps | Two spaces after paragraph numbers, after headings, before each new sentence (6.55 pt vs 3.14 pt word gap, n=53), and between designator and date in the running header | 40-46 |
 | L-005 | Cover statements | ACCESSIBILITY/RELEASABILITY labels bold; text at 1.5 in from margin (hanging) | 1 |
 | L-006 | Signature block | Starts 4.00 in from the page edge (3.0 in from margin), about two lines below the last text | 109 |
-| L-007 | Seal/shield | 1.2 in square, under the BY ORDER OF lines | 1 |
-| L-008 | Cover rules | Rule below COMPLIANCE line, below RELEASABILITY, and below Supersedes/Pages | 1 |
+| L-007 | Seal/shield | x 1.00 in, top 1.47 in, 1.20 in square (7 of 7 covers; see docs/reviews/2026-11-11-cover-consistency.md) | 1 + 6 pubs |
+| L-008 | Cover rules | 3 rules, 6.50 in wide, 0.75-0.80 pt: below COMPLIANCE line, below RELEASABILITY, below Supersedes/Pages (7 of 7) | 1 + 6 pubs |
 | L-009 | Chapters | Start on a new page; "Chapter N" bold centered; title bold centered all caps on the next line | 40 |
 | L-010 | Cover header | Two columns: left "BY ORDER OF ..." bold italic; right column right-aligned bold italic: issuer, type and number, date, series title, title | 1 |
 | L-011 | Attachments | New page; "Attachment N" bold centered; title bold centered all caps; glossary category titles bold at margin | 110 |
 
 Decided (PFM, 2026-11-11): the cover reads "Certified by:" as printed on DAFMAN 90-161 and other published covers (4.5.4.11 writes "Certified By:").
+
+Cover details L-010a..h (right-column groups, OPR/Supersedes tabs, Pages position, compliance spacing): docs/reviews/2026-11-11-cover-consistency.md.
