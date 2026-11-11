@@ -51,6 +51,26 @@
       "ref": "DAFMAN 90-161 6.4.1 (PFMs distribute on approved websites or other approved methods)"
     },
     {
+      "internalName": "ProductStatus",
+      "displayName": "Product Status",
+      "type": "Choice",
+      "required": true,
+      "choices": [
+        "Active",
+        "Superseded",
+        "Rescinded"
+      ],
+      "default": "Active",
+      "ref": "AFRIMS RDS T 33-38 R 07 (PFM, 2026-11-11): destroy when superseded or rescinded; the status change is the disposition trigger"
+    },
+    {
+      "internalName": "InactiveDate",
+      "displayName": "Superseded or Rescinded Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "AFRIMS RDS T 33-38 R 07 (PFM, 2026-11-11): destroy when superseded or rescinded; date of the trigger event"
+    },
+    {
       "internalName": "LastReviewDate",
       "displayName": "Last Review Date",
       "type": "DateTime",
@@ -100,6 +120,30 @@
       ],
       "default": false,
       "ref": "DAFMAN 90-161 7.4.2"
+    },
+    {
+      "name": "PFM - Superseded or Rescinded",
+      "fields": [
+        "PublicationNumber",
+        "Title",
+        "ProductStatus",
+        "InactiveDate",
+        "Publication"
+      ],
+      "orderBy": [
+        {
+          "field": "InactiveDate",
+          "ascending": true
+        }
+      ],
+      "where": {
+        "field": "ProductStatus",
+        "op": "Neq",
+        "type": "Choice",
+        "value": "Active"
+      },
+      "default": false,
+      "ref": "AFRIMS RDS T 33-38 R 07 (PFM, 2026-11-11): destroy when superseded or rescinded; records to destroy (the records manager acts; no automatic deletion)"
     }
   ]
 }

@@ -1009,6 +1009,32 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
+     "SchemaXml": "<Field Name=\"ProductStatus\" StaticName=\"ProductStatus\" DisplayName=\"Product Status\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Active</CHOICE><CHOICE>Superseded</CHOICE><CHOICE>Rescinded</CHOICE></CHOICES><Default>Active</Default></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"InactiveDate\" StaticName=\"InactiveDate\" DisplayName=\"Superseded or Rescinded Date\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
      "SchemaXml": "<Field Name=\"LastReviewDate\" StaticName=\"LastReviewDate\" DisplayName=\"Last Review Date\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
      "Options": 24
     }
@@ -1106,6 +1132,49 @@
   {
    "method": "POST",
    "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Review%20Due')/viewfields/addviewfield('NextReviewDue')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM - Superseded or Rescinded",
+    "PersonalView": false,
+    "ViewQuery": "<Where><Neq><FieldRef Name=\"ProductStatus\"/><Value Type=\"Choice\">Active</Value></Neq></Where><OrderBy><FieldRef Name=\"InactiveDate\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Superseded%20or%20Rescinded')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Superseded%20or%20Rescinded')/viewfields/addviewfield('PublicationNumber')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Superseded%20or%20Rescinded')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Superseded%20or%20Rescinded')/viewfields/addviewfield('ProductStatus')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Superseded%20or%20Rescinded')/viewfields/addviewfield('InactiveDate')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Superseded%20or%20Rescinded')/viewfields/addviewfield('Publication')",
    "body": {}
   }
  ],

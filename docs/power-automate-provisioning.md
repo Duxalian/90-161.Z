@@ -20,7 +20,7 @@ Columns, views and their DAFMAN references: `schemas/lists/*.json` (one file per
 
 ## 2. Import and run
 
-Package: `flow/packages/90161Z-T02-provision-lists-r3.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r3.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
+Package: `flow/packages/90161Z-T02-provision-lists-r4.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r4.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
 
 The flow asks for 2 inputs:
 - **Site URL**: the full address of the site that will hold the lists.
@@ -38,7 +38,7 @@ Order of work:
 
 | Check | Pass |
 |---|---|
-| Run | Succeeded; Result shows "Lists: 7, fields and views: 114, updates: 11 - provisioning finished" |
+| Run | Succeeded; Result shows "Lists: 7, fields and views: 123, updates: 11 - provisioning finished" |
 | Site contents | The 7 display titles in section 1 exist |
 | List address | Open PFM Publications: the address ends in /Lists/PFMPublications |
 | PFM Endorsements, Endorser column | Type Person or Group, people only |

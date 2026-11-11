@@ -82,7 +82,7 @@ for r in d['fields']:
 PY
 
 out=$(pwsh -NoProfile -File scripts/gov/Provision-Lists.ps1 -PlanOnly -SchemaPath schemas/lists 2>&1 | tail -1)
-[ "$out" = "PLAN lists=7 fields=43 views=10" ] && ok "lists plan ($out)" || bad "lists plan: $out"
+[ "$out" = "PLAN lists=7 fields=45 views=11" ] && ok "lists plan ($out)" || bad "lists plan: $out"
 
 cp templates/CRM_A12-1.docx /tmp/crm_before.docx
 node templates/build_crm_template.js >/tmp/crm.out 2>&1 && grep -q "tableWidthDXA=9331 columns=9" /tmp/crm.out && ok "CRM template builds ($(cat /tmp/crm.out | sed s,.*CRM_A12-1.docx,,))" || bad "CRM template build"
