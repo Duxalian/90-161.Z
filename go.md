@@ -1,6 +1,8 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 2026-11-11 07:35 CT. Bookmark this page on my work computer. Type it once:
+Updated: 2026-11-11 07:35 CT. Bookmark on my work computer (clickable links):
+rhope-ops.github.io/90-161.Z
+Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 
 Reload to see new tasks (GitHub can serve a copy up to 5 minutes old).
