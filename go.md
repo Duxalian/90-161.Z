@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 2026-11-11 16:41 CT. Bookmark on my work computer (clickable links):
+Updated: 2026-11-11 16:43 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -32,7 +32,7 @@ In File Explorer, right-click 90161Z-T01-renderer-test-r3.ps1 > Run with PowerSh
 
 Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each check (1-8) in the test plan that fails, with what I see.
 
-## Task 2: create the lists, r6 (open, 2026-11-11 16:41 CT)
+## Task 2: create the lists, r6 (open, 2026-11-11 16:43 CT)
 
 Folder: ...\90-161.Z\T02
 

@@ -116,6 +116,7 @@ function Test-ListSchema {
         if (Test-HasProp $v 'orderBy') {
           foreach ($o in @($v.orderBy)) { if (-not $seen.ContainsKey($o.field)) { $problems.Add("$where : view '$($v.name)' orders by unknown field '$($o.field)'") } }
         }
+        if ((Test-HasProp $v 'groupBy') -and -not $seen.ContainsKey($v.groupBy)) { $problems.Add("$where : view '$($v.name)' groups by unknown field") }
         if (Test-HasProp $v 'where') {
           if (-not $seen.ContainsKey($v.where.field)) { $problems.Add("$where : view '$($v.name)' filters on unknown field") }
           if (@('Eq', 'Neq') -notcontains $v.where.op) { $problems.Add("$where : view '$($v.name)' filter op must be Eq or Neq") }
@@ -225,6 +226,9 @@ function Get-ViewQuery {
     $w = $View.where
     $tag = $w.op
     $q += '<Where><' + $tag + '><FieldRef Name="' + (ConvertTo-XmlText $w.field) + '"/><Value Type="' + (ConvertTo-XmlText $w.type) + '">' + (ConvertTo-XmlText "$($w.value)") + '</Value></' + $tag + '></Where>'
+  }
+  if (Test-HasProp $View 'groupBy') {
+    $q += '<GroupBy Collapse="FALSE"><FieldRef Name="' + (ConvertTo-XmlText $View.groupBy) + '"/></GroupBy>'
   }
   if (Test-HasProp $View 'orderBy') {
     $q += '<OrderBy>'
