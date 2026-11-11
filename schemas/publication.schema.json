@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rhope-ops/90-161.Z/schemas/publication.schema.json",
+  "title": "90-161.Z publication content (layer L1)",
+  "description": "Content only. There are no font, size, spacing or style fields: format comes from scripts/gov/New-Publication.ps1. Inline markup allowed in text: {i}italic{/i}, {b}bold{/b}. Tier numbers such as (T-3) are bolded by the renderer. Rule IDs: docs/format-rules.md.",
+  "type": "object",
+  "required": ["schemaVersion", "meta", "body"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "1" },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "directive", "byOrderOf", "issuerLine", "typeAndNumber", "designator", "date", "seriesTitle", "title", "accessibility", "releasability", "opr", "certifiedBy"],
+      "properties": {
+        "action": { "enum": ["new", "rewrite", "ic", "ac"], "description": "new publication, rewrite, interim change, administrative change" },
+        "directive": { "type": "boolean", "description": "true for directive publications (F-019, F-029)" },
+        "integratedSupplement": { "type": "boolean", "description": "exempts F-005 (4.5.3.4 exception)" },
+        "byOrderOf": { "enum": ["SECRETARY OF THE AIR FORCE", "COMMANDER", "CHIEF, NATIONAL GUARD BUREAU"], "description": "F-013 (4.5.4.1)" },
+        "byOrderOfUnit": { "type": "string", "description": "optional second line under BY ORDER OF THE COMMANDER" },
+        "issuerLine": { "type": "string", "description": "first line of the right header column" },
+        "typeAndNumber": { "type": "string", "description": "publication type and number, e.g. INSTRUCTION 99-101 (4.5.4.3)" },
+        "designator": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+$", "description": "running header and file name, no spaces (3.8.2)" },
+        "date": { "type": "string", "description": "(Date) for drafts (4.5.4.4)" },
+        "dateLines": { "type": "array", "items": { "type": "string" }, "description": "e.g. Incorporating Change 1, 14 JULY 2025" },
+        "seriesTitle": { "type": "string", "description": "AFSC series title, rendered in italics (4.5.4.5)" },
+        "title": { "type": "string", "description": "all capital letters (4.5.4.6)" },
+        "accessibility": { "type": "string", "description": "statement text without the label (Table 4.2)" },
+        "releasability": { "type": "string", "description": "statement text without the label (Table 4.3)" },
+        "opr": { "type": "string", "description": "office symbol only (4.5.4.10)" },
+        "certifiedBy": { "type": "string", "description": "office symbol only (4.5.4.11)" },
+        "supersedes": {
+          "type": "array",
+          "items": { "type": "object", "required": ["designator", "date"], "additionalProperties": false,
+            "properties": { "designator": { "type": "string" }, "date": { "type": "string", "description": "D Month YYYY (4.5.4.12)" } } }
+        },
+        "shieldImage": { "type": ["string", "null"], "description": "local path to the shield image on the gov device (4.5.4.2)" }
+      }
+    },
+    "opening": { "type": "string", "description": "opening paragraph (4.5.5)" },
+    "summaryOfChanges": { "type": ["string", "null"], "description": "rewrites and ICs only (4.5.6)" },
+    "body": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "chapters": { "type": "array", "items": { "$ref": "#/$defs/chapter" } },
+        "paragraphs": { "type": "array", "items": { "$ref": "#/$defs/paragraph" } }
+      }
+    },
+    "signature": { "type": "array", "items": { "type": "string" }, "description": "approving official authentication block lines (4.5.10)" },
+    "attachments": { "type": "array", "items": { "$ref": "#/$defs/attachment" } }
+  },
+  "$defs": {
+    "chapter": {
+      "type": "object", "required": ["title", "paragraphs"], "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string", "description": "all capital letters (4.5.9.7.4.5)" },
+        "paragraphs": { "type": "array", "items": { "$ref": "#/$defs/paragraph" } }
+      }
+    },
+    "paragraph": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string", "description": "heading; main paragraphs need one (4.5.9.2)" },
+        "text": { "type": "string" },
+        "notes": { "type": "array", "items": { "type": "string" }, "description": "text only; renderer adds bold Note: (4.6.2)" },
+        "exceptions": { "type": "array", "items": { "type": "string" }, "description": "text only; renderer adds bold Exception: (4.6.3)" },
+        "bullets": { "type": "array", "items": { "type": "string" }, "description": "non-directive publications only (4.5.9.3)" },
+        "revised": { "type": "boolean", "description": "margin bar for interim changes (4.5.6.2)" },
+        "table": { "$ref": "#/$defs/table" },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/paragraph" } }
+      }
+    },
+    "table": {
+      "type": "object", "required": ["title", "columns", "rows"], "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "columns": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "rows": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } }
+      }
+    },
+    "attachment": {
+      "type": "object", "required": ["title"], "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "glossary": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "references": { "type": "array", "items": { "type": "string" } },
+            "prescribedForms": { "type": "array", "items": { "type": "string" } },
+            "adoptedForms": { "type": "array", "items": { "type": "string" } },
+            "abbreviations": { "$ref": "#/$defs/pairs" },
+            "officeSymbols": { "$ref": "#/$defs/pairs" },
+            "terms": { "$ref": "#/$defs/pairs" }
+          }
+        },
+        "paragraphs": { "type": "array", "items": { "$ref": "#/$defs/paragraph" } }
+      }
+    },
+    "pairs": {
+      "type": "array",
+      "items": { "type": "object", "required": ["term", "definition"], "additionalProperties": false,
+        "properties": { "term": { "type": "string" }, "definition": { "type": "string" } } }
+    }
+  }
+}

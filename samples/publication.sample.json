@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1",
+  "meta": {
+    "action": "rewrite",
+    "directive": true,
+    "byOrderOf": "COMMANDER",
+    "byOrderOfUnit": "SAMPLE AIRLIFT WING",
+    "issuerLine": "SAMPLE AIRLIFT WING",
+    "typeAndNumber": "INSTRUCTION 99-101",
+    "designator": "SAMPLEWINGI99-101",
+    "date": "(Date)",
+    "dateLines": [],
+    "seriesTitle": "Test and Evaluation",
+    "title": "SAMPLE PUBLICATION ROUTING PROCEDURES",
+    "accessibility": "This publication is only available directly from the OPR.",
+    "releasability": "There are no releasability restrictions on this publication",
+    "opr": "OPR-A",
+    "certifiedBy": "OPR-B",
+    "supersedes": [ { "designator": "SAMPLEWINGI99-101", "date": "1 January 2020" } ],
+    "shieldImage": null
+  },
+  "opening": "This publication implements {i}Sample Parent Instruction 99-1, Sample Parent Title{/i}. It applies to all assigned personnel of the sample wing, including the Air National Guard (ANG). Ensure all records generated as a result of processes prescribed in this publication adhere to Air Force Instruction (AFI) 33-322, {i}Records Management and Information Governance Program{/i}, and are disposed in accordance with the Air Force Records Disposition Schedule, which is located in the Air Force Records Information Management System. Refer recommended changes and questions about this publication to the office of primary responsibility (OPR) using the DAF Form 847, {i}Recommendation for Change of Product{/i}. This publication may not be supplemented. The authorities to waive wing, unit, or delta level requirements in this publication are identified with a tier (\"T-0, T-1, T-2, T-3\") number following the compliance statement. Submit requests for waivers through the chain of command to the appropriate tier waiver approval authority, or alternately, to the publication OPR for non-tiered compliance items.",
+  "summaryOfChanges": "This document has been revised and should be completely reviewed. Changes include sample routing steps.",
+  "body": {
+    "chapters": [
+      {
+        "title": "OVERVIEW",
+        "paragraphs": [
+          { "title": "Purpose.", "text": "This sample shows the layout that the renderer produces." },
+          { "title": "Background.", "text": "The sample uses fake units and fake office symbols." }
+        ]
+      },
+      {
+        "title": "ROLES AND RESPONSIBILITIES",
+        "paragraphs": [
+          {
+            "title": "Sample Office A (OPR-A).",
+            "text": "",
+            "children": [
+              { "text": "Will review each draft within 15 business days. (T-3)" },
+              { "text": "Will keep the comment resolution matrix in the record set. (T-3)" }
+            ]
+          },
+          {
+            "title": "Sample Office B (OPR-B).",
+            "text": "Will certify the publication after coordination is complete. (T-3)"
+          }
+        ]
+      },
+      {
+        "title": "ROUTING PROCEDURES",
+        "paragraphs": [
+          {
+            "title": "Routing.",
+            "text": "Route each draft through the steps in {b}Table 3.1{/b}.",
+            "table": {
+              "title": "Sample Routing Steps.",
+              "columns": [ "Step", "Action" ],
+              "rows": [ [ "1", "Draft" ], [ "2", "Coordinate" ], [ "3", "Certify" ] ]
+            }
+          },
+          {
+            "title": "Records.",
+            "text": "Keep all routing records.",
+            "notes": [ "This is a sample note." ],
+            "children": [
+              { "text": "Store records in the office file plan." },
+              { "text": "Dispose of records in accordance with the Air Force Records Disposition Schedule." }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "signature": [ "SAMPLE A. SIGNER, Colonel, ANG", "Commander" ],
+  "attachments": [
+    {
+      "title": "GLOSSARY OF REFERENCES AND SUPPORTING INFORMATION",
+      "glossary": {
+        "references": [ "AFI 33-322, {i}Records Management and Information Governance Program{/i}, 23 March 2020" ],
+        "prescribedForms": [],
+        "adoptedForms": [ "DAF Form 847, {i}Recommendation for Change of Product{/i}" ],
+        "abbreviations": [
+          { "term": "ANG", "definition": "Air National Guard" },
+          { "term": "OPR", "definition": "office of primary responsibility" }
+        ],
+        "officeSymbols": [
+          { "term": "OPR-A", "definition": "Sample Office A" },
+          { "term": "OPR-B", "definition": "Sample Office B" }
+        ],
+        "terms": [ { "term": "Sample Term", "definition": "A fake term used only in this sample." } ]
+      }
+    }
+  ]
+}
