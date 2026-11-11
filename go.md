@@ -36,6 +36,8 @@ Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each chec
 
 Folder: ...\90-161.Z\T02
 
+On hold (2026-11-11 17:30 CT): do not run r6. A full DAFMAN check found list changes (r7) that I approve first.
+
 r6: forms link to their prescribing publication (reviewed together); only directive publication types; no category column. r5 added PFM Series (39 series from DAFMAN), Publication Type, Series and OPR lookups, Inactive status and review dates.
 
 Run it on a TEST site first (a site or subsite only I use). After it passes there, run it again on the real site.
