@@ -4,8 +4,9 @@ The renderer was linted and its validator tested in the agent workspace. Word CO
 
 ## Get the files
 
-From https://github.com/rhope-ops/90-161.Z (no login), save into one folder, for example `C:\90161Z`:
+Task folder (PFM, 2026-11-11): `C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T01`. Create it once. From https://github.com/rhope-ops/90-161.Z (no login), save these 5 files into it (raw links in go.md, Task 1):
 
+- `scripts/gov/90161Z-T01-renderer-test-r1.ps1` (runner)
 - `scripts/gov/Publication.Common.ps1` (shared; must sit in the same folder)
 - `scripts/gov/Test-Publication.ps1`
 - `scripts/gov/New-Publication.ps1`
@@ -13,14 +14,23 @@ From https://github.com/rhope-ops/90-161.Z (no login), save into one folder, for
 
 ## Run
 
-If PowerShell blocks the downloaded files, run once in that folder: `Get-ChildItem *.ps1 | Unblock-File`
+In File Explorer, right-click `90161Z-T01-renderer-test-r1.ps1` > **Run with PowerShell**. No path is typed, so the "-File ... does not exist" error cannot occur.
+
+1. It asks for the DODID. Type it, or press Enter to use this computer's profile folder (`C:\Users\<that folder>`).
+2. It goes to the T01 folder, checks the 4 other files are there, unblocks the scripts, and runs: validator, draft render, final render with PDF.
+3. It shows the output, saves it as `90161Z-T01-result-r1.txt` in the T01 folder (DODID replaced by `<DODID>`), and waits for Enter.
+
+Messages: `FOLDER not found` = the T01 folder is missing or the DODID is wrong; `MISSING in T01 folder: <names>` = save those files.
+
+Manual fallback (PowerShell window), only if Run with PowerShell is blocked: go to the T01 folder first, then run each step:
 
 ```
-cd C:\90161Z
 powershell -ExecutionPolicy Bypass -File .\Test-Publication.ps1 -Path .\publication.sample.json
 powershell -ExecutionPolicy Bypass -File .\New-Publication.ps1 -Path .\publication.sample.json -Mode draft
 powershell -ExecutionPolicy Bypass -File .\New-Publication.ps1 -Path .\publication.sample.json -Mode final -Pdf
 ```
+
+The "-File ... does not exist" error means the PowerShell window is not in the folder that holds the file.
 
 ## Pass criteria
 
