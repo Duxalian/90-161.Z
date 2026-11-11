@@ -58,7 +58,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Gov-device code target: Windows PowerShell 5.1, Word 16 COM, PnP.PowerShell 1.12.0. No other modules (PSGallery blocked).
 - Build: not set yet.
 - Test: not set yet.
-- Lint: not set yet.
+- Lint: `scripts/lint.sh` (pwsh 7 + PSScriptAnalyzer, PS 5.1 syntax target; setup in docs/dev-setup.md). Pass = `findings=0`.
 
 ## Verification
 
