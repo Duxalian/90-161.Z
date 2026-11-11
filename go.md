@@ -34,6 +34,20 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/provisioning-payl
 
 Report: pass or fail for each check in section 3. For a failure, only the HTTP status and error code.
 
+## Task 4: SharePoint connection test (open, 2026-11-11 10:20 CT)
+
+Download (raw link only):
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/sp-get-items.zip
+
+The file must be 6,337 bytes.
+
+In Power Automate: My flows > Import > Import Package (Legacy) > Upload > sp-get-items.zip.
+Import setup: flow = Create as new. SharePoint connection = Select during import > pick my existing SharePoint connection > Save. Then Import.
+Open the flow, Test > Manually > Run flow. Type the full site address and the display name of any list on that site.
+Pass: the run succeeds and "Item count" shows "Items read: N - SharePoint connection worked".
+
+Report: file size; import ok or the exact error text; run result (only the Item count text or the error code, no list contents).
+
 ## Done
 
 - Task 3, flow import test (2026-11-11 08:40): raw zip link, Import Package (Legacy), run passed ("Echo compose" showed the expected text).

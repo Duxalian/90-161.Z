@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Flows get the SharePoint site URL as a run-time input; the site URL and list IDs never go in the repo (the URL is not CUI, but the repo is public and the rule on the wing's site path stands). Lists are chosen by name. | PFM | Rec: site URL in the package |
 | 2026-11-11 | Repo stays public (the gov device reads raw links and Pages without login). Gov-network test details move out of the repo into the private collaboration log; the repo keeps only working rules. | PFM | Rec B: private repo + public drop repo |
 | 2026-11-11 | The future SharePoint page on the collaboration gives general lessons only: no specific addresses, file sizes or filter behavior. | PFM | full detail |
 | 2026-11-11 | Collaboration log moves to a private Claude doc (https://claude.ai/artifact/9zLxe6e9vJPKtRQv5xSSzk) so chats outside the Project can read it; the Project doc only points there. | PFM | Project doc claude/collab-log.md |
