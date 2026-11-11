@@ -5,3 +5,5 @@ skip: ref/dafman90-161.txt
 # Public host names (PFM, 2026-11-11).
 GenAI.mil
 usaf.dps.mil
+# Escaped form of the same public host, in tests/run.sh (PFM, 2026-11-11).
+usaf\.dps\.mil
