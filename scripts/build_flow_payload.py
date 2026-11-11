@@ -44,6 +44,7 @@ def field_xml(f):
     elif t == 'Lookup':
         a += ['Type="Lookup"', 'List="{__%s_ID__}"' % f['lookup']['list'],
               f'ShowField={quoteattr(f["lookup"].get("showField", "Title"))}']
+    elif t == 'User': a += ['Type="User"', 'UserSelectionMode="PeopleOnly"', 'UserSelectionScope="0"']
     elif t in ('Text', 'Number', 'Boolean'): a += [f'Type="{t}"']
     else: sys.exit(f'unsupported field type {t}')
     if f.get('default') not in (None, ''):

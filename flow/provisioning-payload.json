@@ -341,7 +341,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"Endorser\" StaticName=\"Endorser\" DisplayName=\"Endorser\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "SchemaXml": "<Field Name=\"Endorser\" StaticName=\"Endorser\" DisplayName=\"Endorser\" Required=\"FALSE\" Type=\"User\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\"></Field>",
      "Options": 24
     }
    }

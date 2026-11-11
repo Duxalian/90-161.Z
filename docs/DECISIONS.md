@@ -4,6 +4,10 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | **Rec:** Cover line "Certified by:" (as printed on DAFMAN 90-161 and other published DAF covers), not "Certified By:" (4.5.4.11 wording). Open. | Agent | — |
+| 2026-11-11 | **Rec:** CRM template follows DAFMAN 90-161 Figure A12.1 and 5.3 columns. File format (Word encouraged by 5.3 vs Excel in current use) open. | Agent | — |
+| 2026-11-11 | Endorser is a Person field (enables flow alerts to the endorser). | PFM | Endorser as text (Agent placeholder) |
+| 2026-11-11 | Item-level permissions: customers read and edit only rows they created, on Publications and Endorsements. | PFM | — |
 | 2026-11-10 | Create the SharePoint lists with a Power Automate flow (docs/power-automate-provisioning.md); PowerShell/PnP path dropped (sign-in window never opened). | PFM | PnP provisioning |
 | 2026-11-10 | Site URL: repo holds only the domain pattern https://usaf.dps.mil/sites/<your-site>; the real site path stays on the gov device and in the flow. | PFM | — |
 | 2026-11-10 | Build both lanes in parallel: (A) renderer + validator, (B) SharePoint lists + PnP provisioning. | PFM | — |

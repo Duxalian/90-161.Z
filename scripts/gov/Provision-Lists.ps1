@@ -37,7 +37,7 @@ if (-not $SchemaPath) {
   $SchemaPath = Join-Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) 'schemas') 'lists'
 }
 
-$script:AllowedTypes = @('Text', 'Note', 'Choice', 'Number', 'DateTime', 'Boolean', 'URL', 'Lookup')
+$script:AllowedTypes = @('Text', 'Note', 'Choice', 'Number', 'DateTime', 'Boolean', 'URL', 'Lookup', 'User')
 $script:Counts = [ordered]@{
   ListsCreated = 0; ListsSkipped = 0; FieldsCreated = 0; FieldsSkipped = 0
   ViewsCreated = 0; ViewsSkipped = 0; SeedsCreated = 0; SeedsSkipped = 0; Failed = 0
@@ -193,6 +193,7 @@ function Get-FieldXml {
   $inner = ''
   switch ($Field.type) {
     'Text'     { $attrs += 'Type="Text"' }
+    'User'     { $attrs += 'Type="User"'; $attrs += 'UserSelectionMode="PeopleOnly"'; $attrs += 'UserSelectionScope="0"' }
     'Note'     { $attrs += 'Type="Note"'; $attrs += 'NumLines="6"' }
     'Number'   { $attrs += 'Type="Number"' }
     'Boolean'  { $attrs += 'Type="Boolean"' }

@@ -2,6 +2,7 @@
   "list": "Endorsements",
   "description": "One row per endorser per publication: order, role, status, due date, response (ARCHITECTURE s3).",
   "template": "GenericList",
+  "itemLevelPermissions": "creatorOnly",
   "ref": "ARCHITECTURE s3 (Endorsements list) and s4 (endorsement flow)",
   "fields": [
     { "internalName": "Title", "displayName": "Title", "type": "Text", "required": true, "builtIn": true,
@@ -13,8 +14,8 @@
       "ref": "ARCHITECTURE s3 (order) and s4 step 1 (ordered endorser list)" },
     { "internalName": "Role", "displayName": "Role", "type": "Text", "required": false,
       "ref": "ARCHITECTURE s3 (role). Mandatory coordinator roles not extracted yet (docs/process-model.md, Tables A3.1/A3.2)" },
-    { "internalName": "Endorser", "displayName": "Endorser", "type": "Text", "required": false,
-      "ref": "ARCHITECTURE s1 G3 (customers enter their endorsers). Person vs text field is an open choice" },
+    { "internalName": "Endorser", "displayName": "Endorser", "type": "User", "required": false,
+      "ref": "ARCHITECTURE s1 G3 (customers enter their endorsers); Person field so flows can alert the endorser (PFM, 2026-11-10)" },
     { "internalName": "Execution", "displayName": "Sequential or parallel", "type": "Choice", "required": false,
       "choices": ["Sequential", "Parallel"],
       "ref": "ARCHITECTURE s4 step 3 (sequential or parallel per row)" },

@@ -2,6 +2,7 @@
   "list": "Publications",
   "description": "One row per publication action (ARCHITECTURE s3).",
   "template": "GenericList",
+  "itemLevelPermissions": "creatorOnly",
   "ref": "ARCHITECTURE s3 (Publications list)",
   "fields": [
     { "internalName": "Title", "displayName": "Title", "type": "Text", "required": true, "builtIn": true,

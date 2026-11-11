@@ -51,11 +51,23 @@ Save → Test → Manually → Run flow. In the run history every iteration shou
 | Get Stages ID / Get Publications ID | succeeded |
 | Create fields and views | 60 of 60 iterations succeeded |
 | Site contents | Lists Stages, Publications, Endorsements, PublicationIndex exist |
+| Endorsements → Endorser column | Type Person or Group, people only |
 | Endorsements → Status column | Choices: Not started, Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment; default Not started |
 
 Run it once. A second run fails on lists and fields that already exist; that is expected and changes nothing.
 
 If an iteration fails, open it and send only the HTTP status code and the error code (for example `400 / -2130575342`). Do not send URLs or names.
+
+## 4. Set item-level permissions (manual, 2 lists)
+
+Decided (PFM, 2026-11-10): customers see only the rows they created. You (site owner) still see all rows. For **Publications** and **Endorsements**:
+
+List → Settings (gear) → List settings → Advanced settings → Item-level Permissions:
+- Read access: **Read items that were created by the user**
+- Create and Edit access: **Create items and edit items that were created by the user**
+→ OK.
+
+Leave Stages and PublicationIndex readable by all site members.
 
 ## Regenerate the payload
 
