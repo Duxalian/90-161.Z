@@ -33,6 +33,7 @@ PY
 python3 scripts/build_flow_payload.py --check >/dev/null && ok "flow payload up to date" || bad "flow payload stale"
 python3 scripts/build_flow_package.py --check && ok "flow packages up to date" || bad "flow packages stale"
 python3 tests/check_flow_package.py && ok "flow packages match real export shape" || bad "flow package shape"
+python3 tests/check_flow_defs.py && ok "flow def names and expressions" || bad "flow def names or expressions"
 for f in flow/defs/*.json; do python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" && ok "json $f" || bad "json $f"; done
 
 python3 - <<'PY' && ok "flow payload XML parses" || bad "flow payload XML"

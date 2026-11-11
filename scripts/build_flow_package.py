@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build Power Automate import packages (.zip, "Import Package (Legacy)") from flow/defs/*.json.
 
-Output: flow/packages/<name>.zip. Deterministic (IDs from uuid5 of the name, fixed zip timestamps, stored not deflated),
+Output: flow/packages/<name>.zip; def names are 90161Z-T<NN>-<slug>-r<N> (PFM 2026-11-11). Deterministic (IDs from uuid5 of the name, fixed zip timestamps, stored not deflated),
 so --check can compare the committed zip with a fresh build. Never hand-edit the zip.
 Connections: a def lists connector names in "connections" (e.g. ["shared_sharepointonline"]); the package then
 matches the real export in tests/fixtures/real-export-sharepoint (connector + connection resources, maps,
@@ -141,6 +141,11 @@ def main():
                 print(f"STALE {dst.relative_to(ROOT)}"); stale += 1
         else:
             dst.write_bytes(data); print(f"BUILT {dst.relative_to(ROOT)} bytes={len(data)}")
+    if a.check:
+        names = {s.stem for s in DEFS.glob("*.json")}
+        for z in sorted(OUT.glob("*.zip")):
+            if z.stem not in names:
+                print(f"STALE {z.relative_to(ROOT)} (no def)"); stale += 1
     sys.exit(1 if stale else 0)
 
 
