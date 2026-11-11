@@ -36,6 +36,8 @@ Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each chec
 
 Folder: ...\90-161.Z\T02
 
+Hold (2026-11-11): run r2 only on a test site, not the real site, until the row-privacy decision in the gap review is made (it changes section 4).
+
 First: delete the 4 lists the r1 run made on the wrong site (Stages, Publications, Endorsements, PublicationIndex): Site contents > the list's ... menu > Delete.
 
 What r2 does: on the site I name, it creates 7 lists: PFM Offices, PFM Process Steps, PFM Settings, PFM Publications, PFM Activity Log, PFM Endorsements, PFM Product Index. It first reads the site's title and stops, creating nothing, if the title I type does not match. Details:
