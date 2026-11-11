@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Git pre-push hook for every agent and tool (Claude, Codex, Gemini, any other, and people).
-# Installed by scripts/session_checkin.sh: git config core.hooksPath scripts/git-hooks
+# Install once per clone: git config core.hooksPath <the folder of this file> (scripts/session_checkin.sh or a SessionStart hook does it).
 # Blocks: a push that is not a fast-forward (every force-push form, including --force-with-lease),
 # deleting main or master on the remote, and pushing a remote commit this clone has not fetched.
 # A person who truly needs to override runs the push with --no-verify; agents never do (AGENTS.md "Git safety").
