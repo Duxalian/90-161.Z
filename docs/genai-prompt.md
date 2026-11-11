@@ -32,3 +32,7 @@ After the JSON, nothing else. The PFM runs the validator; fix any FAIL lines it 
 3. Run `.\Test-Publication.ps1 -Path .\mypub.json`. Paste FAIL/WARN lines back to the assistant until `VALIDATE fails=0`.
 4. Run `.\New-Publication.ps1 -Path .\mypub.json -Mode draft` (coordination) or `-Mode final -Pdf` (posting).
 5. Search the JSON for `[[MISSING:` before final.
+
+## Data boundary for validator output
+
+With real content, validator WARN lines quote the start of sentences. Paste that output only into GenAI.mil, never into a Claude chat or the repo. For Claude, send only the rule IDs and counts (for example "F-039 x3").

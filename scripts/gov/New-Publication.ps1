@@ -49,7 +49,6 @@ $wdHeaderPrimary = 1; $wdHeaderFirst = 2; $wdHeaderEven = 3
 $wdFieldPage = 33; $wdStatisticPages = 2
 $wdFormatDocx = 16; $wdFormatPdf = 17
 $wdAlignTabRight = 2; $wdStory = 6; $wdPageBreak = 7
-$wdOutlineBody = 10
 
 function ConvertTo-WordBool([bool]$Value) { if ($Value) { return -1 } return 0 }   # Word True = -1
 function Get-Prop($Obj, [string]$Name) {
@@ -71,7 +70,9 @@ $meta = Get-Prop $pub 'meta'
 $directive = [bool](Get-Prop $meta 'directive')
 $designator = [string](Get-Prop $meta 'designator')
 $dateText = [string](Get-Prop $meta 'date')
-if (-not $OutDir) { $OutDir = Split-Path -Parent (Resolve-Path -LiteralPath $Path) }
+if (-not $OutDir) { $OutDir = Split-Path -Parent (Resolve-Path -LiteralPath $Path).Path }
+if (-not (Test-Path -LiteralPath $OutDir)) { New-Item -ItemType Directory -Path $OutDir | Out-Null }
+$OutDir = (Resolve-Path -LiteralPath $OutDir).Path   # Word needs an absolute path
 $suffix = ''
 if ($Mode -eq 'draft') { $suffix = '_DRAFT' }
 $outDocx = Join-Path $OutDir ($designator + $suffix + '.docx')   # S-001: file name without spaces (3.8.2)
@@ -87,7 +88,6 @@ function Format-Para([int]$Align = 3, [double]$Left = 0, [double]$First = 0, [do
   $pf.SpaceAfter = $After
   $pf.LineSpacingRule = 0   # single
   $pf.KeepWithNext = ConvertTo-WordBool $KeepNext
-  $pf.OutlineLevel = $wdOutlineBody
   $pf.TabStops.ClearAll()
   $pf.Borders.Enable = 0
   $script:sel.Font.Bold = 0; $script:sel.Font.Italic = 0
@@ -113,6 +113,11 @@ function Write-Rich([string]$Text, [bool]$Bold = $false, [bool]$Italic = $false)
   $script:sel.Font.Bold = (ConvertTo-WordBool $Bold); $script:sel.Font.Italic = (ConvertTo-WordBool $Italic)
 }
 function Complete-Para { $script:sel.TypeParagraph() }
+function Add-TocEntry([string]$Entry, [int]$TocLevel) {
+  # Hidden TC field; the TOC is built from these fields only, so entries hold headings, not body text.
+  $clean = ($Entry -replace '"', "'")
+  $script:sel.Fields.Add($script:sel.Range, -1, ('TC "' + $clean + '" \l ' + $TocLevel), $false) | Out-Null
+}
 function Add-BottomRule {
   # applies to the paragraph just ended
   $p = $script:doc.Paragraphs.Item($script:doc.Paragraphs.Count - 1)
@@ -152,9 +157,11 @@ try {
   $c1.Font.Bold = -1; $c1.Font.Italic = -1; $c1.ParagraphFormat.Alignment = $wdAlignLeft
   $shield = [string](Get-Prop $meta 'shieldImage')
   if ($shield -and (Test-Path -LiteralPath $shield)) {
-    $c1.InsertParagraphAfter()
-    $r = $tbl.Cell(1, 1).Range.Paragraphs.Last.Range
-    $pic = $r.InlineShapes.AddPicture((Resolve-Path -LiteralPath $shield).Path)
+    $tbl.Cell(1, 1).Range.InsertAfter("`r")
+    $r = $tbl.Cell(1, 1).Range
+    $r.MoveEnd(1, -1) | Out-Null   # exclude the end-of-cell mark
+    $r.Collapse(0)
+    $pic = $doc.InlineShapes.AddPicture((Resolve-Path -LiteralPath $shield).Path, $false, $true, $r)
     $ratio = $pic.Height / $pic.Width
     $pic.Width = $ShieldWidth; $pic.Height = $ShieldWidth * $ratio
   }
@@ -200,7 +207,9 @@ try {
     $sel.TypeText('Supersedes:' + $Gap + (($sup | ForEach-Object { [string](Get-Prop $_ 'designator') + ', ' + [string](Get-Prop $_ 'date') }) -join '; '))
   }
   $sel.TypeText("`t" + 'Pages: ')
-  $doc.Bookmarks.Add('PagesCount', $sel.Range) | Out-Null   # F-023, filled after layout
+  $pStart = $sel.Start
+  $sel.TypeText('0')                                       # placeholder, replaced after layout (F-023)
+  $doc.Bookmarks.Add('PagesCount', $doc.Range($pStart, $pStart + 1)) | Out-Null
   Complete-Para; Add-BottomRule
 
   # ---------------- opening paragraph (F-024, F-025) ----------------
@@ -238,12 +247,12 @@ try {
     $indent = ($Level - 1) * $IndentStep
     $revised = [bool](Get-Prop $P 'revised')
     Format-Para $wdAlignJustify $indent 0 $SpaceAfter
-    if ($Level -eq 1) { $sel.ParagraphFormat.OutlineLevel = 2 }   # TOC uses main paragraph headings only (4.5.8.3)
     $isTop = ($Level -eq 1)
     Write-Rich $Number $isTop
     $t = [string](Get-Prop $P 'title')
     $x = [string](Get-Prop $P 'text')
     if ($t) { $sel.TypeText($Gap); Write-Rich $t $isTop }
+    if ($isTop) { Add-TocEntry ($Number + $Gap + ($t -replace '\{/?[ib]\}', '')) 2 }   # TOC: main paragraph headings only (4.5.8.3)
     if ($x) { $sel.TypeText($Gap); Write-Rich $x }
     foreach ($n in @(Get-Prop $P 'notes' | Where-Object { $null -ne $_ })) { $sel.TypeText($Gap); Write-Rich 'Note:' $true; $sel.TypeText(' '); Write-Rich ([string]$n) }        # F-037 (4.6.2)
     foreach ($e in @(Get-Prop $P 'exceptions' | Where-Object { $null -ne $_ })) { $sel.TypeText($Gap); Write-Rich 'Exception:' $true; $sel.TypeText(' '); Write-Rich ([string]$e) }  # F-037 (4.6.3)
@@ -292,8 +301,9 @@ try {
       $ch = $chapters[$c]; $cn = $c + 1
       $sel.InsertBreak($wdPageBreak)                       # L-009: each chapter starts a new page
       Format-Para $wdAlignCenter 0 0 $SpaceAfter $true
-      $sel.ParagraphFormat.OutlineLevel = 1
-      Write-Rich ("Chapter $cn") $true; Complete-Para           # F-033 (4.5.9.7.4.4)
+      Write-Rich ("Chapter $cn") $true
+      Add-TocEntry ("Chapter $cn$EmDash" + ([string](Get-Prop $ch 'title')).ToUpper()) 1
+      Complete-Para           # F-033 (4.5.9.7.4.4)
       Format-Para $wdAlignCenter 0 0 ($SpaceAfter * 2) $true
       Write-Rich ([string](Get-Prop $ch 'title')).ToUpper() $true; Complete-Para   # F-033 (4.5.9.7.4.5)
       $ps2 = @(Get-Prop $ch 'paragraphs' | Where-Object { $null -ne $_ })
@@ -321,8 +331,9 @@ try {
     $at = $atts[$a]; $an = $a + 1
     $sel.InsertBreak($wdPageBreak)
     Format-Para $wdAlignCenter 0 0 $SpaceAfter $true
-    $sel.ParagraphFormat.OutlineLevel = 1
-    Write-Rich "Attachment $an" $true; Complete-Para
+    Write-Rich "Attachment $an" $true
+    Add-TocEntry ("Attachment $an$EmDash" + ([string](Get-Prop $at 'title')).ToUpper()) 1
+    Complete-Para
     Format-Para $wdAlignCenter 0 0 ($SpaceAfter * 2) $true
     Write-Rich ([string](Get-Prop $at 'title')).ToUpper() $true; Complete-Para
     $g = Get-Prop $at 'glossary'
@@ -380,10 +391,10 @@ try {
       $end = $sec1.Headers.Item($kind).Range
       $end.MoveEnd(1, -1) | Out-Null   # exclude the final paragraph mark
       $end.Collapse(0)
-      $doc.Fields.Add($end, $wdFieldPage) | Out-Null
+      $end.Fields.Add($end, $wdFieldPage) | Out-Null
     } else {                                      # even pages: page number left, designator right
       $start = $line.Duplicate; $start.Collapse(1)
-      $doc.Fields.Add($start, $wdFieldPage) | Out-Null
+      $start.Fields.Add($start, $wdFieldPage) | Out-Null
       $sec1.Headers.Item($kind).Range.InsertAfter("`t" + $runText)
     }
   }
@@ -391,20 +402,20 @@ try {
   # ---------------- TOC and page count ----------------
   if ($null -ne $tocRange) {
     Format-Para $wdAlignLeft 0 0 0
-    $doc.TablesOfContents.Add($tocRange, $false, 1, 2, $false, '', $true, $true, '', $true, $true, $true) | Out-Null   # last arg: UseOutlineLevels
+    $doc.TablesOfContents.Add($tocRange, $false, 1, 2, $true, '', $true, $true, '', $true, $true, $false) | Out-Null   # UseFields = TC entries only
     $doc.TablesOfContents.Item(1).Update()
   }
   $doc.Repaginate()
   $pages = $doc.ComputeStatistics($wdStatisticPages)
-  $doc.Bookmarks.Item('PagesCount').Range.InsertAfter([string]$pages)
+  $doc.Bookmarks.Item('PagesCount').Range.Text = [string]$pages
   $doc.Fields.Update() | Out-Null
 
   $doc.SaveAs([ref]$outDocx, [ref]$wdFormatDocx)
-  Write-Output "RENDER docx=$outDocx pages=$pages mode=$Mode toc=$([bool]$tocRange)"
+  Write-Output ("RENDER docx=" + (Split-Path -Leaf $outDocx) + " pages=$pages mode=$Mode toc=$([bool]$tocRange)")
   if ($Pdf) {
     $outPdf = [IO.Path]::ChangeExtension($outDocx, '.pdf')
-    $doc.SaveAs([ref]$outPdf, [ref]$wdFormatPdf)
-    Write-Output "RENDER pdf=$outPdf"
+    $doc.ExportAsFixedFormat($outPdf, $wdFormatPdf)
+    Write-Output ("RENDER pdf=" + (Split-Path -Leaf $outPdf))
   }
 } finally {
   if ($doc) { $doc.Close([ref]0) }

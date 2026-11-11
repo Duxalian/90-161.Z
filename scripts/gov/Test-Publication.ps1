@@ -96,7 +96,7 @@ foreach ($f in 'accessibility', 'releasability') {
 # F-021 OPR / Certified By: office symbols only, no names (4.5.4.10-11)
 foreach ($f in 'opr', 'certifiedBy') {
   $v = [string](Get-Prop $meta $f)
-  if ($v -match '[a-z]{3,}\s+[A-Z][a-z]+' -or $v -match '\b(Mr|Mrs|Ms|Dr|Col|Lt|Maj|Capt|SMSgt|MSgt|TSgt|SSgt|CMSgt)\.?\s') {
+  if ($v -cmatch '\b[A-Z][a-z]+\s+[A-Z][a-z]+\b' -or $v -cmatch '\b(Mr|Mrs|Ms|Dr|Col|Lt|Maj|Capt|SMSgt|MSgt|TSgt|SSgt|CMSgt)\.?\s') {
     Add-Finding 'FAIL' 'F-021' "meta.$f" 'use the organization or office symbol only, no names (4.5.4.10-11)'
   }
 }
@@ -219,7 +219,7 @@ for ($a = 0; $a -lt $atts.Count; $a++) {
   }
 }
 $typeNum = [string](Get-Prop $meta 'typeAndNumber')
-$needsGlossary = $typeNum -match '\b(INSTRUCTION|MANUAL|POLICY DIRECTIVE)\b' -or (Get-Prop $meta 'designator') -match '(PD|I|MAN)\d'
+$needsGlossary = $typeNum -cmatch '\b(INSTRUCTION|MANUAL|POLICY DIRECTIVE)\b'
 if ($needsGlossary -and $null -eq $gloss) { Add-Finding 'FAIL' 'F-035' 'attachments' 'Attachment 1 (glossary) is required for policy directives, instructions and manuals (4.5.11.1)' }
 
 $abbr = @{}
