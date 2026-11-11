@@ -7,7 +7,7 @@ Updated: 2026-11-11 by Claude. Keep this file at 40 lines or fewer. The current 
 - Rules: DAFMAN 90-161 wins every contradiction; wing files shape process only (AGENTS.md).
 - Phase A done: covers measured (docs/reviews/2026-11-11-cover-consistency.md).
 - Phase C done (agent workspace): renderer cover per measurements, certifier name line, 0.75 pt rules, opening paragraph built from openingParts (4.5.5 order, verbatim fixed text), two-space sentences, TOC always, Attachment 1 (ATT1) report. tests/run.sh 19/19. Independent review: 12 findings, 0 high; fixed.
-- Gov-device tasks live in go.md (repo root) (no email to .mil; it gets filtered).
+- Gov-device tasks live in go.md (repo root) (never email the military address).
 - Flow import route verified on the gov device 2026-11-11: scripts/build_flow_package.py zip, raw link, Import Package (Legacy), run passed.
 - Not yet run on the gov device: renderer (docs/gov-test-plan.md), provisioning flow (docs/power-automate-provisioning.md).
 
