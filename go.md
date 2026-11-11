@@ -34,18 +34,6 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/provisioning-payl
 
 Report: pass or fail for each check in section 3. For a failure, only the HTTP status and error code.
 
-## Task 3: flow import test (open; import worked 08:36 CT, run step left)
-
-Done: download (raw link below; the github.io copy came out wrong at 1,842 bytes), upload and import.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/hello-test.zip
-
-In Power Automate: My flows > Import > Import Package (Legacy) > Upload > hello-test.zip.
-Import setup: Create as new > Save > Import.
-Open the flow, Test > Manually > Run flow.
-Pass: the run succeeds and "Echo compose" shows "Hello from 90-161.Z - import worked".
-
-Report: download ok/fail; Import Package (Legacy) menu present yes/no; import ok or the exact error text; run result.
-
 ## Done
 
-(none yet)
+- Task 3, flow import test (2026-11-11 08:40): raw zip link, Import Package (Legacy), run passed ("Echo compose" showed the expected text).
