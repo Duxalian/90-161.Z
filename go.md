@@ -44,7 +44,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/power-automate-pr
 Download into the T02 folder (raw link only):
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r2.zip
 
-The file must be 74,462 bytes.
+The file must be 74,828 bytes.
 
 In Power Automate: My flows > Import > Import Package (Legacy) > Upload > 90161Z-T02-provision-lists-r2.zip.
 Import setup: flow = Create as new. SharePoint connection = Select during import > pick my existing SharePoint connection > Save. Then Import.

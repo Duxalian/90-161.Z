@@ -105,6 +105,8 @@ def build():
     for name in order(schemas):  # list titles last (see docstring)
         updates.append({'method': 'MERGE', 'uri': f'_api/web/lists/getbytitle({lit(name)})',
                         'body': {'__metadata': {'type': 'SP.List'}, 'Title': schemas[name]['title']}})
+    for r in lists + fields + updates + seed:  # view titles have spaces; never rely on the connector to encode them
+        r['uri'] = r['uri'].replace(' ', '%20')
     return {'generatedFrom': 'schemas/lists/*.json', 'listOrder': order(schemas),
             'lookupPlaceholders': sorted({f['lookup']['list'] for s in schemas.values() for f in s['fields'] if f['type'] == 'Lookup'}),
             'lists': lists, 'fields': fields, 'updates': updates, 'seed': seed}

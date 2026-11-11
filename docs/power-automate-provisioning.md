@@ -47,6 +47,12 @@ Order of work:
 
 Run it once. A second run fails on lists and fields that already exist and ends red; that is expected.
 
+If a run fails part way (any step red, Result not shown), do not run it again on top. Recover:
+1. Note the failed step's name, HTTP status and error code.
+2. Site contents: delete every list whose name starts with PFM (they are empty after provisioning). Some may still show their URL name (for example PFMPublications) because titles are set last.
+3. Empty the site recycle bin of those lists (Recycle bin > select > Delete), so the URL names are free again.
+4. Run the flow again.
+
 If a step fails, open it and send only the HTTP status code and the error code (for example `400 / -2130575342`). Do not send URLs or names.
 
 ## 4. Set item-level permissions (manual, 2 lists)

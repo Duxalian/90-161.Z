@@ -50,6 +50,24 @@ p = json.load(open('flow/provisioning-payload.json'))
 assert p['lookupPlaceholders'] == ['PFMProcessSteps', 'PFMPublications'], p['lookupPlaceholders']
 assert all(u['uri'].startswith('_api/web/lists/getbytitle(') for u in p['updates'])
 assert p['updates'][-len(p['listOrder']):] == [u for u in p['updates'] if u['body']['__metadata']['type'] == 'SP.List']
+g = d['Check_Site_Title']['else']['actions']['Stop_Wrong_Site']
+assert g['type'] == 'Terminate' and g['inputs']['runStatus'] == 'Failed'
+trig = json.loads(z.read([n for n in z.namelist() if n.endswith('/definition.json')][0]))['properties']['definition']['triggers']['manual']['inputs']['schema']
+assert set(trig['required']) == {'text', 'text_1'}
+def upstream(a, seen=()):  # every action must sit after the site-title check
+    if a == 'Check_Site_Title': return True
+    after = list(d[a]['runAfter'])
+    return bool(after) and all(upstream(x) for x in after)
+assert all(upstream(a) for a in d if a not in ('Get_Site_Title', 'Check_Site_Title')), 'an action runs before the site check'
+reqs = p['lists'] + p['fields'] + p['updates']
+assert not any(' ' in r['uri'] for r in reqs), 'unencoded space in a request URI'
+assert all(l['body'].get('EnableVersioning') for l in p['lists']), 'AppendOnly notes need versioning on every list'
+renamed = {}
+for i, r in enumerate(p['updates']):
+    if r['body']['__metadata']['type'] == 'SP.List': renamed[r['uri']] = i
+for i, r in enumerate(p['updates']):
+    for u, j in renamed.items():
+        assert not (r['uri'].startswith(u + '/') and i > j), 'request uses a list title after its rename'
 for k in ('Create_Lists', 'Create_Fields_And_Views', 'Apply_Updates'):
     assert d[k]['runtimeConfiguration']['concurrency']['repetitions'] == 1, k
 PY

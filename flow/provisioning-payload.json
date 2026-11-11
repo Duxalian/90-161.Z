@@ -181,27 +181,27 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM%20-%20Active%20Offices')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM%20-%20Active%20Offices')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/addviewfield('Endorser')",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM%20-%20Active%20Offices')/viewfields/addviewfield('Endorser')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/addviewfield('CoordinationRole')",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM%20-%20Active%20Offices')/viewfields/addviewfield('CoordinationRole')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/addviewfield('CoordinateLast')",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM%20-%20Active%20Offices')/viewfields/addviewfield('CoordinateLast')",
    "body": {}
   },
   {
@@ -271,32 +271,32 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM%20-%20By%20Step%20Number')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('StepNumber')",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM%20-%20By%20Step%20Number')/viewfields/addviewfield('StepNumber')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM%20-%20By%20Step%20Number')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('DAFMANRef')",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM%20-%20By%20Step%20Number')/viewfields/addviewfield('DAFMANRef')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('IsOptional')",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM%20-%20By%20Step%20Number')/viewfields/addviewfield('IsOptional')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('ExitCondition')",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM%20-%20By%20Step%20Number')/viewfields/addviewfield('ExitCondition')",
    "body": {}
   },
   {
@@ -340,22 +340,22 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM - All Settings')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM%20-%20All%20Settings')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM - All Settings')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM%20-%20All%20Settings')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM - All Settings')/viewfields/addviewfield('SettingValue')",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM%20-%20All%20Settings')/viewfields/addviewfield('SettingValue')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM - All Settings')/viewfields/addviewfield('SettingNotes')",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM%20-%20All%20Settings')/viewfields/addviewfield('SettingNotes')",
    "body": {}
   },
   {
@@ -516,47 +516,47 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('ProductType')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('ProductType')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('ActionType')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('ActionType')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('ProcessStep')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('ProcessStep')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('ActionStatus')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('ActionStatus')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('OPR')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('OPR')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('AO')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('AO')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('CoordinationSuspense')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('CoordinationSuspense')",
    "body": {}
   },
   {
@@ -574,32 +574,32 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Stalled%20or%20On%20Hold')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Stalled%20or%20On%20Hold')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('ProcessStep')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Stalled%20or%20On%20Hold')/viewfields/addviewfield('ProcessStep')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('ActionStatus')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Stalled%20or%20On%20Hold')/viewfields/addviewfield('ActionStatus')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('AO')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Stalled%20or%20On%20Hold')/viewfields/addviewfield('AO')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('StatusNotes')",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Stalled%20or%20On%20Hold')/viewfields/addviewfield('StatusNotes')",
    "body": {}
   },
   {
@@ -669,32 +669,32 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM%20-%20Recent')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('Created')",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM%20-%20Recent')/viewfields/addviewfield('Created')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM%20-%20Recent')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('EventType')",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM%20-%20Recent')/viewfields/addviewfield('EventType')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('Publication')",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM%20-%20Recent')/viewfields/addviewfield('Publication')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('EventBy')",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM%20-%20Recent')/viewfields/addviewfield('EventBy')",
    "body": {}
   },
   {
@@ -855,37 +855,37 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20By%20Publication')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20By%20Publication')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('Publication')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20By%20Publication')/viewfields/addviewfield('Publication')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('EndorserOrder')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20By%20Publication')/viewfields/addviewfield('EndorserOrder')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('CoordinationRole')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20By%20Publication')/viewfields/addviewfield('CoordinationRole')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('EndorsementStatus')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20By%20Publication')/viewfields/addviewfield('EndorsementStatus')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('DueDate')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20By%20Publication')/viewfields/addviewfield('DueDate')",
    "body": {}
   },
   {
@@ -903,32 +903,32 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20Not%20Started')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20Not%20Started')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('Publication')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20Not%20Started')/viewfields/addviewfield('Publication')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('EndorserOrder')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20Not%20Started')/viewfields/addviewfield('EndorserOrder')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('EndorsementStatus')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20Not%20Started')/viewfields/addviewfield('EndorsementStatus')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('DueDate')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM%20-%20Not%20Started')/viewfields/addviewfield('DueDate')",
    "body": {}
   },
   {
@@ -1024,32 +1024,32 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20By%20Number')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('PublicationNumber')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20By%20Number')/viewfields/addviewfield('PublicationNumber')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20By%20Number')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('ProductType')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20By%20Number')/viewfields/addviewfield('ProductType')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('Publication')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20By%20Number')/viewfields/addviewfield('Publication')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('PostedLink')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20By%20Number')/viewfields/addviewfield('PostedLink')",
    "body": {}
   },
   {
@@ -1067,27 +1067,27 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Review%20Due')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/addviewfield('PublicationNumber')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Review%20Due')/viewfields/addviewfield('PublicationNumber')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Review%20Due')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/addviewfield('LastReviewDate')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Review%20Due')/viewfields/addviewfield('LastReviewDate')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/addviewfield('NextReviewDue')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Review%20Due')/viewfields/addviewfield('NextReviewDue')",
    "body": {}
   }
  ],

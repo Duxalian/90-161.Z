@@ -10,8 +10,9 @@ Updated: 2026-11-11 by Claude. Keep this file at 40 lines or fewer. The current 
 - Gov-device tasks live in go.md (repo root) (never email the military address).
 - Flow import route verified on the gov device 2026-11-11: scripts/build_flow_package.py zip, raw link, Import Package (Legacy), run passed.
 - SharePoint connection in an imported package verified on the gov device 2026-11-11 (Task 4 r2).
-- Provisioning flow is now a package: flow/defs/90161Z-T02-provision-lists-r1.json (payload embedded at build). go.md Task 2.
-- Not yet run on the gov device: renderer (docs/gov-test-plan.md), Task 2 provisioning package.
+- Names decided 2026-11-11 (DECISIONS.md; doc https://claude.ai/artifact/WU7A3UXrmr9tFf2sy18Ptk): 7 PFM lists, Title Case, tests/check_names.py. Provisioning package T02 r2 has a site-title guard. go.md Task 2 r2.
+- Design goal (PFM): successor can troubleshoot and fix; maintainer how-to required.
+- Not yet run on the gov device: Task 1 r3 (SaveAs fix), Task 2 r2.
 
 ## Open (in order)
 
