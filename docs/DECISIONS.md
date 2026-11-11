@@ -5,7 +5,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
 | 2026-11-11 | The baseline is now rhope-ops/archimedes_lever (fresh history, no personal name; "the owner" is its role word). scripts/sync_baseline.py and scripts/drift.py point there; the Owner line "the PFM" still replaces the role word. | PFM | rhope-ops/standard_project (archived) |
-| 2026-11-11 | Files for the gov device are named to sort in the PFM's folders: 90161Z-T<NN>-<slug>-r<N> (project, 2-digit task, name, revision). Flow display names use the same prefix ("90161Z T04 ... r2"). | PFM (Agent chose the pattern) | sp-get-items.zip, hello-test.zip |
+| 2026-11-11 | Files for the gov device are named to sort in the PFM's folders: 90161Z-T<NN>-<slug>-r<N> (project, 2-digit task, name, revision). Flow display names use the same prefix ("90161Z T04 ... r2"). | PFM (pattern proposed by Agent, approved by PFM 14:14) | sp-get-items.zip, hello-test.zip |
 | 2026-11-11 | Baseline sync: model-agnostic agent rules, git pre-push hook for every tool, log_check, drift and timeline tools, GEMINI.md. Owner stays "the PFM". | PFM | Claude-only hooks and model names |
 | 2026-11-11 | AGENTS.md "- Owner: the PFM" keeps the name out of this public repo on every baseline sync (standard_project f11c658). | PFM | Manual name fix after each sync |
 | 2026-11-11 | Collaboration log becomes the "Project log" from the standard_project baseline (Type, Arc, CT timestamps, Arcs table) to feed a timeline; it stays in the private Claude doc because this repo is public. Baseline synced; "PFM" kept in place of the name. | PFM | Collaboration log rule (turning points only) |
