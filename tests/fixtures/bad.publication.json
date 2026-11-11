@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1",
+  "meta": {
+    "action": "new", "directive": true, "byOrderOf": "BOSS",
+    "issuerLine": "SAMPLE AIRLIFT WING", "typeAndNumber": "INSTRUCTION 99-102", "designator": "SAMPLEWINGI99-102",
+    "date": "(Date)", "seriesTitle": "Test and Evaluation", "title": "Sample Air Force Guide",
+    "accessibility": "ACCESSIBILITY: This publication is only available directly from the OPR.",
+    "releasability": "There are no releasability restrictions on this publication",
+    "opr": "John Smith", "certifiedBy": "OPR-B",
+    "supersedes": [ { "designator": "SAMPLEWINGI99-001", "date": "1 Jan 2020" } ]
+  },
+  "opening": "This publication implements {i}Sample Parent Instruction 99-1.",
+  "summaryOfChanges": "Should not be here.",
+  "body": { "chapters": [ { "title": "Core Content", "paragraphs": [
+    { "title": "Only child.", "text": "Personnel shall comply.", "bullets": [ "a", [ "nested" ] ],
+      "children": [ { "text": "Note: lonely child." } ] } ] } ] },
+  "attachments": [ { "title": "Extra" }, { "title": "GLOSSARY OF REFERENCES AND SUPPORTING INFORMATION",
+    "glossary": { "references": [ "Sample ref, https://example.invalid" ] } } ]
+}
