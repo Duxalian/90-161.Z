@@ -1,6 +1,6 @@
 # 90-161.Z: agent instructions
 
-This file is the source of truth for every agent on this repo: Claude, GPT, Codex and sub-agents. CLAUDE.md imports it. Put rules specific to this project in "Project rules" at the end. "Owner" is the name agents use for the person who decides; a public repo uses a role (for example "the PFM") instead of a real name.
+This file is the source of truth for every agent on this repo: Claude, GPT/Codex, Gemini, any other model, and sub-agents. Codex, Copilot, Cursor and most other tools read AGENTS.md directly; CLAUDE.md (Claude Code) and GEMINI.md (Gemini CLI) import it. If your tool reads none of these, read this file first. Where a rule names a Claude-only feature, use the fallback in `.claude/orchestration.md` "Fallbacks". Put rules specific to this project in "Project rules" at the end. "Owner" is the name agents use for the person who decides; a public repo uses a role (for example "the PFM") instead of a real name.
 
 - Repo: rhope-ops/90-161.Z
 - Purpose: Track and manage DAF publications through the DAFMAN 90-161 publishing process at wing/installation level: status tracking, document cleanup and formatting, and endorsement routing.
@@ -11,7 +11,7 @@ This file is the source of truth for every agent on this repo: Claude, GPT, Code
 1. The PFM's current request.
 2. The PFM's decisions in docs/DECISIONS.md. A newer decision overrides older text.
 3. This file.
-4. The PFM's personal preferences (Claude only).
+4. The PFM's personal preferences for the host you run in (Claude, GPT and Codex have copies; other hosts may have none).
 5. docs/NEXT_PROMPT.md (the handoff).
 
 Chat history, Project files and remembered copies are not authority. If you cannot read this repo, say so and stop.
@@ -43,14 +43,16 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Keep these states separate: done, published, verified; self-review and independent review; delivery state and checkout state.
 - Give full clickable links to files on main, to artifacts and to pull requests. Never give a bare path.
 - Give text that the PFM must paste in full, in a code block. Never tell him to find it in git.
-- End each work turn with a summary: Decide (lettered options, your recommendation marked **Rec:**), Copy (full text for the PFM to paste), then a table with Step (X of Y), Status (done / published / verified), Risks, Running, Not running, Next step (one recommendation), Links. Leave out empty rows, except Step. Claude follows the PFM's personal preferences for the exact format.
+- End each work turn with a summary: Decide (lettered options, your recommendation marked **Rec:**), Copy (full text for the PFM to paste), then a table with Step (X of Y), Status (done / published / verified), Risks, Running, Not running, Next step (one recommendation), Links. Leave out empty rows, except Step. An agent that has the PFM's personal preferences follows them for the exact format.
 
 ## Git safety
 
 - Never force-push, rewrite published history, reset, clean, stash or discard work to make the state look synchronized. Update branches by merge.
 - Pull just before you edit a shared doc. Use small edits. Never rewrite a whole file from an old copy.
 - Never commit secrets, tokens or credentials.
-- Claude Code enforces part of this section with .claude/settings.json: a deny list, and a Stop hook (scripts/stop_check.py) that blocks the end of a turn while work is uncommitted or unpushed. Do not weaken that file to get past a block: ask the PFM.
+- Enforcement for every agent: `scripts/git-hooks/pre-push` blocks force-pushes, pushes that are not a fast-forward, and deleting main. `scripts/session_checkin.sh` installs it (core.hooksPath). Never push with `--no-verify`.
+- Claude Code also has .claude/settings.json: a deny list, and a Stop hook (scripts/stop_check.py) that blocks the end of a turn while work is uncommitted or unpushed. Agents without a Stop hook run `echo '{}' | python3 scripts/stop_check.py` before they end a turn and fix what it reports (exit 2 = not done).
+- Do not weaken a hook or its settings to get past a block: ask the PFM.
 
 ## Commands
 
@@ -90,10 +92,10 @@ Chat history, Project files and remembered copies are not authority. If you cann
 
 The project log feeds a timeline of milestones, breakthroughs and narratives for readers outside the project (the PFM, 2026-11-11). Decisions alone go in docs/DECISIONS.md; the log records how the project got there.
 
-- Location: docs/LOG.md, unless "Project rules" names another place. A public repo must name a private place (for example a private Claude doc), because entries can hold environment or security detail.
+- Location: docs/LOG.md, unless "Project rules" names another place. Check it with `python3 scripts/log_check.py`. A public repo must name a private place (for example a private Claude doc), because entries can hold environment or security detail.
 - Append an entry in the same turn the event happens. Backfill the same turn if you missed one.
 - One row per event. Columns, in this order: # | When (CT) | Type | Arc | Topic | Raised by | What the other missed | Evidence | Result.
-- When: `YYYY-MM-DD HH:MM` in America/Chicago. A range: `YYYY-MM-DD HH:MM–HH:MM`. Mark an estimate with `~`.
+- When: `YYYY-MM-DD HH:MM` in America/Chicago. A range: `YYYY-MM-DD HH:MM–HH:MM`. Mark an estimate with `~` before the date or the time.
 - Type, one of:
   - `milestone`: a deliverable exists or a goal is met (first import works, v1 published).
   - `breakthrough`: a test or idea removes a blocker or changes direction.
@@ -109,7 +111,7 @@ The project log feeds a timeline of milestones, breakthroughs and narratives for
 - When you delegate or run more than one agent, read `.claude/orchestration.md` first: agents (`scout`, `worker`, `reviewer`), model routing, briefs, review and merge, lanes.
 - Delegate only substantial independent work (about 30 minutes or more) with bounded files and measurable done criteria. Give parallel agents disjoint files.
 - Ask for concise findings with evidence paths.
-- Before a merge of changes to code, checks or scripts, the `reviewer` subagent gets only the diff and the brief, not the author's conclusions (model per `.claude/orchestration.md`). Docs-only changes skip this review.
+- Before a merge of changes to code, checks or scripts, a fresh reviewer gets only the diff and the brief, not the author's conclusions: the `reviewer` subagent where the host has subagents, else the next step in `.claude/orchestration.md` "Fallbacks" (model tier per that file). Docs-only changes skip this review.
 - Check delegated output (diff, touched files, no approval or exemption changes) before you report it as done.
 
 ## Unattended work

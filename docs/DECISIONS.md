@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Baseline sync: model-agnostic agent rules, git pre-push hook for every tool, log_check, drift and timeline tools, GEMINI.md. Owner stays "the PFM". | PFM | Claude-only hooks and model names |
 | 2026-11-11 | AGENTS.md "- Owner: the PFM" keeps the name out of this public repo on every baseline sync (standard_project f11c658). | PFM | Manual name fix after each sync |
 | 2026-11-11 | Collaboration log becomes the "Project log" from the standard_project baseline (Type, Arc, CT timestamps, Arcs table) to feed a timeline; it stays in the private Claude doc because this repo is public. Baseline synced; "PFM" kept in place of the name. | PFM | Collaboration log rule (turning points only) |
 | 2026-11-11 | Flows get the SharePoint site URL as a run-time input; the site URL and list IDs never go in the repo (the URL is not CUI, but the repo is public and the rule on the wing's site path stands). Lists are chosen by name. | PFM | Rec: site URL in the package |

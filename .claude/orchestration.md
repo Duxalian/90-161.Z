@@ -1,6 +1,6 @@
 # Orchestration: more than one agent
 
-Read this file when you delegate work or run more than one agent. AGENTS.md "Delegation" points here. the PFM's decisions (2026-11-10): the orchestrator stays on Opus; models are chosen per task with the routing table below.
+Read this file when you delegate work or run more than one agent. AGENTS.md "Delegation" points here. the PFM's decisions (2026-11-10): the orchestrator stays on the strongest model; models are chosen per task with the routing table below. Model-agnostic since 2026-11-11 (the PFM): routing names tiers, and each host maps the tiers to its own models.
 
 ## Agents (.claude/agents/)
 
@@ -14,24 +14,50 @@ Read this file when you delegate work or run more than one agent. AGENTS.md "Del
 
 ## Model routing
 
-Pass a model on the Agent call only where this table says so.
+Route by tier. Pass a model on the call only where this table says "strong" for a role whose default is lower.
 
-| Work | Agent | Model |
+| Work | Role | Tier |
 |---|---|---|
-| Search, file lists, summaries of test or log output | `scout` | haiku |
-| Task from a brief | `worker` | sonnet |
-| Worker task that failed its checks 2 times, a refactor over 5+ files, a performance fix | `worker` | opus (model on the call) |
-| Fresh review of a routine diff | `reviewer` | sonnet |
-| Fresh review of data or save migrations, git or hook tools, security, or a refactor that must not change behavior | `reviewer` | opus (model on the call) |
-| Merges, conflict choices, design, artifacts, deploys | orchestrator | opus |
+| Search, file lists, summaries of test or log output | `scout` | fast |
+| Task from a brief | `worker` | standard |
+| Worker task that failed its checks 2 times, a refactor over 5+ files, a performance fix | `worker` | strong (model on the call) |
+| Fresh review of a routine diff | `reviewer` | standard |
+| Fresh review of data or save migrations, git or hook tools, security, or a refactor that must not change behavior | `reviewer` | strong (model on the call) |
+| Merges, conflict choices, design, artifacts, deploys | orchestrator | strong |
+
+Tiers by host. Model names change often: when a name here is gone, use the host's current model of that tier and update this table.
+
+| Host | fast | standard | strong | Subagents | Hooks |
+|---|---|---|---|---|---|
+| Claude Code | haiku | sonnet | opus | `.claude/agents/` | Stop, PreToolUse, deny list, git |
+| claude.ai (chat, cloud sessions) | Haiku | Sonnet | Opus | Agent tool when offered | git only |
+| Codex (CLI, IDE, cloud) | the account's mini model | default model | highest reasoning setting | agent roles if the version has them | git only |
+| Gemini CLI | Flash | Pro | Pro, high thinking | none assumed | git only |
+| ChatGPT or any other chat | smaller model | default model | strongest model | none | none (no repo access: give text to paste) |
+
+If the routed tier is not available (not offered, usage limit): for `scout` and `worker` work use the next lower tier and say so in the report; for `reviewer` and orchestrator work use the next higher tier, or wait; never review with a lower tier than the author used.
 
 Log the model with each delegated task (in the handoff or the project's task log), so first-attempt pass rates can be compared by model.
+
+## Fallbacks (hosts without a Claude Code feature)
+
+| Feature | Fallback, in order |
+|---|---|
+| Subagent (`scout`, `worker`) | 1. The host's own subagent or agent role, with the brief below. 2. A new session or chat with only the brief; paste its result back. 3. Do the task yourself, one at a time. |
+| Fresh `reviewer` | 1. A subagent with only the diff and the brief. 2. A new session with a different model or tier, given only the diff and the brief. 3. Review it yourself and label it "self-review", never "independent review". |
+| `worker_guard.py` (PreToolUse) | `scripts/git-hooks/pre-push` blocks force-pushes and deleting main for every tool. Give each worker its own branch; the orchestrator alone merges to main. |
+| Stop hook | Before the end of each turn: `echo '{}' \| python3 scripts/stop_check.py`; exit 2 = commit or push first. |
+| Worktree isolation | A separate clone or `git worktree add ../<repo>-<topic> -b <branch>`. |
+| claude.ai artifacts and docs | Repo files (Markdown, HTML) and links to them; say that the artifact step needs Claude. |
+| Personal preferences | AGENTS.md "Reporting" gives the summary format; it is enough without them. |
+
+Branch prefix per agent: `cc/` Claude worker, `gpt/` Codex or GPT, `gem/` Gemini, `agent/` any other. Log the host and model with each delegated task.
 
 ## When to delegate
 
 - Size rule: AGENTS.md "Delegation". A subagent spends tokens loading its context before it starts, so do smaller tasks yourself.
 - Keep for the orchestrator: merges, conflict choices, design and open decisions, artifacts, deploys, release versions.
-- One worker at a time by default. Two only when their allowed files do not overlap. Start each worker with `isolation: "worktree"`.
+- One worker at a time by default. Two only when their allowed files do not overlap. Start each worker in its own worktree (`isolation: "worktree"` in Claude Code; Fallbacks for other hosts).
 
 ## Brief (put it in the Agent prompt)
 
@@ -41,7 +67,7 @@ Log the model with each delegated task (in the handoff or the project's task log
 - Done criteria that can be measured (numbers, test names, PASS lines).
 - Checks to run.
 - "No design decisions: list candidates with trade-offs."
-- The model, when the routing table says opus.
+- The tier (and the host's model name), when the routing table says strong.
 
 ## Review and merge
 
@@ -55,6 +81,7 @@ Log the model with each delegated task (in the handoff or the project's task log
 
 | Lane | Owner | Files | May push to |
 |---|---|---|---|
-| Orchestrator | Claude (Opus) | Everything not in another lane | main |
+| Orchestrator | strongest available model (default: Claude Opus) | Everything not in another lane | main |
 | Worker | `worker` subagent | Only its brief's files | its own `cc/<topic>` branch |
 | GPT / Codex (if used) | Codex | Per brief | its own `gpt/<topic>` branch |
+| Gemini or another agent (if used) | that agent | Per brief | its own `gem/<topic>` or `agent/<topic>` branch |

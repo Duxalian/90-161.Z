@@ -4,6 +4,19 @@ set -uo pipefail
 
 git fetch --quiet origin main 2>/dev/null || echo "warning: fetch of origin/main failed"
 
+# Git hooks for every agent (scripts/git-hooks/pre-push blocks force-pushes). Set only when no other hooks path is set.
+# core.hooksPath hides .git/hooks; our pre-push chains to an old .git/hooks/pre-push (Git LFS). Other old hooks: warned below.
+hooks=$(git config --get core.hooksPath || true)
+if [ -d scripts/git-hooks ] && [ -z "$hooks" ]; then
+  git config core.hooksPath scripts/git-hooks && hooks=scripts/git-hooks && echo "hooks:       installed scripts/git-hooks"
+fi
+echo "hooks:       ${hooks:-none}"
+if [ "$hooks" = scripts/git-hooks ]; then
+  for h in "$(git rev-parse --git-common-dir)"/hooks/*; do
+    case "$h" in *.sample|*/pre-push) continue ;; esac
+    [ -x "$h" ] && echo "warning: $(basename "$h") in .git/hooks is not run while core.hooksPath=scripts/git-hooks; copy it to scripts/git-hooks or unset core.hooksPath"
+  done
+fi
 echo "branch:      $(git rev-parse --abbrev-ref HEAD)"
 echo "head:        $(git rev-parse --short HEAD)"
 echo "origin/main: $(git rev-parse --short origin/main 2>/dev/null || echo unknown)"

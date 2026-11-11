@@ -18,7 +18,8 @@ What it changes:
     CLAUDE.md              Adds "@AGENTS.md" at the top if it is missing. Keeps the rest.
     scripts/session_checkin.sh, scripts/sync_baseline.py, scripts/stop_check.py, scripts/worker_guard.py,
     .claude/orchestration.md   Replaced with the baseline copies.
-    .claude/agents/worker.md, scout.md, reviewer.md   Added only when missing (a project may tune them).
+    .claude/agents/worker.md, scout.md, reviewer.md, GEMINI.md   Added only when missing (a project may tune them).
+    scripts/log_check.py, scripts/drift.py, scripts/timeline.py, scripts/git-hooks/pre-push   Replaced with the baseline copies.
     .claude/settings.json  Adds the baseline deny rules, and each baseline hook event the project has no hook for.
                            Keeps all other settings.
     .gitignore             Adds the baseline lines. Keeps all other lines.
@@ -43,9 +44,10 @@ DEFAULT_BASELINE = "https://github.com/rhope-ops/standard_project"
 RULES_HEADING = "## Project rules"
 COMMANDS_HEADING = "## Commands"
 COPY_FILES = ["scripts/session_checkin.sh", "scripts/sync_baseline.py", "scripts/stop_check.py",
-              "scripts/worker_guard.py", ".claude/orchestration.md"]
+              "scripts/worker_guard.py", "scripts/log_check.py", "scripts/drift.py", "scripts/timeline.py", "scripts/git-hooks/pre-push",
+              ".claude/orchestration.md"]
 # Agent definitions: copied only when the project has no file with that name (projects may tune them).
-COPY_IF_MISSING = [".claude/agents/worker.md", ".claude/agents/scout.md", ".claude/agents/reviewer.md"]
+COPY_IF_MISSING = [".claude/agents/worker.md", ".claude/agents/scout.md", ".claude/agents/reviewer.md", "GEMINI.md"]
 BASELINE_OWNER = "the owner"
 # Never rename the owner inside this script: it holds BASELINE_OWNER as a literal.
 NO_OWNER_RENAME = {"scripts/sync_baseline.py"}
@@ -292,7 +294,7 @@ def main():
             path = root / rel
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(new[rel])
-            if rel.endswith((".sh", ".py")):
+            if rel.endswith((".sh", ".py")) or rel.startswith("scripts/git-hooks/"):
                 shutil.copymode(base / rel, path) if (base / rel).exists() else None
         print("Written. Review with 'git diff', then commit and push.")
 
