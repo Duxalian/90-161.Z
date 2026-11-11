@@ -1,0 +1,109 @@
+# 90-161.Z: agent instructions
+
+This file is the source of truth for every agent on this repo: Claude, GPT, Codex and sub-agents. CLAUDE.md imports it. Put rules specific to this project in "Project rules" at the end.
+
+- Repo: rhope-ops/90-161.Z
+- Purpose: Track and manage DAF publications through the DAFMAN 90-161 publishing process at wing/installation level: status tracking, document cleanup and formatting, and endorsement routing.
+
+## Order of authority
+
+1. the owner's current request.
+2. the owner decisions in docs/DECISIONS.md. A newer decision overrides older text.
+3. This file.
+4. the owner's personal preferences (Claude only).
+5. docs/NEXT_PROMPT.md (the handoff).
+
+Chat history, Project files and remembered copies are not authority. If you cannot read this repo, say so and stop.
+
+## Start of session
+
+- Run `scripts/session_checkin.sh`. Report the branch, uncommitted files, and the ahead/behind count against origin/main.
+- Read docs/NEXT_PROMPT.md and docs/DECISIONS.md.
+- Find the tools you have and read the environment docs before you say a capability is not available.
+
+## Authority
+
+- Make routine decisions yourself.
+- Ask the owner only about: source authority, content approval, irreversible effects, costs, and security or privacy risk.
+- When you ask: give 2–3 options with trade-offs, mark one as your recommendation, and ask all open questions together.
+- Your recommendation is not a decision until the owner approves it.
+
+## Delivery
+
+- Deliver every change without being asked: commit, merge to main, push, verify that origin/main has the commit, and republish the affected artifacts.
+- Exception: for a UI or design change that the owner has not approved, show a preview first (a preview artifact or a branch). Merge after he approves. Delete previews after they ship.
+- For changes that are not UI or design, this rule overrides the personal "preview first" rule.
+- If a step is blocked, name the step and the cause. If permissions block a step, give the exact commands to paste, one code block for each command.
+- Put every deliverable where it survives (repo, doc, artifact) as soon as it exists.
+
+## Reporting
+
+- Report actual checks, counts and limits.
+- Keep these states separate: done, published, verified; self-review and independent review; delivery state and checkout state.
+- Give full clickable links to files on main, to artifacts and to pull requests. Never give a bare path.
+- Give text that the owner must paste in full, in a code block. Never tell him to find it in git.
+- End each work turn with a summary: Decide (lettered options, your recommendation marked **Rec:**), Copy (full text for the owner to paste), then a table with Step (X of Y), Status (done / published / verified), Risks, Running, Not running, Next step (one recommendation), Links. Leave out empty rows, except Step. Claude follows the owner's personal preferences for the exact format.
+
+## Git safety
+
+- Never force-push, rewrite published history, reset, clean, stash or discard work to make the state look synchronized. Update branches by merge.
+- Pull just before you edit a shared doc. Use small edits. Never rewrite a whole file from an old copy.
+- Never commit secrets, tokens or credentials.
+- Claude Code enforces part of this section with .claude/settings.json: a deny list, and a Stop hook (scripts/stop_check.py) that blocks the end of a turn while work is uncommitted or unpushed. Do not weaken that file to get past a block: ask the owner.
+
+## Commands
+
+<!-- Fill in when the project has them. Give exact commands. -->
+- Build: not set yet.
+- Test: not set yet.
+- Lint: not set yet.
+
+## Verification
+
+- Before you report "verified", run the checks in Commands and report the results.
+- For UI work, verify by measuring, not by looking: screenshots at 375 px and 1440 px width, light and dark, measured spacing, and contrast against WCAG AA (4.5:1 text, 3:1 large text and UI parts). Report the numbers.
+
+## Checks
+
+- Never repin an approval, add an exemption, skip a test or edit a generated report to make a check pass.
+- Never hand-edit generated files. Change the source and rebuild.
+
+## Decisions
+
+- Record each the owner decision, with its date, in docs/DECISIONS.md or its canonical document.
+- Mark agent recommendations as recommendations, not as the owner decisions.
+- Do not silently change approved decisions or sources. Raise open items with options. Never invent values.
+
+## Handoff
+
+- The current request overrides an older handoff.
+- Keep status in repo files, never only in chat.
+- Keep docs/NEXT_PROMPT.md short (40 lines or fewer). Put detailed evidence in docs/reviews/.
+
+## Delegation
+
+- When you delegate or run more than one agent, read `.claude/orchestration.md` first: agents (`scout`, `worker`, `reviewer`), model routing, briefs, review and merge, lanes.
+- Delegate only substantial independent work (about 30 minutes or more) with bounded files and measurable done criteria. Give parallel agents disjoint files.
+- Ask for concise findings with evidence paths.
+- Before a merge of changes to code, checks or scripts, the `reviewer` subagent gets only the diff and the brief, not the author's conclusions (model per `.claude/orchestration.md`). Docs-only changes skip this review.
+- Check delegated output (diff, touched files, no approval or exemption changes) before you report it as done.
+
+## Unattended work
+
+- Work the owner expects done while he is away needs a running owner before the turn ends: a started agent or a one-time scheduled task.
+- A scheduled task needs a prompt that stands alone and permission to commit, push to main and republish without a person.
+- Background work stops at the usage limit. Say when that can interrupt it.
+
+## Boundaries
+
+- Do not change account-wide settings, plugins or skills as a side effect of project work.
+
+## Project rules
+
+- Data boundary (the owner, 2026-11-10): government data stays in DoD365 and GenAI.mil only. Never put real drafts, publication content, names, emails, office symbols or comments in this repo or in a Claude chat. Use fake sample data. Sanitize bug reports.
+- Platform (the owner, 2026-11-10): frontend and data on SharePoint Lists, Power Automate and Power Apps in DoD365. Assume no admin rights and standard connectors only, until the owner confirms otherwise.
+- Scope (the owner, 2026-11-10): wing/installation publications (supplements, OIs, local publications and forms).
+- Source authority: DAFMAN 90-161 is the rule source. Cite the paragraph for every stage, time limit and format rule. Never invent a value. See docs/DECISIONS.md for the approved edition.
+- Architecture: docs/ARCHITECTURE.md.
+
+<!-- Add rules for this project below. Date each the owner decision, for example "(the owner, 2026-11-09)". -->
