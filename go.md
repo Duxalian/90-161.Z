@@ -1,10 +1,10 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 2026-11-11 07:15 CT. Bookmark this page's raw URL on my work computer:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/HANDOFF.md
+Updated: 2026-11-11 07:35 CT. Bookmark this page on my work computer. Type it once:
+raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 
-Reload to see new tasks. GitHub can serve a copy up to 5 minutes old.
-Copy each URL into the address bar. Save files with Ctrl+S.
+Reload to see new tasks (GitHub can serve a copy up to 5 minutes old).
+Copy each URL below into the address bar. Save files with Ctrl+S.
 Reply with results in the Claude chat or by email to my Gmail. Never send real publication content.
 
 ## Task 1: renderer test (open)
