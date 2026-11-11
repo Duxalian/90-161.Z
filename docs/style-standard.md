@@ -1,6 +1,6 @@
 # Style standard: 90-161.Z
 
-Decided (PFM, 2026-11-11): everything 90-161.Z creates is standardized IAW DAFMAN 90-161 and The Tongue and Quill. The rules below are the Agent's reading of those sources (**REC** until the PFM approves). `tests/check_names.py` enforces the rules marked **(test)**.
+Decided (PFM, 2026-11-11): everything 90-161.Z creates is standardized IAW DAFMAN 90-161 and The Tongue and Quill. The rules below were approved by the PFM on 2026-11-11 (1A). `tests/check_names.py` enforces the rules marked **(test)**.
 
 Sources:
 - DAFMAN 90-161, 18 Oct 2023, Change 1 and Corrective Action: `ref/dafman90-161.txt`. It governs terms and publication format.
@@ -21,7 +21,7 @@ Sources:
 1. **Terms.** Use the DAFMAN term, spelled as DAFMAN spells it **(test, for the terms listed in the test)**.
    - Action types (1.1.4.1-1.1.4.8): New, Rewrite, Interim Change, Administrative Change, Guidance Memorandum, Certify Current, Rescind, Transfer.
    - Coordination responses (5.4.1-5.4.5): Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment. The 5.4.3 heading uses an em dash; DAFMAN body text also shows a hyphen or en dash. We use the heading form.
-   - Review statuses (7.4.4.1, 7.4.4.3): Certify Current, Requires Revision, Requires Transfer, Is Obsolete, Other. PFM Reviews also has No Response, which is not a DAFMAN status: it records the 7.4.4.4 case (no response, the PFM starts a Rescind). **REC**, Agent addition.
+   - Review statuses (7.4.4.1, 7.4.4.3): Certify Current, Requires Revision, Requires Transfer, Is Obsolete, Other. PFM Reviews also has No Response, which is not a DAFMAN status: it records the 7.4.4.4 case (no response, the PFM starts a Rescind). Kept by the PFM, 2026-11-11 (2A).
    - e-mail (DAFMAN about 30 times, "Email" 2 times; T&Q chapter 25, Hyphen rule 4: "E-mail"). In a title: E-Mail, as in the T&Q heading "Electronic Mail (E-Mail)" (chapter 12) and the DAFMAN table of contents. T&Q chapter 27 title rule 4 would lowercase a second element after a prefix; "e-" is a letter, not a prefix, and both sources capitalize it.
    - nonconcur, record set, Product Index, action officer, office of primary responsibility.
 2. **Title capitalization** for list titles, column names, view names, flow names, choice values and headings (T&Q chapter 27, "Titles of Literary and Artistic Works and Headings") **(test)**:
