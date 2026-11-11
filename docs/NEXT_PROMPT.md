@@ -1,12 +1,13 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-11 by Claude. Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-11 17:08 CT by Claude. Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State (main)
 
 - Cloud sessions: start on the environment "90-161.Z" (pwsh + PSScriptAnalyzer setup script; PII_GUARD_DENYLIST set).
-- Names and columns decided 2026-11-11 (docs/DECISIONS.md): 8 PFM lists (Offices, Series, Process Steps, Settings, Publications, Activity Log, Endorsements, Product Index); Title Case; tests/check_names.py.
-- Provisioning: flow/defs/90161Z-T02-provision-lists-r6.json -> flow/packages/90161Z-T02-provision-lists-r6.zip (113,271 bytes); site-title guard; series rows from DAFMAN Table A2.1. Docs: docs/power-automate-provisioning.md.
+- Names and columns decided 2026-11-11 (docs/DECISIONS.md): 9 PFM lists (Offices, Series, Process Steps, Settings, Publications, Activity Log, Endorsements, Product Index, Reviews); Title Case; tests/check_names.py.
+- r7 (PFM 1A 2A 3A 4A, design check https://claude.ai/artifact/X8LbHd79Zh614i1qYzhyTW): 8 DAFMAN action types; Coordination Stage (Privacy Review, Formal Coordination, Legal); actions point to their Product Index row; PFM Reviews; certifier/approver fields. Flow and app rules from that doc's "Rules for the flows and the app" are not built yet.
+- Provisioning: flow/defs/90161Z-T02-provision-lists-r7.json -> flow/packages/90161Z-T02-provision-lists-r7.zip (143,058 bytes); site-title guard; 39 series rows (Table A2.1) + 2 settings rows (5.2, 5.2.2). Docs: docs/power-automate-provisioning.md.
 - Mockup of all lists: https://claude.ai/artifact/2CtD3ASmmmzkz1EPErgCvh (generated from schemas/lists).
 - Access: all site members read all rows; no item-level permissions; the app filters by Requester and AO.
 - Records: AFRIMS T 33-38 R 07 (destroy record set - DAF Forms 673/399 and paperwork - when superseded or rescinded). Publications stay browsable. Working files: rule open.
@@ -16,14 +17,14 @@ Updated: 2026-11-11 by Claude. Keep this file at 40 lines or fewer. The current 
 
 ## Waiting on the PFM (go.md)
 
-1. Task 2 r6 on a test site, then the real site: Result text or failed step + HTTP status + error code.
+1. Task 2 r7 on a test site, then the real site: Result text or failed step + HTTP status + error code.
 2. Task 5: a real Dataverse solution export (publisher prefix pfm) emailed as file texts.
 3. Task 1 r3 renderer test (Word SaveAs fix).
 
 ## Next design (after Task 5)
 
 1. Build flows as solution-aware flows with connection references (match the real export), not legacy packages.
-2. First flows: write every event to PFM Activity Log; endorsement routing from PFM Offices (Legal last); suspense reminders and escalation (weekdays); Next Review Due = 4 years after the later of Effective Date and Last Certified Current Date, review task 6 months before, prescribed forms with their publication; on-demand status report email.
+2. First flows (apply the design-check rules: stage gating, Legal never Concur—No Response, GM expiry, rescind cascades to forms, periodic review timers): write every event to PFM Activity Log; endorsement routing from PFM Offices (Legal last); suspense reminders and escalation (weekdays); Next Review Due = 4 years after the later of Effective Date and Last Certified Current Date, review task 6 months before, prescribed forms with their publication; on-demand status report email.
 3. Then the Power Apps canvas app (customer intake, status, PFM queue; OPR opens the office record), Accessibility Checker 0 errors.
 
 ## Do not

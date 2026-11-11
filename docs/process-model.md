@@ -4,19 +4,20 @@ Source: DAFMAN 90-161, 18 Oct 2023, Change 1, Corrective Action 1 May 2026. Stat
 
 ## Stages (one publication action)
 
-| # | Stage | Ref | Exit condition |
-|---|---|---|---|
-| 1 | Preparation: directive or not, existing pubs, prior record set, contact PCM/PFM | 3.1 | DAF Form 673 started |
-| 2 | Drafting with SMEs | 3.2, 4.2.2.1 | Draft meets format rules (draft mode) |
-| 3 | Pre-coordination (optional) | 3.3 | — |
-| 4 | Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673 | 3.4, 5.1, 5.1.5 | All coordinators responded; all nonconcurs resolved (5.5.1) |
-| 5 | Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication | 5.1.8.2, 3.4 | Legal concur |
-| 6 | Certification: certifying official endorses DAF Form 673 | 5.6 | Endorsed |
-| 7 | Approval: approving official endorses DAF Form 673; delegation letter on file | 5.7 | Endorsed |
-| 8 | Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM | 6.6.1 | PFM has package |
-| 9 | Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI | 6.4.1–6.4.2, 1.1.3.2 | Posted on wing site |
+| # | Stage | Ref | Exit condition | Target business days (Table A5.2) |
+|---|---|---|---|---|
+| 1 | Preparation: directive or not, existing pubs, prior record set, contact PCM/PFM | 3.1 | DAF Form 673 started | — |
+| 2 | Drafting with SMEs | 3.2, 4.2.2.1 | Draft meets format rules (draft mode) | 60 |
+| 3 | Pre-coordination (optional) | 3.3 | — | — |
+| 4 | Privacy monitor review: the unit privacy monitor reviews the draft before formal coordination | 2.8.1, Table A3.1 note 2 | Privacy monitor review documented | — |
+| 5 | Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673 | 3.4, 5.1, 5.1.5 | All coordinators responded; all nonconcurs resolved (5.5.1) | 20 |
+| 6 | Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication | 5.1.8.2, 3.4 | Legal concur | 20 |
+| 7 | Certification: certifying official endorses DAF Form 673 | 5.6 | Endorsed | 10 |
+| 8 | Approval: approving official endorses DAF Form 673; delegation letter on file | 5.7 | Endorsed | 10 |
+| 9 | Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM | 6.6.1 | PFM has package | — |
+| 10 | Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI | 6.4.1-6.4.2, 1.1.3.2, Table A5.2 f (steps 9-10 together) | Posted on wing site | 15 |
 
-Variants: Rewrite and interim change = stages 4–8 (7.6, 7.7.9). Administrative change = no coordination; 3-Ltr/L3 approves (7.8.10). GM at wing level = local legal review (5.1.7). Periodic review: OPR responds in 30+ days; actions complete within 180 days (7.4.4).
+Variants: Rewrite and interim change = stages 4–9 (7.6, 7.7.9). Administrative change = no coordination; 3-Ltr/L3 approves (7.8.10). GM at wing level = local legal review (5.1.7). Periodic review: OPR responds in 30+ days; actions complete within 180 days (7.4.4).
 
 ## Timing
 

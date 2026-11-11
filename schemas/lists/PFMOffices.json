@@ -23,9 +23,28 @@
     {
       "internalName": "CoordinationRole",
       "displayName": "Coordination Role",
-      "type": "Text",
+      "type": "Choice",
       "required": false,
-      "ref": "DAFMAN 90-161 5.1 (functional interest, technical expertise, oversight, statutory review)"
+      "ref": "DAFMAN 90-161 Table A3.1 items 1, 3, 4, 5 (servicing legal office; records, privacy, FOIA, information collections; reserve and ANG applicability), 1.5.3 (FOIA review), Table A3.2 and 5.1 (functional and other offices); PFM 2026-11-11 (r7, design check decision 1A)",
+      "choices": [
+        "Legal",
+        "FOIA",
+        "Privacy",
+        "Records",
+        "Information Collections",
+        "Guard Applicability",
+        "Reserve Applicability",
+        "Higher Headquarters OPR",
+        "Functional",
+        "Other"
+      ]
+    },
+    {
+      "internalName": "MandatoryCoordinator",
+      "displayName": "Mandatory Coordinator",
+      "type": "Boolean",
+      "required": false,
+      "ref": "DAFMAN 90-161 Table A3.1 (mandatory formal coordinators), Table A3.2 (forms: the item 3 office only); the app adds these offices to every action; PFM 2026-11-11 (r7, design check decision 1A)"
     },
     {
       "internalName": "CoordinateLast",
@@ -50,6 +69,7 @@
         "Title",
         "Endorser",
         "CoordinationRole",
+        "MandatoryCoordinator",
         "CoordinateLast"
       ],
       "orderBy": [

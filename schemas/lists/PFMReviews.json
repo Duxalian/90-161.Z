@@ -1,0 +1,146 @@
+{
+  "list": "PFMReviews",
+  "title": "PFM Reviews",
+  "description": "One row per periodic or special review of a product (DAFMAN 90-161 7.4.2-7.4.4): OPR response, due dates and the follow-up action.",
+  "template": "GenericList",
+  "ref": "DAFMAN 90-161 7.4.2-7.4.4.4, 7.5; PFM 2026-11-11 (design check 4A)",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Review",
+      "type": "Text",
+      "required": true,
+      "builtIn": true,
+      "ref": "Short label, for example the publication number and review year"
+    },
+    {
+      "internalName": "Product",
+      "displayName": "Product",
+      "type": "Lookup",
+      "required": true,
+      "lookup": {
+        "list": "PFMProductIndex",
+        "showField": "PublicationNumber"
+      },
+      "indexed": true,
+      "ref": "The product under review; its prescribed forms are reviewed with it (DAFMAN 90-161 7.4.2)"
+    },
+    {
+      "internalName": "ReviewType",
+      "displayName": "Review Type",
+      "type": "Choice",
+      "required": true,
+      "choices": [
+        "Periodic",
+        "Special"
+      ],
+      "default": "Periodic",
+      "ref": "DAFMAN 90-161 7.4.2 (periodic, every 4 years), 7.4.3 (special)"
+    },
+    {
+      "internalName": "ReviewOpened",
+      "displayName": "Opened",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.4.2 (the PFM tasks the OPR 6 months before the 4-year mark)"
+    },
+    {
+      "internalName": "OPRResponseDue",
+      "displayName": "OPR Response Due",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.4.4 (OPR has at least 30 days to respond); the flow sets Opened + 30 days"
+    },
+    {
+      "internalName": "OPRResponse",
+      "displayName": "OPR Response",
+      "type": "Choice",
+      "required": false,
+      "choices": [
+        "Certify Current",
+        "Requires Revision",
+        "Requires Transfer",
+        "Is Obsolete",
+        "No Response"
+      ],
+      "ref": "DAFMAN 90-161 7.4.4.1-7.4.4.4 (review outcomes); No Response: the PFM is prompted to start a Rescind"
+    },
+    {
+      "internalName": "ResponseDate",
+      "displayName": "Response Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "Date the OPR responded"
+    },
+    {
+      "internalName": "Form399Link",
+      "displayName": "DAF Form 399 Link",
+      "type": "URL",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.5.1 (Certify Current on DAF Form 399, signed by the OPR and the approving authority)"
+    },
+    {
+      "internalName": "ActionDue",
+      "displayName": "Action Due",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.4.4 (follow-up action within 180 days of the response); the flow sets it"
+    },
+    {
+      "internalName": "FollowUpAction",
+      "displayName": "Follow-Up Action",
+      "type": "Lookup",
+      "required": false,
+      "lookup": {
+        "list": "PFMPublications",
+        "showField": "Title"
+      },
+      "ref": "The PFM Publications action that carries out the response (Certify Current, Rewrite, Transfer or Rescind)"
+    }
+  ],
+  "views": [
+    {
+      "name": "PFM - By Response Due",
+      "fields": [
+        "Title",
+        "Product",
+        "ReviewType",
+        "ReviewOpened",
+        "OPRResponseDue",
+        "OPRResponse",
+        "ActionDue"
+      ],
+      "orderBy": [
+        {
+          "field": "OPRResponseDue",
+          "ascending": true
+        }
+      ],
+      "default": false,
+      "ref": "DAFMAN 90-161 7.4.4"
+    },
+    {
+      "name": "PFM - No Response",
+      "fields": [
+        "Title",
+        "Product",
+        "OPRResponseDue",
+        "OPRResponse"
+      ],
+      "orderBy": [
+        {
+          "field": "OPRResponseDue",
+          "ascending": true
+        }
+      ],
+      "where": {
+        "field": "OPRResponse",
+        "op": "Eq",
+        "type": "Choice",
+        "value": "No Response"
+      },
+      "default": false,
+      "ref": "DAFMAN 90-161 7.4.4.4 (no response: the PFM starts a Rescind)"
+    }
+  ]
+}

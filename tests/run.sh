@@ -51,13 +51,16 @@ assert all(('Get_' + l[3:] + '_ID') in d for l in p['lookupPlaceholders']), p['l
 body = d['Create_Fields_And_Views']['actions']['Create_Field_Or_View']['inputs']['parameters']['parameters/body']
 assert all(f'__{l}_ID__' in body for l in p['lookupPlaceholders'])
 assert d['Add_Rows']['runAfter'] == {'Create_Fields_And_Views': ['Succeeded']} and d['Apply_Updates']['runAfter'] == {'Add_Rows': ['Succeeded']}
-assert len(p['rows']) == 39
-assert 'PFMProductIndex' in p['lookupPlaceholders'] and p['listOrder'][-1] == 'PFMProductIndex'
+assert len(p['rows']) == 41
+assert 'PFMProductIndex' in p['lookupPlaceholders'] and p['listOrder'][-1] == 'PFMReviews'
+lo = p['listOrder']; assert lo.index('PFMProductIndex') < lo.index('PFMPublications') < lo.index('PFMReviews'), lo
 gv = [r for r in p['fields'] if r['body'].get('Title') == 'PFM - Prescribed Forms by Publication']
 q = gv[0]['body']['ViewQuery']
 assert q.index('<Where>') < q.index('<GroupBy') < q.index('<OrderBy>'), q
-assert all(r['body']['__metadata']['type'] == 'SP.Data.PFMSeriesListItem' for r in p['rows'])
-nums = [r['body']['SeriesNumber'] for r in p['rows']]
+assert [r['body']['__metadata']['type'] for r in p['rows']].count('SP.Data.PFMSeriesListItem') == 39
+st = {r['body']['Title']: r['body']['SettingValue'] for r in p['rows'] if r['body']['__metadata']['type'] == 'SP.Data.PFMSettingsListItem'}
+assert st == {'CoordinationSuspenseBusinessDays': '15', 'GuardReserveApplicabilityCalendarDays': '30'}, st
+nums = [r['body']['SeriesNumber'] for r in p['rows'] if 'SeriesNumber' in r['body']]
 assert len(set(nums)) == 39 and 16 in nums and 17 in nums
 gets = [a for a in d if a.startswith('Get_') and a.endswith('_ID')]
 assert d[gets[0]]['runAfter'] == {'Create_Lists': ['Succeeded', 'Failed']}
@@ -87,6 +90,35 @@ for k in ('Create_Lists', 'Create_Fields_And_Views', 'Add_Rows', 'Apply_Updates'
     assert d[k]['runtimeConfiguration']['concurrency']['repetitions'] == 1, k
 PY
 
+python3 - <<'PY' && ok "r7 schema rules (DAFMAN design check 2026-11-11)" || bad "r7 schema rules"
+import json, glob
+S = {json.load(open(f))['list']: json.load(open(f)) for f in glob.glob('schemas/lists/*.json')}
+F = lambda l: {f['internalName']: f for f in S[l]['fields']}
+pub, end, pi, rv, off = F('PFMPublications'), F('PFMEndorsements'), F('PFMProductIndex'), F('PFMReviews'), F('PFMOffices')
+assert pub['ActionType']['choices'] == ['New', 'Rewrite', 'Interim Change', 'Administrative Change', 'Guidance Memorandum', 'Certify Current', 'Rescind', 'Transfer']
+assert pub['Product']['lookup']['list'] == 'PFMProductIndex'
+assert 'Execution' not in end and not end['EndorserOrder']['required']
+assert end['CoordinationStage']['choices'] == ['Privacy Review', 'Formal Coordination', 'Legal'] and end['CoordinationStage']['required']
+assert end['CoordinationRole']['choices'] == off['CoordinationRole']['choices'] and 'Legal' in off['CoordinationRole']['choices']
+assert 'Publication' not in pi and 'Expired' in pi['ProductStatus']['choices']
+assert all(pi[k]['lookup']['list'] == 'PFMProductIndex' for k in ('SupersededBy', 'ParentPublication', 'PrescribingPublication'))
+assert rv['Product']['lookup']['list'] == 'PFMProductIndex' and rv['FollowUpAction']['lookup']['list'] == 'PFMPublications'
+steps = S['PFMProcessSteps']['seed']
+assert [s['StepNumber'] for s in steps] == list(range(1, 11)) and 'Privacy' in steps[3]['Title']
+assert {s['StepNumber']: s.get('TargetBusinessDays') for s in steps if s.get('TargetBusinessDays')} == {2: 60, 5: 20, 6: 20, 7: 10, 8: 10, 10: 15}
+PY
+
+python3 - <<'PY' && ok "sample CSVs match schema columns and choices" || bad "sample CSVs"
+import csv, glob, json, os
+for f in glob.glob('samples/lists/*.csv'):
+    S = {x['internalName']: x for x in json.load(open('schemas/lists/' + os.path.basename(f)[:-4] + '.json'))['fields']}
+    rows = list(csv.DictReader(open(f, encoding='utf-8')))
+    assert set(rows[0]) <= set(S), (f, set(rows[0]) - set(S))
+    for r in rows:
+        for k, v in r.items():
+            if v and S[k]['type'] == 'Choice': assert v in S[k]['choices'], (f, k, v)
+PY
+
 python3 - <<'PY' && ok "flow payload XML parses" || bad "flow payload XML"
 import json, xml.etree.ElementTree as ET
 d = json.load(open('flow/provisioning-payload.json'))
@@ -97,7 +129,7 @@ for r in d['fields']:
 PY
 
 out=$(pwsh -NoProfile -File scripts/gov/Provision-Lists.ps1 -PlanOnly -SchemaPath schemas/lists 2>&1 | tail -1)
-[ "$out" = "PLAN lists=8 fields=52 views=15" ] && ok "lists plan ($out)" || bad "lists plan: $out"
+[ "$out" = "PLAN lists=9 fields=80 views=18" ] && ok "lists plan ($out)" || bad "lists plan: $out"
 
 cp templates/CRM_A12-1.docx /tmp/crm_before.docx
 node templates/build_crm_template.js >/tmp/crm.out 2>&1 && grep -q "tableWidthDXA=9331 columns=9" /tmp/crm.out && ok "CRM template builds ($(cat /tmp/crm.out | sed s,.*CRM_A12-1.docx,,))" || bad "CRM template build"

@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 2026-11-11 16:43 CT. Bookmark on my work computer (clickable links):
+Updated: 2026-11-11 17:08 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -32,31 +32,32 @@ In File Explorer, right-click 90161Z-T01-renderer-test-r3.ps1 > Run with PowerSh
 
 Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each check (1-8) in the test plan that fails, with what I see.
 
-## Task 2: create the lists, r6 (open, 2026-11-11 16:43 CT)
+## Task 2: create the lists, r7 (open, 2026-11-11 17:08 CT)
 
 Folder: ...\90-161.Z\T02
 
-On hold (2026-11-11 17:30 CT): do not run r6. A full DAFMAN check found list changes (r7) that I approve first.
-
-r6: forms link to their prescribing publication (reviewed together); only directive publication types; no category column. r5 added PFM Series (39 series from DAFMAN), Publication Type, Series and OPR lookups, Inactive status and review dates.
+r7 replaces r6 (do not run r6). r7 adds the DAFMAN 90-161 check I approved: the 8 DAFMAN action types, coordination stages (Privacy Review, Formal Coordination, Legal), nonconcur resolution, certifier and approver fields, a new PFM Reviews list for the 4-year reviews, Expired status, Superseded By and Parent Publication links, and 2 settings rows (15 business days, 30 calendar days).
 
 Run it on a TEST site first (a site or subsite only I use). After it passes there, run it again on the real site.
 
 First: delete the 4 lists the r1 run made on the wrong site (Stages, Publications, Endorsements, PublicationIndex): Site contents > the list's ... menu > Delete.
 
-What r6 does: on the site I name, it creates 8 lists: PFM Offices, PFM Series, PFM Process Steps, PFM Settings, PFM Publications, PFM Activity Log, PFM Endorsements, PFM Product Index. It first reads the site's title and stops, creating nothing, if the title I type does not match. Details and checks:
+What r7 does: on the site I name, it creates 9 lists: PFM Offices, PFM Process Steps, PFM Series, PFM Settings, PFM Product Index, PFM Publications, PFM Activity Log, PFM Endorsements, PFM Reviews. It first reads the site's title and stops, creating nothing, if the title I type does not match. Details and checks:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/power-automate-provisioning.md
 
+What the lists look like (opens in the Claude app, not on my work computer):
+https://claude.ai/artifact/2CtD3ASmmmzkz1EPErgCvh
+
 Download into the T02 folder (raw link only):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r6.zip
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r7.zip
 
-The file must be 113,271 bytes.
+The file must be 143,058 bytes.
 
-In Power Automate: My flows > Import > Import Package (Legacy) > Upload > 90161Z-T02-provision-lists-r6.zip.
+In Power Automate: My flows > Import > Import Package (Legacy) > Upload > 90161Z-T02-provision-lists-r7.zip.
 Import setup: flow = Create as new. SharePoint connection = Select during import > pick my existing SharePoint connection > Save. Then Import.
-Open the flow "90161Z T02 Provision Lists r6", Test > Manually > Run flow. Type the full site address and the site's title exactly as it shows at the top of the site. Run it once per site.
-Pass: "Result" shows "Lists: 8, fields and views: 158, rows: 39, updates: 13 - provisioning finished". Then do the checks in section 3 and the settings in section 4 of the details page.
-Then delete the r1 flow "90161Z T02 Provision lists r1" and any r2 to r5 flow I imported.
+Open the flow "90161Z T02 Provision Lists r7", Test > Manually > Run flow. Type the full site address and the site's title exactly as it shows at the top of the site. Run it once per site.
+Pass: "Result" shows "Lists: 9, fields and views: 213, rows: 41, updates: 15 - provisioning finished". Then do the checks in section 3 and the settings in section 4 of the details page.
+Then delete the r1 flow "90161Z T02 Provision lists r1" and any r2 to r6 flow I imported.
 
 Report: test site or real site; import ok or the exact error text; the Result text, or for the first failed step only its name, HTTP status and error code.
 

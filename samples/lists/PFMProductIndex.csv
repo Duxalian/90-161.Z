@@ -1,3 +1,4 @@
-Title,ProductType,PublicationNumber,Publication,PostedLink
-Sample Form 99-2,Form,Sample Form 99-2,Sample Form 99-2,https://example.invalid/posted/sample-form-99-2
-Sample OI 98-1,Publication,Sample OI 98-1,,https://example.invalid/posted/sample-oi-98-1
+Title,ProductType,PublicationType,Series,OPR,PublicationNumber,PrescribingPublication,ParentPublication,SupersededBy,PostedLink,ProductStatus,InactiveDate,EffectiveDate,CertifiedCurrentDate,NextReviewDue,ExpirationDate,CollectsPII,PublicationRecordSetLink,FormRecordSetLink
+Sample Instruction 99-101,Publication,Operating Instruction,,,SAMPLEOI99-101,,,,https://example.invalid/posted/sampleoi99-101,Active,,2030-01-01,,2034-01-01,,,https://example.invalid/records/sampleoi99-101,
+Sample Form 99-102,Form,,,,SAMPLEFORM99-102,SAMPLEOI99-101,,,https://example.invalid/posted/sampleform99-102,Active,,2030-01-01,,,,false,,https://example.invalid/records/sampleform99-102
+Sample Instruction 99-100,Publication,Operating Instruction,,,SAMPLEOI99-100,,,SAMPLEOI99-101,,Superseded,2030-01-01,,,,,,,
