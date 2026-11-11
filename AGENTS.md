@@ -54,7 +54,8 @@ Chat history, Project files and remembered copies are not authority. If you cann
 ## Commands
 
 <!-- Fill in when the project has them. Give exact commands. -->
-- Gov-device checks: scripts/gov/Test-Environment.ps1, scripts/gov/Test-PnPConnection.ps1 (read-only).
+- Gov-device checks: scripts/gov/Test-Environment.ps1, scripts/gov/Test-PnPConnection.ps1, scripts/gov/Test-PSGallery.ps1 (read-only). The PFM opens them on the gov device from the public repo; email to .mil gets filtered.
+- Credentials: never store, print, log or ask for passwords in chat. Scripts take them only through Get-Credential at run time.
 - Gov-device code target: Windows PowerShell 5.1, Word 16 COM, PnP.PowerShell 1.12.0. No other modules (PSGallery blocked).
 - Build: not set yet.
 - Test: not set yet.

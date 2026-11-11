@@ -16,8 +16,17 @@ try {
 } catch { $r['PnP module'] = 'FAIL: ' + $_.Exception.Message }
 
 try {
-  Connect-PnPOnline -Url $SiteUrl -UseWebLogin -ErrorAction Stop
-  $r['Connect -UseWebLogin'] = 'OK'
+  $mode = Read-Host 'Sign-in: W = web sign-in window (CAC), P = username/password prompt'
+  if ($mode -eq 'P') {
+    # Get-Credential shows a Windows prompt. The password stays in memory only; it is never saved or printed.
+    $cred = Get-Credential -Message '90-161.Z: SharePoint account'
+    Connect-PnPOnline -Url $SiteUrl -Credentials $cred -ErrorAction Stop
+    Remove-Variable cred
+    $r['Connect'] = 'OK (credentials)'
+  } else {
+    Connect-PnPOnline -Url $SiteUrl -UseWebLogin -ErrorAction Stop
+    $r['Connect'] = 'OK (web login)'
+  }
   try {
     $web = Get-PnPWeb -Includes EffectiveBasePermissions -ErrorAction Stop
     $p = $web.EffectiveBasePermissions
@@ -32,7 +41,7 @@ try {
   } catch { $r['Web features readable'] = 'no' }
   Disconnect-PnPOnline
 } catch {
-  $r['Connect -UseWebLogin'] = 'FAIL: ' + $_.Exception.Message
+  $r['Connect'] = 'FAIL: ' + $_.Exception.Message
 }
 
 Write-Output '====='
