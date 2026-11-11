@@ -4,6 +4,10 @@ Decided (PFM, 2026-11-10): lists are created by a Power Automate flow, not Power
 
 The flow reads one generated file, `flow/provisioning-payload.json`, and sends each request in order. The site URL is chosen inside the flow; it is never in this repo.
 
+## 0. Import route (use this first)
+
+The flow comes as a package built from this payload: `flow/defs/90161Z-T02-provision-lists-r1.json` + `python3 scripts/build_flow_package.py` → `flow/packages/90161Z-T02-provision-lists-r1.zip`. Steps are in go.md, Task 2. The package asks for the site URL at run time, runs every request one at a time in payload order, and does not send the stage seed rows. Sections 1–2 are the manual fallback if the import fails.
+
 ## 1. Get the payload
 
 Open on the gov device and copy all of it (Ctrl+A, Ctrl+C):
@@ -37,7 +41,7 @@ Body expression for 5a (it fills in the list IDs that lookup fields need):
 replace(replace(string(items('Create_fields_and_views')?['body']), '__Stages_ID__', body('Get_Stages_ID')?['d']?['Id']), '__Publications_ID__', body('Get_Publications_ID')?['d']?['Id'])
 ```
 
-Leave **Concurrency control** off on every Apply to each (the default), so requests run in order.
+On every Apply to each: Settings → **Concurrency control** on, **Degree of parallelism** 1, so requests run in payload order (Logic Apps runs loop iterations in parallel by default).
 
 Seed stages (6) is optional: the stage list in docs/process-model.md is a draft. Skip it until the stages are approved.
 

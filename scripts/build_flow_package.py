@@ -6,6 +6,9 @@ so --check can compare the committed zip with a fresh build. Never hand-edit the
 Connections: a def lists connector names in "connections" (e.g. ["shared_sharepointonline"]); the package then
 matches the real export in tests/fixtures/real-export-sharepoint (connector + connection resources, maps,
 connectionReferences). At import the PFM picks an existing connection (creationType "Existing").
+Embeds: a def may map action names to repo files in "embed" (e.g. {"Payload": "flow/provisioning-payload.json"});
+the build puts that file's JSON in the action's "inputs", so generated data has one source and --check sees changes.
+Strings that start with "@" are escaped to "@@" so the flow engine reads them as text, not expressions.
 """
 import argparse, io, json, pathlib, sys, uuid, zipfile
 
@@ -27,8 +30,20 @@ def dumps(o):
     return json.dumps(o, indent=2, ensure_ascii=False) + "\n"
 
 
+def literal(o):
+    """Escape a JSON value so the flow engine treats every string as text ("@x" -> "@@x")."""
+    if isinstance(o, dict): return {k: literal(v) for k, v in o.items()}
+    if isinstance(o, list): return [literal(v) for v in o]
+    if isinstance(o, str) and o.startswith("@"): return "@" + o
+    return o
+
+
 def build(src: pathlib.Path) -> bytes:
     d = json.loads(src.read_text(encoding="utf-8"))
+    for act, rel in d.pop("embed", {}).items():
+        if act not in d.get("actions", {}):
+            raise ValueError(f"{src.name}: embed target '{act}' is not a top-level action")
+        d["actions"][act]["inputs"] = literal(json.loads((ROOT / rel).read_text(encoding="utf-8")))
     for k in ("displayName", "triggers", "actions"):
         if k not in d:
             raise ValueError(f"{src.name}: missing '{k}'")

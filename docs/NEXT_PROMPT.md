@@ -9,7 +9,9 @@ Updated: 2026-11-11 by Claude. Keep this file at 40 lines or fewer. The current 
 - Phase C done (agent workspace): renderer cover per measurements, certifier name line, 0.75 pt rules, opening paragraph built from openingParts (4.5.5 order, verbatim fixed text), two-space sentences, TOC always, Attachment 1 (ATT1) report. tests/run.sh 19/19. Independent review: 12 findings, 0 high; fixed.
 - Gov-device tasks live in go.md (repo root) (never email the military address).
 - Flow import route verified on the gov device 2026-11-11: scripts/build_flow_package.py zip, raw link, Import Package (Legacy), run passed.
-- Not yet run on the gov device: renderer (docs/gov-test-plan.md), provisioning flow (docs/power-automate-provisioning.md).
+- SharePoint connection in an imported package verified on the gov device 2026-11-11 (Task 4 r2).
+- Provisioning flow is now a package: flow/defs/90161Z-T02-provision-lists-r1.json (payload embedded at build). go.md Task 2.
+- Not yet run on the gov device: renderer (docs/gov-test-plan.md), Task 2 provisioning package.
 
 ## Open (in order)
 
