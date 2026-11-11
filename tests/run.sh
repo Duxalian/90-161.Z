@@ -17,7 +17,7 @@ got=$(echo "$out" | grep -oE '^FAIL [A-Z]+-?[0-9]*' | awk '{print $2}' | sort -u
 want="F-005 F-013 F-018 F-020 F-021 F-022 F-025 F-026 F-029 F-031 F-033 F-034 F-035 F-037 SCHEMA W-001 "
 [ $rc -eq 1 ] && [ "$got" = "$want" ] && ok "bad fixture fails on expected rules" || { echo "got:  $got"; echo "want: $want"; bad "bad fixture"; }
 
-for f in samples/publication.sample.json tests/fixtures/bad.publication.json schemas/publication.schema.json; do
+for f in samples/publication.sample.json tests/fixtures/bad.publication.json schemas/publication.schema.json schemas/lists/*.json flow/provisioning-payload.json; do
   python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" && ok "json $f" || bad "json $f"
 done
 
@@ -30,7 +30,21 @@ except ImportError:
 jsonschema.validate(json.load(open('samples/publication.sample.json')), json.load(open('schemas/publication.schema.json')))
 PY
 
-! grep -rniE "@us\.af\.mil|@mail\.mil" samples tests schemas docs scripts >/dev/null && ok "no .mil addresses in repo content" || bad "no .mil addresses"
+python3 scripts/build_flow_payload.py --check >/dev/null && ok "flow payload up to date" || bad "flow payload stale"
+
+python3 - <<'PY' && ok "flow payload XML parses" || bad "flow payload XML"
+import json, xml.etree.ElementTree as ET
+d = json.load(open('flow/provisioning-payload.json'))
+for r in d['fields']:
+    b = r['body']
+    if 'parameters' in b: ET.fromstring(b['parameters']['SchemaXml'])
+    if b.get('ViewQuery'): ET.fromstring('<Q>' + b['ViewQuery'] + '</Q>')
+PY
+
+out=$(pwsh -NoProfile -File scripts/gov/Provision-Lists.ps1 -PlanOnly -SchemaPath schemas/lists 2>&1 | tail -1)
+[ "$out" = "PLAN lists=4 fields=25 views=5" ] && ok "lists plan ($out)" || bad "lists plan: $out"
+
+! grep -rniE "@us\.af\.mil|@mail\.mil|usaf\.dps\.mil/sites/[a-z0-9]" samples tests schemas docs scripts flow >/dev/null && ok "no .mil addresses in repo content" || bad "no .mil addresses"
 
 echo "TESTS pass=$pass fail=$fail"
 [ $fail -eq 0 ]

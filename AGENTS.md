@@ -57,8 +57,8 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Gov-device checks: scripts/gov/Test-Environment.ps1, scripts/gov/Test-PnPConnection.ps1, scripts/gov/Test-PSGallery.ps1 (read-only). The PFM opens them on the gov device from the public repo; email to .mil gets filtered.
 - Credentials: never store, print, log or ask for passwords in chat. Scripts take them only through Get-Credential at run time.
 - Gov-device code target: Windows PowerShell 5.1, Word 16 COM, PnP.PowerShell 1.12.0. No other modules (PSGallery blocked).
-- Build: not set yet.
-- Test: not set yet.
+- Build: `python3 scripts/build_flow_payload.py` regenerates flow/provisioning-payload.json from schemas/lists (never hand-edit the payload).
+- Test: `tests/run.sh`. Pass = last line `TESTS pass=N fail=0`. Word COM and Power Automate are tested on the gov device: docs/gov-test-plan.md, docs/power-automate-provisioning.md section 3.
 - Lint: `scripts/lint.sh` (pwsh 7 + PSScriptAnalyzer, PS 5.1 syntax target; setup in docs/dev-setup.md). Pass = `findings=0`.
 
 ## Verification
@@ -106,7 +106,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Data boundary (PFM, 2026-11-10): government data stays in DoD365 and GenAI.mil only. Never put real drafts, publication content, names, emails, office symbols or comments in this repo or in a Claude chat. Use fake sample data. Sanitize bug reports.
 - Platform (PFM, 2026-11-10): frontend and data on SharePoint Lists, Power Automate and Power Apps in DoD365. The PFM is a site collection administrator with PowerShell access to SharePoint (2026-11-10). Assume no tenant admin rights and standard connectors only, until the PFM confirms otherwise.
 - Scope (PFM, 2026-11-10): ANG wing publications (supplements, OIs, local publications and forms). ANG wing publications post to the wing's own site, not through AFIMPT (DAFMAN 90-161 1.1.3.2, 6.4). No wing supplement exists.
-- Gov device (PFM, 2026-11-10): GitHub login is blocked on the gov device. The repo is public (PFM, 2026-11-10), so the gov device reads it without login. This repo is public: never commit the wing's name or location, people's names, emails, office symbols or any government data.
+- Gov device (PFM, 2026-11-10): GitHub login is blocked on the gov device. The repo is public (PFM, 2026-11-10), so the gov device reads it without login. This repo is public: never commit the wing's name or location, the wing's site path, people's names, emails, office symbols or any government data.
 - Source authority: DAFMAN 90-161 is the rule source. Cite the paragraph for every stage, time limit and format rule. Never invent a value. See docs/DECISIONS.md for the approved edition.
 - Formatting (PFM, 2026-11-10): rules force output to look like DAFMAN 90-161. Format comes from code, never from the model. Rule catalog: docs/format-rules.md. Do not use AFIMPT for formatting or tracking.
 - System of record (PFM, 2026-11-10): 90-161.Z owns endorsement tracking (no TMT).

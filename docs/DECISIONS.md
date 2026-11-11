@@ -4,6 +4,8 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-10 | Create the SharePoint lists with a Power Automate flow (docs/power-automate-provisioning.md); PowerShell/PnP path dropped (sign-in window never opened). | PFM | PnP provisioning |
+| 2026-11-10 | Site URL: repo holds only the domain pattern https://usaf.dps.mil/sites/<your-site>; the real site path stays on the gov device and in the flow. | PFM | — |
 | 2026-11-10 | Build both lanes in parallel: (A) renderer + validator, (B) SharePoint lists + PnP provisioning. | PFM | — |
 | 2026-11-10 | **Rec:** Renderer = PowerShell + Word COM (option A); environment check passed (docs/reviews/2026-11-10-gov-env-check.md). Option C stays open until the Premium check. | Agent | — |
 | 2026-11-10 | Public repo uses "PFM", not the PFM's name. | PFM | — |
