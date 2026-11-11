@@ -31,6 +31,8 @@ jsonschema.validate(json.load(open('samples/publication.sample.json')), json.loa
 PY
 
 python3 scripts/build_flow_payload.py --check >/dev/null && ok "flow payload up to date" || bad "flow payload stale"
+python3 scripts/build_flow_package.py --check && ok "flow packages up to date" || bad "flow packages stale"
+for f in flow/defs/*.json; do python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" && ok "json $f" || bad "json $f"; done
 
 python3 - <<'PY' && ok "flow payload XML parses" || bad "flow payload XML"
 import json, xml.etree.ElementTree as ET

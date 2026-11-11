@@ -1,0 +1,21 @@
+{
+  "displayName": "90-161.Z hello test",
+  "description": "Import test: manual trigger, one Scope with two Compose actions. No connections.",
+  "triggers": {
+    "manual": {
+      "type": "Request",
+      "kind": "Button",
+      "inputs": { "schema": { "type": "object", "properties": {}, "required": [] } }
+    }
+  },
+  "actions": {
+    "Hello_scope": {
+      "type": "Scope",
+      "runAfter": {},
+      "actions": {
+        "Hello_compose": { "type": "Compose", "runAfter": {}, "inputs": "Hello from 90-161.Z" },
+        "Echo_compose": { "type": "Compose", "runAfter": { "Hello_compose": ["Succeeded"] }, "inputs": "@concat(outputs('Hello_compose'), ' - import worked')" }
+      }
+    }
+  }
+}
