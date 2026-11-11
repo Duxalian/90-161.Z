@@ -26,7 +26,7 @@ def load():
     return schemas
 
 def order(schemas):
-    deps = {n: {f['lookup']['list'] for f in s['fields'] if f['type'] == 'Lookup'} for n, s in schemas.items()}
+    deps = {n: {f['lookup']['list'] for f in s['fields'] if f['type'] == 'Lookup'} - {n} for n, s in schemas.items()}  # a list may look up itself
     done, out = set(), []
     while len(out) < len(schemas):
         ready = sorted(n for n in schemas if n not in done and deps[n] <= done)
@@ -63,6 +63,8 @@ def view_query(v):
     w = v.get('where')
     if w:
         q += f'<Where><{w["op"]}><FieldRef Name={quoteattr(w["field"])}/><Value Type={quoteattr(w["type"])}>{escape(str(w["value"]))}</Value></{w["op"]}></Where>'
+    if v.get('groupBy'):
+        q += f'<GroupBy Collapse="FALSE"><FieldRef Name={quoteattr(v["groupBy"])}/></GroupBy>'
     if v.get('orderBy'):
         q += '<OrderBy>' + ''.join(f'<FieldRef Name={quoteattr(o["field"])} Ascending="{"TRUE" if o.get("ascending", True) else "FALSE"}"/>' for o in v['orderBy']) + '</OrderBy>'
     return q

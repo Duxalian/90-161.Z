@@ -36,23 +36,9 @@
         "Supplement",
         "Operating Instruction",
         "Guidance Memorandum",
-        "Instructional Checklist",
-        "Pamphlet",
-        "Handbook",
-        "Visual Aid"
+        "Instructional Checklist"
       ],
-      "ref": "DAFMAN 90-161 1.1.2 (publication types: directive or non-directive, stand-alone or supplement), 1.1.3 and Tables A11.1/A11.2 (types an installation may issue); PFM 2026-11-11. Blank for forms"
-    },
-    {
-      "internalName": "PublicationCategory",
-      "displayName": "Publication Category",
-      "type": "Choice",
-      "required": false,
-      "choices": [
-        "Directive",
-        "Non-directive"
-      ],
-      "ref": "DAFMAN 90-161 1.1.2 (overall categories: directive, non-directive); replaces the Directive Publication yes/no column (PFM 2026-11-11)"
+      "ref": "DAFMAN 90-161 1.1.2 and Table A11.1 (directive publication types an installation may issue). Only directive publications are tracked (PFM 2026-11-11). Blank for forms"
     },
     {
       "internalName": "Series",
@@ -83,6 +69,18 @@
       "type": "Text",
       "required": false,
       "ref": "DAFMAN 90-161 6.4.2 (PI entries identify each publication)"
+    },
+    {
+      "internalName": "PrescribingPublication",
+      "displayName": "Prescribing Publication",
+      "type": "Lookup",
+      "required": false,
+      "lookup": {
+        "list": "PFMProductIndex",
+        "showField": "PublicationNumber"
+      },
+      "indexed": true,
+      "ref": "DAFMAN 90-161 4.5.11.1.2 (prescribed forms; the prescribing publication), 7.4.2 (OPRs review publications and associated prescribed forms together). Set on form rows only; the app shows each publication's Prescribed Forms from it (PFM 2026-11-11)"
     },
     {
       "internalName": "Publication",
@@ -249,6 +247,31 @@
       },
       "default": false,
       "ref": "Inactive, Superseded or Rescinded; record sets of Superseded or Rescinded products are due for destruction (T 33-38 R 07)"
+    },
+    {
+      "name": "PFM - Prescribed Forms by Publication",
+      "fields": [
+        "PrescribingPublication",
+        "PublicationNumber",
+        "Title",
+        "ProductStatus",
+        "NextReviewDue"
+      ],
+      "groupBy": "PrescribingPublication",
+      "orderBy": [
+        {
+          "field": "PublicationNumber",
+          "ascending": true
+        }
+      ],
+      "where": {
+        "field": "ProductType",
+        "op": "Eq",
+        "type": "Choice",
+        "value": "Form"
+      },
+      "default": false,
+      "ref": "DAFMAN 90-161 7.4.2 (review a publication with its prescribed forms)"
     }
   ]
 }

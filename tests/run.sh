@@ -52,6 +52,10 @@ body = d['Create_Fields_And_Views']['actions']['Create_Field_Or_View']['inputs']
 assert all(f'__{l}_ID__' in body for l in p['lookupPlaceholders'])
 assert d['Add_Rows']['runAfter'] == {'Create_Fields_And_Views': ['Succeeded']} and d['Apply_Updates']['runAfter'] == {'Add_Rows': ['Succeeded']}
 assert len(p['rows']) == 39
+assert 'PFMProductIndex' in p['lookupPlaceholders'] and p['listOrder'][-1] == 'PFMProductIndex'
+gv = [r for r in p['fields'] if r['body'].get('Title') == 'PFM - Prescribed Forms by Publication']
+q = gv[0]['body']['ViewQuery']
+assert q.index('<Where>') < q.index('<GroupBy') < q.index('<OrderBy>'), q
 assert all(r['body']['__metadata']['type'] == 'SP.Data.PFMSeriesListItem' for r in p['rows'])
 nums = [r['body']['SeriesNumber'] for r in p['rows']]
 assert len(set(nums)) == 39 and 16 in nums and 17 in nums
@@ -93,7 +97,7 @@ for r in d['fields']:
 PY
 
 out=$(pwsh -NoProfile -File scripts/gov/Provision-Lists.ps1 -PlanOnly -SchemaPath schemas/lists 2>&1 | tail -1)
-[ "$out" = "PLAN lists=8 fields=53 views=14" ] && ok "lists plan ($out)" || bad "lists plan: $out"
+[ "$out" = "PLAN lists=8 fields=52 views=15" ] && ok "lists plan ($out)" || bad "lists plan: $out"
 
 cp templates/CRM_A12-1.docx /tmp/crm_before.docx
 node templates/build_crm_template.js >/tmp/crm.out 2>&1 && grep -q "tableWidthDXA=9331 columns=9" /tmp/crm.out && ok "CRM template builds ($(cat /tmp/crm.out | sed s,.*CRM_A12-1.docx,,))" || bad "CRM template build"

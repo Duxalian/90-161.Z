@@ -1,5 +1,5 @@
 {
-  "displayName": "90161Z T02 Provision Lists r5",
+  "displayName": "90161Z T02 Provision Lists r6",
   "description": "Creates the 8 PFM lists, their fields, views and indexes from flow/provisioning-payload.json (embedded at build), adds the series rows, then sets display titles. Asks for the site URL and the site title; stops before creating anything if the title does not match. One request at a time, in payload order. Process step seed rows are not sent (steps not yet approved).",
   "connections": [
     "shared_sharepointonline"
@@ -201,9 +201,36 @@
         }
       }
     },
-    "Get_Publications_ID": {
+    "Get_ProductIndex_ID": {
       "runAfter": {
         "Get_ProcessSteps_ID": [
+          "Succeeded"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/lists/getbytitle('PFMProductIndex')?$select=Id",
+          "parameters/headers": {
+            "Accept": "application/json;odata=verbose"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Get_Publications_ID": {
+      "runAfter": {
+        "Get_ProductIndex_ID": [
           "Succeeded"
         ]
       },
@@ -281,7 +308,7 @@
                 "Accept": "application/json;odata=verbose",
                 "Content-Type": "application/json;odata=verbose"
               },
-              "parameters/body": "@replace(replace(replace(replace(string(items('Create_Fields_And_Views')?['body']), '__PFMOffices_ID__', body('Get_Offices_ID')?['d']?['Id']), '__PFMProcessSteps_ID__', body('Get_ProcessSteps_ID')?['d']?['Id']), '__PFMPublications_ID__', body('Get_Publications_ID')?['d']?['Id']), '__PFMSeries_ID__', body('Get_Series_ID')?['d']?['Id'])"
+              "parameters/body": "@replace(replace(replace(replace(replace(string(items('Create_Fields_And_Views')?['body']), '__PFMOffices_ID__', body('Get_Offices_ID')?['d']?['Id']), '__PFMProcessSteps_ID__', body('Get_ProcessSteps_ID')?['d']?['Id']), '__PFMProductIndex_ID__', body('Get_ProductIndex_ID')?['d']?['Id']), '__PFMPublications_ID__', body('Get_Publications_ID')?['d']?['Id']), '__PFMSeries_ID__', body('Get_Series_ID')?['d']?['Id'])"
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
