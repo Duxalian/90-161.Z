@@ -47,7 +47,11 @@ assert literal({'a': ['@x', 'y @{z}', 'ok']}) == {'a': ['@@x', 'y @@{z}', 'ok']}
 assert d['Check_Site_Title']['type'] == 'If' and 'Stop_Wrong_Site' in d['Check_Site_Title']['else']['actions']
 assert d['Payload']['runAfter'] == {'Check_Site_Title': ['Succeeded']}
 p = json.load(open('flow/provisioning-payload.json'))
-assert p['lookupPlaceholders'] == ['PFMProcessSteps', 'PFMPublications'], p['lookupPlaceholders']
+assert all(('Get_' + l[3:] + '_ID') in d for l in p['lookupPlaceholders']), p['lookupPlaceholders']
+body = d['Create_Fields_And_Views']['actions']['Create_Field_Or_View']['inputs']['parameters']['parameters/body']
+assert all(f'__{l}_ID__' in body for l in p['lookupPlaceholders'])
+assert d['Add_Rows']['runAfter'] == {'Create_Fields_And_Views': ['Succeeded']} and d['Apply_Updates']['runAfter'] == {'Add_Rows': ['Succeeded']}
+assert len(p['rows']) == 39
 assert all(u['uri'].startswith('_api/web/lists/getbytitle(') for u in p['updates'])
 assert p['updates'][-len(p['listOrder']):] == [u for u in p['updates'] if u['body']['__metadata']['type'] == 'SP.List']
 g = d['Check_Site_Title']['else']['actions']['Stop_Wrong_Site']
@@ -59,7 +63,7 @@ def upstream(a, seen=()):  # every action must sit after the site-title check
     after = list(d[a]['runAfter'])
     return bool(after) and all(upstream(x) for x in after)
 assert all(upstream(a) for a in d if a not in ('Get_Site_Title', 'Check_Site_Title')), 'an action runs before the site check'
-reqs = p['lists'] + p['fields'] + p['updates']
+reqs = p['lists'] + p['fields'] + p['rows'] + p['updates']
 assert not any(' ' in r['uri'] for r in reqs), 'unencoded space in a request URI'
 assert all(l['body'].get('EnableVersioning') for l in p['lists']), 'AppendOnly notes need versioning on every list'
 renamed = {}
@@ -68,7 +72,7 @@ for i, r in enumerate(p['updates']):
 for i, r in enumerate(p['updates']):
     for u, j in renamed.items():
         assert not (r['uri'].startswith(u + '/') and i > j), 'request uses a list title after its rename'
-for k in ('Create_Lists', 'Create_Fields_And_Views', 'Apply_Updates'):
+for k in ('Create_Lists', 'Create_Fields_And_Views', 'Add_Rows', 'Apply_Updates'):
     assert d[k]['runtimeConfiguration']['concurrency']['repetitions'] == 1, k
 PY
 
@@ -82,7 +86,7 @@ for r in d['fields']:
 PY
 
 out=$(pwsh -NoProfile -File scripts/gov/Provision-Lists.ps1 -PlanOnly -SchemaPath schemas/lists 2>&1 | tail -1)
-[ "$out" = "PLAN lists=7 fields=45 views=11" ] && ok "lists plan ($out)" || bad "lists plan: $out"
+[ "$out" = "PLAN lists=8 fields=53 views=14" ] && ok "lists plan ($out)" || bad "lists plan: $out"
 
 cp templates/CRM_A12-1.docx /tmp/crm_before.docx
 node templates/build_crm_template.js >/tmp/crm.out 2>&1 && grep -q "tableWidthDXA=9331 columns=9" /tmp/crm.out && ok "CRM template builds ($(cat /tmp/crm.out | sed s,.*CRM_A12-1.docx,,))" || bad "CRM template build"

@@ -26,6 +26,58 @@
       "ref": "DAFMAN 90-161 6.4.2 (publications and forms)"
     },
     {
+      "internalName": "PublicationType",
+      "displayName": "Publication Type",
+      "type": "Choice",
+      "required": false,
+      "choices": [
+        "Instruction",
+        "Manual",
+        "Supplement",
+        "Operating Instruction",
+        "Guidance Memorandum",
+        "Instructional Checklist",
+        "Pamphlet",
+        "Handbook",
+        "Visual Aid"
+      ],
+      "ref": "DAFMAN 90-161 1.1.2 (publication types: directive or non-directive, stand-alone or supplement), 1.1.3 and Tables A11.1/A11.2 (types an installation may issue); PFM 2026-11-11. Blank for forms"
+    },
+    {
+      "internalName": "PublicationCategory",
+      "displayName": "Publication Category",
+      "type": "Choice",
+      "required": false,
+      "choices": [
+        "Directive",
+        "Non-directive"
+      ],
+      "ref": "DAFMAN 90-161 1.1.2 (overall categories: directive, non-directive); replaces the Directive Publication yes/no column (PFM 2026-11-11)"
+    },
+    {
+      "internalName": "Series",
+      "displayName": "Series",
+      "type": "Lookup",
+      "required": false,
+      "lookup": {
+        "list": "PFMSeries",
+        "showField": "Title"
+      },
+      "indexed": true,
+      "ref": "DAFMAN 90-161 4.3.1 and Attachment 2 Table A2.1 (series number and title); PFM 2026-11-11"
+    },
+    {
+      "internalName": "OPR",
+      "displayName": "OPR",
+      "type": "Lookup",
+      "required": false,
+      "lookup": {
+        "list": "PFMOffices",
+        "showField": "Title"
+      },
+      "ref": "Office symbol of the office of primary responsibility, from PFM Offices so each symbol has one spelling (PFM 2026-11-11); DAFMAN 90-161 5.1.5"
+    },
+    {
       "internalName": "PublicationNumber",
       "displayName": "Publication Number",
       "type": "Text",
@@ -57,35 +109,87 @@
       "required": true,
       "choices": [
         "Active",
+        "Inactive",
         "Superseded",
         "Rescinded"
       ],
       "default": "Active",
-      "ref": "AFRIMS RDS T 33-38 R 07 (PFM, 2026-11-11): destroy when superseded or rescinded; the status change is the disposition trigger"
+      "ref": "Inactive = past the four-year periodic review without certify-as-current (DAFMAN 90-161 7.4.2; PFM 2026-11-11, the PFM's existing practice). Superseded and Rescinded trigger AFRIMS RDS T 33-38 R 07 for the record set (DAF Forms 673 and 399 and accompanying documentation); the publication and its index entry stay browsable"
     },
     {
       "internalName": "InactiveDate",
-      "displayName": "Superseded or Rescinded Date",
+      "displayName": "Status Change Date",
       "type": "DateTime",
       "required": false,
-      "ref": "AFRIMS RDS T 33-38 R 07 (PFM, 2026-11-11): destroy when superseded or rescinded; date of the trigger event"
+      "ref": "Date Product Status last changed (Superseded, Rescinded or Inactive); T 33-38 R 07 trigger date for the record set"
     },
     {
-      "internalName": "LastReviewDate",
-      "displayName": "Last Review Date",
+      "internalName": "EffectiveDate",
+      "displayName": "Effective Date",
       "type": "DateTime",
       "required": false,
-      "ref": "DAFMAN 90-161 7.4.2 (periodic review)"
+      "ref": "DAFMAN 90-161 7.4.2 (review cycle runs from the effective date or last certified current date, whichever is later)"
+    },
+    {
+      "internalName": "CertifiedCurrentDate",
+      "displayName": "Last Certified Current Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "DAFMAN 90-161 7.4.2, 7.5.1 (certify as current starts a new four-year cycle)"
     },
     {
       "internalName": "NextReviewDue",
       "displayName": "Next Review Due",
       "type": "DateTime",
       "required": false,
-      "ref": "DAFMAN 90-161 7.4.2 (periodic review); reminders and the status report read it"
+      "ref": "DAFMAN 90-161 7.4.2: four years after the later of Effective Date and Last Certified Current Date; the review task starts six months earlier. Set by a flow"
     }
   ],
   "views": [
+    {
+      "name": "Library - Active",
+      "fields": [
+        "PublicationNumber",
+        "Title",
+        "ProductType",
+        "PublicationType",
+        "Series",
+        "OPR",
+        "EffectiveDate"
+      ],
+      "orderBy": [
+        {
+          "field": "PublicationNumber",
+          "ascending": true
+        }
+      ],
+      "where": {
+        "field": "ProductStatus",
+        "op": "Eq",
+        "type": "Choice",
+        "value": "Active"
+      },
+      "default": false,
+      "ref": "Users browse current products"
+    },
+    {
+      "name": "Library - All Including Old",
+      "fields": [
+        "PublicationNumber",
+        "Title",
+        "ProductStatus",
+        "InactiveDate",
+        "Series"
+      ],
+      "orderBy": [
+        {
+          "field": "PublicationNumber",
+          "ascending": true
+        }
+      ],
+      "default": false,
+      "ref": "Users browse old products (PFM 2026-11-11: rescinded publications stay reviewable)"
+    },
     {
       "name": "PFM - By Number",
       "fields": [
@@ -109,7 +213,8 @@
       "fields": [
         "PublicationNumber",
         "Title",
-        "LastReviewDate",
+        "EffectiveDate",
+        "CertifiedCurrentDate",
         "NextReviewDue"
       ],
       "orderBy": [
@@ -122,7 +227,7 @@
       "ref": "DAFMAN 90-161 7.4.2"
     },
     {
-      "name": "PFM - Superseded or Rescinded",
+      "name": "PFM - Not Active",
       "fields": [
         "PublicationNumber",
         "Title",
@@ -143,7 +248,7 @@
         "value": "Active"
       },
       "default": false,
-      "ref": "AFRIMS RDS T 33-38 R 07 (PFM, 2026-11-11): destroy when superseded or rescinded; records to destroy (the records manager acts; no automatic deletion)"
+      "ref": "Inactive, Superseded or Rescinded; record sets of Superseded or Rescinded products are due for destruction (T 33-38 R 07)"
     }
   ]
 }
