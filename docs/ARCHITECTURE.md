@@ -46,11 +46,16 @@ The exact stages, mandatory coordinators and time limits come from DAFMAN 90-161
 
 ## 5. Document engine (G2)
 
-- Input: a draft of any quality (.docx).
-- **Rec:** a GenAI.mil assistant (custom GPT in ChatGPT Mil, or a Gemini agent) with fixed instructions from this repo plus the DAF publication template and DAFMAN 90-161 formatting rules as knowledge files.
-- Output: a cleaned .docx in the DAF template, plus a change list and a rule checklist with pass/fail per rule.
-- the owner reviews every output. The checklist is the acceptance test; "perfectly formatted" means every checklist rule passes.
-- Model choice: run the same 3 test drafts through both models; pick by checklist pass rate and edit count.
+Goal (the owner, 2026-11-10): rules force the output to look like DAFMAN 90-161 itself. Format comes from code, never from the model.
+
+| Layer | Runs on | Does |
+|---|---|---|
+| L1 Model | GenAI.mil | Rewrites the draft for plain language; returns content only, as JSON in `schemas/publication.schema.json` (header fields, paragraphs with level, tables, attachments). No style fields exist in the schema. |
+| L2 Renderer | Gov device (option open, see Decide) | Builds the .docx from the JSON. Font, margins, numbering, bolding, header block, draft marking are fixed in code. Two modes: `draft` (coordination, rule F-010) and `final`. |
+| L3 Validator | Same as L2 | Checks every rule in docs/format-rules.md; outputs a pass/fail report per rule ID. |
+
+- "Perfect" = 0 fails on `hard` rules, and the owner approves.
+- Model choice: run the same 3 fake test drafts through ChatGPT Mil and Gemini; pick by schema-valid rate, lint warnings and edit count.
 
 ## 6. Hand-off model (G4)
 
@@ -60,14 +65,15 @@ The exact stages, mandatory coordinators and time limits come from DAFMAN 90-161
 | GenAI.mil model | Gov data, uploaded files | Document cleanup (G2); fixes that need real data |
 | the owner (gov device) | DoD365, GenAI.mil | Builds/imports items into DoD365, runs tests with real data, reports sanitized results |
 
-Transfer path from GitHub to the gov device is open: see Decide in docs/NEXT_PROMPT.md.
+Transfer path (the owner, 2026-11-10): GitHub is reachable from NIPR; the owner opens the repo on the gov device.
 
 ## 7. Risks
 
 | Risk | Effect | Mitigation |
 |---|---|---|
 | Gov data enters GitHub or Claude by mistake | Policy violation, PII spill | Rule in AGENTS.md; fake sample data only; sanitized bug reports |
-| No admin rights: no PnP/pac CLI, no app catalog | Cannot script deployment | Build by hand from repo specs; Power Apps YAML paste; flow from step lists |
+| Site collection admin only: tenant admin, app registration and app catalog not available | PnP.PowerShell may need an Entra app registration | Check available modules first; fallback = build by hand from repo specs |
+| Final submission goes through AFIMPT (6.6, T-1) | 90-161.Z cannot replace that step | Track up to submission; PFM submits in AFIMPT |
 | Power Automate premium connectors not licensed | Some flow steps unavailable | Use standard connectors only (SharePoint, Outlook, Teams, Approvals) |
 | Customers see each other's items | Data exposure between units | Item-level permissions set by flow, or separate views plus app filtering (decide in build) |
 | GenAI.mil output looks right but breaks a rule | Bad final publication | Deterministic checklist; the owner review; no auto-publish |

@@ -4,22 +4,24 @@ Updated: 2026-11-10 by Claude. Keep this file at 40 lines or fewer. The current 
 
 ## State
 
-- main: bootstrapped from rhope-ops/standard_project; project rules, decisions and docs/ARCHITECTURE.md (draft) added.
+- main: bootstrapped; project rules; DECISIONS; ARCHITECTURE (3-layer format engine); format-rules.md (44 rules, draft, not verified); process-model.md (draft, not verified).
+- Rule extraction came from a web summary of the PDF, not literal text.
 
 ## Open (in order)
 
-1. Extract the stage model from DAFMAN 90-161 (stages, mandatory coordinators, time limits, AF Form 673, CRM) into docs/process-model.md, with paragraph references.
-2. Write list schemas (Publications, Endorsements, Stages) in schemas/ as JSON, with fake sample data.
-3. Write the endorsement flow spec (step list per Power Automate action).
-4. Write the document-engine prompt and rule checklist for GenAI.mil.
-5. Power Apps screens (YAML) after the schemas are approved.
+1. Verify format-rules.md and process-model.md against the literal DAFMAN 90-161 PDF; add Tables 4.2–4.5 wording and Tables A3.1/A3.2 (mandatory coordinators).
+2. Write schemas/publication.schema.json (L1) and fake sample publication.
+3. Build L2 renderer + L3 validator (platform per Decide).
+4. List schemas (Publications, Endorsements, Stages) + provisioning script (per PowerShell module check).
+5. Endorsement flow spec; Power Apps YAML.
 
 ## Needs the owner
 
-- Rule source: approve the DAFMAN edition (see DECISIONS) and say if the wing has a supplement.
-- Transfer path from GitHub to the gov device.
-- License check: Power Apps / Power Automate premium or standard only.
+- Attach the DAFMAN 90-161 PDF (public, no releasability restrictions) and the wing supplement if one exists.
+- Run the PowerShell capability check (read-only) and paste the output.
+- Renderer platform decision.
 
 ## Do not
 
 - Put government data in this repo or in Claude chats.
+- Let the model set format. Format comes from code.
