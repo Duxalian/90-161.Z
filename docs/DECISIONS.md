@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Collaboration log moves to a private Claude doc (https://claude.ai/artifact/9zLxe6e9vJPKtRQv5xSSzk) so chats outside the Project can read it; the Project doc only points there. | PFM | Project doc claude/collab-log.md |
 | 2026-11-11 | Collaboration log lives in a private claude.ai Project doc (claude/collab-log.md), not the public repo; agents append each turning point. | PFM | — |
 | 2026-11-11 | Pages site is the hand-off bookmark (works on the gov device, links clickable); raw go.md is the fallback. | PFM | Pages trial |
 | 2026-11-11 | Trial: GitHub Pages front page (rhope-ops.github.io/90-161.Z, branch gh-pages) renders go.md from main with clickable links; go.md stays the source. | PFM | go.md plain text only |
