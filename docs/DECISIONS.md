@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Task scripts' DODID prompt: Enter uses this computer's profile folder name; a typed DODID overrides it. | PFM (2A, proposed by Agent) | Prompt only, no default |
 | 2026-11-11 | Gov-device task folders: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<NN>, one per task. Task scripts ask for the DODID and change to the task folder themselves. | PFM | Any folder, e.g. C:\90161Z |
 | 2026-11-11 | The baseline is now rhope-ops/archimedes_lever (fresh history, no personal name; "the owner" is its role word). scripts/sync_baseline.py and scripts/drift.py point there; the Owner line "the PFM" still replaces the role word. | PFM | rhope-ops/standard_project (archived) |
 | 2026-11-11 | Files for the gov device are named to sort in the PFM's folders: 90161Z-T<NN>-<slug>-r<N> (project, 2-digit task, name, revision). Flow display names use the same prefix ("90161Z T04 ... r2"). | PFM (pattern proposed by Agent, approved by PFM 14:14) | sp-get-items.zip, hello-test.zip |
