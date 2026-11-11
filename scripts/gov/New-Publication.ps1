@@ -23,7 +23,9 @@ param(
 
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
-. (Join-Path $PSScriptRoot 'Publication.Common.ps1')
+$common = Join-Path $PSScriptRoot 'Publication.Common.ps1'
+if (-not (Test-Path -LiteralPath $common)) { throw 'Publication.Common.ps1 is missing. Download it into the same folder as this script.' }
+. $common
 
 # ---------------- constants (rule / layout IDs in docs/format-rules.md) ----------------
 $PT = 72                       # points per inch

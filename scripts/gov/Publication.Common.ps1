@@ -11,7 +11,7 @@ $script:Stmt = @{
   SupplementMay    = 'This publication may be supplemented at any level, but all supplements must be routed to the OPR of this publication for coordination prior to certification and approval.'
   SupplementMayNot = 'This publication may not be supplemented or further implemented or extended.'
   # 4.5.5.11 (waiver authority statement, example)
-  Waiver     = 'The authorities to waive wing, unit, or delta level requirements in this publication are identified with a tier ("T-0, T-1, T-2, T-3") number following the compliance statement. Submit requests for waivers through the chain of command to the appropriate tier waiver approval authority, or alternately, to the publication OPR for non-tiered compliance items.'
+  Waiver     = 'The authorities to waive wing, unit, or delta level requirements in this publication are identified with a tier (' + [char]0x201C + 'T-0, T-1, T-2, T-3' + [char]0x201D + ') number following the compliance statement. Submit requests for waivers through the chain of command to the appropriate tier waiver approval authority, or alternately, to the publication OPR for non-tiered compliance items.'
   # 4.5.5.4
   Copyright  = 'This publication contains copyrighted material.'
   # 4.5.5.5
@@ -41,7 +41,7 @@ function Get-OpeningParagraph($Pub) {
   if ($appl) { $s.Add($appl) }                                                                        # 4.5.5.2
   $pa = Get-PartValue $parts 'privacyAct'
   if ($null -ne $pa) {                                                                                # 4.5.5.3
-    $s.Add('This publication requires the collection and or maintenance of information protected by the Privacy Act of 1974 authorized by ' + [string](Get-PartValue $pa 'authority') + '. The applicable System of Record Notice(s) (SORN) ' + [string](Get-PartValue $pa 'sorn') + ' is (are) available at: http://dpclo.defense.gov/Privacy/SORNs.aspx.')
+    $s.Add('This publication requires the collection and or maintenance of information protected by the Privacy Act of 1974 authorized by ' + ([string](Get-PartValue $pa 'authority')).TrimEnd('.', ' ') + '. The applicable System of Record Notice(s) (SORN) ' + ([string](Get-PartValue $pa 'sorn')).TrimEnd('.', ' ') + ' is (are) available at: http://dpclo.defense.gov/Privacy/SORNs.aspx.')
   }
   if ([bool](Get-PartValue $parts 'copyright')) { $s.Add($script:Stmt.Copyright) }                    # 4.5.5.4
   if ([bool](Get-PartValue $parts 'paperworkReduction')) { $s.Add($script:Stmt.Paperwork) }          # 4.5.5.5
@@ -54,23 +54,25 @@ function Get-OpeningParagraph($Pub) {
   $s.Add($script:Stmt.Records)                                                                        # 4.5.5.8
   $s.Add($script:Stmt.Changes)                                                                        # 4.5.5.9
   $sup = [string](Get-PartValue $parts 'supplement')
-  if ($sup -eq 'mayNot') { $s.Add($script:Stmt.SupplementMayNot) } else { $s.Add($script:Stmt.SupplementMay) }   # 4.5.5.10
+  if ($sup -ceq 'mayNot') { $s.Add($script:Stmt.SupplementMayNot) }
+  elseif ($sup -ceq 'may') { $s.Add($script:Stmt.SupplementMay) }
+  else { throw "openingParts.supplement must be 'may' or 'mayNot' (4.5.5.10.1); found '$sup'" }   # 4.5.5.10
   $s.Add($script:Stmt.Waiver)                                                                         # 4.5.5.11
   if ([bool](Get-PartValue $parts 'tradeNames')) { $s.Add($script:Stmt.TradeNames) }                 # 4.5.5.12, last
   return ($s -join ' ')
 }
 
-$script:NoBreakAbbrev = @('e.g.', 'i.e.', 'etc.', 'Mr.', 'Mrs.', 'Ms.', 'Dr.', 'No.', 'Nos.', 'U.S.', 'St.', 'Jr.', 'Sr.', 'vs.', 'para.', 'Vol.', 'Fig.', 'Col.', 'Lt.', 'Gen.', 'Maj.', 'Capt.', 'Sgt.')
+$script:NoBreakAbbrev = @('e.g.', 'i.e.', 'Mr.', 'Mrs.', 'Ms.', 'Dr.', 'No.', 'Nos.', 'U.S.', 'St.', 'Jr.', 'Sr.', 'vs.', 'para.', 'Vol.', 'Fig.', 'Col.', 'Lt.', 'Gen.', 'Brig.', 'Maj.', 'Capt.', 'Sgt.')
 
 function ConvertTo-TwoSpaceSentence([string]$Text) {
   # L-004: two spaces before each new sentence (measured in DAFMAN 90-161: 6.55 pt vs 3.14 pt word gap).
   if (-not $Text) { return $Text }
-  $rx = [regex]('(?<end>\(T-[0-3]\)|[.?!][)"' + [char]0x201D + ']?)(?<ws>[ ]+)(?=[A-Z"(' + [char]0x201C + '{])')
+  $rx = [regex]('(?<end>\(T-[0-3]\)|[.?!][)"' + [char]0x201D + ']?(?:\{/[ib]\})?)(?<ws>[ ]+)(?=[A-Z0-9"(' + [char]0x201C + '{])')
   return $rx.Replace($Text, {
       param($m)
       $before = $Text.Substring(0, $m.Index + $m.Groups['end'].Length)
-      foreach ($a in $script:NoBreakAbbrev) { if ($before.EndsWith($a)) { return $m.Value } }
-      if ($before -match '(^|\s)[A-Z]\.$') { return $m.Value }              # initials, e.g. "Kimber L. Nettis"
+      foreach ($a in $script:NoBreakAbbrev) { if ($before -cmatch ('(^|[\s(])' + [regex]::Escape($a) + '$')) { return $m.Value } }
+      if ($before -cmatch '(^|\s)[A-Z]\.$') { return $m.Value }              # initials, e.g. "Kimber L. Nettis"
       if ($Text.Substring($m.Index + $m.Length) -match '^\(T-[0-3]\)') { return $m.Groups['end'].Value + ' ' }   # one space before a tier number (measured: 3.08 pt, n=109)
       return $m.Groups['end'].Value + '  '
     })

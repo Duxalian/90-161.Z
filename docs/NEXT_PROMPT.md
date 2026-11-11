@@ -1,30 +1,25 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-10 23:05 by Claude. Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-11 by Claude. Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State
 
-- main: renderer lane and lists lane merged. tests/run.sh passes in the agent workspace.
-- Renderer: scripts/gov/Test-Publication.ps1 (validator), scripts/gov/New-Publication.ps1 (Word COM). Not yet run on the gov device.
-- Lists: schemas/lists/*.json; flow/provisioning-payload.json (generated); docs/power-automate-provisioning.md. Flow not yet built.
-- format-rules.md: 45 rules checked against ref text (self-review); layout L-001..L-011 measured from the PDF.
-- CRM template: templates/CRM_A12-1.docx (Figure A12.1, A/R/M).
-- PowerShell to SharePoint: blocked (PnP sign-in window never opened). Provision-Lists.ps1 kept, not verified.
+- Rules: DAFMAN 90-161 wins every contradiction; wing files shape process only (AGENTS.md).
+- Phase A done: covers measured (docs/reviews/2026-11-11-cover-consistency.md).
+- Phase C done (agent workspace): renderer cover per measurements, certifier name line, 0.75 pt rules, opening paragraph built from openingParts (4.5.5 order, verbatim fixed text), two-space sentences, TOC always, Attachment 1 (ATT1) report. tests/run.sh 19/19. Independent review: 12 findings, 0 high; fixed.
+- Not yet run on the gov device: renderer (docs/gov-test-plan.md), provisioning flow (docs/power-automate-provisioning.md).
 
 ## Open (in order)
 
-1. PFM builds and runs the provisioning flow; report pass/fail per section 3 of the guide.
-2. PFM runs docs/gov-test-plan.md (renderer on the sample); fix what fails.
-3. Pilot L1 on GenAI.mil with docs/genai-prompt.md and 3 fake drafts (ChatGPT Mil vs Gemini).
-4. Endorsement flows (request, reminder, escalation) in Power Automate, per ARCHITECTURE s4.
-5. Power Apps intake and status screens.
-6. Extract Tables A3.1/A3.2 (mandatory coordinators) for wing-level use.
+1. PFM runs the gov test plan and the flow; fix failures.
+2. Phase D: customer process in the app (periodic review per 7.4.2, drafting, PFM review, informal coordination, formal coordination with Legal last, certify, approve, post), endorsement flows, on-demand status report email.
+3. Phase B: one short Word getting-started document (after the app has a link).
 
 ## Needs PFM
 
-- Open choices in docs/sharepoint-lists.md (customer visibility, Endorser person vs text, CRM storage).
+- Gov-device results (renderer test plan, flow section 3 checks).
 
 ## Do not
 
 - Put government data, the wing's name or site path in this repo or in Claude chats.
-- Let the model set format. Format comes from code.
+- Take rules from the wing files. Format comes from code and DAFMAN 90-161.

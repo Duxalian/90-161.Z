@@ -14,7 +14,9 @@ param(
 
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
-. (Join-Path $PSScriptRoot 'Publication.Common.ps1')
+$common = Join-Path $PSScriptRoot 'Publication.Common.ps1'
+if (-not (Test-Path -LiteralPath $common)) { throw 'Publication.Common.ps1 is missing. Download it into the same folder as this script.' }
+. $common
 
 $script:Findings = New-Object System.Collections.Generic.List[object]
 function Add-Finding([string]$Level, [string]$Rule, [string]$Where, [string]$Message) {
@@ -115,9 +117,10 @@ foreach ($s in $sup) {
 $parts = Get-Prop $pub 'openingParts'
 if ($null -ne $parts) {
   if ([string](Get-Prop $parts 'antecedent') -notmatch '\{i\}') { Add-Finding 'FAIL' 'F-024' 'openingParts.antecedent' 'name the antecedent publication with its title in italics ({i}...{/i}) (4.5.5.1)' }
+  if ([string](Get-Prop $parts 'supplement') -cnotin @('may', 'mayNot')) { Add-Finding 'FAIL' 'F-025' 'openingParts.supplement' "must be 'may' or 'mayNot' (4.5.5.10.1, Table 4.5)" }
   if (-not [string](Get-Prop $parts 'applicability')) { Add-Finding 'FAIL' 'F-025' 'openingParts.applicability' 'applicability statement is required (4.5.5.2)' }
 }
-$opening = [string](Get-OpeningParagraph $pub)
+try { $opening = [string](Get-OpeningParagraph $pub) } catch { $opening = ''; Add-Finding 'FAIL' 'F-025' 'openingParts' $_.Exception.Message }
 if ($directive -and $opening.Trim() -eq '') { Add-Finding 'FAIL' 'F-024' 'opening' 'directive publications need an opening paragraph (4.5.5)' }
 if ($opening) {
   $allText.Add($opening)
@@ -159,7 +162,10 @@ function Test-Paragraph($P, [string]$Number, [int]$Parts, [bool]$TopLevel) {
   $x = [string](Get-Prop $P 'text')
   if ($t) { $allText.Add($t) }
   if ($x) { $allText.Add($x) }
-  $locText.Add(@($Number.TrimEnd('.'), ($t + ' ' + $x)))
+  $extra = @(@(Get-Prop $P 'notes') + @(Get-Prop $P 'exceptions') + @(Get-Prop $P 'bullets') | Where-Object { $_ -is [string] })
+  $tblObj = Get-Prop $P 'table'
+  if ($null -ne $tblObj) { $extra += [string](Get-Prop $tblObj 'title'); foreach ($r in @(Get-Prop $tblObj 'rows')) { $extra += (@($r) -join ' ') } }
+  $locText.Add(@($Number.TrimEnd('.'), ($t + ' ' + $x + ' ' + ($extra -join ' '))))
   if ($t -match '^\s*core content\.?\s*$') { Add-Finding 'FAIL' 'F-031' $where 'do not title a section "Core Content" (4.5.9.7)' }
   if ($TopLevel -and -not $t) { Add-Finding 'WARN' 'F-028' $where 'main paragraphs should have a bold heading (4.5.9.2)' }
   if ($t -and $t -notmatch '[.?]$') { Add-Finding 'WARN' 'F-028' $where 'headings end with a period (example "7.5. Certification of Publication as Current.") (4.5.9.2)' }
@@ -285,10 +291,11 @@ if ($null -ne $gloss) {
   $listedForms = @((@(Get-Prop $gloss 'prescribedForms') + @(Get-Prop $gloss 'adoptedForms')) | Where-Object { $null -ne $_ } | ForEach-Object { Get-PlainText ([string]$_) })
 }
 $locText.Insert(0, @('opening', $opening))
+if ($soc) { $locText.Insert(1, @('summaryOfChanges', $soc)) }
 $seen = @{}
 foreach ($lt in $locText) {
   $where = [string]$lt[0]; $plain = Get-PlainText ([string]$lt[1])
-  foreach ($m in [regex]::Matches($plain, '\(([A-Z][A-Za-z0-9/&-]{1,11})\)')) {
+  foreach ($m in [regex]::Matches($plain, '\(([A-Z][A-Z0-9/&-]*[A-Z][A-Za-z0-9/&-]*)\)')) {
     $k = 'ACR ' + $m.Groups[1].Value
     if ($m.Groups[1].Value -match '^T-[0-3]$') { continue }
     if (-not $seen.ContainsKey($k)) { $seen[$k] = $where; $listed = $abbr.ContainsKey($m.Groups[1].Value)
@@ -296,7 +303,7 @@ foreach ($lt in $locText) {
   }
   foreach ($m in [regex]::Matches($plain, '\b((?:DAF|AF|DD|SF|OF|[A-Z0-9]{2,8}) Form [0-9][0-9A-Z-]*)')) {
     $k = 'FORM ' + $m.Groups[1].Value
-    if (-not $seen.ContainsKey($k)) { $seen[$k] = $where; $listed = @($listedForms | Where-Object { $_ -like ($m.Groups[1].Value + '*') }).Count -gt 0
+    if (-not $seen.ContainsKey($k)) { $seen[$k] = $where; $fm = $m.Groups[1].Value; $listed = @($listedForms | Where-Object { $_ -match ('^' + [regex]::Escape($fm) + '([^0-9A-Za-z]|$)') }).Count -gt 0
       Write-Output ("ATT1 form {0} first={1} listed={2}" -f $m.Groups[1].Value, $where, $(if ($listed) { 'yes' } else { 'no' }))
       if (-not $listed) { Add-Finding 'WARN' 'F-035' $where "form '$($m.Groups[1].Value)' is used but not listed in Attachment 1 (4.5.11.1)" } }
   }

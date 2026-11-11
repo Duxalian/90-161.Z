@@ -13,6 +13,8 @@ From https://github.com/rhope-ops/90-161.Z (no login), save into one folder, for
 
 ## Run
 
+If PowerShell blocks the downloaded files, run once in that folder: `Get-ChildItem *.ps1 | Unblock-File`
+
 ```
 cd C:\90161Z
 powershell -ExecutionPolicy Bypass -File .\Test-Publication.ps1 -Path .\publication.sample.json
