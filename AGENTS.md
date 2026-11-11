@@ -114,5 +114,6 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Formatting (PFM, 2026-11-10): rules force output to look like DAFMAN 90-161. Format comes from code, never from the model. Rule catalog: docs/format-rules.md. Do not use AFIMPT for formatting or tracking.
 - System of record (PFM, 2026-11-10): 90-161.Z owns endorsement tracking (no TMT).
 - Architecture: docs/ARCHITECTURE.md. Process: docs/process-model.md.
+- Collaboration log (PFM, 2026-11-11): log each turning point (new idea, missed assumption, direction-changing test, overruled recommendation) in the claude.ai Project doc claude/collab-log.md, not in this repo: who raised it, what the other side missed, evidence, result. Append in the same turn it happens.
 
 <!-- Add rules for this project below. Date each PFM decision, for example "(PFM, 2026-11-09)". -->
