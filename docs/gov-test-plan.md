@@ -6,7 +6,7 @@ The renderer was linted and its validator tested in the agent workspace. Word CO
 
 Task folder (PFM, 2026-11-11): `C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T01`. Create it once. From https://github.com/rhope-ops/90-161.Z (no login), save these 5 files into it (raw links in go.md, Task 1):
 
-- `scripts/gov/90161Z-T01-renderer-test-r1.ps1` (runner)
+- `scripts/gov/90161Z-T01-renderer-test-r2.ps1` (runner)
 - `scripts/gov/Publication.Common.ps1` (shared; must sit in the same folder)
 - `scripts/gov/Test-Publication.ps1`
 - `scripts/gov/New-Publication.ps1`
@@ -14,11 +14,11 @@ Task folder (PFM, 2026-11-11): `C:\Users\<DODID>\OneDrive - United States Air Fo
 
 ## Run
 
-In File Explorer, right-click `90161Z-T01-renderer-test-r1.ps1` > **Run with PowerShell**. No path is typed, so the "-File ... does not exist" error cannot occur.
+In File Explorer, right-click `90161Z-T01-renderer-test-r2.ps1` > **Run with PowerShell**. No path is typed, so the "-File ... does not exist" error cannot occur.
 
 1. It asks for the DODID. Type it, or press Enter to use this computer's profile folder (`C:\Users\<that folder>`).
 2. It goes to the T01 folder, checks the 4 other files are there, unblocks the scripts, and runs: validator, draft render, final render with PDF.
-3. It shows the output, saves it as `90161Z-T01-result-r1.txt` in the T01 folder (DODID replaced by `<DODID>`), and waits for Enter.
+3. It shows the output, saves it as `90161Z-T01-result-r2.txt` in the T01 folder (DODID replaced by `<DODID>`), and waits for Enter.
 
 Messages: `FOLDER not found` = the T01 folder is missing or the DODID is wrong; `MISSING in T01 folder: <names>` = save those files.
 

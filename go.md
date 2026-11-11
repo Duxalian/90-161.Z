@@ -12,7 +12,7 @@ If a downloaded script is blocked: open its raw link, Ctrl+A, Ctrl+C, paste into
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by email to my Gmail. Never send real publication content.
 
-## Task 1: renderer test, r1 (open, 2026-11-11 14:45 CT)
+## Task 1: renderer test, r2 (open, 2026-11-11 14:45 CT)
 
 Folder: ...\90-161.Z\T01
 
@@ -20,13 +20,13 @@ Steps and pass checks:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/gov-test-plan.md
 
 Save these 5 files into the T01 folder:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T01-renderer-test-r1.ps1
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T01-renderer-test-r2.ps1
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Publication.Common.ps1
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Test-Publication.ps1
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/publication.sample.json
 
-In File Explorer, right-click 90161Z-T01-renderer-test-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter to use this computer's profile folder. It runs all 3 steps and saves 90161Z-T01-result-r1.txt in the T01 folder.
+In File Explorer, right-click 90161Z-T01-renderer-test-r2.ps1 > Run with PowerShell. Type my DODID, or press Enter to use this computer's profile folder. It runs all 3 steps and saves 90161Z-T01-result-r2.txt in the T01 folder.
 
 Report: the RENDER and VALIDATE lines, the 3 "exit=" lines, and each check (1-8) that fails, with what I see.
 
