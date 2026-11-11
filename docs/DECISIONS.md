@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Personal-data guard on (.pii-guard): skip ref/dafman90-161.txt (public DAF manual: office mailboxes, phone numbers, .mil sites); allow GenAI.mil and usaf.dps.mil. Pushes and pull-request checks fail without a denylist. Scan: 0 findings in 85 files. | PFM | Guard off |
 | 2026-11-11 | Design goal: easy for the PFM's successor to troubleshoot, change and fix. The finished product includes a step-by-step how-to written for a non-expert. | PFM | - |
 | 2026-11-11 | Columns: AO on PFM Publications is a Person column (GAL entry, clickable card). Stalled actions are flagged with Action Status (On Track, On Hold, Stalled) and Status Notes (append-only, dated). The Endorsements column Status is renamed Endorsement Status so each label has one meaning. | PFM (AO, status with notes); Agent (column names, values) | - |
 | 2026-11-11 | Title Case for every name of a thing (lists, views, flows, column display names); tests/check_names.py enforces it. Additions now: PFM Settings, PFM Activity Log, PFM Offices lists; Product Type column (Publication, Form); Last Review Date and Next Review Due on PFM Product Index. PFM Working Files library later (folder permissions need their own test). | PFM (8A, 9B) | sentence case; library now |
