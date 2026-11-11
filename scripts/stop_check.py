@@ -4,7 +4,7 @@
 Blocks (exit 2, reason on stderr) when the checkout has uncommitted changes, or
 commits that its upstream branch does not have, or a branch that was never pushed.
 Allows the stop on the second try in a row (stop_hook_active), so a turn that must
-end anyway (for example, near the usage limit, or when the owner said hold) can end.
+end anyway (for example, near the usage limit, or when PFM said hold) can end.
 Outside a git repo, or when git fails, it allows the stop.
 
 Configured in .claude/settings.json ("hooks" > "Stop"). Manual run:

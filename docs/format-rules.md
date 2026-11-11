@@ -3,9 +3,9 @@
 Source: DAFMAN 90-161, 18 Oct 2023, Change 1 (14 Jul 2025), Corrective Action (1 May 2026).
 Extraction status: **draft, partly verified**. Literal text: ref/dafman90-161.txt (from ref/dafman90-161.pdf, 199 pages). Rows with a date in `Verified` were checked against that text. Before any rule is used as a hard check, verify its wording against the PDF and set `Verified` to the date.
 
-Goal (the owner, 2026-11-10): the rules force output to look like DAFMAN 90-161 itself. AFIMPT is not used for formatting or tracking.
+Goal (PFM, 2026-11-10): the rules force output to look like DAFMAN 90-161 itself. AFIMPT is not used for formatting or tracking.
 
-Context (the owner, 2026-11-10): ANG wing. ANG wing publications are not processed by AFDPO (1.1.3.2, 6.6.3), so the renderer's `final` mode must produce the camera-ready publication, including the TOC (F-027) and manual margin bars for ICs (4.5.6 note).
+Context (PFM, 2026-11-10): ANG wing. ANG wing publications are not processed by AFDPO (1.1.3.2, 6.6.3), so the renderer's `final` mode must produce the camera-ready publication, including the TOC (F-027) and manual margin bars for ICs (4.5.6 note).
 
 ## How the rules are enforced
 
@@ -15,7 +15,7 @@ Context (the owner, 2026-11-10): ANG wing. ANG wing publications are not process
 | L2 Renderer | Deterministic code builds the .docx from the JSON. Fonts, margins, numbering, bolding and header block are fixed in code. | Same input gives the same layout every time. |
 | L3 Validator | Code checks each rule below and reports pass/fail per rule ID. | "Perfect" = 0 fails on `hard` rules. |
 
-Check type: `schema` = enforced by L1; `render` = enforced by L2; `lint` = checked by L3 on the text; `human` = the owner checks.
+Check type: `schema` = enforced by L1; `render` = enforced by L2; `lint` = checked by L3 on the text; `human` = PFM checks.
 Severity: `hard` = blocks output; `warn` = reported only.
 
 ## Rules

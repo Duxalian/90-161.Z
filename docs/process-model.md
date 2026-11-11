@@ -41,4 +41,4 @@ Tables A3.1 / A3.2 not yet extracted. Records manager coordinates during formal 
 
 ## System boundary
 
-ANG wing (the owner, 2026-11-10): publications post to the wing's own site (1.1.3.2, 6.4), not e-Publishing through AFIMPT. 90-161.Z tracks through posting and keeps the PI (6.4.2).
+ANG wing (PFM, 2026-11-10): publications post to the wing's own site (1.1.3.2, 6.4), not e-Publishing through AFIMPT. 90-161.Z tracks through posting and keeps the PI (6.4.2).
