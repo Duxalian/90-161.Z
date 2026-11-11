@@ -1,7 +1,7 @@
 {
   "list": "PFMActivityLog",
   "title": "PFM Activity Log",
-  "description": "One row per event: status change, endorsement requested, reminder sent, status report emailed. Flow run history expires after 28 days; this list keeps the record.",
+  "description": "Publications and Forms Manager (PFM) record of events: status change, endorsement requested, reminder sent, status report e-mailed. One row per event. Flow run history expires after 28 days; this list keeps the record.",
   "template": "GenericList",
   "ref": "PFM 2026-11-11 (naming doc: PFM Activity Log)",
   "indexBuiltIn": [
@@ -38,10 +38,10 @@
         "Endorsement Requested",
         "Reminder Sent",
         "Endorsement Received",
-        "Status Report Emailed",
+        "Status Report E-Mailed",
         "Other"
       ],
-      "ref": "PFM 2026-11-11 (events the flows record)"
+      "ref": "PFM 2026-11-11 (events the flows record); \"E-Mailed\" per docs/style-standard.md (PFM 2026-11-11: DAFMAN 90-161 and The Tongue and Quill)"
     },
     {
       "internalName": "EventBy",

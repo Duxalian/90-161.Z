@@ -28,7 +28,7 @@
     },
     "Title": "PFMOffices",
     "BaseTemplate": 100,
-    "Description": "One row per coordinating office: endorser and coordination role. Endorsement routing reuses it. Office data stays in SharePoint.",
+    "Description": "Publications and Forms Manager (PFM) list of coordinating offices: one row per office, with its endorser and coordination role. Endorsement routing reuses it. Office data stays in SharePoint.",
     "ContentTypesEnabled": false,
     "EnableVersioning": true
    }
@@ -42,7 +42,7 @@
     },
     "Title": "PFMProcessSteps",
     "BaseTemplate": 100,
-    "Description": "Process steps for one publication action, derived from DAFMAN 90-161, with Table A5.2 target business days. Status: draft, not verified (docs/process-model.md).",
+    "Description": "Publications and Forms Manager (PFM) list of process steps for one publication action, derived from Department of the Air Force Manual (DAFMAN) 90-161, with Table A5.2 target business days. Status: draft, not verified (docs/process-model.md).",
     "ContentTypesEnabled": false,
     "EnableVersioning": true
    }
@@ -56,7 +56,7 @@
     },
     "Title": "PFMSeries",
     "BaseTemplate": 100,
-    "Description": "Publication series numbers and titles from DAFMAN 90-161 Attachment 2, Table A2.1. Add or rename a series here; no schema change needed.",
+    "Description": "Publications and Forms Manager (PFM) list of publication series numbers and titles from Department of the Air Force Manual (DAFMAN) 90-161, Attachment 2, Table A2.1. Add or rename a series here; no schema change is needed.",
     "ContentTypesEnabled": false,
     "EnableVersioning": true
    }
@@ -70,7 +70,7 @@
     },
     "Title": "PFMSettings",
     "BaseTemplate": 100,
-    "Description": "One row per setting the app and flows read (wing name for the subtitle, PFM mailbox, defaults). Values are entered on the gov device, never in the repo.",
+    "Description": "Publications and Forms Manager (PFM) settings: one row per setting the app and flows read (wing name for the subtitle, PFM mailbox, defaults). Values are entered on the government computer, never in the code repository.",
     "ContentTypesEnabled": false,
     "EnableVersioning": true
    }
@@ -84,7 +84,7 @@
     },
     "Title": "PFMProductIndex",
     "BaseTemplate": 100,
-    "Description": "Product Index (PI) of all applicable organizational publications and forms that the PFM maintains (DAFMAN 90-161 6.4.2, T-3).",
+    "Description": "Publications and Forms Manager (PFM) product index (PI) of all applicable organizational publications and forms that the PFM maintains (Department of the Air Force Manual (DAFMAN) 90-161, 6.4.2).",
     "ContentTypesEnabled": false,
     "EnableVersioning": true
    }
@@ -98,7 +98,7 @@
     },
     "Title": "PFMPublications",
     "BaseTemplate": 100,
-    "Description": "One row per action on a publication or form (DAFMAN 90-161 1.1.4): the action, its process step, certification and approval. Each action points to its PFM Product Index row.",
+    "Description": "Publications and Forms Manager (PFM) record of actions: one row per action on a publication or form (Department of the Air Force Manual (DAFMAN) 90-161, 1.1.4), with its process step, certification and approval. Each action points to its PFM Product Index row.",
     "ContentTypesEnabled": false,
     "EnableVersioning": true
    }
@@ -112,7 +112,7 @@
     },
     "Title": "PFMActivityLog",
     "BaseTemplate": 100,
-    "Description": "One row per event: status change, endorsement requested, reminder sent, status report emailed. Flow run history expires after 28 days; this list keeps the record.",
+    "Description": "Publications and Forms Manager (PFM) record of events: status change, endorsement requested, reminder sent, status report e-mailed. One row per event. Flow run history expires after 28 days; this list keeps the record.",
     "ContentTypesEnabled": false,
     "EnableVersioning": true
    }
@@ -126,7 +126,7 @@
     },
     "Title": "PFMEndorsements",
     "BaseTemplate": 100,
-    "Description": "One row per coordinator per action: stage, role, status, suspense, response and nonconcur resolution (DAFMAN 90-161 3.4, 5.1-5.5).",
+    "Description": "Publications and Forms Manager (PFM) record of coordination: one row per coordinator per action, with stage, role, status, suspense, response and nonconcur resolution (Department of the Air Force Manual (DAFMAN) 90-161, 3.4 and 5.1-5.5).",
     "ContentTypesEnabled": false,
     "EnableVersioning": true
    }
@@ -140,7 +140,7 @@
     },
     "Title": "PFMReviews",
     "BaseTemplate": 100,
-    "Description": "One row per periodic or special review of a product (DAFMAN 90-161 7.4.2-7.4.4): OPR response, due dates and the follow-up action.",
+    "Description": "Publications and Forms Manager (PFM) record of reviews: one row per periodic or special review of a product (Department of the Air Force Manual (DAFMAN) 90-161, 7.4.2-7.4.4), with the office of primary responsibility (OPR) response, due dates and the follow-up action.",
     "ContentTypesEnabled": false,
     "EnableVersioning": true
    }
@@ -168,7 +168,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"CoordinationRole\" StaticName=\"CoordinationRole\" DisplayName=\"Coordination Role\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Legal</CHOICE><CHOICE>FOIA</CHOICE><CHOICE>Privacy</CHOICE><CHOICE>Records</CHOICE><CHOICE>Information Collections</CHOICE><CHOICE>Guard Applicability</CHOICE><CHOICE>Reserve Applicability</CHOICE><CHOICE>Higher Headquarters OPR</CHOICE><CHOICE>Functional</CHOICE><CHOICE>Other</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"CoordinationRole\" StaticName=\"CoordinationRole\" DisplayName=\"Coordination Role\" Required=\"FALSE\" Description=\"Who the office coordinates for. Legal, Freedom of Information Act (FOIA), Privacy, Records and Information Collections come from Table A3.1 item 3 and item 1; Guard and Reserve Applicability from items 4 and 5; Higher Headquarters OPR is the office of primary responsibility (OPR) of the higher headquarters publication; Functional from Table A3.2.\" Type=\"Choice\"><CHOICES><CHOICE>Legal</CHOICE><CHOICE>FOIA</CHOICE><CHOICE>Privacy</CHOICE><CHOICE>Records</CHOICE><CHOICE>Information Collections</CHOICE><CHOICE>Guard Applicability</CHOICE><CHOICE>Reserve Applicability</CHOICE><CHOICE>Higher Headquarters OPR</CHOICE><CHOICE>Functional</CHOICE><CHOICE>Other</CHOICE></CHOICES></Field>",
      "Options": 24
     }
    }
@@ -276,7 +276,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"DAFMANRef\" StaticName=\"DAFMANRef\" DisplayName=\"DAFMAN Reference\" Required=\"TRUE\" Type=\"Text\"></Field>",
+     "SchemaXml": "<Field Name=\"DAFMANRef\" StaticName=\"DAFMANRef\" DisplayName=\"DAFMAN Reference\" Required=\"TRUE\" Description=\"Paragraph or table in Department of the Air Force Manual (DAFMAN) 90-161.\" Type=\"Text\"></Field>",
      "Options": 24
     }
    }
@@ -515,7 +515,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"OPR\" StaticName=\"OPR\" DisplayName=\"OPR\" Required=\"FALSE\" Type=\"Lookup\" List=\"{__PFMOffices_ID__}\" ShowField=\"Title\"></Field>",
+     "SchemaXml": "<Field Name=\"OPR\" StaticName=\"OPR\" DisplayName=\"OPR\" Required=\"FALSE\" Description=\"The office of primary responsibility (OPR) for the product, from PFM Offices.\" Type=\"Lookup\" List=\"{__PFMOffices_ID__}\" ShowField=\"Title\"></Field>",
      "Options": 24
     }
    }
@@ -671,7 +671,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"CollectsPII\" StaticName=\"CollectsPII\" DisplayName=\"Collects PII\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
+     "SchemaXml": "<Field Name=\"CollectsPII\" StaticName=\"CollectsPII\" DisplayName=\"Collects Personal Identifiable Information\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
      "Options": 24
     }
    }
@@ -1056,7 +1056,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"ICNumber\" StaticName=\"ICNumber\" DisplayName=\"IC Number\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "SchemaXml": "<Field Name=\"ICNumber\" StaticName=\"ICNumber\" DisplayName=\"IC Number\" Required=\"FALSE\" Description=\"Interim change (IC) number, IC-1, IC-2 in order (DAFMAN 90-161 4.3.9).\" Type=\"Text\"></Field>",
      "Options": 24
     }
    }
@@ -1108,7 +1108,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"OPR\" StaticName=\"OPR\" DisplayName=\"OPR\" Required=\"FALSE\" Type=\"Lookup\" List=\"{__PFMOffices_ID__}\" ShowField=\"Title\"></Field>",
+     "SchemaXml": "<Field Name=\"OPR\" StaticName=\"OPR\" DisplayName=\"OPR\" Required=\"FALSE\" Description=\"The office of primary responsibility (OPR) for the action, from PFM Offices.\" Type=\"Lookup\" List=\"{__PFMOffices_ID__}\" ShowField=\"Title\"></Field>",
      "Options": 24
     }
    }
@@ -1134,7 +1134,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"AO\" StaticName=\"AO\" DisplayName=\"AO\" Required=\"FALSE\" Type=\"User\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\"></Field>",
+     "SchemaXml": "<Field Name=\"AO\" StaticName=\"AO\" DisplayName=\"AO\" Required=\"FALSE\" Description=\"The action officer (AO) who prepares the action.\" Type=\"User\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\"></Field>",
      "Options": 24
     }
    }
@@ -1251,7 +1251,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"DAFFormLink\" StaticName=\"DAFFormLink\" DisplayName=\"DAF Form 673 or 399 Link\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "SchemaXml": "<Field Name=\"DAFFormLink\" StaticName=\"DAFFormLink\" DisplayName=\"DAF Form 673 or 399 Link\" Required=\"FALSE\" Description=\"Link to the signed Department of the Air Force (DAF) Form 673, or DAF Form 399 for Certify Current.\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
      "Options": 24
     }
    }
@@ -1383,7 +1383,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"EventType\" StaticName=\"EventType\" DisplayName=\"Event Type\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Status Changed</CHOICE><CHOICE>Endorsement Requested</CHOICE><CHOICE>Reminder Sent</CHOICE><CHOICE>Endorsement Received</CHOICE><CHOICE>Status Report Emailed</CHOICE><CHOICE>Other</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"EventType\" StaticName=\"EventType\" DisplayName=\"Event Type\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Status Changed</CHOICE><CHOICE>Endorsement Requested</CHOICE><CHOICE>Reminder Sent</CHOICE><CHOICE>Endorsement Received</CHOICE><CHOICE>Status Report E-Mailed</CHOICE><CHOICE>Other</CHOICE></CHOICES></Field>",
      "Options": 24
     }
    }
@@ -1504,7 +1504,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"CoordinationRole\" StaticName=\"CoordinationRole\" DisplayName=\"Coordination Role\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Legal</CHOICE><CHOICE>FOIA</CHOICE><CHOICE>Privacy</CHOICE><CHOICE>Records</CHOICE><CHOICE>Information Collections</CHOICE><CHOICE>Guard Applicability</CHOICE><CHOICE>Reserve Applicability</CHOICE><CHOICE>Higher Headquarters OPR</CHOICE><CHOICE>Functional</CHOICE><CHOICE>Other</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"CoordinationRole\" StaticName=\"CoordinationRole\" DisplayName=\"Coordination Role\" Required=\"FALSE\" Description=\"Who the office coordinates for. Legal, Freedom of Information Act (FOIA), Privacy, Records and Information Collections come from Table A3.1 item 3 and item 1; Guard and Reserve Applicability from items 4 and 5; Higher Headquarters OPR is the office of primary responsibility (OPR) of the higher headquarters publication; Functional from Table A3.2.\" Type=\"Choice\"><CHOICES><CHOICE>Legal</CHOICE><CHOICE>FOIA</CHOICE><CHOICE>Privacy</CHOICE><CHOICE>Records</CHOICE><CHOICE>Information Collections</CHOICE><CHOICE>Guard Applicability</CHOICE><CHOICE>Reserve Applicability</CHOICE><CHOICE>Higher Headquarters OPR</CHOICE><CHOICE>Functional</CHOICE><CHOICE>Other</CHOICE></CHOICES></Field>",
      "Options": 24
     }
    }
@@ -1543,7 +1543,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"EndorsementStatus\" StaticName=\"EndorsementStatus\" DisplayName=\"Endorsement Status\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Not started</CHOICE><CHOICE>Concur</CHOICE><CHOICE>Concur With Comment</CHOICE><CHOICE>Concur—No Response</CHOICE><CHOICE>Nonconcur</CHOICE><CHOICE>No Comment</CHOICE></CHOICES><Default>Not started</Default></Field>",
+     "SchemaXml": "<Field Name=\"EndorsementStatus\" StaticName=\"EndorsementStatus\" DisplayName=\"Endorsement Status\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Not Started</CHOICE><CHOICE>Concur</CHOICE><CHOICE>Concur With Comment</CHOICE><CHOICE>Concur—No Response</CHOICE><CHOICE>Nonconcur</CHOICE><CHOICE>No Comment</CHOICE></CHOICES><Default>Not Started</Default></Field>",
      "Options": 24
     }
    }
@@ -1634,7 +1634,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"CRMLink\" StaticName=\"CRMLink\" DisplayName=\"CRM Link\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "SchemaXml": "<Field Name=\"CRMLink\" StaticName=\"CRMLink\" DisplayName=\"CRM Link\" Required=\"FALSE\" Description=\"Link to the comment resolution matrix (CRM) file (DAFMAN 90-161 5.3).\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
      "Options": 24
     }
    }
@@ -1701,7 +1701,7 @@
     },
     "Title": "PFM - Not Started",
     "PersonalView": false,
-    "ViewQuery": "<Where><Eq><FieldRef Name=\"EndorsementStatus\"/><Value Type=\"Choice\">Not started</Value></Eq></Where><OrderBy><FieldRef Name=\"DueDate\" Ascending=\"TRUE\"/></OrderBy>",
+    "ViewQuery": "<Where><Eq><FieldRef Name=\"EndorsementStatus\"/><Value Type=\"Choice\">Not Started</Value></Eq></Where><OrderBy><FieldRef Name=\"DueDate\" Ascending=\"TRUE\"/></OrderBy>",
     "RowLimit": 100
    }
   },
@@ -1835,7 +1835,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"OPRResponseDue\" StaticName=\"OPRResponseDue\" DisplayName=\"OPR Response Due\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "SchemaXml": "<Field Name=\"OPRResponseDue\" StaticName=\"OPRResponseDue\" DisplayName=\"OPR Response Due\" Required=\"FALSE\" Description=\"Date the office of primary responsibility (OPR) must respond; at least 30 days after Opened (DAFMAN 90-161 7.4.4).\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
      "Options": 24
     }
    }
@@ -1848,7 +1848,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"OPRResponse\" StaticName=\"OPRResponse\" DisplayName=\"OPR Response\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Certify Current</CHOICE><CHOICE>Requires Revision</CHOICE><CHOICE>Requires Transfer</CHOICE><CHOICE>Is Obsolete</CHOICE><CHOICE>No Response</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"OPRResponse\" StaticName=\"OPRResponse\" DisplayName=\"OPR Response\" Required=\"FALSE\" Description=\"Status the office of primary responsibility (OPR) reports (DAFMAN 90-161 7.4.4.1 and 7.4.4.3). No Response: the PFM starts a Rescind (7.4.4.4).\" Type=\"Choice\"><CHOICES><CHOICE>Certify Current</CHOICE><CHOICE>Requires Revision</CHOICE><CHOICE>Requires Transfer</CHOICE><CHOICE>Is Obsolete</CHOICE><CHOICE>Other</CHOICE><CHOICE>No Response</CHOICE></CHOICES></Field>",
      "Options": 24
     }
    }
@@ -1874,7 +1874,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"Form399Link\" StaticName=\"Form399Link\" DisplayName=\"DAF Form 399 Link\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "SchemaXml": "<Field Name=\"Form399Link\" StaticName=\"Form399Link\" DisplayName=\"DAF Form 399 Link\" Required=\"FALSE\" Description=\"Link to the Department of the Air Force (DAF) Form 399 for Certify Current (DAFMAN 90-161 7.5.1).\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
      "Options": 24
     }
    }
@@ -2448,7 +2448,7 @@
     },
     "Title": "GuardReserveApplicabilityCalendarDays",
     "SettingValue": "30",
-    "SettingNotes": "Calendar days for Guard Applicability and Reserve Applicability coordinators below MAJCOM level (DAFMAN 90-161 5.2.2)."
+    "SettingNotes": "Calendar days for Guard Applicability and Reserve Applicability coordinators below major command (MAJCOM) level (DAFMAN 90-161 5.2.2)."
    }
   }
  ],

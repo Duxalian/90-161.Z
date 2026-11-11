@@ -38,6 +38,7 @@ def order(schemas):
 def field_xml(f):
     a = [f'Name={quoteattr(f["internalName"])}', f'StaticName={quoteattr(f["internalName"])}',
          f'DisplayName={quoteattr(f["displayName"])}', f'Required="{"TRUE" if f.get("required") else "FALSE"}"']
+    if f.get('description'): a.append(f'Description={quoteattr(f["description"])}')  # spells out abbreviations (docs/style-standard.md)
     inner = ''
     t = f['type']
     if t == 'Note': a += ['Type="Note"', 'NumLines="6"'] + (['AppendOnly="TRUE"'] if f.get('appendOnly') else [])

@@ -1,5 +1,5 @@
 Title,Publication,CoordinationStage,EndorserOrder,CoordinationRole,Endorser,IsRequired,EndorsementStatus,DueDate,ExtensionDate,ExtensionRationale,ResponseDate,NonconcurResolution,ResolutionDate,CRMLink
 Sample OI 99-101 IC-1 - Privacy,Sample OI 99-101 IC-1,Privacy Review,,Privacy,Endorser-A,true,Concur,2030-02-15,,,2030-02-10,,,
 Sample OI 99-101 IC-1 - Records,Sample OI 99-101 IC-1,Formal Coordination,,Records,Endorser-B,true,Nonconcur,2030-03-15,,,2030-03-10,Comments Incorporated,2030-03-12,https://example.invalid/crm/sampleoi99-101-b.docx
-Sample OI 99-101 IC-1 - Functional,Sample OI 99-101 IC-1,Formal Coordination,,Functional,Endorser-C,false,Not started,2030-03-15,2030-03-25,Sample rationale,,,,
-Sample OI 99-101 IC-1 - Legal,Sample OI 99-101 IC-1,Legal,,Legal,Endorser-D,true,Not started,,,,,,,
+Sample OI 99-101 IC-1 - Functional,Sample OI 99-101 IC-1,Formal Coordination,,Functional,Endorser-C,false,Not Started,2030-03-15,2030-03-25,Sample rationale,,,,
+Sample OI 99-101 IC-1 - Legal,Sample OI 99-101 IC-1,Legal,,Legal,Endorser-D,true,Not Started,,,,,,,

@@ -102,6 +102,7 @@ assert end['CoordinationStage']['choices'] == ['Privacy Review', 'Formal Coordin
 assert end['CoordinationRole']['choices'] == off['CoordinationRole']['choices'] and 'Legal' in off['CoordinationRole']['choices']
 assert 'Publication' not in pi and 'Expired' in pi['ProductStatus']['choices']
 assert all(pi[k]['lookup']['list'] == 'PFMProductIndex' for k in ('SupersededBy', 'ParentPublication', 'PrescribingPublication'))
+assert rv['OPRResponse']['choices'] == ['Certify Current', 'Requires Revision', 'Requires Transfer', 'Is Obsolete', 'Other', 'No Response']
 assert rv['Product']['lookup']['list'] == 'PFMProductIndex' and rv['FollowUpAction']['lookup']['list'] == 'PFMPublications'
 steps = S['PFMProcessSteps']['seed']
 assert [s['StepNumber'] for s in steps] == list(range(1, 11)) and 'Privacy' in steps[3]['Title']
@@ -118,6 +119,8 @@ for f in glob.glob('samples/lists/*.csv'):
         for k, v in r.items():
             if v and S[k]['type'] == 'Choice': assert v in S[k]['choices'], (f, k, v)
 PY
+
+python3 scripts/build_list_mockup.py /tmp/pfm-lists-mockup.html | grep -q "9 lists" && ! grep -qE "[0-9]{4}-[0-9]{2}-[0-9]{2}</td>|Not started|Emailed" /tmp/pfm-lists-mockup.html && ok "list mockup builds (T&Q dates and terms)" || bad "list mockup"
 
 python3 - <<'PY' && ok "flow payload XML parses" || bad "flow payload XML"
 import json, xml.etree.ElementTree as ET

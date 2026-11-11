@@ -1,7 +1,7 @@
 {
   "list": "PFMProcessSteps",
   "title": "PFM Process Steps",
-  "description": "Process steps for one publication action, derived from DAFMAN 90-161, with Table A5.2 target business days. Status: draft, not verified (docs/process-model.md).",
+  "description": "Publications and Forms Manager (PFM) list of process steps for one publication action, derived from Department of the Air Force Manual (DAFMAN) 90-161, with Table A5.2 target business days. Status: draft, not verified (docs/process-model.md).",
   "template": "GenericList",
   "ref": "ARCHITECTURE s3 (Stages list); docs/process-model.md Stages table",
   "fields": [
@@ -25,7 +25,8 @@
       "displayName": "DAFMAN Reference",
       "type": "Text",
       "required": true,
-      "ref": "docs/process-model.md Stages table, column Ref (ARCHITECTURE s3: Stages carries paragraph references)"
+      "ref": "docs/process-model.md Stages table, column Ref (ARCHITECTURE s3: Stages carries paragraph references)",
+      "description": "Paragraph or table in Department of the Air Force Manual (DAFMAN) 90-161."
     },
     {
       "internalName": "ExitCondition",

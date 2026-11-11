@@ -1,7 +1,7 @@
 {
   "list": "PFMReviews",
   "title": "PFM Reviews",
-  "description": "One row per periodic or special review of a product (DAFMAN 90-161 7.4.2-7.4.4): OPR response, due dates and the follow-up action.",
+  "description": "Publications and Forms Manager (PFM) record of reviews: one row per periodic or special review of a product (Department of the Air Force Manual (DAFMAN) 90-161, 7.4.2-7.4.4), with the office of primary responsibility (OPR) response, due dates and the follow-up action.",
   "template": "GenericList",
   "ref": "DAFMAN 90-161 7.4.2-7.4.4.4, 7.5; PFM 2026-11-11 (design check 4A)",
   "fields": [
@@ -49,7 +49,8 @@
       "displayName": "OPR Response Due",
       "type": "DateTime",
       "required": false,
-      "ref": "DAFMAN 90-161 7.4.4 (OPR has at least 30 days to respond); the flow sets Opened + 30 days"
+      "ref": "DAFMAN 90-161 7.4.4 (OPR has at least 30 days to respond); the flow sets Opened + 30 days",
+      "description": "Date the office of primary responsibility (OPR) must respond; at least 30 days after Opened (DAFMAN 90-161 7.4.4)."
     },
     {
       "internalName": "OPRResponse",
@@ -61,9 +62,11 @@
         "Requires Revision",
         "Requires Transfer",
         "Is Obsolete",
+        "Other",
         "No Response"
       ],
-      "ref": "DAFMAN 90-161 7.4.4.1-7.4.4.4 (review outcomes); No Response: the PFM is prompted to start a Rescind"
+      "ref": "DAFMAN 90-161 7.4.4.1 and 7.4.4.3 (status responses, including Other); No Response: the PFM is prompted to start a Rescind (7.4.4.4)",
+      "description": "Status the office of primary responsibility (OPR) reports (DAFMAN 90-161 7.4.4.1 and 7.4.4.3). No Response: the PFM starts a Rescind (7.4.4.4)."
     },
     {
       "internalName": "ResponseDate",
@@ -77,7 +80,8 @@
       "displayName": "DAF Form 399 Link",
       "type": "URL",
       "required": false,
-      "ref": "DAFMAN 90-161 7.5.1 (Certify Current on DAF Form 399, signed by the OPR and the approving authority)"
+      "ref": "DAFMAN 90-161 7.5.1 (Certify Current on DAF Form 399, signed by the OPR and the approving authority)",
+      "description": "Link to the Department of the Air Force (DAF) Form 399 for Certify Current (DAFMAN 90-161 7.5.1)."
     },
     {
       "internalName": "ActionDue",
