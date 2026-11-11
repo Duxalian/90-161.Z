@@ -82,7 +82,7 @@ DAFMAN 90-161 itself is the template (4.5.4). These values are measured with pdf
 | L-001 | Running header | Top at 0.507 in; bold; odd pages: designator + 2 spaces + date left, page number right; even pages: page number left, designator + date right; none on page 1 | 43, 44, 110 |
 | L-002 | Paragraph indent | Main paragraph at margin; each lower level +0.25 in (1.00, 1.25, 1.50, 1.75 in); continuation lines align with the number (no hanging indent) | 43, 45 |
 | L-003 | Paragraph spacing | 6 pt after each paragraph; single line spacing; body text justified | 43 |
-| L-004 | Gaps | Two spaces after paragraph numbers, after headings, and between designator and date in the running header | 40 |
+| L-004 | Gaps | Two spaces after paragraph numbers, after headings, before each new sentence (6.55 pt vs 3.14 pt word gap, n=53), and between designator and date in the running header | 40-46 |
 | L-005 | Cover statements | ACCESSIBILITY/RELEASABILITY labels bold; text at 1.5 in from margin (hanging) | 1 |
 | L-006 | Signature block | Starts 4.00 in from the page edge (3.0 in from margin), about two lines below the last text | 109 |
 | L-007 | Seal/shield | 1.2 in square, under the BY ORDER OF lines | 1 |

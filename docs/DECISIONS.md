@@ -4,6 +4,9 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | DAFMAN 90-161 is the source of truth whenever any wing file (template, AO guide, checklist) or practice contradicts it. Wing files shape the customer process only; they never supply rules. | PFM | — |
+| 2026-11-11 | Resolved by that rule: indent 0.25 in per level; signature block at 4.0 in; TOC per 4.5.8.2 (ANG wing level); waiver wording per 4.5.5.11 example. | PFM | wing template variants |
+| 2026-11-11 | Two spaces before each new sentence (DAFMAN 90-161 measured: 6.55 pt between sentences vs 3.14 pt between words, n=53/1625, pages 40-46). | PFM | — |
 | 2026-11-11 | Gov-device tasks: send raw GitHub links by email to the PFM's military address. | PFM | Copy blocks in chat |
 | 2026-11-11 | Cover line reads "Certified by:" (as printed on published covers), not "Certified By:". | PFM | Rec |
 | 2026-11-11 | New CRM template from DAFMAN 90-161 Figure A12.1 (Word, measured column widths): templates/CRM_A12-1.docx. Replaces the PFM's old CRM. | PFM | Old CRM |

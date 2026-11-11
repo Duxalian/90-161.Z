@@ -108,6 +108,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Scope (PFM, 2026-11-10): ANG wing publications (supplements, OIs, local publications and forms). ANG wing publications post to the wing's own site, not through AFIMPT (DAFMAN 90-161 1.1.3.2, 6.4). No wing supplement exists.
 - Gov-device hand-off (PFM, 2026-11-11): when a task needs the PFM's work computer, email raw.githubusercontent.com links (no code in the body) from the PFM's Gmail to his military address. The PFM replies by email; read the reply in Gmail.
 - Gov device (PFM, 2026-11-10): GitHub login is blocked on the gov device. The repo is public (PFM, 2026-11-10), so the gov device reads it without login. This repo is public: never commit the wing's name or location, the wing's site path, people's names, emails, office symbols or any government data.
+- Wing files (PFM, 2026-11-11): the wing template, AO guide and ANG checklist shape the customer process 90-161.Z takes a customer through. They never supply rules; on any contradiction DAFMAN 90-161 wins.
 - Source authority: DAFMAN 90-161 is the rule source. Cite the paragraph for every stage, time limit and format rule. Never invent a value. See docs/DECISIONS.md for the approved edition.
 - Formatting (PFM, 2026-11-10): rules force output to look like DAFMAN 90-161. Format comes from code, never from the model. Rule catalog: docs/format-rules.md. Do not use AFIMPT for formatting or tracking.
 - System of record (PFM, 2026-11-10): 90-161.Z owns endorsement tracking (no TMT).
