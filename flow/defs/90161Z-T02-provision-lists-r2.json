@@ -1,0 +1,298 @@
+{
+  "displayName": "90161Z T02 Provision Lists r2",
+  "description": "Creates the 7 PFM lists, their fields, views and indexes from flow/provisioning-payload.json (embedded at build), then sets display titles. Asks for the site URL and the site title; stops before creating anything if the title does not match. One request at a time, in payload order. Process step seed rows are not sent (steps not yet approved).",
+  "connections": [
+    "shared_sharepointonline"
+  ],
+  "embed": {
+    "Payload": "flow/provisioning-payload.json"
+  },
+  "triggers": {
+    "manual": {
+      "type": "Request",
+      "kind": "Button",
+      "inputs": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "title": "Site URL",
+              "type": "string",
+              "x-ms-dynamically-added": true,
+              "description": "Full site address, https://.../sites/...",
+              "x-ms-content-hint": "TEXT"
+            },
+            "text_1": {
+              "title": "Site Title",
+              "type": "string",
+              "x-ms-dynamically-added": true,
+              "description": "The site's title exactly as it shows at the top of the site",
+              "x-ms-content-hint": "TEXT"
+            }
+          },
+          "required": [
+            "text",
+            "text_1"
+          ]
+        }
+      }
+    }
+  },
+  "actions": {
+    "Get_Site_Title": {
+      "runAfter": {},
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web?$select=Title",
+          "parameters/headers": {
+            "Accept": "application/json;odata=verbose"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Check_Site_Title": {
+      "runAfter": {
+        "Get_Site_Title": [
+          "Succeeded"
+        ]
+      },
+      "type": "If",
+      "expression": {
+        "and": [
+          {
+            "equals": [
+              "@toLower(trim(string(body('Get_Site_Title')?['d']?['Title'])))",
+              "@toLower(trim(triggerBody()['text_1']))"
+            ]
+          }
+        ]
+      },
+      "actions": {},
+      "else": {
+        "actions": {
+          "Stop_Wrong_Site": {
+            "runAfter": {},
+            "type": "Terminate",
+            "inputs": {
+              "runStatus": "Failed",
+              "runError": {
+                "code": "SiteTitleMismatch",
+                "message": "The site title does not match the title you typed. Nothing was created."
+              }
+            }
+          }
+        }
+      }
+    },
+    "Payload": {
+      "runAfter": {
+        "Check_Site_Title": [
+          "Succeeded"
+        ]
+      },
+      "type": "Compose",
+      "inputs": "replaced at build from flow/provisioning-payload.json"
+    },
+    "Create_Lists": {
+      "runAfter": {
+        "Payload": [
+          "Succeeded"
+        ]
+      },
+      "type": "Foreach",
+      "foreach": "@outputs('Payload')?['lists']",
+      "runtimeConfiguration": {
+        "concurrency": {
+          "repetitions": 1
+        }
+      },
+      "actions": {
+        "Create_List": {
+          "runAfter": {},
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "@triggerBody()['text']",
+              "parameters/method": "POST",
+              "parameters/uri": "@items('Create_Lists')?['uri']",
+              "parameters/headers": {
+                "Accept": "application/json;odata=verbose",
+                "Content-Type": "application/json;odata=verbose"
+              },
+              "parameters/body": "@string(items('Create_Lists')?['body'])"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest"
+            },
+            "authentication": {
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+              "type": "Raw"
+            }
+          }
+        }
+      }
+    },
+    "Get_Process_Steps_ID": {
+      "runAfter": {
+        "Create_Lists": [
+          "Succeeded",
+          "Failed"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/lists/getbytitle('PFMProcessSteps')?$select=Id",
+          "parameters/headers": {
+            "Accept": "application/json;odata=verbose"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Get_Publications_ID": {
+      "runAfter": {
+        "Get_Process_Steps_ID": [
+          "Succeeded"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/lists/getbytitle('PFMPublications')?$select=Id",
+          "parameters/headers": {
+            "Accept": "application/json;odata=verbose"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Create_Fields_And_Views": {
+      "runAfter": {
+        "Get_Publications_ID": [
+          "Succeeded"
+        ]
+      },
+      "type": "Foreach",
+      "foreach": "@outputs('Payload')?['fields']",
+      "runtimeConfiguration": {
+        "concurrency": {
+          "repetitions": 1
+        }
+      },
+      "actions": {
+        "Create_Field_Or_View": {
+          "runAfter": {},
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "@triggerBody()['text']",
+              "parameters/method": "POST",
+              "parameters/uri": "@items('Create_Fields_And_Views')?['uri']",
+              "parameters/headers": {
+                "Accept": "application/json;odata=verbose",
+                "Content-Type": "application/json;odata=verbose"
+              },
+              "parameters/body": "@replace(replace(string(items('Create_Fields_And_Views')?['body']), '__PFMProcessSteps_ID__', body('Get_Process_Steps_ID')?['d']?['Id']), '__PFMPublications_ID__', body('Get_Publications_ID')?['d']?['Id'])"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest"
+            },
+            "authentication": {
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+              "type": "Raw"
+            }
+          }
+        }
+      }
+    },
+    "Apply_Updates": {
+      "runAfter": {
+        "Create_Fields_And_Views": [
+          "Succeeded"
+        ]
+      },
+      "type": "Foreach",
+      "foreach": "@outputs('Payload')?['updates']",
+      "runtimeConfiguration": {
+        "concurrency": {
+          "repetitions": 1
+        }
+      },
+      "actions": {
+        "Apply_Update": {
+          "runAfter": {},
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "@triggerBody()['text']",
+              "parameters/method": "POST",
+              "parameters/uri": "@items('Apply_Updates')?['uri']",
+              "parameters/headers": {
+                "Accept": "application/json;odata=verbose",
+                "Content-Type": "application/json;odata=verbose",
+                "X-HTTP-Method": "MERGE",
+                "IF-MATCH": "*"
+              },
+              "parameters/body": "@string(items('Apply_Updates')?['body'])"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest"
+            },
+            "authentication": {
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+              "type": "Raw"
+            }
+          }
+        }
+      }
+    },
+    "Result": {
+      "runAfter": {
+        "Apply_Updates": [
+          "Succeeded"
+        ]
+      },
+      "type": "Compose",
+      "inputs": "@concat('Lists: ', string(length(outputs('Payload')?['lists'])), ', fields and views: ', string(length(outputs('Payload')?['fields'])), ', updates: ', string(length(outputs('Payload')?['updates'])), ' - provisioning finished')"
+    }
+  }
+}

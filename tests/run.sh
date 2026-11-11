@@ -34,16 +34,23 @@ python3 scripts/build_flow_payload.py --check >/dev/null && ok "flow payload up 
 python3 scripts/build_flow_package.py --check && ok "flow packages up to date" || bad "flow packages stale"
 python3 tests/check_flow_package.py && ok "flow packages match real export shape" || bad "flow package shape"
 python3 tests/check_flow_defs.py && ok "flow def names and expressions" || bad "flow def names or expressions"
+python3 tests/check_names.py && ok "naming rules (PFM 2026-11-11)" || bad "naming rules"
 for f in flow/defs/*.json; do python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" && ok "json $f" || bad "json $f"; done
 
-python3 - <<'PY' && ok "T02 package embeds the current payload; loops run 1 at a time" || bad "T02 package payload or loop concurrency"
+python3 - <<'PY' && ok "T02 package: current payload, site-title guard first, lookups and list titles last, loops 1 at a time" || bad "T02 package payload or loop concurrency"
 import json, zipfile, glob, sys
 sys.path.insert(0, 'scripts'); from build_flow_package import literal
 z = zipfile.ZipFile(sorted(glob.glob('flow/packages/90161Z-T02-provision-lists-r*.zip'))[-1])
 d = json.loads(z.read([n for n in z.namelist() if n.endswith('/definition.json')][0]))['properties']['definition']['actions']
 assert d['Payload']['inputs'] == literal(json.load(open('flow/provisioning-payload.json')))
 assert literal({'a': ['@x', 'y @{z}', 'ok']}) == {'a': ['@@x', 'y @@{z}', 'ok']}
-for k in ('Create_lists', 'Create_fields_and_views'):
+assert d['Check_Site_Title']['type'] == 'If' and 'Stop_Wrong_Site' in d['Check_Site_Title']['else']['actions']
+assert d['Payload']['runAfter'] == {'Check_Site_Title': ['Succeeded']}
+p = json.load(open('flow/provisioning-payload.json'))
+assert p['lookupPlaceholders'] == ['PFMProcessSteps', 'PFMPublications'], p['lookupPlaceholders']
+assert all(u['uri'].startswith('_api/web/lists/getbytitle(') for u in p['updates'])
+assert p['updates'][-len(p['listOrder']):] == [u for u in p['updates'] if u['body']['__metadata']['type'] == 'SP.List']
+for k in ('Create_Lists', 'Create_Fields_And_Views', 'Apply_Updates'):
     assert d[k]['runtimeConfiguration']['concurrency']['repetitions'] == 1, k
 PY
 
@@ -57,7 +64,7 @@ for r in d['fields']:
 PY
 
 out=$(pwsh -NoProfile -File scripts/gov/Provision-Lists.ps1 -PlanOnly -SchemaPath schemas/lists 2>&1 | tail -1)
-[ "$out" = "PLAN lists=4 fields=25 views=5" ] && ok "lists plan ($out)" || bad "lists plan: $out"
+[ "$out" = "PLAN lists=7 fields=42 views=10" ] && ok "lists plan ($out)" || bad "lists plan: $out"
 
 cp templates/CRM_A12-1.docx /tmp/crm_before.docx
 node templates/build_crm_template.js >/tmp/crm.out 2>&1 && grep -q "tableWidthDXA=9331 columns=9" /tmp/crm.out && ok "CRM template builds ($(cat /tmp/crm.out | sed s,.*CRM_A12-1.docx,,))" || bad "CRM template build"

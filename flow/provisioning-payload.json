@@ -1,14 +1,17 @@
 {
  "generatedFrom": "schemas/lists/*.json",
  "listOrder": [
-  "Stages",
-  "Publications",
-  "Endorsements",
-  "PublicationIndex"
+  "PFMOffices",
+  "PFMProcessSteps",
+  "PFMSettings",
+  "PFMPublications",
+  "PFMActivityLog",
+  "PFMEndorsements",
+  "PFMProductIndex"
  ],
  "lookupPlaceholders": [
-  "Publications",
-  "Stages"
+  "PFMProcessSteps",
+  "PFMPublications"
  ],
  "lists": [
   {
@@ -18,10 +21,11 @@
     "__metadata": {
      "type": "SP.List"
     },
-    "Title": "Stages",
+    "Title": "PFMOffices",
     "BaseTemplate": 100,
-    "Description": "Stage model for one publication action, derived from DAFMAN 90-161. Status: draft, not verified (docs/process-model.md).",
-    "ContentTypesEnabled": false
+    "Description": "One row per coordinating office: endorser and coordination role. Endorsement routing reuses it. Office data stays in SharePoint.",
+    "ContentTypesEnabled": false,
+    "EnableVersioning": true
    }
   },
   {
@@ -31,10 +35,11 @@
     "__metadata": {
      "type": "SP.List"
     },
-    "Title": "Publications",
+    "Title": "PFMProcessSteps",
     "BaseTemplate": 100,
-    "Description": "One row per publication action (ARCHITECTURE s3).",
-    "ContentTypesEnabled": false
+    "Description": "Process steps for one publication action, derived from DAFMAN 90-161. Status: draft, not verified (docs/process-model.md).",
+    "ContentTypesEnabled": false,
+    "EnableVersioning": true
    }
   },
   {
@@ -44,10 +49,11 @@
     "__metadata": {
      "type": "SP.List"
     },
-    "Title": "Endorsements",
+    "Title": "PFMSettings",
     "BaseTemplate": 100,
-    "Description": "One row per endorser per publication: order, role, status, due date, response (ARCHITECTURE s3).",
-    "ContentTypesEnabled": false
+    "Description": "One row per setting the app and flows read (wing name for the subtitle, PFM mailbox, defaults). Values are entered on the gov device, never in the repo.",
+    "ContentTypesEnabled": false,
+    "EnableVersioning": true
    }
   },
   {
@@ -57,285 +63,60 @@
     "__metadata": {
      "type": "SP.List"
     },
-    "Title": "PublicationIndex",
+    "Title": "PFMPublications",
     "BaseTemplate": 100,
-    "Description": "Publication Index (PI) of all applicable organizational publications and forms that the PFM maintains (DAFMAN 90-161 6.4.2, T-3).",
-    "ContentTypesEnabled": false
+    "Description": "One row per publication or form action the PFM tracks (ARCHITECTURE s3).",
+    "ContentTypesEnabled": false,
+    "EnableVersioning": true
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFMActivityLog",
+    "BaseTemplate": 100,
+    "Description": "One row per event: status change, endorsement requested, reminder sent, status report emailed. Flow run history expires after 28 days; this list keeps the record.",
+    "ContentTypesEnabled": false,
+    "EnableVersioning": true
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFMEndorsements",
+    "BaseTemplate": 100,
+    "Description": "One row per endorser per publication action: order, role, status, suspense, response (DAFMAN 90-161 5.1; ARCHITECTURE s3).",
+    "ContentTypesEnabled": false,
+    "EnableVersioning": true
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFMProductIndex",
+    "BaseTemplate": 100,
+    "Description": "Product Index (PI) of all applicable organizational publications and forms that the PFM maintains (DAFMAN 90-161 6.4.2, T-3).",
+    "ContentTypesEnabled": false,
+    "EnableVersioning": true
    }
   }
  ],
  "fields": [
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"StageNumber\" StaticName=\"StageNumber\" DisplayName=\"Stage number\" Required=\"TRUE\" Type=\"Number\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"DafmanRef\" StaticName=\"DafmanRef\" DisplayName=\"DAFMAN reference\" Required=\"TRUE\" Type=\"Text\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"ExitCondition\" StaticName=\"ExitCondition\" DisplayName=\"Exit condition\" Required=\"FALSE\" Type=\"Note\" NumLines=\"6\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"IsOptional\" StaticName=\"IsOptional\" DisplayName=\"Optional stage\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/views",
-   "body": {
-    "__metadata": {
-     "type": "SP.View"
-    },
-    "Title": "By stage number",
-    "PersonalView": false,
-    "ViewQuery": "<OrderBy><FieldRef Name=\"StageNumber\" Ascending=\"TRUE\"/></OrderBy>",
-    "RowLimit": 100
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/removeallviewfields",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('StageNumber')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('LinkTitle')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('DafmanRef')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('IsOptional')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/views/getbytitle('By stage number')/viewfields/addviewfield('ExitCondition')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"ActionType\" StaticName=\"ActionType\" DisplayName=\"Action type\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>New</CHOICE><CHOICE>Rewrite</CHOICE><CHOICE>Change</CHOICE><CHOICE>Supplement</CHOICE><CHOICE>OI</CHOICE><CHOICE>Certify as current</CHOICE><CHOICE>Rescind</CHOICE></CHOICES></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"PublicationNumber\" StaticName=\"PublicationNumber\" DisplayName=\"Publication number\" Required=\"FALSE\" Type=\"Text\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"IsDirective\" StaticName=\"IsDirective\" DisplayName=\"Directive publication\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"Stage\" StaticName=\"Stage\" DisplayName=\"Stage\" Required=\"TRUE\" Type=\"Lookup\" List=\"{__Stages_ID__}\" ShowField=\"Title\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"Opr\" StaticName=\"Opr\" DisplayName=\"OPR\" Required=\"FALSE\" Type=\"Text\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"DraftLink\" StaticName=\"DraftLink\" DisplayName=\"Draft link\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"CoordinationSuspense\" StaticName=\"CoordinationSuspense\" DisplayName=\"Coordination suspense\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/views",
-   "body": {
-    "__metadata": {
-     "type": "SP.View"
-    },
-    "Title": "PFM queue",
-    "PersonalView": false,
-    "ViewQuery": "<OrderBy><FieldRef Name=\"CoordinationSuspense\" Ascending=\"TRUE\"/></OrderBy>",
-    "RowLimit": 100
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/removeallviewfields",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('LinkTitle')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('ActionType')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('Stage')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('Opr')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Publications')/views/getbytitle('PFM queue')/viewfields/addviewfield('CoordinationSuspense')",
-   "body": {}
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"Publication\" StaticName=\"Publication\" DisplayName=\"Publication\" Required=\"TRUE\" Type=\"Lookup\" List=\"{__Publications_ID__}\" ShowField=\"Title\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"EndorserOrder\" StaticName=\"EndorserOrder\" DisplayName=\"Order\" Required=\"TRUE\" Type=\"Number\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"Role\" StaticName=\"Role\" DisplayName=\"Role\" Required=\"FALSE\" Type=\"Text\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/fields/createfieldasxml",
    "body": {
     "parameters": {
      "__metadata": {
@@ -348,103 +129,725 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/fields/createfieldasxml",
    "body": {
     "parameters": {
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"Execution\" StaticName=\"Execution\" DisplayName=\"Sequential or parallel\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Sequential</CHOICE><CHOICE>Parallel</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"CoordinationRole\" StaticName=\"CoordinationRole\" DisplayName=\"Coordination Role\" Required=\"FALSE\" Type=\"Text\"></Field>",
      "Options": 24
     }
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/fields/createfieldasxml",
    "body": {
     "parameters": {
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"IsRequired\" StaticName=\"IsRequired\" DisplayName=\"Required endorsement\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
+     "SchemaXml": "<Field Name=\"CoordinateLast\" StaticName=\"CoordinateLast\" DisplayName=\"Coordinate Last\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
      "Options": 24
     }
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/fields/createfieldasxml",
    "body": {
     "parameters": {
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"Status\" StaticName=\"Status\" DisplayName=\"Status\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Not started</CHOICE><CHOICE>Concur</CHOICE><CHOICE>Concur With Comment</CHOICE><CHOICE>Concur—No Response</CHOICE><CHOICE>Nonconcur</CHOICE><CHOICE>No Comment</CHOICE></CHOICES><Default>Not started</Default></Field>",
+     "SchemaXml": "<Field Name=\"IsActive\" StaticName=\"IsActive\" DisplayName=\"Active\" Required=\"FALSE\" Type=\"Boolean\"><Default>1</Default></Field>",
      "Options": 24
     }
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"DueDate\" StaticName=\"DueDate\" DisplayName=\"Due date\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"ExtensionDate\" StaticName=\"ExtensionDate\" DisplayName=\"Extension estimated completion\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"ResponseDate\" StaticName=\"ResponseDate\" DisplayName=\"Response date\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"CrmLink\" StaticName=\"CrmLink\" DisplayName=\"CRM link\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views",
    "body": {
     "__metadata": {
      "type": "SP.View"
     },
-    "Title": "By publication",
+    "Title": "PFM - Active Offices",
+    "PersonalView": false,
+    "ViewQuery": "<Where><Eq><FieldRef Name=\"IsActive\"/><Value Type=\"Boolean\">1</Value></Eq></Where><OrderBy><FieldRef Name=\"Title\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/addviewfield('Endorser')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/addviewfield('CoordinationRole')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/views/getbytitle('PFM - Active Offices')/viewfields/addviewfield('CoordinateLast')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"StepNumber\" StaticName=\"StepNumber\" DisplayName=\"Step Number\" Required=\"TRUE\" Type=\"Number\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"DAFMANRef\" StaticName=\"DAFMANRef\" DisplayName=\"DAFMAN Reference\" Required=\"TRUE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ExitCondition\" StaticName=\"ExitCondition\" DisplayName=\"Exit Condition\" Required=\"FALSE\" Type=\"Note\" NumLines=\"6\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"IsOptional\" StaticName=\"IsOptional\" DisplayName=\"Optional Step\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM - By Step Number",
+    "PersonalView": false,
+    "ViewQuery": "<OrderBy><FieldRef Name=\"StepNumber\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('StepNumber')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('DAFMANRef')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('IsOptional')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/views/getbytitle('PFM - By Step Number')/viewfields/addviewfield('ExitCondition')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"SettingValue\" StaticName=\"SettingValue\" DisplayName=\"Setting Value\" Required=\"FALSE\" Type=\"Note\" NumLines=\"6\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"SettingNotes\" StaticName=\"SettingNotes\" DisplayName=\"Setting Notes\" Required=\"FALSE\" Type=\"Note\" NumLines=\"6\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM - All Settings",
+    "PersonalView": false,
+    "ViewQuery": "<OrderBy><FieldRef Name=\"Title\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM - All Settings')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM - All Settings')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM - All Settings')/viewfields/addviewfield('SettingValue')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/views/getbytitle('PFM - All Settings')/viewfields/addviewfield('SettingNotes')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ActionType\" StaticName=\"ActionType\" DisplayName=\"Action Type\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>New</CHOICE><CHOICE>Rewrite</CHOICE><CHOICE>Change</CHOICE><CHOICE>Supplement</CHOICE><CHOICE>OI</CHOICE><CHOICE>Certify as current</CHOICE><CHOICE>Rescind</CHOICE></CHOICES></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ProductType\" StaticName=\"ProductType\" DisplayName=\"Product Type\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Publication</CHOICE><CHOICE>Form</CHOICE></CHOICES><Default>Publication</Default></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"PublicationNumber\" StaticName=\"PublicationNumber\" DisplayName=\"Publication Number\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"IsDirective\" StaticName=\"IsDirective\" DisplayName=\"Directive Publication\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ProcessStep\" StaticName=\"ProcessStep\" DisplayName=\"Process Step\" Required=\"TRUE\" Type=\"Lookup\" List=\"{__PFMProcessSteps_ID__}\" ShowField=\"Title\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ActionStatus\" StaticName=\"ActionStatus\" DisplayName=\"Action Status\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>On Track</CHOICE><CHOICE>On Hold</CHOICE><CHOICE>Stalled</CHOICE></CHOICES><Default>On Track</Default></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"StatusNotes\" StaticName=\"StatusNotes\" DisplayName=\"Status Notes\" Required=\"FALSE\" Type=\"Note\" NumLines=\"6\" AppendOnly=\"TRUE\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"OPR\" StaticName=\"OPR\" DisplayName=\"OPR\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"AO\" StaticName=\"AO\" DisplayName=\"AO\" Required=\"FALSE\" Type=\"User\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"DraftLink\" StaticName=\"DraftLink\" DisplayName=\"Draft Link\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"CoordinationSuspense\" StaticName=\"CoordinationSuspense\" DisplayName=\"Coordination Suspense\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM - Queue",
+    "PersonalView": false,
+    "ViewQuery": "<OrderBy><FieldRef Name=\"CoordinationSuspense\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('ProductType')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('ActionType')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('ProcessStep')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('ActionStatus')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('OPR')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('AO')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Queue')/viewfields/addviewfield('CoordinationSuspense')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM - Stalled or On Hold",
+    "PersonalView": false,
+    "ViewQuery": "<Where><Neq><FieldRef Name=\"ActionStatus\"/><Value Type=\"Choice\">On Track</Value></Neq></Where><OrderBy><FieldRef Name=\"Modified\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('ProcessStep')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('ActionStatus')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('AO')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM - Stalled or On Hold')/viewfields/addviewfield('StatusNotes')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Publication\" StaticName=\"Publication\" DisplayName=\"Publication\" Required=\"FALSE\" Type=\"Lookup\" List=\"{__PFMPublications_ID__}\" ShowField=\"Title\" Indexed=\"TRUE\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"EventType\" StaticName=\"EventType\" DisplayName=\"Event Type\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Status Changed</CHOICE><CHOICE>Endorsement Requested</CHOICE><CHOICE>Reminder Sent</CHOICE><CHOICE>Endorsement Received</CHOICE><CHOICE>Status Report Emailed</CHOICE><CHOICE>Other</CHOICE></CHOICES></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"EventBy\" StaticName=\"EventBy\" DisplayName=\"Event By\" Required=\"FALSE\" Type=\"User\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"EventDetails\" StaticName=\"EventDetails\" DisplayName=\"Event Details\" Required=\"FALSE\" Type=\"Note\" NumLines=\"6\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM - Recent",
+    "PersonalView": false,
+    "ViewQuery": "<OrderBy><FieldRef Name=\"Created\" Ascending=\"FALSE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('Created')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('EventType')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('Publication')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/views/getbytitle('PFM - Recent')/viewfields/addviewfield('EventBy')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Publication\" StaticName=\"Publication\" DisplayName=\"Publication\" Required=\"TRUE\" Type=\"Lookup\" List=\"{__PFMPublications_ID__}\" ShowField=\"Title\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"EndorserOrder\" StaticName=\"EndorserOrder\" DisplayName=\"Endorser Order\" Required=\"TRUE\" Type=\"Number\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"CoordinationRole\" StaticName=\"CoordinationRole\" DisplayName=\"Coordination Role\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Endorser\" StaticName=\"Endorser\" DisplayName=\"Endorser\" Required=\"FALSE\" Type=\"User\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"Execution\" StaticName=\"Execution\" DisplayName=\"Sequential or Parallel\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Sequential</CHOICE><CHOICE>Parallel</CHOICE></CHOICES></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"IsRequired\" StaticName=\"IsRequired\" DisplayName=\"Required Endorsement\" Required=\"FALSE\" Type=\"Boolean\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"EndorsementStatus\" StaticName=\"EndorsementStatus\" DisplayName=\"Endorsement Status\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Not started</CHOICE><CHOICE>Concur</CHOICE><CHOICE>Concur With Comment</CHOICE><CHOICE>Concur—No Response</CHOICE><CHOICE>Nonconcur</CHOICE><CHOICE>No Comment</CHOICE></CHOICES><Default>Not started</Default></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"DueDate\" StaticName=\"DueDate\" DisplayName=\"Due Date\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ExtensionDate\" StaticName=\"ExtensionDate\" DisplayName=\"Extension Estimated Completion\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"ResponseDate\" StaticName=\"ResponseDate\" DisplayName=\"Response Date\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"CRMLink\" StaticName=\"CRMLink\" DisplayName=\"CRM Link\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM - By Publication",
     "PersonalView": false,
     "ViewQuery": "<OrderBy><FieldRef Name=\"Publication\" Ascending=\"TRUE\"/><FieldRef Name=\"EndorserOrder\" Ascending=\"TRUE\"/></OrderBy>",
     "RowLimit": 100
@@ -452,129 +855,168 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('Publication')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('Publication')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('EndorserOrder')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('EndorserOrder')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('Role')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('CoordinationRole')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('Status')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('EndorsementStatus')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('By publication')/viewfields/addviewfield('DueDate')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - By Publication')/viewfields/addviewfield('DueDate')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views",
    "body": {
     "__metadata": {
      "type": "SP.View"
     },
-    "Title": "Not started",
+    "Title": "PFM - Not Started",
     "PersonalView": false,
-    "ViewQuery": "<Where><Eq><FieldRef Name=\"Status\"/><Value Type=\"Choice\">Not started</Value></Eq></Where><OrderBy><FieldRef Name=\"DueDate\" Ascending=\"TRUE\"/></OrderBy>",
+    "ViewQuery": "<Where><Eq><FieldRef Name=\"EndorsementStatus\"/><Value Type=\"Choice\">Not started</Value></Eq></Where><OrderBy><FieldRef Name=\"DueDate\" Ascending=\"TRUE\"/></OrderBy>",
     "RowLimit": 100
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('Publication')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('Publication')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('EndorserOrder')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('EndorserOrder')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('Status')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('EndorsementStatus')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Endorsements')/views/getbytitle('Not started')/viewfields/addviewfield('DueDate')",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')/views/getbytitle('PFM - Not Started')/viewfields/addviewfield('DueDate')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PublicationIndex')/fields/createfieldasxml",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
    "body": {
     "parameters": {
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"PublicationNumber\" StaticName=\"PublicationNumber\" DisplayName=\"Publication number\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "SchemaXml": "<Field Name=\"ProductType\" StaticName=\"ProductType\" DisplayName=\"Product Type\" Required=\"TRUE\" Type=\"Choice\"><CHOICES><CHOICE>Publication</CHOICE><CHOICE>Form</CHOICE></CHOICES><Default>Publication</Default></Field>",
      "Options": 24
     }
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PublicationIndex')/fields/createfieldasxml",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
    "body": {
     "parameters": {
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"Publication\" StaticName=\"Publication\" DisplayName=\"Tracked publication\" Required=\"FALSE\" Type=\"Lookup\" List=\"{__Publications_ID__}\" ShowField=\"Title\"></Field>",
+     "SchemaXml": "<Field Name=\"PublicationNumber\" StaticName=\"PublicationNumber\" DisplayName=\"Publication Number\" Required=\"FALSE\" Type=\"Text\"></Field>",
      "Options": 24
     }
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PublicationIndex')/fields/createfieldasxml",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
    "body": {
     "parameters": {
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"PostedLink\" StaticName=\"PostedLink\" DisplayName=\"Posted location\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "SchemaXml": "<Field Name=\"Publication\" StaticName=\"Publication\" DisplayName=\"Tracked Publication\" Required=\"FALSE\" Type=\"Lookup\" List=\"{__PFMPublications_ID__}\" ShowField=\"Title\"></Field>",
      "Options": 24
     }
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"PostedLink\" StaticName=\"PostedLink\" DisplayName=\"Posted Location\" Required=\"FALSE\" Type=\"URL\" Format=\"Hyperlink\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"LastReviewDate\" StaticName=\"LastReviewDate\" DisplayName=\"Last Review Date\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"NextReviewDue\" StaticName=\"NextReviewDue\" DisplayName=\"Next Review Due\" Required=\"FALSE\" Type=\"DateTime\" Format=\"DateOnly\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views",
    "body": {
     "__metadata": {
      "type": "SP.View"
     },
-    "Title": "By number",
+    "Title": "PFM - By Number",
     "PersonalView": false,
     "ViewQuery": "<OrderBy><FieldRef Name=\"PublicationNumber\" Ascending=\"TRUE\"/></OrderBy>",
     "RowLimit": 100
@@ -582,153 +1024,308 @@
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/removeallviewfields",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/removeallviewfields",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/addviewfield('PublicationNumber')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('PublicationNumber')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/addviewfield('LinkTitle')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('LinkTitle')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/addviewfield('Publication')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('ProductType')",
    "body": {}
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PublicationIndex')/views/getbytitle('By number')/viewfields/addviewfield('PostedLink')",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('Publication')",
    "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - By Number')/viewfields/addviewfield('PostedLink')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM - Review Due",
+    "PersonalView": false,
+    "ViewQuery": "<OrderBy><FieldRef Name=\"NextReviewDue\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/addviewfield('PublicationNumber')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/addviewfield('LastReviewDate')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM - Review Due')/viewfields/addviewfield('NextReviewDue')",
+   "body": {}
+  }
+ ],
+ "updates": [
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')/fields/getbyinternalnameortitle('Title')",
+   "body": {
+    "__metadata": {
+     "type": "SP.Field"
+    },
+    "Title": "Office"
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')/fields/getbyinternalnameortitle('Title')",
+   "body": {
+    "__metadata": {
+     "type": "SP.Field"
+    },
+    "Title": "Setting"
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/fields/getbyinternalnameortitle('Created')",
+   "body": {
+    "__metadata": {
+     "type": "SP.Field"
+    },
+    "Indexed": true
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/fields/getbyinternalnameortitle('Title')",
+   "body": {
+    "__metadata": {
+     "type": "SP.Field"
+    },
+    "Title": "Event"
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMOffices')",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFM Offices"
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFM Process Steps"
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMSettings')",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFM Settings"
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFM Publications"
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFM Activity Log"
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMEndorsements')",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFM Endorsements"
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "Title": "PFM Product Index"
+   }
   }
  ],
  "seed": [
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/items",
    "body": {
     "__metadata": {
-     "type": "SP.Data.StagesListItem"
+     "type": "SP.Data.PFMProcessStepsListItem"
     },
-    "StageNumber": 1,
+    "StepNumber": 1,
     "Title": "Preparation: directive or not, existing pubs, prior record set, contact PCM/PFM",
-    "DafmanRef": "3.1",
+    "DAFMANRef": "3.1",
     "ExitCondition": "DAF Form 673 started",
     "IsOptional": false
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/items",
    "body": {
     "__metadata": {
-     "type": "SP.Data.StagesListItem"
+     "type": "SP.Data.PFMProcessStepsListItem"
     },
-    "StageNumber": 2,
+    "StepNumber": 2,
     "Title": "Drafting with SMEs",
-    "DafmanRef": "3.2, 4.2.2.1",
+    "DAFMANRef": "3.2, 4.2.2.1",
     "ExitCondition": "Draft meets format rules (draft mode)",
     "IsOptional": false
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/items",
    "body": {
     "__metadata": {
-     "type": "SP.Data.StagesListItem"
+     "type": "SP.Data.PFMProcessStepsListItem"
     },
-    "StageNumber": 3,
+    "StepNumber": 3,
     "Title": "Pre-coordination (optional)",
-    "DafmanRef": "3.3",
+    "DAFMANRef": "3.3",
     "ExitCondition": "",
     "IsOptional": true
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/items",
    "body": {
     "__metadata": {
-     "type": "SP.Data.StagesListItem"
+     "type": "SP.Data.PFMProcessStepsListItem"
     },
-    "StageNumber": 4,
+    "StepNumber": 4,
     "Title": "Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673",
-    "DafmanRef": "3.4, 5.1, 5.1.5",
+    "DAFMANRef": "3.4, 5.1, 5.1.5",
     "ExitCondition": "All coordinators responded; all nonconcurs resolved (5.5.1)",
     "IsOptional": false
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/items",
    "body": {
     "__metadata": {
-     "type": "SP.Data.StagesListItem"
+     "type": "SP.Data.PFMProcessStepsListItem"
     },
-    "StageNumber": 5,
+    "StepNumber": 5,
     "Title": "Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication",
-    "DafmanRef": "5.1.8.2, 3.4",
+    "DAFMANRef": "5.1.8.2, 3.4",
     "ExitCondition": "Legal concur",
     "IsOptional": false
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/items",
    "body": {
     "__metadata": {
-     "type": "SP.Data.StagesListItem"
+     "type": "SP.Data.PFMProcessStepsListItem"
     },
-    "StageNumber": 6,
+    "StepNumber": 6,
     "Title": "Certification: certifying official endorses DAF Form 673",
-    "DafmanRef": "5.6",
+    "DAFMANRef": "5.6",
     "ExitCondition": "Endorsed",
     "IsOptional": false
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/items",
    "body": {
     "__metadata": {
-     "type": "SP.Data.StagesListItem"
+     "type": "SP.Data.PFMProcessStepsListItem"
     },
-    "StageNumber": 7,
+    "StepNumber": 7,
     "Title": "Approval: approving official endorses DAF Form 673; delegation letter on file",
-    "DafmanRef": "5.7",
+    "DAFMANRef": "5.7",
     "ExitCondition": "Endorsed",
     "IsOptional": false
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/items",
    "body": {
     "__metadata": {
-     "type": "SP.Data.StagesListItem"
+     "type": "SP.Data.PFMProcessStepsListItem"
     },
-    "StageNumber": 8,
+    "StepNumber": 8,
     "Title": "Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM",
-    "DafmanRef": "6.6.1",
+    "DAFMANRef": "6.6.1",
     "ExitCondition": "PFM has package",
     "IsOptional": false
    }
   },
   {
    "method": "POST",
-   "uri": "_api/web/lists/getbytitle('Stages')/items",
+   "uri": "_api/web/lists/getbytitle('PFMProcessSteps')/items",
    "body": {
     "__metadata": {
-     "type": "SP.Data.StagesListItem"
+     "type": "SP.Data.PFMProcessStepsListItem"
     },
-    "StageNumber": 9,
+    "StepNumber": 9,
     "Title": "Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI",
-    "DafmanRef": "6.4.1-6.4.2, 1.1.3.2",
+    "DAFMANRef": "6.4.1-6.4.2, 1.1.3.2",
     "ExitCondition": "Posted on wing site",
     "IsOptional": false
    }
