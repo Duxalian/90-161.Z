@@ -436,11 +436,14 @@ try {
   $doc.Bookmarks.Item('PagesCount').Range.Text = [string]$pages
   $doc.Fields.Update() | Out-Null
 
-  $doc.SaveAs([ref]$outDocx, [ref]$wdFormatDocx)
+  # Join-Path returns a PSObject-wrapped string; Word COM rejects it by ref (gov run 2026-11-11). Pass plain typed values.
+  [string]$saveName = [string]$outDocx
+  [int]$saveFormat = $wdFormatDocx
+  $doc.SaveAs([ref]$saveName, [ref]$saveFormat)
   Write-Output ("RENDER docx=" + (Split-Path -Leaf $outDocx) + " pages=$pages mode=$Mode toc=$([bool]$tocRange)")
   if ($Pdf) {
     $outPdf = [IO.Path]::ChangeExtension($outDocx, '.pdf')
-    $doc.ExportAsFixedFormat($outPdf, $wdFormatPdf)
+    $doc.ExportAsFixedFormat([string]$outPdf, [int]$wdFormatPdf)
     Write-Output ("RENDER pdf=" + (Split-Path -Leaf $outPdf))
   }
 } finally {
