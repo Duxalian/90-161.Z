@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PreToolUse hook for the worker and reviewer subagents (.claude/agents/): blocks git commands they must never run.
 
-Adapted from rhope-ops/no-more-beyond scripts/worker_guard.py (tested parser).
+Adapted from an earlier project's worker guard (tested parser).
 
 Usage (wired in the .claude/agents/ frontmatter `hooks:`; runs only while that subagent is active):
   python3 scripts/worker_guard.py            # reads the hook JSON on stdin

@@ -1,6 +1,6 @@
 # Orchestration: more than one agent
 
-Read this file when you delegate work or run more than one agent. AGENTS.md "Delegation" points here. the PFM's decisions (2026-11-10): the orchestrator stays on the strongest model; models are chosen per task with the routing table below. Model-agnostic since 2026-11-11 (the PFM): routing names tiers, and each host maps the tiers to its own models.
+Read this file when you delegate work or run more than one agent. AGENTS.md "Delegation" points here. The PFM's decisions (2026-11-10): the orchestrator stays on the strongest model; models are chosen per task with the routing table below. Model-agnostic since 2026-11-11 (the PFM): routing names tiers, and each host maps the tiers to its own models.
 
 ## Agents (.claude/agents/)
 
@@ -76,7 +76,7 @@ Branch prefix per agent: `cc/` Claude worker, `gpt/` Codex or GPT, `gem/` Gemini
 2. Update by merge, never rebase: `git checkout -B review/<branch> origin/<branch> && git merge origin/main`. When intents conflict, stop and list the choice for the PFM.
 3. Fresh review: `reviewer` with only the diff and the brief. Verify each finding before you report it.
 4. Checks: the commands in AGENTS.md "Commands". Report before and after numbers.
-5. Merge: `git checkout main && git merge --no-ff review/<branch>`, confirm `git merge-base --is-ancestor origin/main HEAD`, push, verify origin/main. UI or design changes the PFM has not approved wait for his yes (AGENTS.md "Delivery").
+5. Merge: `git checkout main && git merge --no-ff review/<branch>`, confirm `git merge-base --is-ancestor origin/main HEAD`, push, verify origin/main. UI or design changes the PFM has not approved wait for the PFM's yes (AGENTS.md "Delivery").
 
 ## Lanes (fill in per project, in AGENTS.md "Project rules")
 

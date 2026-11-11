@@ -18,8 +18,10 @@ What it changes:
     CLAUDE.md              Adds "@AGENTS.md" at the top if it is missing. Keeps the rest.
     scripts/session_checkin.sh, scripts/sync_baseline.py, scripts/stop_check.py, scripts/worker_guard.py,
     .claude/orchestration.md   Replaced with the baseline copies.
-    .claude/agents/worker.md, scout.md, reviewer.md, GEMINI.md   Added only when missing (a project may tune them).
-    scripts/log_check.py, scripts/drift.py, scripts/timeline.py, scripts/pii_guard.py, scripts/git-hooks/pre-push
+    .claude/agents/worker.md, scout.md, reviewer.md, GEMINI.md, docs/FIRST_USE.md   Added only when missing (a project
+                           may tune them; FIRST_USE.md holds the denylist places that the session-start check names).
+    scripts/log_check.py, scripts/drift.py, scripts/timeline.py, scripts/pii_guard.py, scripts/first_use_check.py,
+    scripts/git-hooks/pre-push
                            Replaced with the baseline copies. (.pii-guard is not copied: a project opts in itself.)
     .claude/settings.json  Adds the baseline deny rules, and each baseline hook event the project has no hook for.
                            Keeps all other settings.
@@ -29,7 +31,7 @@ What it changes:
                            script), "the owner" becomes the project owner ("The owner" becomes the owner with a capital
                            first letter). Project text is never renamed. A private repo may keep a real name
                            (--owner NAME); a public repo uses a role. Owner: letters, digits, space . _ , ( ) -
-What it never changes: docs/, README.md and all other files.
+What it never changes: README.md, docs/ (except adding a missing docs/FIRST_USE.md) and all other files.
 Standard library only. Needs git.
 """
 import argparse
@@ -46,14 +48,17 @@ DEFAULT_BASELINE = "https://github.com/rhope-ops/archimedes_lever"
 RULES_HEADING = "## Project rules"
 COMMANDS_HEADING = "## Commands"
 COPY_FILES = ["scripts/session_checkin.sh", "scripts/sync_baseline.py", "scripts/stop_check.py",
-              "scripts/worker_guard.py", "scripts/log_check.py", "scripts/drift.py", "scripts/timeline.py", "scripts/pii_guard.py",
+              "scripts/worker_guard.py", "scripts/log_check.py", "scripts/drift.py", "scripts/timeline.py", "scripts/pii_guard.py", "scripts/first_use_check.py",
               "scripts/git-hooks/pre-push",
               ".claude/orchestration.md"]
 # Agent definitions: copied only when the project has no file with that name (projects may tune them).
-COPY_IF_MISSING = [".claude/agents/worker.md", ".claude/agents/scout.md", ".claude/agents/reviewer.md", "GEMINI.md"]
+COPY_IF_MISSING = [".claude/agents/worker.md", ".claude/agents/scout.md", ".claude/agents/reviewer.md", "GEMINI.md",
+                   "docs/FIRST_USE.md"]
 BASELINE_OWNER = "the owner"  # role word in baseline text; no real name lives in the baseline
 # Never rename the owner inside this script: it holds BASELINE_OWNER as a literal.
-NO_OWNER_RENAME = {"scripts/sync_baseline.py"}
+# first_use_check.py and docs/FIRST_USE.md use "the owner" as an answer option and a role: keep them as written
+# (bootstrap.sh skips them too).
+NO_OWNER_RENAME = {"scripts/sync_baseline.py", "scripts/first_use_check.py", "docs/FIRST_USE.md"}
 OWNER_RE = r"[A-Za-z0-9 ._,()-]+"  # safe inside Python strings, JSON and Markdown
 
 
@@ -262,7 +267,8 @@ def main():
                 new[rel] = text if rel in NO_OWNER_RENAME else apply_owner(text, owner)
         for rel in COPY_IF_MISSING:
             if (base / rel).exists() and not (root / rel).exists():
-                new[rel] = apply_owner((base / rel).read_text(), owner)
+                text = (base / rel).read_text()
+                new[rel] = text if rel in NO_OWNER_RENAME else apply_owner(text, owner)
         if (base / ".claude/settings.json").exists():
             new[".claude/settings.json"] = merge_settings(base / ".claude/settings.json", root / ".claude/settings.json")
         if (base / ".gitignore").exists():
