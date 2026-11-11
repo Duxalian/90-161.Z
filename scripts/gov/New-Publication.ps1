@@ -18,12 +18,14 @@ param(
   [Parameter(Mandatory = $true)][string]$Path,
   [ValidateSet('draft', 'final')][string]$Mode = 'draft',
   [string]$OutDir,
-  [switch]$Pdf,
-  [ValidateSet('auto', 'on', 'off')][string]$Toc = 'auto'
+  [switch]$Pdf
 )
 
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
+$common = Join-Path $PSScriptRoot 'Publication.Common.ps1'
+if (-not (Test-Path -LiteralPath $common)) { throw 'Publication.Common.ps1 is missing. Download it into the same folder as this script.' }
+. $common
 
 # ---------------- constants (rule / layout IDs in docs/format-rules.md) ----------------
 $PT = 72                       # points per inch
@@ -37,7 +39,10 @@ $Gap = '  '                    # L-004: two spaces after paragraph numbers, head
 $LabelTab = 1.5 * $PT          # L-005: ACCESSIBILITY/RELEASABILITY text starts 1.5 in from the margin
 $SigIndent = 3.0 * $PT         # L-006: signature block starts 4.0 in from the page edge
 $ShieldWidth = 1.2 * $PT       # L-007: seal/shield 1.2 in wide
-$RuleWidth = 12                # L-008: cover rules (wdLineWidth150pt)
+$RuleWidth = 6                 # L-008: cover rules 0.75-0.80 pt measured on 7 covers (wdLineWidth075pt)
+$OprTab = 0.5 * $PT            # L-010f: office symbol 0.50 in after "OPR:"
+$SupTab = 1.0 * $PT            # L-010g: Supersedes value 1.00 in after the label, wraps under itself
+$OprLeftCol = 4.0 * $PT        # L-010g/h: Supersedes value wraps before 5.0 in; Certified by / Pages right-aligned at 7.50 in
 $TextWidth = 6.5 * $PT
 $DraftMark = "DRAFT$([char]0x2014)NOT FOR IMPLEMENTATION OR COMPLIANCE"   # F-010 (4.5.1)
 $EmDash = [char]0x2014
@@ -95,7 +100,9 @@ function Format-Para([int]$Align = 3, [double]$Left = 0, [double]$First = 0, [do
 }
 function Write-Rich([string]$Text, [bool]$Bold = $false, [bool]$Italic = $false) {
   # Inline markup: {i}..{/i}, {b}..{/b}. Tier numbers "(T-0..3)" are bold (F-039, 4.5.9.7.4.12).
+  # Two spaces before each new sentence (L-004).
   if ($null -eq $Text) { return }
+  $Text = ConvertTo-TwoSpaceSentence $Text
   $tokens = [regex]::Split($Text, '(\{/?[ib]\}|\(T-[0-3]\))')
   $b = $Bold; $i = $Italic
   foreach ($t in $tokens) {
@@ -171,10 +178,17 @@ try {
   $right.Add(@('', ''))
   $right.Add(@($dateText, 'bi'))
   foreach ($dl in @(Get-Prop $meta 'dateLines' | Where-Object { $null -ne $_ })) { $right.Add(@([string]$dl, 'i')) }
+  $supLines = @(Get-Prop $meta 'supplementLines' | Where-Object { $null -ne $_ })
+  if ($supLines.Count -gt 0) {                      # L-010c: organization / Supplement / supplement date group
+    $right.Add(@('', ''))
+    foreach ($sl in $supLines) { $right.Add(@([string]$sl, 'bi')) }
+  }
   $right.Add(@('', ''))
   $right.Add(@([string](Get-Prop $meta 'seriesTitle'), 'bi'))
   $right.Add(@('', ''))
-  $right.Add(@([string](Get-Prop $meta 'title'), 'bi'))
+  $titleLines = @(Get-Prop $meta 'titleLines' | Where-Object { $null -ne $_ })
+  if ($titleLines.Count -eq 0) { $titleLines = @([string](Get-Prop $meta 'title')) }
+  foreach ($tl in $titleLines) { $right.Add(@(([string]$tl).ToUpper(), 'bi')) }   # F-018: all caps
   $c2 = $tbl.Cell(1, 2).Range
   $c2.Text = (($right | ForEach-Object { $_[0] }) -join "`r")
   $c2.ParagraphFormat.Alignment = $wdAlignRight
@@ -196,26 +210,38 @@ try {
   $sel.ParagraphFormat.TabStops.Add($LabelTab) | Out-Null
   Write-Rich 'RELEASABILITY:' $true; $sel.TypeText("`t"); Write-Rich ([string](Get-Prop $meta 'releasability')); Complete-Para; Add-BottomRule
 
+  # OPR / Certified by / Supersedes / Pages block (L-010f-h), as a borderless 2-column table:
+  # row 1: OPR | Certified by;  row 2: | (certifier name);  row 3: Supersedes | Pages
   Format-Para $wdAlignLeft 0 0 0
-  $sel.ParagraphFormat.TabStops.Add($TextWidth, $wdAlignTabRight) | Out-Null
-  $sel.TypeText('OPR:' + $Gap + [string](Get-Prop $meta 'opr') + "`t" + 'Certified by: ' + [string](Get-Prop $meta 'certifiedBy'))   # F-021 (4.5.4.10-11); "by" lower case as printed on DAFMAN 90-161 (PFM, 2026-11-11)
-  Complete-Para
-  Format-Para $wdAlignLeft 0 0 $SpaceAfter
-  $sel.ParagraphFormat.TabStops.Add($TextWidth, $wdAlignTabRight) | Out-Null
   $sup = @(Get-Prop $meta 'supersedes' | Where-Object { $null -ne $_ })
-  if ($sup.Count -gt 0) {   # F-022 (4.5.4.12): omit the line content when nothing is superseded
-    $sel.TypeText('Supersedes:' + $Gap + (($sup | ForEach-Object { [string](Get-Prop $_ 'designator') + ', ' + [string](Get-Prop $_ 'date') }) -join '; '))
+  $ot = $doc.Tables.Add($sel.Range, 3, 2)
+  $ot.Borders.Enable = 0
+  $ot.LeftPadding = 0; $ot.RightPadding = 0
+  $ot.Columns.Item(1).Width = $OprLeftCol
+  $ot.Columns.Item(2).Width = $TextWidth - $OprLeftCol
+  $ot.Range.Font.Name = $FontName; $ot.Range.Font.Size = $FontSize; $ot.Range.Font.Bold = 0; $ot.Range.Font.Italic = 0
+  $ot.Range.ParagraphFormat.SpaceAfter = 0; $ot.Range.ParagraphFormat.SpaceBefore = 0
+  $c = $ot.Cell(1, 1).Range; $c.Text = 'OPR:' + "`t" + [string](Get-Prop $meta 'opr')                           # F-021 (4.5.4.10)
+  $c.ParagraphFormat.TabStops.ClearAll(); $c.ParagraphFormat.TabStops.Add($OprTab) | Out-Null
+  $c = $ot.Cell(1, 2).Range; $c.Text = 'Certified by: ' + [string](Get-Prop $meta 'certifiedBy'); $c.ParagraphFormat.Alignment = $wdAlignRight   # "by" lower case (PFM, 2026-11-11)
+  $c = $ot.Cell(2, 2).Range; $c.Text = '(' + ([string](Get-Prop $meta 'certifiedByName')).Trim('(', ')', ' ') + ')'; $c.ParagraphFormat.Alignment = $wdAlignRight   # certifier name line (PFM, 2026-11-11)
+  if ($sup.Count -gt 0) {   # F-022 (4.5.4.12): line omitted when nothing is superseded
+    $c = $ot.Cell(3, 1).Range
+    $c.Text = 'Supersedes:' + "`t" + (($sup | ForEach-Object { [string](Get-Prop $_ 'designator') + ', ' + [string](Get-Prop $_ 'date') }) -join '; ')
+    $c.ParagraphFormat.TabStops.ClearAll(); $c.ParagraphFormat.TabStops.Add($SupTab) | Out-Null
+    $c.ParagraphFormat.LeftIndent = $SupTab; $c.ParagraphFormat.FirstLineIndent = -$SupTab
   }
-  $sel.TypeText("`t" + 'Pages: ')
-  $pStart = $sel.Start
-  $sel.TypeText('0')                                       # placeholder, replaced after layout (F-023)
-  $doc.Bookmarks.Add('PagesCount', $doc.Range($pStart, $pStart + 1)) | Out-Null
+  $c = $ot.Cell(3, 2).Range; $c.Text = 'Pages: 0'; $c.ParagraphFormat.Alignment = $wdAlignRight   # F-023; "0" replaced after layout
+  $pc = $ot.Cell(3, 2).Range
+  $doc.Bookmarks.Add('PagesCount', $doc.Range($pc.End - 2, $pc.End - 1)) | Out-Null
+  $sel.EndKey($wdStory) | Out-Null
+  Format-Para $wdAlignLeft 0 0 0
   Complete-Para; Add-BottomRule
 
   # ---------------- opening paragraph (F-024, F-025) ----------------
   Format-Para $wdAlignJustify 0 0 $SpaceAfter
   Complete-Para
-  Write-Rich ([string](Get-Prop $pub 'opening')); Complete-Para
+  Write-Rich (Get-OpeningParagraph $pub); Complete-Para   # 4.5.5: fixed statements from code, slots from content
 
   # ---------------- summary of changes (F-026, 4.5.6) ----------------
   $soc = [string](Get-Prop $pub 'summaryOfChanges')
@@ -227,7 +253,7 @@ try {
   }
 
   # ---------------- table of contents (F-027, 4.5.8.2-4.5.8.3) ----------------
-  $wantToc = ($Toc -eq 'on') -or ($Toc -eq 'auto' -and $Mode -eq 'final')
+  $wantToc = $true   # F-027: ANG wing publications always carry a TOC (4.5.8.2), built per 4.5.8.3 (PFM, 2026-11-11)
   $tocRange = $null
   if ($wantToc) {
     Format-Para $wdAlignLeft 0 0 0
