@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>90-161.Z tasks</title>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--acc:#0b57d0;--line:#ddd}
+@media (prefers-color-scheme:dark){:root{--bg:#121212;--fg:#ececec;--mut:#aaa;--acc:#8ab4f8;--line:#333}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:24px 16px}
+h1{font-size:1.5rem;margin:0 0 12px}h2{font-size:1.15rem;margin:28px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
+p{margin:4px 0}a{color:var(--acc);word-break:break-all}.mut{color:var(--mut);font-size:.9rem}
+</style></head><body><main id="m"><p class="mut">Loading…</p></main>
+<script>
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function link(s){return esc(s).replace(/(https?:\/\/[^\s<]+|raw\.githubusercontent\.com\/[^\s<]+)/g,function(u){var h=u.indexOf('http')===0?u:'https://'+u;return '<a href="'+h+'">'+u+'</a>'})}
+fetch('go.md',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.text()}).then(function(t){
+var o='';t.split('\n').forEach(function(l){if(/^## /.test(l))o+='<h2>'+link(l.slice(3))+'</h2>';else if(/^# /.test(l))o+='<h1>'+link(l.slice(2))+'</h1>';else if(l.trim())o+='<p>'+link(l)+'</p>'});
+document.getElementById('m').innerHTML=o+'<p class="mut">Source: go.md in rhope-ops/90-161.Z</p>'}).catch(function(e){document.getElementById('m').innerHTML='<p>Could not load go.md ('+esc(String(e.message))+').</p>'})
+</script></body></html>
