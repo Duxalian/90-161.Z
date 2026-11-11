@@ -13,6 +13,7 @@
  "lookupPlaceholders": [
   "PFMOffices",
   "PFMProcessSteps",
+  "PFMProductIndex",
   "PFMPublications",
   "PFMSeries"
  ],
@@ -450,20 +451,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"PublicationType\" StaticName=\"PublicationType\" DisplayName=\"Publication Type\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Instruction</CHOICE><CHOICE>Manual</CHOICE><CHOICE>Supplement</CHOICE><CHOICE>Operating Instruction</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Instructional Checklist</CHOICE><CHOICE>Pamphlet</CHOICE><CHOICE>Handbook</CHOICE><CHOICE>Visual Aid</CHOICE></CHOICES></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"PublicationCategory\" StaticName=\"PublicationCategory\" DisplayName=\"Publication Category\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Directive</CHOICE><CHOICE>Non-directive</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"PublicationType\" StaticName=\"PublicationType\" DisplayName=\"Publication Type\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Instruction</CHOICE><CHOICE>Manual</CHOICE><CHOICE>Supplement</CHOICE><CHOICE>Operating Instruction</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Instructional Checklist</CHOICE></CHOICES></Field>",
      "Options": 24
     }
    }
@@ -1054,20 +1042,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"PublicationType\" StaticName=\"PublicationType\" DisplayName=\"Publication Type\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Instruction</CHOICE><CHOICE>Manual</CHOICE><CHOICE>Supplement</CHOICE><CHOICE>Operating Instruction</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Instructional Checklist</CHOICE><CHOICE>Pamphlet</CHOICE><CHOICE>Handbook</CHOICE><CHOICE>Visual Aid</CHOICE></CHOICES></Field>",
-     "Options": 24
-    }
-   }
-  },
-  {
-   "method": "POST",
-   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
-   "body": {
-    "parameters": {
-     "__metadata": {
-      "type": "SP.XmlSchemaFieldCreationInformation"
-     },
-     "SchemaXml": "<Field Name=\"PublicationCategory\" StaticName=\"PublicationCategory\" DisplayName=\"Publication Category\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Directive</CHOICE><CHOICE>Non-directive</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"PublicationType\" StaticName=\"PublicationType\" DisplayName=\"Publication Type\" Required=\"FALSE\" Type=\"Choice\"><CHOICES><CHOICE>Instruction</CHOICE><CHOICE>Manual</CHOICE><CHOICE>Supplement</CHOICE><CHOICE>Operating Instruction</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Instructional Checklist</CHOICE></CHOICES></Field>",
      "Options": 24
     }
    }
@@ -1107,6 +1082,19 @@
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
      "SchemaXml": "<Field Name=\"PublicationNumber\" StaticName=\"PublicationNumber\" DisplayName=\"Publication Number\" Required=\"FALSE\" Type=\"Text\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
+     "SchemaXml": "<Field Name=\"PrescribingPublication\" StaticName=\"PrescribingPublication\" DisplayName=\"Prescribing Publication\" Required=\"FALSE\" Type=\"Lookup\" List=\"{__PFMProductIndex_ID__}\" ShowField=\"PublicationNumber\" Indexed=\"TRUE\"></Field>",
      "Options": 24
     }
    }
@@ -1425,6 +1413,49 @@
   {
    "method": "POST",
    "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Not%20Active')/viewfields/addviewfield('Publication')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views",
+   "body": {
+    "__metadata": {
+     "type": "SP.View"
+    },
+    "Title": "PFM - Prescribed Forms by Publication",
+    "PersonalView": false,
+    "ViewQuery": "<Where><Eq><FieldRef Name=\"ProductType\"/><Value Type=\"Choice\">Form</Value></Eq></Where><GroupBy Collapse=\"FALSE\"><FieldRef Name=\"PrescribingPublication\"/></GroupBy><OrderBy><FieldRef Name=\"PublicationNumber\" Ascending=\"TRUE\"/></OrderBy>",
+    "RowLimit": 100
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Prescribed%20Forms%20by%20Publication')/viewfields/removeallviewfields",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Prescribed%20Forms%20by%20Publication')/viewfields/addviewfield('PrescribingPublication')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Prescribed%20Forms%20by%20Publication')/viewfields/addviewfield('PublicationNumber')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Prescribed%20Forms%20by%20Publication')/viewfields/addviewfield('LinkTitle')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Prescribed%20Forms%20by%20Publication')/viewfields/addviewfield('ProductStatus')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMProductIndex')/views/getbytitle('PFM%20-%20Prescribed%20Forms%20by%20Publication')/viewfields/addviewfield('NextReviewDue')",
    "body": {}
   }
  ],
