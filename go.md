@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 2026-11-11 16:21 CT. Bookmark on my work computer (clickable links):
+Updated: 2026-11-11 16:41 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -32,7 +32,7 @@ In File Explorer, right-click 90161Z-T01-renderer-test-r3.ps1 > Run with PowerSh
 
 Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each check (1-8) in the test plan that fails, with what I see.
 
-## Task 2: create the lists, r5 (open, 2026-11-11 16:21 CT)
+## Task 2: create the lists, r5 (open, 2026-11-11 16:41 CT)
 
 Folder: ...\90-161.Z\T02
 
@@ -48,7 +48,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/power-automate-pr
 Download into the T02 folder (raw link only):
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r5.zip
 
-The file must be 110,608 bytes.
+The file must be 110,653 bytes.
 
 In Power Automate: My flows > Import > Import Package (Legacy) > Upload > 90161Z-T02-provision-lists-r5.zip.
 Import setup: flow = Create as new. SharePoint connection = Select during import > pick my existing SharePoint connection > Save. Then Import.

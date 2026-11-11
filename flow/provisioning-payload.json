@@ -229,7 +229,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"StepNumber\" StaticName=\"StepNumber\" DisplayName=\"Step Number\" Required=\"TRUE\" Type=\"Number\"></Field>",
+     "SchemaXml": "<Field Name=\"StepNumber\" StaticName=\"StepNumber\" DisplayName=\"Step Number\" Required=\"TRUE\" Type=\"Number\" Decimals=\"0\"></Field>",
      "Options": 24
     }
    }
@@ -324,7 +324,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"SeriesNumber\" StaticName=\"SeriesNumber\" DisplayName=\"Series Number\" Required=\"TRUE\" Type=\"Number\"></Field>",
+     "SchemaXml": "<Field Name=\"SeriesNumber\" StaticName=\"SeriesNumber\" DisplayName=\"Series Number\" Required=\"TRUE\" Type=\"Number\" Decimals=\"0\"></Field>",
      "Options": 24
     }
    }
@@ -820,7 +820,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"EndorserOrder\" StaticName=\"EndorserOrder\" DisplayName=\"Endorser Order\" Required=\"TRUE\" Type=\"Number\"></Field>",
+     "SchemaXml": "<Field Name=\"EndorserOrder\" StaticName=\"EndorserOrder\" DisplayName=\"Endorser Order\" Required=\"TRUE\" Type=\"Number\" Decimals=\"0\"></Field>",
      "Options": 24
     }
    }

@@ -52,6 +52,13 @@ body = d['Create_Fields_And_Views']['actions']['Create_Field_Or_View']['inputs']
 assert all(f'__{l}_ID__' in body for l in p['lookupPlaceholders'])
 assert d['Add_Rows']['runAfter'] == {'Create_Fields_And_Views': ['Succeeded']} and d['Apply_Updates']['runAfter'] == {'Add_Rows': ['Succeeded']}
 assert len(p['rows']) == 39
+assert all(r['body']['__metadata']['type'] == 'SP.Data.PFMSeriesListItem' for r in p['rows'])
+nums = [r['body']['SeriesNumber'] for r in p['rows']]
+assert len(set(nums)) == 39 and 16 in nums and 17 in nums
+gets = [a for a in d if a.startswith('Get_') and a.endswith('_ID')]
+assert d[gets[0]]['runAfter'] == {'Create_Lists': ['Succeeded', 'Failed']}
+assert all(d[b]['runAfter'] == {a: ['Succeeded']} for a, b in zip(gets, gets[1:]))
+assert d['Create_Fields_And_Views']['runAfter'] == {gets[-1]: ['Succeeded']}
 assert all(u['uri'].startswith('_api/web/lists/getbytitle(') for u in p['updates'])
 assert p['updates'][-len(p['listOrder']):] == [u for u in p['updates'] if u['body']['__metadata']['type'] == 'SP.List']
 g = d['Check_Site_Title']['else']['actions']['Stop_Wrong_Site']
