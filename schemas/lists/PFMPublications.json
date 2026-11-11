@@ -3,7 +3,6 @@
   "title": "PFM Publications",
   "description": "One row per publication or form action the PFM tracks (ARCHITECTURE s3).",
   "template": "GenericList",
-  "itemLevelPermissions": "creatorOnly",
   "ref": "ARCHITECTURE s3 (Publications list)",
   "fields": [
     {
@@ -96,6 +95,14 @@
       "ref": "ARCHITECTURE s1 G1 (customers: OPRs, authors); DAFMAN 90-161 5.1.5 (OPR runs coordination)"
     },
     {
+      "internalName": "Requester",
+      "displayName": "Requester",
+      "type": "User",
+      "required": false,
+      "indexed": true,
+      "ref": "PFM 2026-11-11 (gap review item 6): the app sets it to the person who asked; Power Apps filters on its Email (Created By does not delegate past 2,000 rows) and the PFM can enter a request for someone else"
+    },
+    {
       "internalName": "AO",
       "displayName": "AO",
       "type": "User",
@@ -127,6 +134,7 @@
         "ProcessStep",
         "ActionStatus",
         "OPR",
+        "Requester",
         "AO",
         "CoordinationSuspense"
       ],

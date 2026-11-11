@@ -4,6 +4,8 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Gap review (doc https://claude.ai/artifact/Ta3utvkZGP5aKXWWeRh7vU): (1A) all site members read all rows; item-level permissions off; the app filters by Requester and AO. (2) Dataverse solution import is offered on the PFM's tenant: test solution-aware flows next. (3) No governance notice is required; the PFM has built and shared Power Apps before. (4) The PFM is the base records manager: working files may live on SharePoint and may need a disposition date from the AFRIMS RDS. (5A) Requester column, Central time zone, test site, Accessibility Checker as a release gate. | PFM | Creator-only rows (2026-11-10) |
+| 2026-11-11 | The 15-business-day coordination period (DAFMAN 90-161 5.2) is shown as a metric only, never as a deadline: no overdue warnings, no red flags, no escalation emails. | PFM | Suspense enforcement |
 | 2026-11-11 | .pii-guard also allows the escaped host usaf\.dps\.mil (tests/run.sh). Guard from archimedes_lever 1fb39b2: denylist entries wrapped in <> now match; a name inside an allowed host passes. | PFM | — |
 | 2026-11-11 | Continuity: every flow and the Power App get a co-owner (the successor or a second person); the transfer steps go in the maintainer how-to. The how-to is written last, once the app exists. | PFM (1A, 2A) | Single owner; how-to now |
 | 2026-11-11 | Personal-data guard on (.pii-guard): skip ref/dafman90-161.txt (public DAF manual: office mailboxes, phone numbers, .mil sites); allow GenAI.mil and usaf.dps.mil. Pushes and pull-request checks fail without a denylist. Scan: 0 findings in 85 files. | PFM | Guard off |

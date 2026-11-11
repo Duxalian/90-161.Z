@@ -3,7 +3,6 @@
   "title": "PFM Endorsements",
   "description": "One row per endorser per publication action: order, role, status, suspense, response (DAFMAN 90-161 5.1; ARCHITECTURE s3).",
   "template": "GenericList",
-  "itemLevelPermissions": "creatorOnly",
   "ref": "ARCHITECTURE s3 (Endorsements list) and s4 (endorsement flow)",
   "fields": [
     {

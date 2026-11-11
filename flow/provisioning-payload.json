@@ -470,6 +470,19 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
+     "SchemaXml": "<Field Name=\"Requester\" StaticName=\"Requester\" DisplayName=\"Requester\" Required=\"FALSE\" Type=\"User\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\" Indexed=\"TRUE\"></Field>",
+     "Options": 24
+    }
+   }
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/fields/createfieldasxml",
+   "body": {
+    "parameters": {
+     "__metadata": {
+      "type": "SP.XmlSchemaFieldCreationInformation"
+     },
      "SchemaXml": "<Field Name=\"AO\" StaticName=\"AO\" DisplayName=\"AO\" Required=\"FALSE\" Type=\"User\" UserSelectionMode=\"PeopleOnly\" UserSelectionScope=\"0\"></Field>",
      "Options": 24
     }
@@ -547,6 +560,11 @@
   {
    "method": "POST",
    "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('OPR')",
+   "body": {}
+  },
+  {
+   "method": "POST",
+   "uri": "_api/web/lists/getbytitle('PFMPublications')/views/getbytitle('PFM%20-%20Queue')/viewfields/addviewfield('Requester')",
    "body": {}
   },
   {

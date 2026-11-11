@@ -78,7 +78,7 @@ Field lists below are the schema files; each field has a `ref` there.
 
 No value below is decided. Each needs a PFM decision or a source.
 
-1. Customer visibility. Risk in ARCHITECTURE s7: customers see each other's items.
+1. Customer visibility. Decided (PFM, 2026-11-11): B, all site members read all rows; item-level permissions off. Options considered:
    - A: item-level permissions set by a flow. Strong separation; flow must run as an account that can manage permissions, and each item breaks inheritance (list limits and slower views).
    - B: one list, views and app filtering only. Simple; not a security boundary (a user with list access can open any item through the list).
    - C: separate lists per unit. Strongest separation; many lists to provision and report across.

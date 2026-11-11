@@ -75,6 +75,6 @@ Transfer path (PFM, 2026-11-10): GitHub is reachable from NIPR; PFM opens the re
 | Site collection admin only: tenant admin, app registration and app catalog not available | PnP.PowerShell may need an Entra app registration | Check available modules first; fallback = build by hand from repo specs |
 | Final submission goes through AFIMPT (6.6, T-1) | 90-161.Z cannot replace that step | Track up to submission; PFM submits in AFIMPT |
 | Power Automate premium connectors not licensed | Some flow steps unavailable | Use standard connectors only (SharePoint, Outlook, Teams, Approvals) |
-| Customers see each other's items | Data exposure between units | Item-level permissions set by flow, or separate views plus app filtering (decide in build) |
+| Customers see each other's items | Data exposure between units | Accepted (PFM, 2026-11-11): all site members read all rows; the app filters by Requester and AO. Coordination data is internal to the wing |
 | GenAI.mil output looks right but breaks a rule | Bad final publication | Deterministic checklist; PFM review; no auto-publish |
 | Local wing supplement differs from DAFMAN | Wrong stages | Read the wing supplement before the stage model is fixed |

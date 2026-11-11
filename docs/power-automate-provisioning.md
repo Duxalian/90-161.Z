@@ -11,16 +11,16 @@ Names (PFM, 2026-11-11, docs/DECISIONS.md): every list has the prefix PFM. Each 
 | PFM Offices | PFMOffices | One row per coordinating office | All site members |
 | PFM Process Steps | PFMProcessSteps | The process steps (draft; not seeded) | All site members |
 | PFM Settings | PFMSettings | One row per setting (wing name, PFM mailbox, defaults) | All site members |
-| PFM Publications | PFMPublications | One row per publication or form action | Creator only (section 4) |
+| PFM Publications | PFMPublications | One row per publication or form action | All site members |
 | PFM Activity Log | PFMActivityLog | One row per event; Created and Publication indexed | All site members |
-| PFM Endorsements | PFMEndorsements | One row per endorser per action | Creator only (section 4) |
+| PFM Endorsements | PFMEndorsements | One row per endorser per action | All site members |
 | PFM Product Index | PFMProductIndex | The Product Index (DAFMAN 6.4.2) | All site members |
 
 Columns, views and their DAFMAN references: `schemas/lists/*.json` (one file per list, named by URL name). The payload `flow/provisioning-payload.json` is generated from them.
 
 ## 2. Import and run
 
-Package: `flow/packages/90161Z-T02-provision-lists-r2.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r2.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
+Package: `flow/packages/90161Z-T02-provision-lists-r3.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r3.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
 
 The flow asks for 2 inputs:
 - **Site URL**: the full address of the site that will hold the lists.
@@ -38,7 +38,7 @@ Order of work:
 
 | Check | Pass |
 |---|---|
-| Run | Succeeded; Result shows "Lists: 7, fields and views: 112, updates: 11 - provisioning finished" |
+| Run | Succeeded; Result shows "Lists: 7, fields and views: 114, updates: 11 - provisioning finished" |
 | Site contents | The 7 display titles in section 1 exist |
 | List address | Open PFM Publications: the address ends in /Lists/PFMPublications |
 | PFM Endorsements, Endorser column | Type Person or Group, people only |
@@ -55,16 +55,12 @@ If a run fails part way (any step red, Result not shown), do not run it again on
 
 If a step fails, open it and send only the HTTP status code and the error code (for example `400 / -2130575342`). Do not send URLs or names.
 
-## 4. Set item-level permissions (manual, 2 lists)
+## 4. Permissions and site settings (manual)
 
-Decided (PFM, 2026-11-10): customers see only the rows they created. You (site owner) still see all rows. For **PFM Publications** and **PFM Endorsements**:
+Decided (PFM, 2026-11-11, replaces the 2026-11-10 creator-only rule): all site members read all rows; people add and change rows through the app. Do not turn on item-level permissions: it would hide rows from the AO and endorsers, and from anyone when a flow creates the row.
 
-List > Settings (gear) > List settings > Advanced settings > Item-level Permissions:
-- Read access: **Read items that were created by the user**
-- Create and Edit access: **Create items and edit items that were created by the user**
-> OK.
-
-Known gap: an AO who did not create a row cannot see it. A later flow will give the AO access to that row.
+1. Leave each PFM list on the site's permissions (no unique permissions, no Advanced settings change).
+2. Site settings > Regional settings > Time zone: (UTC-06:00) Central Time. Date-only columns (suspense, due and review dates) then show the same day for everyone.
 
 ## Change a list or column
 

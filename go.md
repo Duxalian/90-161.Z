@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 2026-11-11 15:43 CT. Bookmark on my work computer (clickable links):
+Updated: 2026-11-11 16:06 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -32,29 +32,46 @@ In File Explorer, right-click 90161Z-T01-renderer-test-r3.ps1 > Run with PowerSh
 
 Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each check (1-8) in the test plan that fails, with what I see.
 
-## Task 2: create the lists, r2 (open, 2026-11-11 15:43 CT)
+## Task 2: create the lists, r3 (open, 2026-11-11 16:06 CT)
 
 Folder: ...\90-161.Z\T02
 
-Hold (2026-11-11): run r2 only on a test site, not the real site, until the row-privacy decision in the gap review is made (it changes section 4).
+r3 adds the Requester column and drops item-level permissions (decided: all site members read all rows).
+
+Run it on a TEST site first (a site or subsite only I use). After it passes there, run it again on the real site.
 
 First: delete the 4 lists the r1 run made on the wrong site (Stages, Publications, Endorsements, PublicationIndex): Site contents > the list's ... menu > Delete.
 
-What r2 does: on the site I name, it creates 7 lists: PFM Offices, PFM Process Steps, PFM Settings, PFM Publications, PFM Activity Log, PFM Endorsements, PFM Product Index. It first reads the site's title and stops, creating nothing, if the title I type does not match. Details:
+What r3 does: on the site I name, it creates 7 lists: PFM Offices, PFM Process Steps, PFM Settings, PFM Publications, PFM Activity Log, PFM Endorsements, PFM Product Index. It first reads the site's title and stops, creating nothing, if the title I type does not match. Details and checks:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/power-automate-provisioning.md
 
 Download into the T02 folder (raw link only):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r2.zip
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r3.zip
 
-The file must be 74,828 bytes.
+The file must be 75,718 bytes.
 
-In Power Automate: My flows > Import > Import Package (Legacy) > Upload > 90161Z-T02-provision-lists-r2.zip.
+In Power Automate: My flows > Import > Import Package (Legacy) > Upload > 90161Z-T02-provision-lists-r3.zip.
 Import setup: flow = Create as new. SharePoint connection = Select during import > pick my existing SharePoint connection > Save. Then Import.
-Open the flow "90161Z T02 Provision Lists r2", Test > Manually > Run flow. Type the full site address and the site's title exactly as it shows at the top of the site. Run it once only.
-Pass: "Result" shows "Lists: 7, fields and views: 112, updates: 11 - provisioning finished". Then do the checks in section 3 and the permissions in section 4 of the details page.
-Then delete the r1 flow "90161Z T02 Provision lists r1".
+Open the flow "90161Z T02 Provision Lists r3", Test > Manually > Run flow. Type the full site address and the site's title exactly as it shows at the top of the site. Run it once per site.
+Pass: "Result" shows "Lists: 7, fields and views: 114, updates: 11 - provisioning finished". Then do the checks in section 3 and the settings in section 4 of the details page.
+Then delete the r1 flow "90161Z T02 Provision lists r1" and the r2 flow if I imported it.
 
-Report: import ok or the exact error text; the Result text, or for the first failed step only its name, HTTP status and error code.
+Report: test site or real site; import ok or the exact error text; the Result text, or for the first failed step only its name, HTTP status and error code.
+
+## Task 5: solution export sample (open, 2026-11-11 16:06 CT)
+
+Folder: ...\90-161.Z\T05
+
+Goal: a real export so Claude can build flows as Dataverse solutions (easier to move and hand over than legacy packages). Like Task 3, Claude needs a real file before building one.
+
+In Power Automate:
+1. Solutions > New solution. Display name: 90161Z T05 Solution Sample. Publisher: New publisher > Display name: PFM, Name: pfm, Prefix: pfm > Save > Create.
+2. Open the solution > New > Automation > Cloud flow > Instant. Name: 90161Z T05 Sample. Trigger: Manually trigger a flow. Create.
+3. Add the SharePoint action Get items. Site Address and List Name: any site and list on my test site. Save.
+4. Back in the solution: Export solution > Next > Unmanaged > Export. Save the zip into the T05 folder.
+5. Open the zip. Send me by email (to my Gmail) the list of file and folder names in it, and the full text of: solution.xml, customizations.xml, [Content_Types].xml and the .json file in the Workflows folder.
+
+Report: also tell me if step 1 or step 4 was blocked, with the exact message. Never send list contents.
 
 ## Done
 
