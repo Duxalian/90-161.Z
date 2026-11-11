@@ -25,7 +25,7 @@ Sample: DAFMAN 90-161 (2023, C1, CA 2026); AFI 33-332 JB Charleston SUP (2026); 
 
 | Element | Observed | Treatment |
 |---|---|---|
-| Certifier name line "(Rank First Last)" under Certified by, right-aligned | 5 of 7 (not on DAFMAN 90-161 or Maxwell); DAFMAN Figure 1.1 shows none; 4.5.4.10 forbids names only on the OPR line | Optional field; off by default |
+| Certifier name line "(Rank First Last)" under Certified by, right-aligned | 15 of 19 covers (second sample below). Absent: DAFMAN 90-161 (SAF/AAG), DAFI 36-2110 (SAF/MR), 2 Maxwell AFB SUPs (42 MSG/CC). Figure 1.1 shows none (HAF example). | Required field in 90-161.Z (PFM, 2026-11-11) |
 | Left column wrap | "BY ORDER OF THE SECRETARY / OF THE AIR FORCE" (5), "BY ORDER OF THE / SECRETARY OF THE AIR FORCE" (1), "BY ORDER OF THE COMMANDER / [UNIT]" | Line break follows the content: commander + unit on line 2 |
 | Title line breaks | DAFMAN breaks "PUBLISHING PROCESSES / AND PROCEDURES" though line 1 could hold "AND" | Allow a manual break in the title; otherwise wrap |
 
@@ -37,3 +37,22 @@ Sample: DAFMAN 90-161 (2023, C1, CA 2026); AFI 33-332 JB Charleston SUP (2026); 
 4. Certifier name: optional meta field `certifiedByName`, rendered as "(…)" right-aligned under Certified by.
 5. No title-to-seal alignment (the PFM checklist item is not supported by published covers).
 6. Seal box: 1.20 in at x 1.00, top 1.47 in.
+
+## Second sample: certifier name line (12 more covers, measured 2026-11-11)
+
+| Publication | Level | Name line under "Certified by:" | Position |
+|---|---|---|---|
+| SHEPPARDAFBI 90-302 | base | (David Nelson) | right-aligned 7.50, +0.19 in |
+| DAFI 21-101 3 WG SUP | wing | (Christopher A. Tooman) | right 7.50, +0.20 |
+| AFI 21-101 1 FW SUP | wing | Col Daniel P. Willison Jr. (no parentheses; page not in AFDPO layout: margins about 0.76 in) | right |
+| AFMAN 11-202V2 ACC SUP 57 WG SUP | wing | (Brig Gen Richard Goodman) | right 7.50, +0.19 |
+| AFI 11-418 354 FW SUP | wing (parent block shown) | (Mr. William D. Dries, Jr.) | right 7.50, +0.19 |
+| DAFI 90-160 Maxwell AFB SUP | base | none (42 MSG/CC) | — |
+| AFI 33-360 914 AW SUP | wing (parent block) | (Lt Gen Michael Basla) | right 7.50, +0.20 |
+| DAFI 32-2001 934 AW SUP | wing (parent block) | (Col Thomas A. Bongiovi) | right 7.50, +0.19 |
+| DAFI 21-101 ANG SUP | NGB | (BGen Kimbra L. Sterr) | right 7.50, +0.19 |
+| DAFI 36-2110 | HAF | none (SAF/MR) | — |
+| DAFI 32-1015 | HAF | (Michael E. Saunders) | right 7.50, +0.19 |
+| DAFI 31-117 | HAF | (Col Brian A. Filler) | right, +0.19 |
+
+Format: one line, in parentheses, rank (if any) + name, right-aligned at 7.50 in, 0.19-0.20 in below the Certified by line. Rank forms seen: Col, Lt Col, Brig Gen, BGen, Lt Gen, Mr., Ms., Dr., none.
