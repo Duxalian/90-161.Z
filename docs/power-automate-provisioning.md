@@ -41,7 +41,7 @@ Order of work:
 
 | Check | Pass |
 |---|---|
-| Run | Succeeded; Result shows "Lists: 9, fields and views: 213, rows: 41, updates: 15 - provisioning finished" |
+| Run | Succeeded; Result shows "Lists: 9, fields and views: 213, rows: 41, updates: 15. Provisioning finished." |
 | Site contents | The 9 display titles in section 1 exist; PFM Series has 39 rows; PFM Settings has 2 rows |
 | List address | Open PFM Publications: the address ends in /Lists/PFMPublications |
 | PFM Endorsements, Endorser column | Type Person or Group, people only |

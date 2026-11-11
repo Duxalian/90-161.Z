@@ -20,13 +20,13 @@ Sources:
 
 1. **Terms.** Use the DAFMAN term, spelled as DAFMAN spells it **(test, for the terms listed in the test)**.
    - Action types (1.1.4.1-1.1.4.8): New, Rewrite, Interim Change, Administrative Change, Guidance Memorandum, Certify Current, Rescind, Transfer.
-   - Coordination responses (5.4.1-5.4.5): Concur, Concur With Comment, Concur—No Response (em dash), Nonconcur, No Comment.
-   - Review statuses (7.4.4.1, 7.4.4.3): Certify Current, Requires Revision, Requires Transfer, Is Obsolete, Other.
-   - e-mail (DAFMAN 31 times, "email" 2 times; T&Q chapter 25, hyphen rule 4). In a title: E-Mail.
+   - Coordination responses (5.4.1-5.4.5): Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment. The 5.4.3 heading uses an em dash; DAFMAN body text also shows a hyphen or en dash. We use the heading form.
+   - Review statuses (7.4.4.1, 7.4.4.3): Certify Current, Requires Revision, Requires Transfer, Is Obsolete, Other. PFM Reviews also has No Response, which is not a DAFMAN status: it records the 7.4.4.4 case (no response, the PFM starts a Rescind). **REC**, Agent addition.
+   - e-mail (DAFMAN about 30 times, "Email" 2 times; T&Q chapter 25, Hyphen rule 4: "E-mail"). In a title: E-Mail, as in the T&Q heading "Electronic Mail (E-Mail)" (chapter 12) and the DAFMAN table of contents. T&Q chapter 27 title rule 4 would lowercase a second element after a prefix; "e-" is a letter, not a prefix, and both sources capitalize it.
    - nonconcur, record set, Product Index, action officer, office of primary responsibility.
 2. **Title capitalization** for list titles, column names, view names, flow names, choice values and headings (T&Q chapter 27, "Titles of Literary and Artistic Works and Headings") **(test)**:
    - Capitalize every word, except articles (a, an, the), short conjunctions (and, as, but, if, or, nor) and short prepositions (at, by, for, in, of, off, on, out, to, up).
-   - Always capitalize the first word, the last word and the first word after a dash or a " - " separator (rule 5).
+   - Always capitalize the first word, the last word and the first word after a dash, a colon or a " - " separator (rule 5).
    - Capitalize both parts of a hyphenated word; "up" in "Follow-Up" is an adverb and is capitalized (rule 5c).
    - "with" has 4 letters and is capitalized: Concur With Comment.
 3. **Abbreviations** (T&Q chapter 26; DAFMAN 4.5.9.7.2):

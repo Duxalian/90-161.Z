@@ -51,12 +51,12 @@ https://claude.ai/artifact/2CtD3ASmmmzkz1EPErgCvh
 Download into the T02 folder (raw link only):
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r8.zip
 
-The file must be 145,685 bytes.
+The file must be 145,661 bytes.
 
 In Power Automate: My flows > Import > Import Package (Legacy) > Upload > 90161Z-T02-provision-lists-r8.zip.
 Import setup: flow = Create as new. SharePoint connection = Select during import > pick my existing SharePoint connection > Save. Then Import.
 Open the flow "90161Z T02 Provision Lists r8", Test > Manually > Run flow. Type the full site address and the site's title exactly as it shows at the top of the site. Run it once per site.
-Pass: "Result" shows "Lists: 9, fields and views: 213, rows: 41, updates: 15 - provisioning finished". Then do the checks in section 3 and the settings in section 4 of the details page.
+Pass: "Result" shows "Lists: 9, fields and views: 213, rows: 41, updates: 15. Provisioning finished.". Then do the checks in section 3 and the settings in section 4 of the details page.
 Then delete the r1 flow "90161Z T02 Provision lists r1" and any r2 to r7 flow I imported.
 
 Report: test site or real site; import ok or the exact error text; the Result text, or for the first failed step only its name, HTTP status and error code.

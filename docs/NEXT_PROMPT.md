@@ -7,7 +7,7 @@ Updated: 2026-11-11 17:30 CT by Claude. Keep this file at 40 lines or fewer. The
 - Cloud sessions: start on the environment "90-161.Z" (pwsh + PSScriptAnalyzer setup script; PII_GUARD_DENYLIST set).
 - Names and columns decided 2026-11-11 (docs/DECISIONS.md): 9 PFM lists (Offices, Series, Process Steps, Settings, Publications, Activity Log, Endorsements, Product Index, Reviews); Title Case; tests/check_names.py.
 - r7 (PFM 1A 2A 3A 4A, design check https://claude.ai/artifact/X8LbHd79Zh614i1qYzhyTW): 8 DAFMAN action types; Coordination Stage (Privacy Review, Formal Coordination, Legal); actions point to their Product Index row; PFM Reviews; certifier/approver fields. Flow and app rules from that doc's "Rules for the flows and the app" are not built yet.
-- Provisioning: flow/defs/90161Z-T02-provision-lists-r8.json -> flow/packages/90161Z-T02-provision-lists-r8.zip (145,685 bytes); site-title guard; 39 series rows (Table A2.1) + 2 settings rows (5.2, 5.2.2). Docs: docs/power-automate-provisioning.md.
+- Provisioning: flow/defs/90161Z-T02-provision-lists-r8.json -> flow/packages/90161Z-T02-provision-lists-r8.zip (145,661 bytes); site-title guard; 39 series rows (Table A2.1) + 2 settings rows (5.2, 5.2.2). Docs: docs/power-automate-provisioning.md.
 - Mockup of all lists: https://claude.ai/artifact/2CtD3ASmmmzkz1EPErgCvh (python3 scripts/build_list_mockup.py <out.html>, then republish).
 - Style (PFM 2026-11-11): docs/style-standard.md, DAFMAN 90-161 + The Tongue and Quill; tests/check_names.py enforces it. Rules are a Rec until the PFM approves. Apply it to flow e-mails and the app too.
 - Access: all site members read all rows; no item-level permissions; the app filters by Requester and AO.

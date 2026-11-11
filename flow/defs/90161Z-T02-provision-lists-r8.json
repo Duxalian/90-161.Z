@@ -414,7 +414,7 @@
         ]
       },
       "type": "Compose",
-      "inputs": "@concat('Lists: ', string(length(outputs('Payload')?['lists'])), ', fields and views: ', string(length(outputs('Payload')?['fields'])), ', rows: ', string(length(outputs('Payload')?['rows'])), ', updates: ', string(length(outputs('Payload')?['updates'])), ' - provisioning finished')"
+      "inputs": "@concat('Lists: ', string(length(outputs('Payload')?['lists'])), ', fields and views: ', string(length(outputs('Payload')?['fields'])), ', rows: ', string(length(outputs('Payload')?['rows'])), ', updates: ', string(length(outputs('Payload')?['updates'])), '. Provisioning finished.')"
     }
   }
 }

@@ -192,6 +192,9 @@ function Get-FieldXml {
     'DisplayName="' + (ConvertTo-XmlText $Field.displayName) + '"'
     'Required="' + ([string]([bool]$Field.required)).ToUpper() + '"'
   )
+  if ((Test-HasProp $Field 'description') -and $Field.description) {
+    $attrs += 'Description="' + (ConvertTo-XmlText $Field.description) + '"'  # spells out abbreviations (docs/style-standard.md)
+  }
   $inner = ''
   switch ($Field.type) {
     'Text'     { $attrs += 'Type="Text"' }

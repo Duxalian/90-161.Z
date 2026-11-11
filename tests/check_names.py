@@ -31,25 +31,33 @@ bad = []
 
 
 def title_case(s, atoms=()):
-    for a in atoms:  # a choice value quoted inside a view name keeps its own capitals
-        s = s.replace(a, "X")
-    words = [w for w in re.split(r"( - |—| |/)", s) if w and w != " " and w != "/"]
+    for a in atoms:  # a choice value quoted inside a view name keeps its own capitals (whole words only)
+        s = re.sub(r"(?<![\w-])" + re.escape(a) + r"(?![\w-])", "X", s)
+    words = [w for w in re.split(r"( - |\u2014|: | |/)", s) if w and w not in (" ", "/")]
     ok, after_break = True, True
     for i, w in enumerate(words):
-        if w in (" - ", "—"):
+        if w in (" - ", "\u2014", ": "):
             after_break = True
             continue
-        parts = w.split("-")
+        parts = w.strip("()\"'").split("-")
         for j, p in enumerate(parts):
             if not p:
                 continue
             edge = (after_break and j == 0) or (i == len(words) - 1 and j == len(parts) - 1)
-            if p.lower() in SMALL and not edge:
-                ok &= p == p.lower() or (j > 0)  # second part of a hyphenated verb compound: Follow-Up
-            else:
+            if p.lower() in SMALL and not edge and j == 0:
+                ok &= p == p.lower()
+            else:  # T&Q ch 27 rule 4 and 5c: hyphenated parts are capitalized (Follow-Up)
                 ok &= p[0].isupper() or p[0].isdigit()
-        after_break = False
+        after_break = w.endswith(":")
     return ok
+
+
+# Self-test of the T&Q title rule (review of r8, 2026-11-11)
+for _s, _want in {"Follow-Up Action": True, "Follow-up Action": False, "Concur With Comment": True, "Stalled or On Hold": False,
+                  "PFM - By Number": True, "Report: The Plan": True, "Report: the Plan": False, "Items (Date)": True,
+                  "Superseded By": True, "Prescribed Forms by Publication": True}.items():
+    assert title_case(_s) == _want, _s
+assert title_case("PFM - Stalled or On Hold", ["On Hold"]) and not title_case("PFM - Status notes", ["No"])
 
 
 def abbrs(s):
