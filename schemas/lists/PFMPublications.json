@@ -22,12 +22,10 @@
         "New",
         "Rewrite",
         "Change",
-        "Supplement",
-        "OI",
-        "Certify as current",
+        "Certify as Current",
         "Rescind"
       ],
-      "ref": "ARCHITECTURE s3 (action list: new, rewrite, change, supplement, OI, certify-as-current, rescind)"
+      "ref": "ARCHITECTURE s3 (action list: new, rewrite, change, supplement, OI, certify-as-current, rescind); Supplement and OI moved to Publication Type (PFM 2026-11-11)"
     },
     {
       "internalName": "ProductType",
@@ -42,18 +40,52 @@
       "ref": "DAFMAN 90-161 6.4.2 (the PI covers publications and forms); PFM 2026-11-11 (column, not a separate list)"
     },
     {
+      "internalName": "PublicationType",
+      "displayName": "Publication Type",
+      "type": "Choice",
+      "required": false,
+      "choices": [
+        "Instruction",
+        "Manual",
+        "Supplement",
+        "Operating Instruction",
+        "Guidance Memorandum",
+        "Instructional Checklist",
+        "Pamphlet",
+        "Handbook",
+        "Visual Aid"
+      ],
+      "ref": "DAFMAN 90-161 1.1.2 (publication types: directive or non-directive, stand-alone or supplement), 1.1.3 and Tables A11.1/A11.2 (types an installation may issue); PFM 2026-11-11. Blank for forms"
+    },
+    {
+      "internalName": "PublicationCategory",
+      "displayName": "Publication Category",
+      "type": "Choice",
+      "required": false,
+      "choices": [
+        "Directive",
+        "Non-directive"
+      ],
+      "ref": "DAFMAN 90-161 1.1.2 (overall categories: directive, non-directive); replaces the Directive Publication yes/no column (PFM 2026-11-11)"
+    },
+    {
+      "internalName": "Series",
+      "displayName": "Series",
+      "type": "Lookup",
+      "required": false,
+      "lookup": {
+        "list": "PFMSeries",
+        "showField": "Title"
+      },
+      "indexed": true,
+      "ref": "DAFMAN 90-161 4.3.1 and Attachment 2 Table A2.1 (series number and title); PFM 2026-11-11"
+    },
+    {
       "internalName": "PublicationNumber",
       "displayName": "Publication Number",
       "type": "Text",
       "required": false,
       "ref": "DAFMAN 90-161 6.4.2 (PI entries identify each publication)"
-    },
-    {
-      "internalName": "IsDirective",
-      "displayName": "Directive Publication",
-      "type": "Boolean",
-      "required": false,
-      "ref": "DAFMAN 90-161 3.1 and docs/process-model.md stage 1 (directive or not)"
     },
     {
       "internalName": "ProcessStep",
@@ -90,9 +122,13 @@
     {
       "internalName": "OPR",
       "displayName": "OPR",
-      "type": "Text",
+      "type": "Lookup",
       "required": false,
-      "ref": "ARCHITECTURE s1 G1 (customers: OPRs, authors); DAFMAN 90-161 5.1.5 (OPR runs coordination)"
+      "lookup": {
+        "list": "PFMOffices",
+        "showField": "Title"
+      },
+      "ref": "Office symbol of the office of primary responsibility, from PFM Offices so each symbol has one spelling (PFM 2026-11-11); DAFMAN 90-161 5.1.5"
     },
     {
       "internalName": "Requester",

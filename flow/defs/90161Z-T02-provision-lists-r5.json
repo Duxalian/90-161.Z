@@ -1,6 +1,6 @@
 {
-  "displayName": "90161Z T02 Provision Lists r4",
-  "description": "Creates the 7 PFM lists, their fields, views and indexes from flow/provisioning-payload.json (embedded at build), then sets display titles. Asks for the site URL and the site title; stops before creating anything if the title does not match. One request at a time, in payload order. Process step seed rows are not sent (steps not yet approved).",
+  "displayName": "90161Z T02 Provision Lists r5",
+  "description": "Creates the 8 PFM lists, their fields, views and indexes from flow/provisioning-payload.json (embedded at build), adds the series rows, then sets display titles. Asks for the site URL and the site title; stops before creating anything if the title does not match. One request at a time, in payload order. Process step seed rows are not sent (steps not yet approved).",
   "connections": [
     "shared_sharepointonline"
   ],
@@ -146,11 +146,38 @@
         }
       }
     },
-    "Get_Process_Steps_ID": {
+    "Get_Offices_ID": {
       "runAfter": {
         "Create_Lists": [
           "Succeeded",
           "Failed"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/lists/getbytitle('PFMOffices')?$select=Id",
+          "parameters/headers": {
+            "Accept": "application/json;odata=verbose"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Get_ProcessSteps_ID": {
+      "runAfter": {
+        "Get_Offices_ID": [
+          "Succeeded"
         ]
       },
       "type": "OpenApiConnection",
@@ -176,7 +203,7 @@
     },
     "Get_Publications_ID": {
       "runAfter": {
-        "Get_Process_Steps_ID": [
+        "Get_ProcessSteps_ID": [
           "Succeeded"
         ]
       },
@@ -201,9 +228,36 @@
         }
       }
     },
-    "Create_Fields_And_Views": {
+    "Get_Series_ID": {
       "runAfter": {
         "Get_Publications_ID": [
+          "Succeeded"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/lists/getbytitle('PFMSeries')?$select=Id",
+          "parameters/headers": {
+            "Accept": "application/json;odata=verbose"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Create_Fields_And_Views": {
+      "runAfter": {
+        "Get_Series_ID": [
           "Succeeded"
         ]
       },
@@ -227,7 +281,48 @@
                 "Accept": "application/json;odata=verbose",
                 "Content-Type": "application/json;odata=verbose"
               },
-              "parameters/body": "@replace(replace(string(items('Create_Fields_And_Views')?['body']), '__PFMProcessSteps_ID__', body('Get_Process_Steps_ID')?['d']?['Id']), '__PFMPublications_ID__', body('Get_Publications_ID')?['d']?['Id'])"
+              "parameters/body": "@replace(replace(replace(replace(string(items('Create_Fields_And_Views')?['body']), '__PFMOffices_ID__', body('Get_Offices_ID')?['d']?['Id']), '__PFMProcessSteps_ID__', body('Get_ProcessSteps_ID')?['d']?['Id']), '__PFMPublications_ID__', body('Get_Publications_ID')?['d']?['Id']), '__PFMSeries_ID__', body('Get_Series_ID')?['d']?['Id'])"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest"
+            },
+            "authentication": {
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+              "type": "Raw"
+            }
+          }
+        }
+      }
+    },
+    "Add_Rows": {
+      "runAfter": {
+        "Create_Fields_And_Views": [
+          "Succeeded"
+        ]
+      },
+      "type": "Foreach",
+      "foreach": "@outputs('Payload')?['rows']",
+      "runtimeConfiguration": {
+        "concurrency": {
+          "repetitions": 1
+        }
+      },
+      "actions": {
+        "Add_Row": {
+          "runAfter": {},
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "@triggerBody()['text']",
+              "parameters/method": "POST",
+              "parameters/uri": "@items('Add_Rows')?['uri']",
+              "parameters/headers": {
+                "Accept": "application/json;odata=verbose",
+                "Content-Type": "application/json;odata=verbose"
+              },
+              "parameters/body": "@string(items('Add_Rows')?['body'])"
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
@@ -244,7 +339,7 @@
     },
     "Apply_Updates": {
       "runAfter": {
-        "Create_Fields_And_Views": [
+        "Add_Rows": [
           "Succeeded"
         ]
       },
@@ -292,7 +387,7 @@
         ]
       },
       "type": "Compose",
-      "inputs": "@concat('Lists: ', string(length(outputs('Payload')?['lists'])), ', fields and views: ', string(length(outputs('Payload')?['fields'])), ', updates: ', string(length(outputs('Payload')?['updates'])), ' - provisioning finished')"
+      "inputs": "@concat('Lists: ', string(length(outputs('Payload')?['lists'])), ', fields and views: ', string(length(outputs('Payload')?['fields'])), ', rows: ', string(length(outputs('Payload')?['rows'])), ', updates: ', string(length(outputs('Payload')?['updates'])), ' - provisioning finished')"
     }
   }
 }

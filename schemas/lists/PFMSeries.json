@@ -1,0 +1,200 @@
+{
+  "list": "PFMSeries",
+  "title": "PFM Series",
+  "description": "Publication series numbers and titles from DAFMAN 90-161 Attachment 2, Table A2.1. Add or rename a series here; no schema change needed.",
+  "template": "GenericList",
+  "ref": "DAFMAN 90-161 4.3.1, Attachment 2 Table A2.1; PFM 2026-11-11",
+  "seedOnProvision": true,
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Series Title",
+      "type": "Text",
+      "required": true,
+      "builtIn": true,
+      "ref": "Table A2.1 (series title)"
+    },
+    {
+      "internalName": "SeriesNumber",
+      "displayName": "Series Number",
+      "type": "Number",
+      "required": true,
+      "ref": "Table A2.1 (series number)"
+    }
+  ],
+  "views": [
+    {
+      "name": "PFM - By Number",
+      "fields": [
+        "SeriesNumber",
+        "Title"
+      ],
+      "orderBy": [
+        {
+          "field": "SeriesNumber",
+          "ascending": true
+        }
+      ],
+      "default": false,
+      "ref": "Table A2.1"
+    }
+  ],
+  "seed": [
+    {
+      "SeriesNumber": 1,
+      "Title": "Air and Space Force Culture"
+    },
+    {
+      "SeriesNumber": 10,
+      "Title": "Operations"
+    },
+    {
+      "SeriesNumber": 11,
+      "Title": "Flying Operations"
+    },
+    {
+      "SeriesNumber": 13,
+      "Title": "Nuclear, Space, Missile, or Command and Control Operations"
+    },
+    {
+      "SeriesNumber": 14,
+      "Title": "Intelligence"
+    },
+    {
+      "SeriesNumber": 15,
+      "Title": "Weather"
+    },
+    {
+      "SeriesNumber": 16,
+      "Title": "Operations Support"
+    },
+    {
+      "SeriesNumber": 17,
+      "Title": "Cyberspace Operations"
+    },
+    {
+      "SeriesNumber": 20,
+      "Title": "Logistics"
+    },
+    {
+      "SeriesNumber": 21,
+      "Title": "Maintenance"
+    },
+    {
+      "SeriesNumber": 23,
+      "Title": "Materiel Management"
+    },
+    {
+      "SeriesNumber": 24,
+      "Title": "Transportation"
+    },
+    {
+      "SeriesNumber": 25,
+      "Title": "Logistics Staff"
+    },
+    {
+      "SeriesNumber": 31,
+      "Title": "Security"
+    },
+    {
+      "SeriesNumber": 32,
+      "Title": "Civil Engineering"
+    },
+    {
+      "SeriesNumber": 33,
+      "Title": "Communications and Information (Transitioning to 17-Series)"
+    },
+    {
+      "SeriesNumber": 34,
+      "Title": "Services"
+    },
+    {
+      "SeriesNumber": 35,
+      "Title": "Public Affairs"
+    },
+    {
+      "SeriesNumber": 36,
+      "Title": "Personnel"
+    },
+    {
+      "SeriesNumber": 38,
+      "Title": "Manpower and Organization"
+    },
+    {
+      "SeriesNumber": 40,
+      "Title": "Medical Command"
+    },
+    {
+      "SeriesNumber": 41,
+      "Title": "Health Services"
+    },
+    {
+      "SeriesNumber": 44,
+      "Title": "Medical"
+    },
+    {
+      "SeriesNumber": 46,
+      "Title": "Nursing"
+    },
+    {
+      "SeriesNumber": 47,
+      "Title": "Dental"
+    },
+    {
+      "SeriesNumber": 48,
+      "Title": "Aerospace Medicine"
+    },
+    {
+      "SeriesNumber": 51,
+      "Title": "Law"
+    },
+    {
+      "SeriesNumber": 52,
+      "Title": "Chaplain"
+    },
+    {
+      "SeriesNumber": 60,
+      "Title": "Standardization"
+    },
+    {
+      "SeriesNumber": 61,
+      "Title": "Scientific, Research, and Development"
+    },
+    {
+      "SeriesNumber": 62,
+      "Title": "Developmental Engineering"
+    },
+    {
+      "SeriesNumber": 63,
+      "Title": "Acquisition"
+    },
+    {
+      "SeriesNumber": 64,
+      "Title": "Contracting"
+    },
+    {
+      "SeriesNumber": 65,
+      "Title": "Financial Management"
+    },
+    {
+      "SeriesNumber": 71,
+      "Title": "Special Investigations"
+    },
+    {
+      "SeriesNumber": 84,
+      "Title": "History"
+    },
+    {
+      "SeriesNumber": 90,
+      "Title": "Special Management"
+    },
+    {
+      "SeriesNumber": 91,
+      "Title": "Safety"
+    },
+    {
+      "SeriesNumber": 99,
+      "Title": "Test and Evaluation"
+    }
+  ]
+}

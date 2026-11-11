@@ -7,7 +7,9 @@ Output: flow/provisioning-payload.json with arrays the flow sends in order:
   updates - MERGE requests, run last: index built-in columns, rename Title columns, then set each
             list's display title ("title"). Renaming the list last keeps getbytitle(<URL name>) valid
             for every earlier request (naming rule 2, PFM 2026-11-11).
-  seed    - optional Process Steps rows (process model is draft; see docs/process-model.md); not sent by the flow
+  rows    - rows the flow adds after fields and views, before updates (lists with "seedOnProvision": true,
+            e.g. PFM Series from DAFMAN Table A2.1)
+  seed    - optional rows of other lists (Process Steps: process model is draft); not sent by the flow
 Every request is a SharePoint REST call relative to the site: {"method", "uri", "body"}.
 Do not hand-edit the output. Change the schemas and run: python3 scripts/build_flow_payload.py
 """
@@ -48,7 +50,8 @@ def field_xml(f):
         a += ['Type="Lookup"', 'List="{__%s_ID__}"' % f['lookup']['list'],
               f'ShowField={quoteattr(f["lookup"].get("showField", "Title"))}']
     elif t == 'User': a += ['Type="User"', 'UserSelectionMode="PeopleOnly"', 'UserSelectionScope="0"']
-    elif t in ('Text', 'Number', 'Boolean'): a += [f'Type="{t}"']
+    elif t == 'Number': a += ['Type="Number"', 'Decimals="0"']  # whole numbers: series, order, step
+    elif t in ('Text', 'Boolean'): a += [f'Type="{t}"']
     else: sys.exit(f'unsupported field type {t}')
     if f.get('indexed'): a += ['Indexed="TRUE"']
     if f.get('default') not in (None, ''):
@@ -69,7 +72,7 @@ def lit(s):  # OData string literal
 
 def build():
     schemas = load()
-    lists, fields, updates, seed = [], [], [], []
+    lists, fields, updates, rows, seed = [], [], [], [], []
     for name in order(schemas):
         s = schemas[name]
         lists.append({'method': 'POST', 'uri': '_api/web/lists',
@@ -101,15 +104,15 @@ def build():
         for row in s.get('seed', []) or []:
             item = {'__metadata': {'type': f'SP.Data.{name}ListItem'}}
             item.update(row)
-            seed.append({'method': 'POST', 'uri': base + '/items', 'body': item})
+            (rows if s.get('seedOnProvision') else seed).append({'method': 'POST', 'uri': base + '/items', 'body': item})
     for name in order(schemas):  # list titles last (see docstring)
         updates.append({'method': 'MERGE', 'uri': f'_api/web/lists/getbytitle({lit(name)})',
                         'body': {'__metadata': {'type': 'SP.List'}, 'Title': schemas[name]['title']}})
-    for r in lists + fields + updates + seed:  # view titles have spaces; never rely on the connector to encode them
+    for r in lists + fields + updates + rows + seed:  # view titles have spaces; never rely on the connector to encode them
         r['uri'] = r['uri'].replace(' ', '%20')
     return {'generatedFrom': 'schemas/lists/*.json', 'listOrder': order(schemas),
             'lookupPlaceholders': sorted({f['lookup']['list'] for s in schemas.values() for f in s['fields'] if f['type'] == 'Lookup'}),
-            'lists': lists, 'fields': fields, 'updates': updates, 'seed': seed}
+            'lists': lists, 'fields': fields, 'rows': rows, 'updates': updates, 'seed': seed}
 
 if __name__ == '__main__':
     out = build()
@@ -119,4 +122,4 @@ if __name__ == '__main__':
         ok = os.path.exists(path) and open(path, encoding='utf-8').read() == text
         print('PAYLOAD up to date' if ok else 'PAYLOAD stale: run scripts/build_flow_payload.py'); sys.exit(0 if ok else 1)
     open(path, 'w', encoding='utf-8').write(text)
-    print(f"PAYLOAD lists={len(out['lists'])} fieldsAndViews={len(out['fields'])} updates={len(out['updates'])} seed={len(out['seed'])} order={','.join(out['listOrder'])}")
+    print(f"PAYLOAD lists={len(out['lists'])} fieldsAndViews={len(out['fields'])} rows={len(out['rows'])} updates={len(out['updates'])} seed={len(out['seed'])} order={','.join(out['listOrder'])}")
