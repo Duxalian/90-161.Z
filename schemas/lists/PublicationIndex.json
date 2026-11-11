@@ -1,0 +1,22 @@
+{
+  "list": "PublicationIndex",
+  "description": "Publication Index (PI) of all applicable organizational publications and forms that the PFM maintains (DAFMAN 90-161 6.4.2, T-3).",
+  "template": "GenericList",
+  "ref": "DAFMAN 90-161 6.4.2; docs/process-model.md stage 9 (updates the PI)",
+  "fields": [
+    { "internalName": "Title", "displayName": "Title", "type": "Text", "required": true, "builtIn": true,
+      "ref": "DAFMAN 90-161 6.4.2 (PI lists publications and forms by title)" },
+    { "internalName": "PublicationNumber", "displayName": "Publication number", "type": "Text", "required": false,
+      "ref": "DAFMAN 90-161 6.4.2 (PI entries identify each publication)" },
+    { "internalName": "Publication", "displayName": "Tracked publication", "type": "Lookup", "required": false,
+      "lookup": { "list": "Publications", "showField": "Title" },
+      "ref": "docs/process-model.md stage 9 (posting updates the PI); ties a PI entry to its tracked action" },
+    { "internalName": "PostedLink", "displayName": "Posted location", "type": "URL", "required": false,
+      "ref": "DAFMAN 90-161 6.4.1 (PFMs distribute on approved websites or other approved methods)" }
+  ],
+  "views": [
+    { "name": "By number", "fields": ["PublicationNumber", "Title", "Publication", "PostedLink"],
+      "orderBy": [ { "field": "PublicationNumber", "ascending": true } ], "default": false,
+      "ref": "DAFMAN 90-161 6.4.2" }
+  ]
+}

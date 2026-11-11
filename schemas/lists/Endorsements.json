@@ -1,0 +1,60 @@
+{
+  "list": "Endorsements",
+  "description": "One row per endorser per publication: order, role, status, due date, response (ARCHITECTURE s3).",
+  "template": "GenericList",
+  "ref": "ARCHITECTURE s3 (Endorsements list) and s4 (endorsement flow)",
+  "fields": [
+    { "internalName": "Title", "displayName": "Title", "type": "Text", "required": true, "builtIn": true,
+      "ref": "ARCHITECTURE s3 (one row per endorser per publication)" },
+    { "internalName": "Publication", "displayName": "Publication", "type": "Lookup", "required": true,
+      "lookup": { "list": "Publications", "showField": "Title" },
+      "ref": "ARCHITECTURE s3 (Endorsements -> Publications)" },
+    { "internalName": "EndorserOrder", "displayName": "Order", "type": "Number", "required": true,
+      "ref": "ARCHITECTURE s3 (order) and s4 step 1 (ordered endorser list)" },
+    { "internalName": "Role", "displayName": "Role", "type": "Text", "required": false,
+      "ref": "ARCHITECTURE s3 (role). Mandatory coordinator roles not extracted yet (docs/process-model.md, Tables A3.1/A3.2)" },
+    { "internalName": "Endorser", "displayName": "Endorser", "type": "Text", "required": false,
+      "ref": "ARCHITECTURE s1 G3 (customers enter their endorsers). Person vs text field is an open choice" },
+    { "internalName": "Execution", "displayName": "Sequential or parallel", "type": "Choice", "required": false,
+      "choices": ["Sequential", "Parallel"],
+      "ref": "ARCHITECTURE s4 step 3 (sequential or parallel per row)" },
+    { "internalName": "IsRequired", "displayName": "Required endorsement", "type": "Boolean", "required": false,
+      "ref": "ARCHITECTURE s4 step 7 (all required endorsements complete)" },
+    { "internalName": "Status", "displayName": "Status", "type": "Choice", "required": true,
+      "choices": ["Not started", "Concur", "Concur With Comment", "Concur—No Response", "Nonconcur", "No Comment"],
+      "default": "Not started",
+      "ref": "DAFMAN 90-161 5.4.1-5.4.5 (Concur; Concur With Comment; Concur—No Response; Nonconcur; No Comment); ARCHITECTURE s4 step 2 (Not started)" },
+    { "internalName": "DueDate", "displayName": "Due date", "type": "DateTime", "required": false,
+      "ref": "DAFMAN 90-161 5.2 (suspense); ARCHITECTURE s3 and s4 step 3 (due date)" },
+    { "internalName": "ExtensionDate", "displayName": "Extension estimated completion", "type": "DateTime", "required": false,
+      "ref": "DAFMAN 90-161 5.2.1 (extension request includes estimated completion date)" },
+    { "internalName": "ResponseDate", "displayName": "Response date", "type": "DateTime", "required": false,
+      "ref": "ARCHITECTURE s3 (response) and s4 step 4" },
+    { "internalName": "CrmLink", "displayName": "CRM link", "type": "URL", "required": false,
+      "ref": "ARCHITECTURE s4 step 4 (comments go to the CRM); DAFMAN 90-161 5.3" }
+  ],
+  "views": [
+    { "name": "By publication", "fields": ["Title", "Publication", "EndorserOrder", "Role", "Status", "DueDate"],
+      "orderBy": [ { "field": "Publication", "ascending": true }, { "field": "EndorserOrder", "ascending": true } ], "default": false,
+      "ref": "ARCHITECTURE s3 (List views: PFM admin views)" },
+    { "name": "Not started", "fields": ["Title", "Publication", "EndorserOrder", "Status", "DueDate"],
+      "orderBy": [ { "field": "DueDate", "ascending": true } ],
+      "where": { "field": "Status", "op": "Eq", "type": "Choice", "value": "Not started" }, "default": false,
+      "ref": "ARCHITECTURE s4 step 2 (status Not started)" }
+  ],
+  "crmColumns": {
+    "note": "Reference only; not provisioned. The CRM is a Word file linked from CrmLink (5.3). See Open choices in docs/sharepoint-lists.md.",
+    "ref": "DAFMAN 90-161 5.3 (T-1)",
+    "columns": [
+      "Item number",
+      "Source (office symbol, first and last name, rank/grade, telephone number and e-mail address)",
+      "Type of comment (administrative, substantive, or critical)",
+      "Page number",
+      "Paragraph number",
+      "Line number",
+      "Comment",
+      "Rationale",
+      "Decision"
+    ]
+  }
+}

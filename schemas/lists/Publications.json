@@ -1,0 +1,31 @@
+{
+  "list": "Publications",
+  "description": "One row per publication action (ARCHITECTURE s3).",
+  "template": "GenericList",
+  "ref": "ARCHITECTURE s3 (Publications list)",
+  "fields": [
+    { "internalName": "Title", "displayName": "Title", "type": "Text", "required": true, "builtIn": true,
+      "ref": "ARCHITECTURE s3 (one row per publication action)" },
+    { "internalName": "ActionType", "displayName": "Action type", "type": "Choice", "required": true,
+      "choices": ["New", "Rewrite", "Change", "Supplement", "OI", "Certify as current", "Rescind"],
+      "ref": "ARCHITECTURE s3 (action list: new, rewrite, change, supplement, OI, certify-as-current, rescind)" },
+    { "internalName": "PublicationNumber", "displayName": "Publication number", "type": "Text", "required": false,
+      "ref": "DAFMAN 90-161 6.4.2 (PI entries identify each publication)" },
+    { "internalName": "IsDirective", "displayName": "Directive publication", "type": "Boolean", "required": false,
+      "ref": "DAFMAN 90-161 3.1 and docs/process-model.md stage 1 (directive or not)" },
+    { "internalName": "Stage", "displayName": "Stage", "type": "Lookup", "required": true,
+      "lookup": { "list": "Stages", "showField": "Title" },
+      "ref": "ARCHITECTURE s3 (Publications -> Stages); docs/process-model.md Stages" },
+    { "internalName": "Opr", "displayName": "OPR", "type": "Text", "required": false,
+      "ref": "ARCHITECTURE s1 G1 (customers: OPRs, authors); DAFMAN 90-161 5.1.5 (OPR runs coordination)" },
+    { "internalName": "DraftLink", "displayName": "Draft link", "type": "URL", "required": false,
+      "ref": "ARCHITECTURE s3 (Drafts library) and s4 step 3 (draft link sent to endorser)" },
+    { "internalName": "CoordinationSuspense", "displayName": "Coordination suspense", "type": "DateTime", "required": false,
+      "ref": "DAFMAN 90-161 5.2 (OPR sets suspense; coordinators get 15 business days, T-3)" }
+  ],
+  "views": [
+    { "name": "PFM queue", "fields": ["Title", "ActionType", "Stage", "Opr", "CoordinationSuspense"],
+      "orderBy": [ { "field": "CoordinationSuspense", "ascending": true } ], "default": false,
+      "ref": "ARCHITECTURE s3 (Power Apps: the PFM's work queue; List views: PFM admin views)" }
+  ]
+}

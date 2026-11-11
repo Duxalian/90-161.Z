@@ -1,0 +1,3 @@
+Title,ActionType,PublicationNumber,IsDirective,Stage,Opr,DraftLink,CoordinationSuspense
+Sample OI 99-1,OI,Sample OI 99-1,true,"Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673",OPR-A,https://example.invalid/drafts/sample-oi-99-1.docx,2030-01-15
+Sample Form 99-2,New,Sample Form 99-2,false,"Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI",OPR-B,https://example.invalid/drafts/sample-form-99-2.docx,2030-02-01
