@@ -198,7 +198,7 @@ try {
 
   Format-Para $wdAlignLeft 0 0 0
   $sel.ParagraphFormat.TabStops.Add($TextWidth, $wdAlignTabRight) | Out-Null
-  $sel.TypeText('OPR:' + $Gap + [string](Get-Prop $meta 'opr') + "`t" + 'Certified By: ' + [string](Get-Prop $meta 'certifiedBy'))   # F-021 (4.5.4.10-11)
+  $sel.TypeText('OPR:' + $Gap + [string](Get-Prop $meta 'opr') + "`t" + 'Certified by: ' + [string](Get-Prop $meta 'certifiedBy'))   # F-021 (4.5.4.10-11); "by" lower case as printed on DAFMAN 90-161 (PFM, 2026-11-11)
   Complete-Para
   Format-Para $wdAlignLeft 0 0 $SpaceAfter
   $sel.ParagraphFormat.TabStops.Add($TextWidth, $wdAlignTabRight) | Out-Null

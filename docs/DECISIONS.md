@@ -4,8 +4,9 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
-| 2026-11-11 | **Rec:** Cover line "Certified by:" (as printed on DAFMAN 90-161 and other published DAF covers), not "Certified By:" (4.5.4.11 wording). Open. | Agent | — |
-| 2026-11-11 | **Rec:** CRM template follows DAFMAN 90-161 Figure A12.1 and 5.3 columns. File format (Word encouraged by 5.3 vs Excel in current use) open. | Agent | — |
+| 2026-11-11 | Cover line reads "Certified by:" (as printed on published covers), not "Certified By:". | PFM | Rec |
+| 2026-11-11 | New CRM template from DAFMAN 90-161 Figure A12.1 (Word, measured column widths): templates/CRM_A12-1.docx. Replaces the PFM's old CRM. | PFM | Old CRM |
+| 2026-11-11 | CRM resolution codes A/R/M (Figure A12.1 key), not A/R/P (its column header). | PFM | — |
 | 2026-11-11 | Endorser is a Person field (enables flow alerts to the endorser). | PFM | Endorser as text (Agent placeholder) |
 | 2026-11-11 | Item-level permissions: customers read and edit only rows they created, on Publications and Endorsements. | PFM | — |
 | 2026-11-10 | Create the SharePoint lists with a Power Automate flow (docs/power-automate-provisioning.md); PowerShell/PnP path dropped (sign-in window never opened). | PFM | PnP provisioning |

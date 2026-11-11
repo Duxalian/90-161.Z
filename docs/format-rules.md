@@ -91,4 +91,4 @@ DAFMAN 90-161 itself is the template (4.5.4). These values are measured with pdf
 | L-010 | Cover header | Two columns: left "BY ORDER OF ..." bold italic; right column right-aligned bold italic: issuer, type and number, date, series title, title | 1 |
 | L-011 | Attachments | New page; "Attachment N" bold centered; title bold centered all caps; glossary category titles bold at margin | 110 |
 
-Open: DAFMAN's own cover prints "Certified by:" while 4.5.4.11 writes "Certified By:". The renderer uses the 4.5.4.11 wording.
+Decided (PFM, 2026-11-11): the cover reads "Certified by:" as printed on DAFMAN 90-161 and other published covers (4.5.4.11 writes "Certified By:").

@@ -44,7 +44,11 @@ PY
 out=$(pwsh -NoProfile -File scripts/gov/Provision-Lists.ps1 -PlanOnly -SchemaPath schemas/lists 2>&1 | tail -1)
 [ "$out" = "PLAN lists=4 fields=25 views=5" ] && ok "lists plan ($out)" || bad "lists plan: $out"
 
-! grep -rniE "@us\.af\.mil|@mail\.mil|usaf\.dps\.mil/sites/[a-z0-9]" samples tests schemas docs scripts flow >/dev/null && ok "no .mil addresses in repo content" || bad "no .mil addresses"
+cp templates/CRM_A12-1.docx /tmp/crm_before.docx
+node templates/build_crm_template.js >/tmp/crm.out 2>&1 && grep -q "tableWidthDXA=9331 columns=9" /tmp/crm.out && ok "CRM template builds ($(cat /tmp/crm.out | sed s,.*CRM_A12-1.docx,,))" || bad "CRM template build"
+zip -d templates/CRM_A12-1.docx '*/' >/dev/null 2>&1; true
+
+! grep -rniE "@us\.af\.mil|@mail\.mil|usaf\.dps\.mil/sites/[a-z0-9]" samples tests schemas docs scripts flow templates/build_crm_template.js >/dev/null && ok "no .mil addresses in repo content" || bad "no .mil addresses"
 
 echo "TESTS pass=$pass fail=$fail"
 [ $fail -eq 0 ]

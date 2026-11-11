@@ -8,6 +8,7 @@ Updated: 2026-11-10 23:05 by Claude. Keep this file at 40 lines or fewer. The cu
 - Renderer: scripts/gov/Test-Publication.ps1 (validator), scripts/gov/New-Publication.ps1 (Word COM). Not yet run on the gov device.
 - Lists: schemas/lists/*.json; flow/provisioning-payload.json (generated); docs/power-automate-provisioning.md. Flow not yet built.
 - format-rules.md: 45 rules checked against ref text (self-review); layout L-001..L-011 measured from the PDF.
+- CRM template: templates/CRM_A12-1.docx (Figure A12.1, A/R/M).
 - PowerShell to SharePoint: blocked (PnP sign-in window never opened). Provision-Lists.ps1 kept, not verified.
 
 ## Open (in order)
@@ -22,7 +23,6 @@ Updated: 2026-11-10 23:05 by Claude. Keep this file at 40 lines or fewer. The cu
 ## Needs PFM
 
 - Open choices in docs/sharepoint-lists.md (customer visibility, Endorser person vs text, CRM storage).
-- "Certified by:" (DAFMAN cover) vs "Certified By:" (4.5.4.11): renderer uses 4.5.4.11.
 
 ## Do not
 
