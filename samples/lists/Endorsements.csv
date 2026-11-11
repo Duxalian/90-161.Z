@@ -1,0 +1,4 @@
+Title,Publication,EndorserOrder,Role,Endorser,Execution,IsRequired,Status,DueDate,ExtensionDate,ResponseDate,CrmLink
+Sample endorsement 1,Sample OI 99-1,1,Sample role A,Endorser-A,Sequential,true,Concur With Comment,2030-01-15,,2030-01-10,https://example.invalid/crm/sample-oi-99-1-a.docx
+Sample endorsement 2,Sample OI 99-1,2,Sample role B,Endorser-B,Sequential,true,Not started,2030-01-15,2030-01-25,,
+Sample endorsement 3,Sample Form 99-2,1,Sample role C,Endorser-C,Parallel,false,Nonconcur,2030-02-01,,2030-01-28,https://example.invalid/crm/sample-form-99-2-c.docx
