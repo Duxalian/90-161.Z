@@ -8,7 +8,7 @@
     2. Fit: scale the emblem so its larger side fills the box, keeping its shape.
     3. Center it on a clear 360 x 360 px square (1.20 in at 300 dpi) and save it as PNG in the "Prepared"
        subfolder, same base name. The renderer accepts only these files.
-    4. Check: effective resolution = larger trimmed side / 1.20 in. Under 100 dpi = FAIL (no file written),
+    4. Check: effective resolution = larger trimmed side / 1.20 in. Under 100 dpi = FAIL (no file written; an older prepared file of that seal is removed),
        under 150 dpi = WARN (file written).
   Output: 90161Z-T07-result-r1.txt in the T07 folder, one line per seal by number only (seal01, seal02 ...),
   and 90161Z-T07-key-r1.txt that maps numbers to file names. Send only the result file; the key stays local.
@@ -82,7 +82,9 @@ function Save-PreparedSeal([System.Drawing.Bitmap]$Src, [int[]]$Box, [string]$Ou
   $scale = $BoxPx / [double]([Math]::Max($ew, $eh))
   $dw = [int][Math]::Round($ew * $scale); $dh = [int][Math]::Round($eh * $scale)
   $dx = [int][Math]::Floor(($BoxPx - $dw) / 2); $dy = [int][Math]::Floor(($BoxPx - $dh) / 2)   # centered (PFM 2A)
-  $out = New-Object System.Drawing.Bitmap $BoxPx, $BoxPx, ([System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+  # Premultiplied alpha on both sides, so bicubic scaling does not pull dark edges in from clear pixels.
+  $srcP = $Src.Clone((New-Object System.Drawing.Rectangle 0, 0, $Src.Width, $Src.Height), [System.Drawing.Imaging.PixelFormat]::Format32bppPArgb)
+  $out = New-Object System.Drawing.Bitmap $BoxPx, $BoxPx, ([System.Drawing.Imaging.PixelFormat]::Format32bppPArgb)
   $out.SetResolution($BoxDpi, $BoxDpi)
   $g = [System.Drawing.Graphics]::FromImage($out)
   try {
@@ -94,8 +96,8 @@ function Save-PreparedSeal([System.Drawing.Bitmap]$Src, [int[]]$Box, [string]$Ou
     $attr = New-Object System.Drawing.Imaging.ImageAttributes
     $attr.SetWrapMode([System.Drawing.Drawing2D.WrapMode]::TileFlipXY)   # no gray fringe at the edges
     $dest = New-Object System.Drawing.Rectangle $dx, $dy, $dw, $dh
-    $g.DrawImage($Src, $dest, $Box[0], $Box[1], $ew, $eh, [System.Drawing.GraphicsUnit]::Pixel, $attr)
-  } finally { $g.Dispose() }
+    $g.DrawImage($srcP, $dest, $Box[0], $Box[1], $ew, $eh, [System.Drawing.GraphicsUnit]::Pixel, $attr)
+  } finally { $g.Dispose(); if ($attr) { $attr.Dispose() }; $srcP.Dispose() }
   $out.Save($OutPath, [System.Drawing.Imaging.ImageFormat]::Png)
   $out.Dispose()
   return @($dw, $dh)
@@ -143,11 +145,20 @@ try {
   $lines.Add('TASK T07 seal prep r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', box ' + $BoxPx + ' px at ' + $BoxDpi + ' dpi')
   $keys.Add('Key for 90161Z-T07-result-r1.txt. Keep this file on this computer; do not send it.')
   $n = 0; $pass = 0; $warn = 0; $fail = 0
+  $outNames = @{}
   foreach ($f in $files) {
     $n++
     $tag = 'seal' + $n.ToString('00')
     $keys.Add($tag + ' = ' + $f.Name)
     Write-Host ($tag + ' working...')
+    $base = [System.IO.Path]::GetFileNameWithoutExtension($f.Name)
+    $outPath = Join-Path $prep ($base + '.png')
+    if ($outNames.ContainsKey($base.ToLowerInvariant())) {   # a.png and a.jpg would write the same prepared file
+      $fail++; $lines.Add("$tag FAIL same name as $($outNames[$base.ToLowerInvariant()]) with another extension: rename one file"); continue
+    }
+    $outNames[$base.ToLowerInvariant()] = $tag
+    # A seal that fails must not leave an older prepared file the renderer would still accept.
+    if (Test-Path -LiteralPath $outPath) { Remove-Item -LiteralPath $outPath -Force }
     $img = $null; $bmp = $null
     try {
       $img = [System.Drawing.Image]::FromFile($f.FullName)
@@ -163,13 +174,13 @@ try {
       if ($ratio -lt 0.95) { $shape = 'tall' } elseif ($ratio -gt 1.05) { $shape = 'wide' }
       $info = "source=$($img.Width)x$($img.Height) emblem=${ew}x${eh} trimmed=$trimmed shape=$shape dpi=$dpi"
       if ($dpi -lt $FailDpi) { $fail++; $lines.Add("$tag FAIL $info (under $FailDpi dpi: get a larger file; nothing written)"); continue }
-      $outPath = Join-Path $prep ([System.IO.Path]::GetFileNameWithoutExtension($f.Name) + '.png')
       $size = Save-PreparedSeal $bmp $box $outPath
       $placed = "placed=$($size[0])x$($size[1]) in ${BoxPx}x$BoxPx"
       if ($dpi -lt $WarnDpi) { $warn++; $lines.Add("$tag WARN $info $placed (under $WarnDpi dpi: may print soft)") }
       else { $pass++; $lines.Add("$tag PASS $info $placed") }
     } catch {
-      $fail++; $lines.Add("$tag FAIL cannot read or write the image: " + (ConvertTo-Masked ([string]$_.Exception.Message) $secret))
+      $fail++; $lines.Add("$tag FAIL cannot read or write the image (details on screen only)")
+      Write-Host ("$tag detail: " + (ConvertTo-Masked ([string]$_.Exception.Message) $secret))
     } finally {
       if ($bmp) { $bmp.Dispose() }
       if ($img) { $img.Dispose() }

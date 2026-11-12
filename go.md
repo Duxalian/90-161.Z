@@ -52,8 +52,9 @@ Report: e-mail these to my Gmail: 90161Z-T06-extracted-r1.json, 90161Z-T06-chang
 Folder: ...\90-161.Z\T07. Decided: each unit's own shield (1C), in a SharePoint library (2A); every seal is prepared to the same 1.20 in box, centered (1A 2A).
 
 Part A, test with fake seals (do this first):
-1. Save this file into the T01 folder (it replaces New-Publication.ps1 there; same name). It now accepts only prepared seals and fits every seal in the 1.20 in box:
+1. Save these two files into the T01 folder (they replace the files of the same name there). The renderer now accepts only prepared seals and fits every seal in the 1.20 in box:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Test-Publication.ps1
 2. Save these two files into the T07 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-prep-r1.ps1
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-test-r1.ps1
