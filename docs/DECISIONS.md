@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-12 | Task page (rhope-ops.github.io/90-161.Z, index.html): collapsible sections (open tasks expanded, Done collapsed, state remembered per browser), Open/Done labels, jump links, file cards with Copy link, folder boxes with Copy, numbered steps (3A, preview https://claude.ai/artifact/4XLxCcVfpdAWQaBwotUfX2). go.md keeps its patterns: "## Task N: name (open, date)", numbered steps, "Folder:" lines. | PFM (3A) | Plain line-by-line page |
 | 2026-11-12 | Task-result e-mails from the PFM's work address are deleted (moved to Trash) after an agent parses them and records the results in the repo. The agent always asks the PFM to confirm each deletion first (AGENTS.md Project rules). | PFM | Result e-mails kept in Gmail |
 | 2026-11-12 | Flow inputs the PFM fills in (labels and the gray help text under them) are written for a low-skill user: plain words, what to do and where to find it, no "https://.../sites/..." patterns. Applies to every future payload. | PFM | Technical help text ("Full site address, https://.../sites/...") |
 | 2026-11-12 | Remove the site-title check from the provisioning flow: the PFM pastes the correct site address, as in earlier tests. T02 r9 asks only for the site address. | PFM | Site-title guard (naming doc, 2026-11-11) |
