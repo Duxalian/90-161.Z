@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 12 Nov 26, 0510 CT. Bookmark on my work computer (clickable links):
+Updated: 12 Nov 26, 1320 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -21,6 +21,17 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Public
 2. Run Task 1 r5 again (below). No other file changes.
 3. Run Task 7 Part A step 4 again.
 4. E-mail both result files and the 3 PDFs (SAMPLEWINGI99-101.pdf, -TALL.pdf, -ROUND.pdf), also if they show FORMAT-FAIL lines.
+
+## Task 10: decision brief, r1 (open, 12 Nov 26, 1320 CT)
+
+Folder: ...\90-161.Z\T10
+
+A draft PowerPoint for wing leadership, staff offices and NGB: what is decided, 7 decisions they need to make, and 29 risks. Read it before anyone else sees it.
+
+1. Save this file into the T10 folder:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-decision-brief-r1.pptx
+2. Open it in PowerPoint. Check that it opens without a repair message and that no text runs off a slide.
+3. Reply in the Claude chat: changes I want, and whether it may go to leadership.
 
 ## Task 1: renderer test, r5 (open, 11 Nov 26, 1837 CT)
 
