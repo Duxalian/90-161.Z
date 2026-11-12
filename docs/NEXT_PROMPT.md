@@ -20,7 +20,7 @@ Updated: 2026-11-12 by Claude (T01 r5, T06, T07 results). Keep this file at 40 l
 
 0. Renderer round 2 (go.md Fix first): 6/6 renders made PDFs; cover gaps within 0.011 in of DAFMAN; only L-012 TOC indent failed (cast error) and seal top 1.383 vs 1.47. New-Publication.ps1 now tries 3 routes for L-012 and prints `route=` with a read-back; seal +6.3 pt. Evidence: docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md.
 1. Task 1 r5 and Task 7 Part A step 4: re-run with the new renderer; measure TOC (number 1.50, text 2.00, pitch 0.272) and seal top 1.47.
-2. Task 6 r1 done: GPT and Gemini 12/12; Rec GPT (0 extra defects vs 2). Grok dropped (PFM 2026-11-12). Open: confirm the JSON in the Grok and GPT e-mails (identical) is GPT's. Prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
+2. Task 6 r1 done: GPT and Gemini 12/12; GPT is the extractor, Gemini fallback (PFM 1A). Grok dropped. Prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
 
