@@ -35,6 +35,7 @@ Rule for the live site: only ADD lists, columns and choice values. Nothing is re
 | | Access Level (choice: Public, Restricted, CUI) | B18 |
 | | Effective Date Justification (multi-line) | A9 (future date) |
 | | All Comments Adjudicated (yes/no; the AO confirms before Legal, the PFM spot-checks; PFM 3.3A) |
+| | Legal Hold (yes/no; set by the PFM; stops the closeout deletion of Working Files; PFM 4.6A, AFI 33-322 9.1.3) |
 | | Directive Guidance Moved (yes/no); Retained Forms Relinked (yes/no) | Figure A5.1 note, A16 (rescind gates) |
 | | Section 508 Checked (yes/no) | B4 |
 | | Guidance Memorandum Justification (multi-line) | 5.1.7 (T-1; R9) |
@@ -66,7 +67,7 @@ From docs/process-model.md "New publication request" (DAFMAN 3.1) and "Special r
 
 ## 4. Library 90-161.Z folders (PFM creates by hand)
 
-Seals; Working Files (one subfolder per action); Published (posted publications and forms, read for all members; PFM 3.6B); Record Sets, with Publications and Forms subfolders kept apart (B7, 15A); Delegation Letters (PFM 1.7A, 12 Nov; checked at each change of command). Permissions (PFM batch 2, 12 Nov): each Working Files action folder gets its own permissions from a flow (AO, alternate, the action's coordinators, the PFM office group; 2.3B); Record Sets and Delegation Letters: PFM Office group and co-owners only (2.4A). The PFM Office group is a new SharePoint group with the people who work the PFM org box (3.7B). Published: read for all members, edit for the PFM Office group (3.6B). Site Members = the wing's existing directory group (2.1A); the app is shared with it (2.6A).
+Seals; Working Files (one subfolder per action; drafts only, deleted at closeout unless a hold applies, PFM 4.6A); Published (posted publications and forms, read for all members; PFM 3.6B); Record Sets, with Publications and Forms subfolders kept apart (B7, 15A); Delegation Letters (PFM 1.7A, 12 Nov; checked at each change of command). Permissions (PFM batch 2, 12 Nov): each Working Files action folder gets its own permissions from a flow (AO, alternate, the action's coordinators, the PFM office group; 2.3B); Record Sets and Delegation Letters: PFM Office group and co-owners only (2.4A). The PFM Office group is a new SharePoint group with the people who work the PFM org box (3.7B). Published: read for all members, edit for the PFM Office group (3.6B). Site Members = the wing's existing directory group (2.1A); the app is shared with it (2.6A).
 
 ## 5. What flows enforce (gates)
 
@@ -95,7 +96,7 @@ Recounted 12 Nov 26 (second independent review, finding 11), sections 1-5a.
 | Item | Count |
 |---|---|
 | New lists | 3, with 45 columns (PFM Guidance 10, PFM Recommendations 17, PFM Waivers 18) |
-| New columns on existing lists | 67: PFM Publications 36 (section 3: 33; 3a: 3), PFM Product Index 14, PFM Offices 7, PFM Reviews 5, PFM Endorsements 4, PFM Process Steps 1 (batch 1 added 7, 12 Nov) |
+| New columns on existing lists | 68: PFM Publications 37 (section 3: 34; 3a: 3), PFM Product Index 14, PFM Offices 7, PFM Reviews 5, PFM Endorsements 4, PFM Process Steps 1 (batch 1 added 7, 12 Nov) |
 | New choice values | 15: Action Type 4; Coordination Role 2 on 2 lists = 4; Endorsement Status 1; Event Type 5 (4 + Review Requested); Product Status 1 (In Development) |
 | Property changes | 2: AO allows multiple values; Publication Number unique |
 | View filter changes | 3 (section 5a) |
@@ -109,8 +110,8 @@ Recounted 12 Nov 26 (second independent review, finding 11), sections 1-5a.
 | PFM Recommendations | Squadron Concurrence, Group Concurrence, Wing Concurrence (choice each: Concur, Concur With Remarks, Nonconcur); Squadron Concurrence Date, Group Concurrence Date, Wing Concurrence Date | PFM 4.5A; Table A6.1 sections 3-5 (outbound 847s) |
 | PFM Offices | Seed 2 more mandatory rows: Privacy (Coordination Role Privacy), Information Collections (Coordination Role Information Collections) | PFM 4.2A; Table A3.1 item 3 |
 | PFM Waivers | Flow rule: warn when Tier is T-0, T-1 or T-2 and the Waiver Approver is a wing person (a Leader in PFM Offices) | PFM 4.4A; Table A10.1 |
-| PFM Settings | Working File Disposition Rule (the AFRIMS rule the PFM names) | PFM 4.6A |
+| PFM Settings | Records Freeze (yes/no; stops every closeout deletion while set); Working File Rule (an AFRIMS rule, only if Table 33-38 has one) | PFM 4.6A; AFI 33-322 6.1.1.4.3 |
 
-Testing (PFM 5.7B, 12 Nov): no test site; T02 r10 runs its checks on the live site with lists named with a TEST prefix and removes them afterwards.
+Testing (PFM 5.7B, 12 Nov): a separate test site is requested from AFLCMC; until it exists, T02 r10 runs its checks on the live site with lists named with a TEST prefix and removes them afterwards.
 
 Counts after batch 4: PFM Recommendations 23 columns (new lists 51); PFM Settings seed rows 3; PFM Offices seed rows 22 + 2 mandatory. Columns on existing lists unchanged (67).
