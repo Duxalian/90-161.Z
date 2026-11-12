@@ -5,5 +5,9 @@ skip: ref/dafman90-161.txt
 # Public host names (PFM, 2026-11-11).
 GenAI.mil
 usaf.dps.mil
+# Public host names for go.md Task 12 (PFM 2A, 2026-11-12).
+www.ang.af.mil
+www.dafhistory.af.mil
+www.trademark.af.mil
 # Escaped form of the same public host, in tests/run.sh (PFM, 2026-11-11).
 usaf\.dps\.mil
