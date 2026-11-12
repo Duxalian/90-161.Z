@@ -8,21 +8,19 @@ raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 Reload to see new tasks (GitHub can serve a copy up to 5 minutes old).
 Copy each URL below into the address bar. Save files with Ctrl+S.
 New files are named 90161Z-T<task>-<name>-r<revision> so they sort by task in my folders. Use the highest r number.
-How to paste and run (ISSM approved in writing, 12 Nov 26): open the paste link, Ctrl+A, Ctrl+C. Start menu, type ISE, open Windows PowerShell ISE. File > New. Click in the white script pane, Ctrl+V, press F5. Type my DODID or press Enter. It makes the task folders if they are missing, saves the files into them and runs the test. Nothing to download or save by hand. If ISE is not there: open Windows PowerShell, right-click to paste, press Enter (not tested yet; tell Claude if it fails). Screenshots of the ISE window can show my DODID in the path: crop them.
+How to paste and run (ISSM approved in writing, 12 Nov 26): open the paste link, Ctrl+A, Ctrl+C. Start menu, type ISE, open Windows PowerShell ISE. File > New. Click in the white script pane, Ctrl+V, press F5. A runner window opens: type my DODID (or leave it empty), press Run. It makes the task folders if they are missing, saves the files into them, runs each step with a live log, and saves one results zip in ...\90-161.Z\Rounds. Copy summary puts a short summary on the clipboard for the e-mail body. Paste links name an exact version, so a reload is never needed. Nothing to download or save by hand. If ISE is not there: open Windows PowerShell, right-click to paste, press Enter (not tested yet; tell Claude if it fails). Screenshots of the ISE window can show my DODID in the path: crop them.
 If a script will not run, stop that task and tell Claude with the STOPPED line. Do not work around it (risk R02).
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
 
-## Fix first: renderer, round 2 (open, 11 Nov 26, 2045 CT)
+## Fix first: renderer round 2, Round R01 (open, 12 Nov 26)
 
 Your 11 Nov runs worked: every render made a PDF, the cover spacing matches DAFMAN, and the seals are the right size. Two things are left: the table of contents indents (the "Specified cast" line) and the seal sits 0.09 in too high. The new New-Publication.ps1 fixes both and prints which fix worked.
 
-First time with paste and run (see the top of this page). Two pastes, no downloads:
-1. Paste and run Task 1 r6 (it writes the new New-Publication.ps1 into T01):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-T01-paste-r6.ps1
-2. Paste and run Task 7 seal test r2:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-T07-paste-r2.ps1
-3. E-mail 90161Z-T01-result-r6.txt, 90161Z-T07-test-result-r2.txt and the 3 PDFs (SAMPLEWINGI99-101.pdf, -TALL.pdf, -ROUND.pdf), also if they show FORMAT-FAIL lines. If a paste stops, send the STOPPED line and say ISE or PowerShell window.
+Round R01, one paste (see the top of this page). Runs Task 1 r6 and Task 7 seal test r2; the renderer now measures itself and prints MEASURE ... PASS or FAIL lines:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/533f43b7f121c05f367655fbb280673475472e4b/scripts/gov/paste/90161Z-R01-round-r1.ps1
+The window title shows build b60abd8b.
+Report: e-mail 90161Z-R01-results-r1.zip from the ...\90-161.Z\Rounds folder to my Gmail, subject "90161Z R01", with the copied summary in the body. Send it also if steps say CHECK. If the window does not open or the run stops, send the STOPPED line and say whether a window opened.
 
 ## Task 12: color sources, r1 (open, 12 Nov 26, 1530 CT)
 
@@ -79,13 +77,13 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-
 
 Folder: ...\90-161.Z\T01
 
-r6 = r5 run by paste and run, with the renderer fixes from Fix first. Do it as Fix first step 1; this section is the reference. Old r3, r4 and r5 runners in T01 can be deleted.
+r6 = r5 run by paste and run, with the renderer fixes from Fix first. It runs inside Round R01 (Fix first); this section is the reference. Old r3, r4 and r5 runners in T01 can be deleted.
 
 Steps and pass checks:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/gov-test-plan.md
 
-Paste and run:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-T01-paste-r6.ps1
+Paste and run (Round R01):
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/533f43b7f121c05f367655fbb280673475472e4b/scripts/gov/paste/90161Z-R01-round-r1.ps1
 
 It saves 90161Z-T01-result-r6.txt in the T01 folder.
 
@@ -107,8 +105,8 @@ Report: reply "Task 8 done" and the step 4 result (Edit shown or not shown).
 Folder: ...\90-161.Z\T07. Decided: each unit's own shield (1C), in a SharePoint library (2A); every seal is prepared to the same 1.20 in box, centered (1A 2A).
 
 Part A, test with fake seals (do this first):
-Status 12 Nov 26: seal prep passed; seal size passed; seal 0.09 in too high. Now Part A is one paste (Fix first step 2), which does steps 1 to 4 below:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-T07-paste-r2.ps1
+Status 12 Nov 26: seal prep passed; seal size passed; seal 0.09 in too high. Now Part A runs inside Round R01 (Fix first), which does steps 1 to 4 below:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/533f43b7f121c05f367655fbb280673475472e4b/scripts/gov/paste/90161Z-R01-round-r1.ps1
 Reference only, the old download steps:
 1. Save this file into the T01 folder (it replaces the file of the same name there). New-Publication.ps1 comes from Fix first:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Test-Publication.ps1
