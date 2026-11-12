@@ -41,3 +41,11 @@ Status: the PFM's phase order (12 Nov, in chat) plus agent recommendations marke
 | Q9 | Where posted wing publications live now | A: a library on the same site. B: a library on another site. C: mixed, or only on e-Publishing | Fact from the PFM |
 
 Scale (REC, no question): PFM Activity Log reaches the 5,000-item view threshold in about 2.5 years at an estimated 2,000 rows a year (50 actions x 40 events; estimate, not measured). Index Created and Action ID at provisioning; views filter on indexed columns; a yearly archive flow.
+
+## Phase 2 use and scale, round 4 (12 Nov): open questions Q19-Q21
+
+| Q | Question | Options | REC |
+|---|---|---|---|
+| Q19 | E-mail volume | A: one daily digest per person (weekdays) of what waits on them; immediate e-mail only for a new task and a due date reached. B: one e-mail per event | A: an AO with 10 coordinators would get 20+ e-mails per round with B |
+| Q20 | Backup of list data | A: a weekly flow exports every PFM list to CSV in Record Sets/Backups, keeps 8 weeks. B: rely on the recycle bin and version history only | A: covers a wrong bulk edit or a deleted list after 93 days (risk R17) |
+| Q21 | People who leave (AO, coordinator, approver) | A: a weekly flow checks the accounts named on open actions (Office 365 Users) and lists disabled or missing ones on the PFM screen. B: found by hand when an action stalls | A, if Office 365 Users passes the data-policy test (rights test D1/M03) |
