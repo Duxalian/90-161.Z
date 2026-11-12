@@ -22,20 +22,17 @@ Columns, views and their DAFMAN references: `schemas/lists/*.json` (one file per
 
 ## 2. Import and run
 
-Package: `flow/packages/90161Z-T02-provision-lists-r8.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r8.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
+Package: `flow/packages/90161Z-T02-provision-lists-r9.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r9.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
 
-The flow asks for 2 inputs:
-- **Site URL**: the full address of the site that will hold the lists.
-- **Site Title**: the site's title exactly as it shows at the top of the site.
+The flow asks for one input, **Site URL**: the full address of the site that will hold the lists. Paste it from the site's address bar. The site-title check was removed in r9 (PFM, 2026-11-12); check the address before you run.
 
 Order of work:
-1. **Check Site Title** reads the site's title. If it does not match what you typed (ignoring capital letters and outer spaces), the run stops with "SiteTitleMismatch" and creates nothing.
-2. **Create Lists**: 9 lists under their URL names, versioning on.
-3. **Get ... ID** (Offices, Process Steps, Product Index, Publications, Series): the IDs that lookup columns need.
-4. **Create Fields And Views**: columns, views and view columns, one request at a time.
-5. **Add Rows**: the 39 series rows into PFM Series and the 2 rows into PFM Settings.
-6. **Apply Updates**: index Created on the Activity Log, rename the Title column where a list uses another label (Setting, Event, Office), then set each list's display title. This runs last because steps 2-4 find lists by URL name.
-7. **Result** shows the counts.
+1. **Create Lists**: 9 lists under their URL names, versioning on.
+2. **Get ... ID** (Offices, Process Steps, Product Index, Publications, Series): the IDs that lookup columns need.
+3. **Create Fields And Views**: columns, views and view columns, one request at a time.
+4. **Add Rows**: the 39 series rows into PFM Series and the 2 rows into PFM Settings.
+5. **Apply Updates**: index Created on the Activity Log, rename the Title column where a list uses another label (Setting, Event, Office), then set each list's display title. This runs last because steps 1-3 find lists by URL name.
+6. **Result** shows the counts.
 
 ## 3. Checks after the run
 
