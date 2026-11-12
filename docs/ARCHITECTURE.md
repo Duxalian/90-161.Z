@@ -52,12 +52,13 @@ Goal (PFM, 2026-11-10): rules force the output to look like DAFMAN 90-161 itself
 
 | Layer | Runs on | Does |
 |---|---|---|
-| L1 Model | GenAI.mil | Rewrites the draft for plain language; returns content only, as JSON in `schemas/publication.schema.json` (header fields, paragraphs with level, tables, attachments). No style fields exist in the schema. |
-| L2 Renderer | Gov device (option open, see Decide) | Builds the .docx from the JSON. Font, margins, numbering, bolding, header block, draft marking are fixed in code. Two modes: `draft` (coordination, rule F-010) and `final`. |
+| L1 Model | GenAI.mil (required; every wing has it, PFM 2026-11-12) | Copies the draft's words exactly (prompt rule R1) and returns content only, as JSON in `schemas/publication.schema.json` (header fields, paragraphs with level, tables, attachments). No style fields exist in the schema. |
+| L2 Renderer | Gov device, PowerShell 5.1 or 7 (PFM 5.1B, 5.3A) | Builds the .docx file itself from the JSON and a DAFMAN template; Word COM only updates fields (table of contents) and saves the PDF. Build code is tested in the cloud on fake samples only. Font, margins, numbering, bolding, header block, draft marking are fixed in code. Two modes: `draft` (coordination, rule F-010) and `final`. |
 | L3 Validator | Same as L2 | Checks every rule in docs/format-rules.md; outputs a pass/fail report per rule ID. |
 
 - "Perfect" = 0 fails on `hard` rules, and PFM approves.
-- Model choice: run the same 3 fake test drafts through ChatGPT Mil and Gemini; pick by schema-valid rate, lint warnings and edit count.
+- Model (PFM, 12 Nov): GPT extracts, Gemini is the fallback.
+- Checks (PFM 5.2B, 12 Nov): a word-for-word check that L1 text matches the source on every run; a regression set of fake drafts re-run whenever GenAI.mil changes; tests against measured DAFMAN pages; one rule list (docs/format-rules.md) drives both L2 and L3.
 
 ## 6. Hand-off model (G4)
 

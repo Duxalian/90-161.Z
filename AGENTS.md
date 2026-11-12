@@ -68,7 +68,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 <!-- Fill in when the project has them. Give exact commands. -->
 - Gov-device checks: scripts/gov/Test-Environment.ps1, scripts/gov/Test-PnPConnection.ps1, scripts/gov/Test-PSGallery.ps1 (read-only). The PFM opens them on the gov device from go.md (repo root).
 - Credentials: never store, print, log or ask for passwords in chat. Scripts take them only through Get-Credential at run time.
-- Gov-device code target: Windows PowerShell 5.1, Word 16 COM, PnP.PowerShell 1.12.0. No other modules (PSGallery blocked).
+- Gov-device code target: Windows PowerShell 5.1 (code also runs on PowerShell 7; PFM 5.3A, 2026-11-12), Word 16 COM, PnP.PowerShell 1.12.0. No other modules (PSGallery blocked).
 - Build: `python3 scripts/build_flow_payload.py` regenerates flow/provisioning-payload.json from schemas/lists (never hand-edit the payload). `node templates/build_crm_template.js` rebuilds templates/CRM_A12-1.docx. `python3 scripts/build_flow_package.py` builds flow/packages/*.zip (Import Package (Legacy)) from flow/defs/*.json (never hand-edit the zips).
 - Test: `tests/run.sh`. Pass = last line `TESTS pass=N fail=0`. Word COM and Power Automate are tested on the gov device: docs/gov-test-plan.md, docs/power-automate-provisioning.md section 3.
 - Lint: `scripts/lint.sh` (pwsh 7 + PSScriptAnalyzer, PS 5.1 syntax target; setup in docs/dev-setup.md). Pass = `findings=0`.

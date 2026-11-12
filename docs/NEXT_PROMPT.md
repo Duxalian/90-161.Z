@@ -1,6 +1,6 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-12 by Claude (batches 1-5 answered, 4.6A; open: 5.1 renderer, 5.2 format layers, 3.5 legal). Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-12 by Claude (all 5 batches answered; 5.1B 5.2B 5.3A; open: 3.5 legal, test site). Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State (main)
 
@@ -17,7 +17,7 @@ Updated: 2026-11-12 by Claude (batches 1-5 answered, 4.6A; open: 5.1 renderer, 5
 - Gap review: https://claude.ai/artifact/Ta3utvkZGP5aKXWWeRh7vU (open: test site, Accessibility Checker gate, CUI check for working files).
 - Full-scope list design (14A, approved 12 Nov): docs/reviews/2026-11-12-list-design-full-scope.md, revised after the second independent review (https://claude.ai/artifact/VNBoH8i4SNy7do6py58YNM; PFM 1A-5A: one stage table 0-12, one AO plus one alternate, AO 1/2 Email columns, scope ladder with squadron and flight, flow opens the rescind on no answer). Next: T02 r10 (provisioning flow + seed rows + go.md task), after batch answers that add columns (register 1.3-1.5, 4.5). Table A3.2 seed: docs/coordination-table-a3-2.md.
 - DAFMAN coverage map (12 Nov): docs/dafman-coverage/README.md (1,408 rows: Covered 383, N/A 314, Gap 73; themes T1-T13). process-model: stages 0-12, new publication (N1-N11, N6 scope and N11 officials), special review (S1-S7). Customer guidance draft r3 (75 screens): docs/guidance/customer-steps.md; the PFM's review doc https://claude.ai/artifact/8qUeXnJNPhyEJNUYU6ShzV carries r3. e-Publishing index: go.md Task 9.
-- Open now: the PFM answers the assumed decisions in 5 batches (34 points; batches 1-5 done 12 Nov, 4.6A; open 5.1, 5.2; PFM asks legal about 3.5; test site requested): https://claude.ai/artifact/UAKZ89DXU6xJsedi1dpt7J. After each batch: record in DECISIONS, fix the docs, push.
+- Open now: the PFM answers the assumed decisions in 5 batches (34 points; all answered 12 Nov; PFM asks legal about 3.5; test site requested). Order of work: PFM says go: https://claude.ai/artifact/UAKZ89DXU6xJsedi1dpt7J. After each batch: record in DECISIONS, fix the docs, push.
 
 ## Waiting on the PFM (go.md)
 
