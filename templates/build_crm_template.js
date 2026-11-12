@@ -59,6 +59,7 @@ const doc = new Document({
 const FIXED_DATE = process.env.SOURCE_DATE_EPOCH
   ? new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000)
   : new Date('2026-11-11T00:00:00Z');
+if (isNaN(FIXED_DATE)) { console.error(`SOURCE_DATE_EPOCH is not a number of seconds: ${process.env.SOURCE_DATE_EPOCH}`); process.exit(1); }
 const STAMP = FIXED_DATE.toISOString().replace(/\.\d{3}Z$/, 'Z');
 
 async function build() {
