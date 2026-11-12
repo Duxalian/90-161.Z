@@ -330,7 +330,7 @@ $wingLevel = ($bo -eq 'COMMANDER') -and ($issuerText -match '\b(WING|DELTA)\b')
 if ($wingLevel) {
   foreach ($lt in $locText) {
     $where = [string]$lt[0]; $plain = Get-PlainText ([string]$lt[1])
-    foreach ($m in [regex]::Matches($plain, '\(T-3\)')) {
+    foreach ($m in [regex]::Matches($plain, '\(\s*T\s*[-\u2013]\s*3\s*\)')) {
       $start = [Math]::Max(0, $m.Index - 50)
       Add-Finding 'WARN' 'F-040' $where ("(T-3) is redundant in a wing or delta publication; the wing or delta/CC who approved it is already the waiver authority: '..." + $plain.Substring($start, $m.Index + $m.Length - $start).Trim() + "' (Attachment 10 note 4)")
     }

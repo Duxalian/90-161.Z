@@ -62,7 +62,7 @@ Severity: `hard` = blocks output; `warn` = reported only.
 | F-037 | "Note:" and "Exception:" bold with colon | 4.6 | render | hard | 2026-11-10 |
 | F-038 | Figure/table number and title directly above the item; min 8 pt | 4.6 | render | hard | 2026-11-10 |
 | F-039 | Compliance statements use "will"/"must", name a responsible party, end with bold tier "(T-1)"; no blanket tiers | 4.6.5 | lint | warn | 2026-11-10 |
-| F-040 | Do not use a tier number at the issuer's own level: in a wing or delta publication, (T-3) is redundant because the wing or delta/CC who approved it is the default waiver authority. The validator treats a publication as wing level when `byOrderOf` is COMMANDER and `issuerLine` or `byOrderOfUnit` names a WING or DELTA. What a wing compliance statement carries instead is open (see Open) | Attachment 10 note 4; 4.6.5.3.2 | lint | warn | 2026-11-12 |
+| F-040 | Do not use a tier number at the issuer's own level: in a wing or delta publication, (T-3) is redundant because the wing or delta/CC who approved it is the default waiver authority. The validator treats a publication as wing level when `byOrderOf` is COMMANDER and `issuerLine` or `byOrderOfUnit` names a WING or DELTA (a keyword guess: the schema has no level field, so an abbreviated issuer such as WG is missed and a non-wing name with WING or DELTA is caught). What a wing compliance statement carries instead is open (see Open) | Attachment 10 note 4; 4.6.5.3.2 | lint | warn | 2026-11-12 |
 | W-001 | Use "must", not "shall" | T1.1 #5 | lint | hard | 2026-11-10 |
 | W-002 | Sentences 20 words or fewer; paragraphs 7 sentences or fewer | T1.1 #2 | lint | warn | 2026-11-10 |
 | W-003 | No all-caps for emphasis | T1.1 #4 | lint | warn | 2026-11-10 |
