@@ -1,0 +1,80 @@
+{
+  "file": "docs/brief/90161Z-T10-adoption-brief-r1.pptx",
+  "title": "90-161.Z: a path to ANG-wide adoption",
+  "scope": "ang",
+  "marking": "UNCLASSIFIED",
+  "footer": "90-161.Z adoption brief r1 · draft · use only once interest is confirmed · 12 Nov 2026",
+  "slides": [
+    {"type": "title", "section": "Summary", "title": "90-161.Z: a path to ANG-wide adoption",
+     "subtitle": "Draft r1 · 12 November 2026\nFor use only after wing PFMs confirm interest. Offices above wing level are not yet identified.",
+     "notes": "This deck is separate from the wing briefs. It starts only if the interest check shows demand."},
+    {"type": "stats", "section": "Summary", "title": "Why look beyond one wing",
+     "cards": [
+       {"big": "1", "label": "rule set: every ANG wing follows the same DAFMAN 90-161 duties"},
+       {"big": "1", "color": "warning", "label": "set of reviews could serve every wing, instead of each wing repeating them"},
+       {"big": "$0", "color": "green", "label": "new licenses expected: standard DoD365 tools only (to confirm)"}
+     ],
+     "listTitle": "What this deck asks",
+     "list": ["Confirm that wing PFMs want it (interest check).", "Find a sponsor above wing level.", "Agree on a path with gates, from interest to a formal decision."]},
+    {"type": "roadmap", "section": "Path", "title": "Path to adoption: each step opens only when its gate passes",
+     "phases": [
+       {"name": "1. Interest", "state": "now", "what": "Ask wing PFMs: current method, access they hold, interest in a pilot", "gate": "Enough wings say yes to justify a sponsor"},
+       {"name": "2. Sponsor", "what": "An office above wing level agrees to own it (office not identified)", "gate": "Named sponsor and product owner"},
+       {"name": "3. Reviews once", "what": "Cyber, OPSEC and PA, legal and license, privacy, records at enterprise level", "gate": "Written answers that cover all wings"},
+       {"name": "4. Multi-wing pilot", "what": "2 or 3 wings with less access install from the guide alone", "gate": "Installs work without the author's help"},
+       {"name": "5. Decision", "what": "The sponsor decides: optional tool, standard tool, or stop", "gate": "Support model and funding of time agreed"}
+     ]},
+    {"type": "table", "section": "Path", "title": "Step 1: what to ask wing PFMs", "fs": 14,
+     "head": ["Question", "Why it matters"],
+     "colW": [6, 6],
+     "rows": [
+       ["How do you track publications today?", "Shows the gap the tool fills"],
+       ["Are you a site owner or site collection admin on your PFM site?", "Decides which setup path and fallbacks apply"],
+       ["Which group gives your wing members SharePoint access?", "Decides app sharing (AD, Microsoft 365 or SharePoint group)"],
+       ["Would your wing pilot it with test data?", "Finds the pilot wings for step 4"],
+       ["How many hours a month could you give to it?", "Sizes the support model"]
+     ]},
+    {"type": "table", "section": "Path", "title": "Step 2: what a sponsor gives and gets", "fs": 14,
+     "head": ["The sponsor gives", "The sponsor gets"],
+     "colW": [6, 6],
+     "rows": [
+       ["A named product owner and a backup maintainer", "One tool that follows DAFMAN 90-161 at every wing"],
+       ["Tasking for one set of enterprise reviews", "Reviews done once instead of at every wing"],
+       ["A release channel the sponsor controls", "Updates reach every wing from one source"],
+       ["Time for support, not money (no licenses expected)", "Status of wing publications in a common form"]
+     ]},
+    {"type": "table", "section": "Path", "title": "Step 3: reviews done once for every wing", "fs": 14,
+     "head": ["Review", "Question", "Status"],
+     "colW": [3, 7, 2],
+     "rows": [
+       ["Cyber security", "Is the tool covered by the DoD365 authorization, and how are scripts delivered and signed?", "Not started"],
+       ["OPSEC and Public Affairs", "May the design stay public, and what must be removed?", "Not started"],
+       ["Legal", "Who owns the work, and under what license may wings use it?", "Not started"],
+       ["Privacy", "One privacy assessment that every wing reuses", "Not started"],
+       ["Records", "Records rules for the lists and the activity log", "Not started"]
+     ],
+     "note": "Offices above wing level are not identified yet; the sponsor names them."},
+    {"type": "options", "section": "Ownership", "title": "Who owns it across wings",
+     "options": [
+       {"name": "A. The author alone", "what": "One PFM builds and supports every wing in addition to their duties.", "pro": "Fastest; no agreement needed.", "con": "Stops when that person moves; cannot support many wings."},
+       {"name": "B. Sponsor with owner and backup", "rec": true, "what": "A sponsor names a product owner and a backup; the author leads design.", "pro": "Survives moves; one rule set and one set of reviews.", "con": "Needs a sponsor and time from two people."},
+       {"name": "C. Each wing keeps a copy", "what": "Wings copy it once and maintain it themselves.", "pro": "No central support.", "con": "Copies drift apart; reviews repeat at every wing."}
+     ],
+     "note": "Recommendation by the project; not a decision until a sponsor agrees."},
+    {"type": "table", "section": "Ownership", "title": "Release and change control across wings", "fs": 14,
+     "head": ["Control", "What it does"],
+     "colW": [4, 8],
+     "rows": [
+       ["Signed releases, checked by two people", "No single account can push bad code to every wing"],
+       ["A government-controlled copy of the code", "The work survives if a personal account closes"],
+       ["Rule catalog tied to the DAFMAN edition", "Every DAFMAN change reaches every wing in one release"],
+       ["Central releases list owned by the sponsor", "Every wing's app shows when an update exists"],
+       ["Settings in lists, not code changes", "Wings adapt it without making their own copies"]
+     ]},
+    {"type": "heat", "section": "Risks", "title": "Risks of going ANG-wide ({hh} likely and severe today)",
+     "key": ["Only risks that apply across wings are shown; wing-level risks are in the wing briefs.", "Ratings are the project's judgment, not measurement.", "Red: act before step 2. Amber: plan a response."]},
+    {"type": "risks", "section": "Risks", "title": "Risks across wings and what reduces them"},
+    {"type": "close", "section": "Decision", "title": "Decisions for a sponsor",
+     "items": ["Agree to run the interest check with wing PFMs.", "If interest is there: name a sponsor, a product owner and a backup.", "Task one set of enterprise reviews.", "Approve a 2- or 3-wing pilot from the install guide alone."]}
+  ]
+}

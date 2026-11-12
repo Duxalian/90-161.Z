@@ -1,368 +1,161 @@
 {
- "file": "docs/brief/90161Z-T10-command-brief-r3.pptx",
- "title": "Publications tracker (90-161.Z): pilot decision",
+ "file": "docs/brief/90161Z-T10-command-brief-r4.pptx",
+ "title": "Publications tracker (90-161.Z): seven questions for the commander",
+ "scope": "wing",
  "marking": "UNCLASSIFIED",
- "footer": "90-161.Z command brief r3 · palette preview · 12 Nov 2026",
+ "footer": "90-161.Z command brief r4 · draft · 12 Nov 2026",
  "slides": [
   {
    "type": "title",
-   "section": "Summary",
-   "title": "Publications tracker (90-161.Z): pilot decision",
-   "subtitle": "For the commander and group commanders\nDraft r3 (palette preview) · 12 November 2026 · about 10 minutes",
-   "notes": "Purpose: decide whether to pilot the tracker at this wing and start the approval reviews. No government data is in this brief."
+   "section": "Start",
+   "title": "Publications tracker (90-161.Z): seven questions",
+   "subtitle": "For the commander and group commanders\nDraft r4 · 12 November 2026 · about 10 minutes",
+   "notes": "Wing-internal brief. Each slide asks one question. No government data is in this brief."
   },
   {
-   "type": "stats",
-   "section": "Summary",
-   "title": "Bottom line",
-   "cards": [
-    {
-     "big": "$0",
-     "label": "new license cost expected: it uses only tools the wing already has (to be confirmed by the license manager)"
-    },
-    {
-     "big": "Not yet",
-     "color": "red",
-     "label": "approved for use: 5 reviews are needed before real use (cyber, OPSEC, legal, privacy, records)"
-    },
-    {
-     "big": "Pilot",
-     "color": "warning",
-     "label": "first at this wing with test data, then real publications, then one other wing"
-    }
-   ],
-   "listTitle": "What we ask of you",
-   "list": [
-    "Approve a pilot at this wing once the reviews below are under way.",
-    "Task the ISSM, Public Affairs and OPSEC, the Staff Judge Advocate, the Privacy Act Officer and the Records Manager to review it.",
-    "Name a backup person, so the tool does not depend on one PFM."
-   ],
-   "notes": "Three asks: pilot, reviews, backup person."
-  },
-  {
-   "type": "table",
-   "section": "Why",
-   "title": "Why use it: one place for every publication action",
-   "lead": "It runs the steps of DAFMAN 90-161 (the Air Force publishing manual) for the wing and keeps every step on record.",
-   "head": [
-    "Today",
-    "With 90-161.Z",
-    "Rule it follows"
-   ],
-   "colW": [
-    4,
-    5,
-    2.4
-   ],
-   "rows": [
-    [
-     "Status lives in e-mail and in people's heads",
-     "Anyone can see where each publication stands, at any time",
-     "DAFMAN 90-161"
-    ],
-    [
-     "Coordination is chased by hand",
-     "Automatic requests and weekday reminders; overdue items go to the right person",
-     "15 business days, para 5.2"
-    ],
-    [
-     "Formatting is fixed by hand, page by page",
-     "Software applies the official format and checks every rule",
-     "Chapter 4"
-    ],
-    [
-     "4-year reviews are easy to miss",
-     "Review dates are tracked; the review opens 6 months early",
-     "Para 7.4"
-    ],
-    [
-     "Wing checklist, action officer guide, template and workbook",
-     "Replaced by one app with step-by-step screens",
-     "PFM decision, 11 Nov"
-    ]
-   ],
-   "notes": "The rules come from DAFMAN 90-161, not from the tool.",
-   "fs": 15
-  },
-  {
-   "type": "status",
-   "section": "Does it work",
-   "title": "Does it work? Built in parts; each part is tested before the next",
-   "lead": "Tested on fake data only. Real publications wait for the approvals.",
-   "head": [
-    "Part",
-    "Status",
-    "What the test showed"
-   ],
-   "colW": [
-    3.2,
-    1.8,
-    7
-   ],
-   "rows": [
-    [
-     "SharePoint lists (where the data lives)",
-     "green",
-     "Working",
-     "Built on a wing site by the setup flow on 11 Nov; all counts matched"
-    ],
-    [
-     "Document formatter",
-     "amber",
-     "Nearly",
-     "6 of 6 test documents produced; 2 small layout defects being fixed"
-    ],
-    [
-     "AI step that reads drafts (GenAI.mil)",
-     "green",
-     "Working",
-     "Passed 12 of 12 checks on fake drafts"
-    ],
-    [
-     "Reminders and routing",
-     "grey",
-     "Not built",
-     "Designed; built after the access tests"
-    ],
-    [
-     "The app people use",
-     "grey",
-     "Not built",
-     "Designed; built last"
-    ],
-    [
-     "Access tests (who can do what)",
-     "amber",
-     "Testing",
-     "Test kit ready; the PFM runs it next"
-    ]
-   ],
-   "notes": "Honest status: the foundation works; the parts people touch are not built yet.",
-   "fs": 15
-  },
-  {
-   "type": "table",
-   "section": "If it breaks",
-   "title": "If it breaks, work continues by hand and no data is lost",
-   "head": [
-    "What breaks",
-    "What people notice",
-    "What happens"
-   ],
-   "colW": [
-    3,
-    4,
-    5
-   ],
-   "rows": [
-    [
-     "The app or the reminders stop",
-     "No automatic e-mails",
-     "The PFM works from the SharePoint lists and e-mails by hand, as today"
-    ],
-    [
-     "The PFM leaves or their account closes",
-     "Reminders stop",
-     "The backup person takes over with a written handover; a daily check flags it"
-    ],
-    [
-     "Someone deletes or changes data by mistake",
-     "A wrong or missing entry",
-     "Every change is kept; deleted items can be restored for 93 days; a regular export is planned"
-    ],
-    [
-     "A Microsoft or DoD365 policy change",
-     "A feature stops working",
-     "Each feature has a fallback; the tool shows what to do"
-    ],
-    [
-     "The tool is withdrawn",
-     "-",
-     "Publications stay on the wing site as normal files; lists can be exported"
-    ]
-   ],
-   "notes": "The tool adds automation on top of normal SharePoint. Removing it leaves the data in place.",
-   "fs": 15
-  },
-  {
-   "type": "table",
-   "section": "Cost",
-   "title": "What it costs",
-   "head": [
-    "Cost",
-    "Amount",
-    "Note"
-   ],
-   "colW": [
-    2.4,
-    3.4,
-    6.2
-   ],
-   "rows": [
-    [
-     "Licenses and software",
-     "$0 expected",
-     "Uses only the standard DoD365 tools; the design forbids paid add-ons. The license manager confirms"
-    ],
-    [
-     "PFM time to build and pilot",
-     "Already under way",
-     "Measured during the pilot and reported back"
-    ],
-    [
-     "Backup person",
-     "A few hours to learn it",
-     "Needed so the tool survives a move or a leave period"
-    ],
-    [
-     "Users",
-     "No extra time expected",
-     "Replaces manual tracking; measured in the pilot"
-    ],
-    [
-     "Approval reviews",
-     "Staff time in 5 offices",
-     "One set of reviews can serve every wing if NGB sponsors it"
-    ]
-   ],
-   "notes": "No new money expected. The main cost is people's time, which the pilot measures.",
-   "fs": 15
-  },
-  {
-   "type": "status",
-   "section": "Approval",
-   "title": "Is it approved for use? Not yet",
-   "lead": "It runs only on tools the wing already uses (DoD365 and GenAI.mil). These reviews are still needed:",
-   "head": [
-    "Review",
-    "Status",
-    "The question for that office"
-   ],
-   "colW": [
-    2.8,
-    1.6,
-    7.6
-   ],
-   "rows": [
-    [
-     "Cyber security (ISSM)",
-     "grey",
-     "Not started",
-     "May the tool and its setup scripts be used on the network, and how should scripts be delivered?"
-    ],
-    [
-     "Public Affairs and OPSEC",
-     "grey",
-     "Not started",
-     "The design files are public: do they need a security and policy review?"
-    ],
-    [
-     "Staff Judge Advocate",
-     "grey",
-     "Not started",
-     "Is the work official duty, and under what license may other wings use it?"
-    ],
-    [
-     "Privacy Act Officer",
-     "grey",
-     "Not started",
-     "The lists hold names and work e-mails: is a privacy assessment needed?"
-    ],
-    [
-     "Records Manager",
-     "grey",
-     "Not started",
-     "Which records rules apply to the lists, and where must project records be kept?"
-    ]
-   ],
-   "notes": "Nothing real goes into the tool before these answers.",
-   "fs": 15
-  },
-  {
-   "type": "risks",
-   "section": "Risks",
-   "title": "Top risks and what we do about them",
-   "plain": true,
-   "ids": [
-    "R01",
-    "R02",
-    "R03",
-    "R04",
-    "R30",
-    "R08"
-   ],
-   "notes": "Full risk list is in the installer brief and the project records.",
-   "fs": 14
-  },
-  {
-   "type": "options",
-   "section": "Way ahead",
-   "title": "Who keeps it running",
-   "options": [
-    {
-     "name": "A. The PFM alone",
-     "what": "One person builds, fixes and supports it in addition to their duties.",
-     "pro": "Fastest; no new agreement.",
-     "con": "Stops when that person moves; does not scale to other wings."
-    },
-    {
-     "name": "B. Named owner and backup, NGB sponsor",
-     "rec": true,
-     "what": "A named owner and a backup person; NGB sponsors it for other wings.",
-     "pro": "Survives moves; one set of approvals for all wings.",
-     "con": "Needs a sponsor and a little time from two people."
-    },
-    {
-     "name": "C. Each wing copies it",
-     "what": "Wings copy it once and maintain their own.",
-     "pro": "No central support.",
-     "con": "Copies drift apart; the same approvals repeat at every wing."
-    }
-   ],
-   "note": "Recommendation by the project; it is not a decision until you approve it."
-  },
-  {
-   "type": "roadmap",
-   "section": "Way ahead",
-   "title": "The path: each step starts only when the one before passes",
-   "phases": [
-    {
-     "name": "1. Design",
-     "state": "now",
-     "what": "Process, data, setup and update design; decisions logged",
-     "gate": "Access tests done; reviews started"
-    },
-    {
-     "name": "2. Build",
-     "what": "Reminders, routing and the app, with test data",
-     "gate": "All tests pass"
-    },
-    {
-     "name": "3. Pilot here",
-     "what": "Real publications at this wing",
-     "gate": "Reviews closed; pilot goals met"
-    },
-    {
-     "name": "4. Second wing",
-     "what": "Another wing installs it from the guide",
-     "gate": "Works without help from us"
-    },
-    {
-     "name": "5. Offer to ANG",
-     "what": "Optional tool, sponsored by NGB",
-     "gate": "Owner named; approvals in place"
-    }
+   "type": "ask",
+   "section": "Start",
+   "title": "How this brief works",
+   "facts": [
+    "Each slide asks one question.",
+    "Answer each one Yes, No or Pending evaluation.",
+    "The last slide is an answer sheet.",
+    "Recommendations are marked; they are the PFM's advice, not decisions."
    ]
   },
   {
-   "type": "close",
-   "section": "Way ahead",
-   "title": "Decisions requested",
-   "items": [
-    "Approve the pilot at this wing, after the reviews start.",
-    "Task the five reviews (cyber, OPSEC and PA, legal, privacy, records).",
-    "Name a backup person."
-   ]
+   "type": "ask",
+   "section": "Questions",
+   "title": "1. Should the wing track its publications in one tool?",
+   "facts": [
+    "Today, status sits in e-mail and spreadsheets.",
+    "The tool shows every publication's status in one place.",
+    "It follows the Air Force publishing manual (DAFMAN 90-161)."
+   ],
+   "choices": [
+    "Keep building it for our wing.",
+    "Stop; keep the manual process.",
+    "Decide after the pilot with test data."
+   ],
+   "rec": "Yes",
+   "notes": "Why use it. It replaces the wing checklist, action officer guide, template and workbook (PFM decision, 11 Nov)."
+  },
+  {
+   "type": "ask",
+   "section": "Questions",
+   "title": "2. Is it far enough along to pilot with test data?",
+   "facts": [
+    "Data lists: working (tested 11 Nov).",
+    "Document formatter: nearly; 2 small fixes left.",
+    "Reminders and the app: not built yet."
+   ],
+   "choices": [
+    "Finish the build; pilot with test data.",
+    "Stop work.",
+    "Wait for the access test results."
+   ],
+   "rec": "Yes",
+   "notes": "Does it work. All tests so far used fake data only."
+  },
+  {
+   "type": "ask",
+   "section": "Questions",
+   "title": "3. If it breaks, is the backup plan good enough?",
+   "facts": [
+    "Work continues by hand, as it does today.",
+    "No data is lost: every change is kept.",
+    "A backup person takes over with written steps."
+   ],
+   "choices": [
+    "Accept the plan.",
+    "Ask for more protection first.",
+    "Review it after the pilot."
+   ],
+   "rec": "Yes",
+   "notes": "What happens if it breaks. Deleted items can be restored for 93 days; a regular export is planned."
+  },
+  {
+   "type": "ask",
+   "section": "Questions",
+   "title": "4. Do you accept the cost?",
+   "facts": [
+    "$0 in new licenses expected; the license manager confirms.",
+    "The PFM's time to build: already under way.",
+    "A backup person: a few hours to learn it."
+   ],
+   "choices": [
+    "Accept.",
+    "Do not accept.",
+    "Wait for the license manager's answer."
+   ],
+   "rec": "Yes",
+   "notes": "Cost. The design uses standard DoD365 tools only and forbids paid add-ons."
+  },
+  {
+   "type": "ask",
+   "section": "Questions",
+   "title": "5. Should five offices review it before real use?",
+   "facts": [
+    "It is not approved for use yet.",
+    "Reviews: cyber security (ISSM), Public Affairs and OPSEC, legal (SJA), privacy, records.",
+    "Nothing real goes into the tool before their answers."
+   ],
+   "choices": [
+    "Task the five offices now.",
+    "Use it without reviews (not advised).",
+    "Task them after the test-data pilot."
+   ],
+   "rec": "Yes",
+   "notes": "Is it approved for use. Not yet."
+  },
+  {
+   "type": "ask",
+   "section": "Questions",
+   "title": "6. Will you name a backup person?",
+   "facts": [
+    "Today one person builds and runs it.",
+    "If that person leaves, the reminders stop.",
+    "A backup needs a few hours to learn it."
+   ],
+   "choices": [
+    "Name one now.",
+    "No backup.",
+    "Name one before real use."
+   ],
+   "rec": "Yes"
+  },
+  {
+   "type": "ask",
+   "section": "Questions",
+   "title": "7. Do you accept the top three risks with these fixes?",
+   "facts": [
+    "Design files are public: Public Affairs and OPSEC review them.",
+    "The way scripts reach work computers is not approved yet: the ISSM decides.",
+    "Some features need access we may not have: we test it first; each has a fallback."
+   ],
+   "choices": [
+    "Accept, with these fixes.",
+    "Stop until the risks are closed.",
+    "Review after the access tests."
+   ],
+   "rec": "Yes",
+   "notes": "Risks R01, R02, R30 in the risk register."
+  },
+  {
+   "type": "sheet",
+   "section": "Answers",
+   "title": "Answer sheet",
+   "rows": [
+    "Track the wing's publications in one tool?",
+    "Pilot with test data?",
+    "Backup plan good enough?",
+    "Accept the cost?",
+    "Five offices review it before real use?",
+    "Name a backup person?",
+    "Accept the top three risks with these fixes?"
+   ],
+   "note": "Recommended: Yes on all seven. Pending evaluation keeps that part on hold; the PFM reports back.",
+   "fs": 16
   }
  ]
 }

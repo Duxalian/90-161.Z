@@ -22,11 +22,7 @@ New-Item -ItemType Directory -Force -Path "$HOME\90-161.Z\scripts\gov", "$HOME\9
 ```
 
    Files go to `$HOME\90-161.Z\scripts\gov\Provision-Lists.ps1` and `$HOME\90-161.Z\schemas\lists\*.json`.
-3. Open PowerShell (not as admin). If scripts are blocked for this session only:
-
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
+3. Open PowerShell (not as admin). (This PnP path was dropped on 10 Nov; see docs/power-automate-provisioning.md.)
 
 4. Check the schemas (no network, no sign-in):
 
@@ -100,4 +96,4 @@ No value below is decided. Each needs a PFM decision or a source.
 9. Resolved in r7 (PFM 2026-11-11, design check https://claude.ai/artifact/X8LbHd79Zh614i1qYzhyTW): certifying and approving official, dates, delegation letter, DAF Form 673 or 399 link. Was: publication fields not in the docs: certifying/approving official (5.6, 5.7), DAF Form 673 and 399 tracking, posting date. Left out until chosen.
 10. Stage as lookup versus choice. Lookup follows ARCHITECTURE s3 and keeps paragraph refs; a choice would be simpler to filter but would duplicate the stage names.
 11. Seeding. `-SeedStages` is opt-in because process-model.md is unverified.
-12. Delivery of files to the gov device is manual copy (GitHub login is blocked). Option: `Invoke-WebRequest` from the raw GitHub address, if the gov network allows it; untested.
+12. Delivery of files to the gov device: go.md raw links (no GitHub login).

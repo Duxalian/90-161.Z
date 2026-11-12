@@ -4,6 +4,10 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-12 | Command brief: 1 to 2 concepts per slide, each a question the commanders answer Yes, No or Pending evaluation, with an answer sheet; plain words. | PFM | Table-heavy command brief r2/r3 |
+| 2026-11-12 | Briefs scoped: the command and installer briefs cover use inside one wing only. Promotion to NGB and ANG-wide adoption goes in a third brief (adoption brief), used only after the PFM confirms interest among wing PFMs. | PFM | NGB content in the wing briefs |
+| 2026-11-12 | Network details removed from the public repo now (PFM yes to item 2): blocked-service wording reworded, the gov-device environment check reduced to its design rules, and the Notepad and ExecutionPolicy workarounds removed until the ISSM decides (risk R02). Git history still holds the old text. | PFM | Keep until PA and OPSEC review |
+| 2026-11-12 | Environment setup script installs pptxgenjs 3.12.0 (PFM approved in chat; the approval card was denied on the phone, so the PFM applies it in environment settings). | PFM | Install by hand each session |
 | 2026-11-12 | (P2A) Members read only on the config and log lists (PFM Settings, PFM Offices, PFM Process Steps, PFM Activity Log and the other lists that hold rules); only flows write the Activity Log; the PFM office edits config. Applies in T02 r10 and setup. | PFM (3A) | Members edit all lists except item-level rules |
 | 2026-11-12 | Colors (1A): one palette file in the repo drives both briefs and the app theme: AF ultramarine (reflex) blue dominant, AF yellow only as a fill or on blue (never text on white), dark orange for warnings, red/amber/green status colors kept; AFI 84-105 3.7.5.3. Values provisional until the go.md Task 12 sources; preview first. | PFM (1A) | Navy and amber picked by the agent |
 | 2026-11-12 | (2A) The PII guard allows the public host names www.ang.af.mil, www.dafhistory.af.mil and www.trademark.af.mil so go.md can link them; added to .pii-guard on the PFM's instruction. | PFM (2A) | Search by title |
@@ -117,7 +121,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 | 2026-11-10 | **Rec:** Renderer = PowerShell + Word COM (option A); environment check passed (docs/reviews/2026-11-10-gov-env-check.md). Option C stays open until the Premium check. | Agent | — |
 | 2026-11-10 | Public repo uses "PFM", not the PFM's name. | PFM | — |
 | 2026-11-10 | Repo is public, so the gov device reads it without a GitHub login. Rule: nothing that names the wing, people or office symbols goes in the repo. | PFM | Rec "make the repo public" |
-| 2026-11-10 | GitHub login is blocked on the gov device (GitHub itself is reachable). | PFM | Transfer path "PFM opens the repo on the gov device" |
+| 2026-11-10 | The gov device reads GitHub without a login (wording reduced 12 Nov, PFM: no network details in the public repo). | PFM | Transfer path "PFM opens the repo on the gov device" |
 | 2026-11-10 | Renderer: try both A (PowerShell + Word COM) and C (Power Automate "Populate a Microsoft Word template"). | PFM | — |
 | 2026-11-10 | PFM is not a tenant admin. | PFM | — |
 | 2026-11-10 | The wing has no supplement to DAFMAN 90-161. | PFM | — |
@@ -126,7 +130,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 | 2026-11-10 | PFM is a site collection administrator and can reach SharePoint through PowerShell. | PFM | "no admin rights" assumption (partly) |
 | 2026-11-10 | Formatting goal: rules force output to look like DAFMAN 90-161 itself. AFIMPT is not used for formatting or tracking. | PFM | — |
 | 2026-11-10 | 90-161.Z is the system of record for endorsements (no TMT). | PFM | — |
-| 2026-11-10 | Transfer path: GitHub is reachable from NIPR; PFM opens the repo on the gov device. | PFM | — |
+| 2026-11-10 | Transfer path: the PFM opens the repo on the gov device (wording reduced 12 Nov). | PFM | — |
 | 2026-11-10 | Rule source: DAFMAN 90-161, 18 Oct 2023, incorporating Change 1 (14 Jul 2025) and Corrective Action (1 May 2026), plus the wing supplement if one exists (none exists). | PFM | — |
 | 2026-11-10 | **Rec:** Pilot the document engine on ChatGPT Mil and Gemini (GenAI.mil) with the same 3 test drafts; pick by checklist pass rate. | Agent | — |
 | 2026-11-10 | Repo: private rhope-ops/90-161.Z, bootstrapped from standard_project. | PFM | — |

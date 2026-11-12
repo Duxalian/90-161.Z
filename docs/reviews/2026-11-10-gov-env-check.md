@@ -1,16 +1,5 @@
 # Gov-device environment check, 2026-11-10
 
-Source: output of scripts/gov/Test-Environment.ps1, run by the PFM on the gov device. Sanitized: no host, user or unit data.
+Details removed from this public repo on 12 Nov 26 (PFM decision: no gov-network details in the public repo; DECISIONS 2026-11-11 "Gov-network test details move out of the repo"). The full result is in the private project log.
 
-| Check | Result | Effect |
-|---|---|---|
-| PowerShell | 5.1 Desktop, 64-bit | Windows PowerShell; PnP 1.x supports it |
-| LanguageMode | FullLanguage | COM and .NET allowed |
-| Execution policy | MachinePolicy=Unrestricted, LocalMachine=Bypass | .ps1 files run; paste-only not required |
-| Word COM | OK, version 16.0; edit OK; Times New Roman set | Renderer option A works |
-| Times New Roman font | present | F-001 can be met |
-| PnP.PowerShell | 1.12.0 installed | Can script SharePoint; 1.x has -UseWebLogin (no app registration); not yet tested |
-| SPO Management Shell | not installed | Not needed |
-| PSGallery | not reachable | No new modules; use only what is installed |
-
-Conclusion (Agent): renderer = PowerShell + Word COM (option A) is viable. Provisioning by PnP 1.12 is likely viable; confirm with scripts/gov/Test-PnPConnection.ps1.
+Design rules that came from it (kept): the renderer targets Windows PowerShell 5.1 with Word COM (AGENTS.md Commands), and gov-device code uses only what is already installed.

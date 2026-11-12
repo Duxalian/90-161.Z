@@ -10,7 +10,7 @@ const JSZip = require("jszip");
 
 const root = path.join(__dirname, "..");
 const dir = path.join(root, "docs/brief");
-const RISKS = JSON.parse(fs.readFileSync(path.join(dir, "risks.json"), "utf8"));
+const ALL_RISKS = JSON.parse(fs.readFileSync(path.join(dir, "risks.json"), "utf8"));
 // "{decisions}" in any slide text = dated PFM rows in docs/DECISIONS.md (column "By" starts with PFM), counted at build.
 const DECISIONS = fs.readFileSync(path.join(root, "docs/DECISIONS.md"), "utf8").split("\n")
   .filter(l => /^\| 20\d\d-/.test(l) && /^PFM/.test((l.split("|")[3] || "").trim())).length;
@@ -28,6 +28,9 @@ const tone = { red: [HEX.red, HEX.redT], amber: [HEX.amber, HEX.amberT], green: 
 
 function build(deckName) {
   const B = JSON.parse(fs.readFileSync(path.join(dir, deckName + ".json"), "utf8").split("{decisions}").join(String(DECISIONS)));
+  // A deck shows only the risks in its scope ("wing" deck: wing + both; "ang" deck: ang + both). Default scope = wing.
+  const scope = B.scope || "wing";
+  const RISKS = ALL_RISKS.filter(r => [scope, "both"].includes(r.scope || "wing"));
   const pres = new pptxgen();
   pres.layout = "LAYOUT_WIDE"; // 13.333 x 7.5 in
   pres.title = B.title; pres.subject = "Decision brief"; pres.author = "90-161.Z project";
@@ -60,6 +63,32 @@ function build(deckName) {
   const R = {
     title(d) { const s = slide("DARK", d.section); s.addText(d.title, { placeholder: "title" }); s.addText(d.subtitle, { placeholder: "body" }); return s; },
     close(d) { const s = slide("DARK", d.section); s.addText(d.title, { placeholder: "title" }); s.addText(bullets(d.items, true), { placeholder: "body" }); return s; },
+    ask(d) {
+      // One question per slide (PFM 12 Nov: 1-2 concepts per commander slide, each answered Yes, No or Pending evaluation).
+      const s = slide("CONTENT", d.section); s.addText(d.title, { placeholder: "title" });
+      const fh = d.choices ? 2.1 : 4.6;
+      s.addText(bullets(d.facts), { isTextBox: true, x: M, y: 1.45, w: CW, h: fh, fontSize: 20, color: HEX.ink, valign: "top", paraSpaceAfter: 10 });
+      if (d.choices) {
+        const kinds = [["Yes", HEX.green, HEX.greenT], ["No", HEX.red, HEX.redT], ["Pending evaluation", HEX.grey, HEX.greyT]];
+        const cw = (CW - 0.6) / 3, y = 3.75, h = 2.75;
+        kinds.forEach(([k, fg, bg], i) => {
+          const x = M + i * (cw + 0.3), rec = d.rec === k;
+          s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: cw, h, rectRadius: 0.08, fill: { color: bg }, line: { color: rec ? HEX.navy : bg, width: rec ? 3 : 1 }, objectName: "choice-" + i });
+          txt(s, k, { x: x + 0.25, y: y + 0.2, w: cw - 0.5, h: 0.55, fontSize: 24, bold: true, color: fg });
+          txt(s, d.choices[i], { x: x + 0.25, y: y + 0.85, w: cw - 0.5, h: 1.3, fontSize: 16 });
+          if (rec) txt(s, "Recommended", { x: x + 0.25, y: y + h - 0.55, w: cw - 0.5, h: 0.4, fontSize: 14, bold: true, color: HEX.navy });
+        });
+      }
+      return s;
+    },
+    sheet(d) {
+      const s = slide("CONTENT", d.section); s.addText(d.title, { placeholder: "title" });
+      const box = "\u2610";
+      s.addTable([["#", "Question", "Yes", "No", "Pending evaluation"].map(th), ...d.rows.map((q, i) => [td(String(i + 1), { bold: true }), td(q), td(box, { align: "center", fontSize: 20 }), td(box, { align: "center", fontSize: 20 }), td(box, { align: "center", fontSize: 20 })])],
+        { x: M, y: 1.45, w: CW, colW: [0.5, 7.4, 1.1, 1.1, CW - 10.1], border: { type: "solid", color: HEX.line, pt: 0.75 }, margin: 0.06 });
+      if (d.note) txt(s, d.note, { x: M, y: 6.25, w: CW, h: 0.5, fontSize: 14, color: HEX.slate, italic: true });
+      return s;
+    },
     stats(d) {
       const s = slide("CONTENT", d.section); s.addText(d.title, { placeholder: "title" });
       const n = d.cards.length, cw = (CW - 0.3 * (n - 1)) / n;

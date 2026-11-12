@@ -22,15 +22,7 @@ In File Explorer, right-click `90161Z-T01-renderer-test-r5.ps1` > **Run with Pow
 
 Messages: `FOLDER not found` = the T01 folder is missing or the DODID is wrong; `MISSING in T01 folder: <names>` = save those files.
 
-Manual fallback (PowerShell window), only if Run with PowerShell is blocked: go to the T01 folder first, then run each step:
-
-```
-powershell -ExecutionPolicy Bypass -File .\Test-Publication.ps1 -Path .\publication.sample.json
-powershell -ExecutionPolicy Bypass -File .\New-Publication.ps1 -Path .\publication.sample.json -Mode draft
-powershell -ExecutionPolicy Bypass -File .\New-Publication.ps1 -Path .\publication.sample.json -Mode final -Pdf
-```
-
-The "-File ... does not exist" error means the PowerShell window is not in the folder that holds the file.
+Manual fallback: removed 12 Nov 26 (PFM: no workarounds for script delivery until the ISSM decides, risk R02). If Run with PowerShell does not work, stop and tell Claude.
 
 ## Pass criteria
 

@@ -1,14 +1,14 @@
 {
- "file": "docs/brief/90161Z-T10-installer-brief-r3.pptx",
+ "file": "docs/brief/90161Z-T10-installer-brief-r4.pptx",
  "title": "90-161.Z for wing PFMs: what it takes to install and run",
  "marking": "UNCLASSIFIED",
- "footer": "90-161.Z installer brief r3 · palette preview · 12 Nov 2026",
+ "footer": "90-161.Z installer brief r4 · draft · 12 Nov 2026",
  "slides": [
   {
    "type": "title",
    "section": "Summary",
    "title": "90-161.Z for wing PFMs: what it takes to install and run",
-   "subtitle": "For a Publications and Forms Manager deciding whether to install it\nDraft r3 (palette preview) · 12 November 2026",
+   "subtitle": "For a Publications and Forms Manager deciding whether to install it at their wing\nDraft r4 · 12 November 2026",
    "notes": "Audience: a wing PFM. Covers what it does, what you need, setup, updates, upkeep, limits, approvals and risks."
   },
   {
@@ -138,7 +138,7 @@
     "Updates announced in the app; most updates are data copies"
    ],
    "cons": [
-    "Not approved for use yet; your wing needs its own reviews unless NGB sponsors one set",
+    "Not approved for use yet; your wing needs its own reviews",
     "Built and supported by one maintainer today",
     "Needs setup time and a backup person",
     "SharePoint and Power Apps limits apply (slide 12)",
@@ -518,13 +518,12 @@
      "Which records rules apply to the lists and the activity log?"
     ]
    ],
-   "note": "If NGB sponsors the tool, one set of reviews can cover every wing.",
    "fs": 14
   },
   {
    "type": "heat",
    "section": "Risks",
-   "title": "Risk picture: {hh} risks are likely and severe today",
+   "title": "Risk picture ({hh} likely and severe today)",
    "key": [
     "Likelihood and impact: High, Medium or Low, rated by the project; judgment, not measurement.",
     "IDs match the appendix.",
@@ -625,5 +624,6 @@
    ],
    "method": "Prepared with AI assistance (a commercial assistant on a personal device, fake data only). Independent read-only reviews on 12 Nov 2026 covered design choices against the decisions log, engineering gaps and governance. Policy items come from search summaries; the named offices confirm them. Built from docs/brief/installer.json and docs/brief/risks.json by scripts/build_decision_brief.js."
   }
- ]
+ ],
+ "scope": "wing"
 }

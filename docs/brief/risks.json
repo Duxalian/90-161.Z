@@ -26,14 +26,15 @@
  {
   "id": "R03",
   "area": "Sustainment",
-  "risk": "One maintainer, no government owner, no funding or support model; a move or separation orphans every wing",
+  "risk": "One maintainer, no government owner, funding or support model; if that person leaves, the tool gets no fixes or updates",
   "l": "H",
   "i": "H",
-  "mit": "NGB-sponsored owner, backup maintainer, support model, exit plan (D3)",
-  "owner": "Wing CC, NGB",
+  "mit": "Name an owner and a backup person; write a support plan and an exit plan (D3)",
+  "owner": "Wing CC",
   "status": "Open",
   "plain": "One person builds and supports it; if they leave, no one maintains it",
-  "plainMit": "Name an owner and a backup person; write a support plan"
+  "plainMit": "Name an owner and a backup person; write a support plan",
+  "scope": "both"
  },
  {
   "id": "R04",
@@ -50,14 +51,15 @@
  {
   "id": "R05",
   "area": "Supply chain",
-  "risk": "One personal account controls the code every wing would run",
+  "risk": "One personal account controls the code the wing would run",
   "l": "M",
   "i": "H",
   "mit": "Signed releases with hashes, two-person review, a government-controlled copy",
-  "owner": "Wing ISSM, NGB",
+  "owner": "Wing ISSM",
   "status": "Open",
   "plain": "Someone who takes over the code account could push bad code to every wing",
-  "plainMit": "Signed releases checked by two people; a government copy of the code"
+  "plainMit": "Signed releases checked by two people; a government copy of the code",
+  "scope": "both"
  },
  {
   "id": "R06",
@@ -244,11 +246,11 @@
  {
   "id": "R23",
   "area": "Change control",
-  "risk": "DAFMAN 90-161 changes must reach every wing's rules; no one approves rule changes",
+  "risk": "DAFMAN 90-161 changes reach our rules only when the maintainer releases an update",
   "l": "M",
   "i": "M",
-  "mit": "Rule catalog versioned to the DAFMAN edition; named approver",
-  "owner": "Product owner",
+  "mit": "Rule catalog versioned to the DAFMAN edition; PFM checks each DAFMAN change",
+  "owner": "PFM",
   "status": "Open"
  },
  {
@@ -258,8 +260,9 @@
   "l": "M",
   "i": "M",
   "mit": "Offer as an optional tool endorsed by NGB; second-wing pilot first",
-  "owner": "NGB sponsor",
-  "status": "Open"
+  "owner": "Sponsor (office not identified)",
+  "status": "Open",
+  "scope": "ang"
  },
  {
   "id": "R25",
@@ -274,12 +277,13 @@
  {
   "id": "R26",
   "area": "Updates",
-  "risk": "The update source sits on one wing's site; it breaks when that wing's PFM leaves",
+  "risk": "The update source sits on the maintainer's site; updates stop if that PFM leaves",
   "l": "M",
   "i": "M",
   "mit": "Host it with the product owner; co-owner on the site",
   "owner": "Product owner",
-  "status": "Open"
+  "status": "Open",
+  "scope": "both"
  },
  {
   "id": "R27",
@@ -322,5 +326,49 @@
   "status": "Testing",
   "plain": "Some features depend on access the PFM may not have",
   "plainMit": "Test every access right first; each has a fallback"
+ },
+ {
+  "id": "R31",
+  "area": "Sponsorship",
+  "risk": "No higher-level sponsor: the tool stays at one wing and each wing repeats every review",
+  "l": "M",
+  "i": "M",
+  "mit": "Gauge interest among wing PFMs first; then seek a sponsor with a concrete ask",
+  "owner": "PFM",
+  "status": "Open",
+  "scope": "ang"
+ },
+ {
+  "id": "R32",
+  "area": "Divergence",
+  "risk": "Wings copy and change the tool; copies drift apart and stop taking updates",
+  "l": "M",
+  "i": "M",
+  "mit": "Settings in lists, not code changes; one release channel; changes come back as requests",
+  "owner": "Product owner",
+  "status": "Open",
+  "scope": "ang"
+ },
+ {
+  "id": "R33",
+  "area": "Support load",
+  "risk": "Support requests from many wings exceed one maintainer's time",
+  "l": "H",
+  "i": "M",
+  "mit": "Named support model before more than one pilot wing; install guide and self-test reduce calls",
+  "owner": "Sponsor, product owner",
+  "status": "Open",
+  "scope": "ang"
+ },
+ {
+  "id": "R34",
+  "area": "Approval time",
+  "risk": "Enterprise-level reviews take longer than wing reviews",
+  "l": "M",
+  "i": "M",
+  "mit": "Start enterprise reviews only after interest is confirmed; wings keep local reviews meanwhile",
+  "owner": "Sponsor",
+  "status": "Open",
+  "scope": "ang"
  }
 ]

@@ -68,7 +68,7 @@ Goal (PFM, 2026-11-10): rules force the output to look like DAFMAN 90-161 itself
 | GenAI.mil model | Gov data, uploaded files | Document cleanup (G2); fixes that need real data |
 | PFM (gov device) | DoD365, GenAI.mil | Builds/imports items into DoD365, runs tests with real data, reports sanitized results |
 
-Transfer path (PFM, 2026-11-10): GitHub is reachable from NIPR; PFM opens the repo on the gov device.
+Transfer path (PFM, 2026-11-10): the PFM opens the repo on the gov device.
 
 ## 7. Risks
 

@@ -73,7 +73,7 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 | # | Right | Needed for | Expected | Conf | Test | Fallback |
 |---|---|---|---|---|---|---|
 | G1 | Run PowerShell 5.1 with Word | Renderer | Proven | H | T01 r5 | Format by hand |
-| G2 | Run downloaded scripts without the Notepad step | Renderer, checks | Policy | M | ISSM decision (risk R02) | Approved channel or signed scripts |
+| G2 | Run downloaded scripts as delivered | Renderer, checks | Policy | M | ISSM decision (risk R02) | Approved channel or signed scripts |
 
 ## 6. Manual checks (go.md Task 11, part B)
 
