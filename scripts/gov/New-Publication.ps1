@@ -39,6 +39,7 @@ $Gap = '  '                    # L-004: two spaces after paragraph numbers, head
 $LabelTab = 1.5 * $PT          # L-005: ACCESSIBILITY/RELEASABILITY text starts 1.5 in from the margin
 $SigIndent = 3.0 * $PT         # L-006: signature block starts 4.0 in from the page edge
 $ShieldWidth = 1.2 * $PT       # L-007: seal/shield box 1.20 in square
+$SealBefore = 6.3              # L-007: seal top at 1.47 in; assumes 2 header lines (BY ORDER OF + unit), which end at 1.383 in (gov T07 r1: seal sat 0.087 in high)
 $SealPx = 360                  # L-007a: prepared seals are 360 x 360 px PNG (Task 7 seal prep), emblem centered (PFM 2A)
 $RuleWidth = 6                 # L-008: cover rules 0.75-0.80 pt measured on 7 covers (wdLineWidth075pt)
 # L-008a: cover spacing measured on DAFMAN 90-161 page 1 (baseline/rule gaps, inches): title->compliance 0.417,
@@ -122,6 +123,28 @@ function Use-Format([string]$Rule, [scriptblock]$Do) {
     $script:formatFails++
     Write-Output ('FORMAT-FAIL ' + $Rule + ' line ' + $_.InvocationInfo.ScriptLineNumber + ': ' + $_.Exception.Message)
   }
+}
+function Invoke-ComSet($Obj, [string]$Name, $Value) {
+  # Late-bound set: bypasses the PowerShell COM adapter's type conversion.
+  [void]$Obj.GetType().InvokeMember($Name, [Reflection.BindingFlags]::SetProperty, $null, $Obj, @($Value))
+}
+function Invoke-ParaFormat($Style, $Values) {
+  # Sets $Values (name -> value) on $Style.ParagraphFormat; returns the route that worked. Throws if all 3 fail.
+  $errs = @()
+  $k = ''
+  try { $pf = $Style.ParagraphFormat; foreach ($k in $Values.Keys) { $pf.$k = $Values[$k] }; return 'direct' } catch { $errs += ('direct[' + $k + ']: ' + $_.Exception.Message) }
+  try {
+    $copy = $Style.ParagraphFormat.Duplicate
+    foreach ($k in $Values.Keys) { $copy.$k = $Values[$k] }
+    $Style.ParagraphFormat = $copy
+    return 'copy'
+  } catch { $errs += ('copy[' + $k + ']: ' + $_.Exception.Message) }
+  try {
+    $pf = $Style.GetType().InvokeMember('ParagraphFormat', [Reflection.BindingFlags]::GetProperty, $null, $Style, $null)
+    foreach ($k in $Values.Keys) { $v = $Values[$k]; if ($v -is [double]) { $v = [single]$v }; Invoke-ComSet $pf $k $v }   # Word float properties
+    return 'invoke'
+  } catch { $errs += ('invoke[' + $k + ']: ' + $_.Exception.Message) }
+  throw ($errs -join ' | ')
 }
 function Format-Para([int]$Align = 3, [double]$Left = 0, [double]$First = 0, [double]$After = $SpaceAfter, [bool]$KeepNext = $false) {
   $pf = $script:sel.ParagraphFormat
@@ -224,6 +247,7 @@ try {
     $pic = $doc.InlineShapes.AddPicture((Resolve-Path -LiteralPath $shield).Path, $false, $true, $r)
     Use-Format 'L-007 seal aspect' { $pic.LockAspectRatio = 0 }   # msoFalse
     $pic.Width = [single]$ShieldWidth; $pic.Height = [single]$ShieldWidth   # square canvas: every seal fills the same 1.20 in box (L-007)
+    Use-Format 'L-007 seal top' { $pic.Range.ParagraphFormat.SpaceBefore = [double]$SealBefore }
   }
   $right = New-Object System.Collections.Generic.List[object]
   $right.Add(@([string](Get-Prop $meta 'issuerLine'), 'bi'))
@@ -487,14 +511,20 @@ try {
     Format-Para $wdAlignLeft 0 0 0
     foreach ($lv in @(@($wdStyleTOC1, $true, 0), @($wdStyleTOC2, $false, $TocNumber))) {   # L-012
       [int]$styleId = $lv[0]; [bool]$styleBold = $lv[1]; [single]$styleFirst = $lv[2] - $TocHang
-      Use-Format ('L-012 TOC style ' + $styleId) {
+      Use-Format ('L-012 TOC font ' + $styleId) {
         $st = $doc.Styles.Item($styleId)
         $st.Font.Name = [string]$FontName; $st.Font.Size = [single]$TocFontSize
         $st.Font.Bold = [int](ConvertTo-WordBool $styleBold); $st.Font.Italic = 0
-        $pf = $st.ParagraphFormat
-        $pf.LeftIndent = [single]$TocHang; $pf.FirstLineIndent = $styleFirst
-        $pf.SpaceBefore = 0; $pf.SpaceAfter = [single]$TocAfter
-        $pf.LineSpacingRule = [int]$wdLineSpaceExactly; $pf.LineSpacing = [single]$TocLine
+      }
+      # Gov runs 2026-11-11 (6 of 6): setting $st.ParagraphFormat.LeftIndent threw "Specified cast is not valid".
+      # Try 3 routes and print the one that works: direct, a copied ParagraphFormat assigned back, late-bound InvokeMember.
+      $tocPf = [ordered]@{ LeftIndent = [double]$TocHang; FirstLineIndent = [double]$styleFirst; SpaceBefore = [double]0
+                           SpaceAfter = [double]$TocAfter; LineSpacingRule = [int]$wdLineSpaceExactly; LineSpacing = [double]$TocLine }
+      Use-Format ('L-012 TOC indent ' + $styleId) {
+        $st = $doc.Styles.Item($styleId)
+        $route = Invoke-ParaFormat $st $tocPf
+        $got = $doc.Styles.Item($styleId).ParagraphFormat   # read back: a route that reports success must also take effect
+        Write-Output ('L-012 TOC indent ' + $styleId + ' route=' + $route + ' left=' + $got.LeftIndent + ' first=' + $got.FirstLineIndent + ' (want ' + $tocPf.LeftIndent + ' / ' + $tocPf.FirstLineIndent + ')')
       }
     }
     $doc.TablesOfContents.Add($tocRange, $false, 1, 2, $true, '', $true, $true, '', $true, $true, $false) | Out-Null   # UseFields = TC entries only

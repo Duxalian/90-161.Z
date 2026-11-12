@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-12 | Do not use Grok on GenAI.mil for 90-161.Z (too slow). Task 6 compares GPT and Gemini only. **Rec:** GPT as the extractor, Gemini as fallback (docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md); not decided. | PFM (Grok); Agent (Rec) | Test Gemini, GPT and Grok |
 | 2026-11-12 | Q11A: the AO-appointment e-mail links to an app screen with a GAL people picker; the CSS picks the AO and a flow writes it to the PFM Publications row and the Activity Log. Interim until the app exists (Agent suggestion): the PFM enters the AO by hand. | PFM (11A) | Flow parses reply e-mails |
 | 2026-11-12 | Walkthrough Q1 (https://claude.ai/artifact/VLxDqQfhEfWSw4Ckrc52Ki): AO appointment. The PFM office mailbox e-mails the target organization's CSS org box (publications, OPRs, reason due); an authorized official in the OPR appoints an AO (usually 1, at most 2); the CSS answers with the appointee from the GAL. Coordinators: mandatory from PFM Offices, the AO adds offices with functional interest (5.1.3). How the CSS answer reaches the list: open. | PFM (Q1) | Customer picks all endorsers (ARCHITECTURE s4) |
 | 2026-11-12 | Q2A: the PFM's office runs GenAI.mil and the renderer (draft before coordination, final at posting), for standardization; this replaces what PFMs normally do through AFIMPT. | PFM (Q2A) | — |

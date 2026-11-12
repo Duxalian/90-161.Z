@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 2100 CT. Bookmark on my work computer (clickable links):
+Updated: 12 Nov 26, 0930 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -12,18 +12,15 @@ If a downloaded script is blocked: open its raw link, Ctrl+A, Ctrl+C, paste into
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
 
-## Fix first: renderer cast error (open, 11 Nov 26, 1955 CT)
+## Fix first: renderer, round 2 (open, 12 Nov 26, 0930 CT)
 
-My T06 and T07 renders stopped with "Specified cast is not valid", so no PDFs. The seal prep passed. The new New-Publication.ps1 names the line that fails and still makes the PDF.
-
-This is the only place to download New-Publication.ps1. Tasks 1, 6 and 7 all use this one copy in the T01 folder.
+Your 11 Nov runs worked: every render made a PDF, the cover spacing matches DAFMAN, and the seals are the right size. Two things are left: the table of contents indents (the "Specified cast" line) and the seal sits 0.09 in too high. The new New-Publication.ps1 fixes both and prints which fix worked.
 
 1. Save this file into the T01 folder. Replace the old one:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
-2. Run Task 1 r5 (below).
-3. Run Task 7 Part A step 4 again. Steps 1-3 are done.
-4. Run Task 6 step 4 again.
-5. If a result shows FORMAT-FAIL or RENDER-ERROR lines, e-mail it anyway, with the PDFs that exist.
+2. Run Task 1 r5 again (below). No other file changes.
+3. Run Task 7 Part A step 4 again.
+4. E-mail both result files and the 3 PDFs (SAMPLEWINGI99-101.pdf, -TALL.pdf, -ROUND.pdf), also if they show FORMAT-FAIL lines.
 
 ## Task 1: renderer test, r5 (open, 11 Nov 26, 1837 CT)
 
@@ -41,25 +38,6 @@ In File Explorer, right-click 90161Z-T01-renderer-test-r5.ps1 > Run with PowerSh
 
 Report: e-mail the result file, SAMPLEWINGI99-101.docx and SAMPLEWINGI99-101.pdf to my Gmail. Claude measures the cover and the table of contents from the PDF.
 
-## Task 6: GenAI.mil extraction test, r1 (open, 11 Nov 26, 1837 CT)
-
-Folder: ...\90-161.Z\T06. Do Fix first and Task 1 r5 first: this task uses the renderer files in the T01 folder.
-
-Goal: GenAI.mil turns a messy draft into content, and the renderer builds the publication from that content. The draft is fake.
-
-Save these three files into the T06 folder:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/prompts/90161Z-T06-extract-prompt-r1.txt
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T06-messy-draft-r1.docx
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T06-extract-test-r1.ps1
-
-1. Open GenAI.mil. Open 90161Z-T06-extract-prompt-r1.txt in Notepad, Ctrl+A, Ctrl+C, and paste it into a new chat. Attach 90161Z-T06-messy-draft-r1.docx. Send.
-2. In the answer, copy only the text inside the json box. Paste it into Notepad. File > Save as, Save as type = All files, name 90161Z-T06-extracted-r1.json, Encoding = UTF-8, into the T06 folder.
-3. Copy the "CHANGES AND QUESTIONS" list into a second Notepad file, 90161Z-T06-changes-r1.txt, in the T06 folder.
-4. In File Explorer, right-click 90161Z-T06-extract-test-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter. It saves 90161Z-T06-result-r1.txt.
-
-Report: e-mail these to my Gmail: 90161Z-T06-extracted-r1.json, 90161Z-T06-changes-r1.txt, 90161Z-T06-result-r1.txt, and the PDF it made. Also say which GenAI.mil model I used. If GenAI.mil refused the file or cut off the answer, send its exact message.
-Status 11 Nov 26: steps 1-3 done with Gemini, GPT and Grok; validation passed, render failed (fix above). Also e-mail each model's JSON and changes list: rename them with the model at the end, for example 90161Z-T06-extracted-r1-grok.json. Run step 4 once, with any one of them saved as 90161Z-T06-extracted-r1.json.
-
 ## Task 8: edit own rows only, r1 (open, 11 Nov 26, 2100 CT)
 
 No files. Decided 10A: everyone reads all rows; people edit only rows they created, on two lists.
@@ -76,7 +54,7 @@ Report: reply "Task 8 done" and the step 4 result (Edit shown or not shown).
 Folder: ...\90-161.Z\T07. Decided: each unit's own shield (1C), in a SharePoint library (2A); every seal is prepared to the same 1.20 in box, centered (1A 2A).
 
 Part A, test with fake seals (do this first):
-Status 11 Nov 26: steps 1-3 done; seal prep passed; renders failed (Fix first). Now do only step 4.
+Status 12 Nov 26: seal prep passed; seal size passed; seal 0.09 in too high (Fix first). Now do only step 4.
 1. Save this file into the T01 folder (it replaces the file of the same name there). New-Publication.ps1 comes from Fix first:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Test-Publication.ps1
 2. Save these two files into the T07 folder:
@@ -104,6 +82,7 @@ FAIL = under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger 
 
 ## Done
 
+- Task 6, GenAI.mil extraction r1 (11 Nov 26): GPT and Gemini both 12 of 12 content checks; GPT had fewer errors. Grok dropped (too slow, 12 Nov 26).
 - Task 2, create the lists r9 (11 Nov 26): pass on the real site. Lists: 9, fields and views: 213, rows: 41, updates: 15.
 - Task 5, solution export sample (11 Nov 26): export received; Claude uses it for solution-aware flows. The flow used a SharePoint connection reference from another solution; future packages carry their own.
 - Task 1, renderer test r3 (11 Nov 26): pass (checks 1-6). Fixes in r5: (T-3) line break, cover spacing, table of contents style.

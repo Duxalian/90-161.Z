@@ -1,6 +1,6 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-12 by Claude (T06/T07 results). Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-12 by Claude (T01 r5, T06, T07 results). Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State (main)
 
@@ -18,10 +18,10 @@ Updated: 2026-11-12 by Claude (T06/T07 results). Keep this file at 40 lines or f
 
 ## Waiting on the PFM (go.md)
 
-0. Renderer fix (go.md top): all 5 T06/T07 renders failed "Specified cast is not valid" (docs/reviews/2026-11-11-gov-results-t06-t07.md). New-Publication.ps1 now prints FORMAT-FAIL/RENDER-ERROR with the line; read those lines first, then fix the named step.
-1. Task 1 r5: cover spacing, TOC style, tier hyphen (docs/reviews/2026-11-11-page1-vs-dafman.md). Measure his PDF against DAFMAN page 1.
-2. Task 6 r1: validated (schema pass) with Gemini, GPT, Grok; waiting on the 3 JSON files to grade against EXPECTED in scripts/build_messy_draft.py.
-3. Task 7 r1: Part A prep PASS (4/4 lines); renders wait on the fix (then check PDFs per docs/gov-test-plan.md Task 7). Part B: real seals in library 90-161.Z, folder Seals (PFM 7B); r1 needs the pasted path (next seal-prep revision: Enter finds "* - 90-161.Z\Seals"). T02 r9 passed on the real site.
+0. Renderer round 2 (go.md Fix first): 6/6 renders made PDFs; cover gaps within 0.011 in of DAFMAN; only L-012 TOC indent failed (cast error) and seal top 1.383 vs 1.47. New-Publication.ps1 now tries 3 routes for L-012 and prints `route=` with a read-back; seal +6.3 pt. Evidence: docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md.
+1. Task 1 r5 and Task 7 Part A step 4: re-run with the new renderer; measure TOC (number 1.50, text 2.00, pitch 0.272) and seal top 1.47.
+2. Task 6 r1 done: GPT and Gemini 12/12; Rec GPT (0 extra defects vs 2). Grok dropped (PFM 2026-11-12). Open: confirm the JSON in the Grok and GPT e-mails (identical) is GPT's. Prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
+3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
 
 ## Next design (after Task 5)
