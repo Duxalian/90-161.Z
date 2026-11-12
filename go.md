@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 12 Nov 26, 1800 CT. Bookmark on my work computer (clickable links):
+Updated: 12 Nov 26 (paste and run added). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -75,7 +75,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-
 2. Open each in PowerPoint. Check that it opens without a repair message and that no text runs off a slide.
 3. Reply in the Claude chat: changes I want, and whether each may go to its audience.
 
-## Task 1: renderer test, r6 (open, 12 Nov 26, 1800 CT)
+## Task 1: renderer test, r6 (open, 12 Nov 26)
 
 Folder: ...\90-161.Z\T01
 
@@ -107,7 +107,7 @@ Report: reply "Task 8 done" and the step 4 result (Edit shown or not shown).
 Folder: ...\90-161.Z\T07. Decided: each unit's own shield (1C), in a SharePoint library (2A); every seal is prepared to the same 1.20 in box, centered (1A 2A).
 
 Part A, test with fake seals (do this first):
-Status 12 Nov 26, 1800: seal prep passed; seal size passed; seal 0.09 in too high. Now Part A is one paste (Fix first step 2), which does steps 1 to 4 below:
+Status 12 Nov 26: seal prep passed; seal size passed; seal 0.09 in too high. Now Part A is one paste (Fix first step 2), which does steps 1 to 4 below:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-T07-paste-r2.ps1
 Reference only, the old download steps:
 1. Save this file into the T01 folder (it replaces the file of the same name there). New-Publication.ps1 comes from Fix first:
