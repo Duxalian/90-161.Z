@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 12 Nov 26, 0930 CT. Bookmark on my work computer (clickable links):
+Updated: 11 Nov 26, 1821 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -32,7 +32,7 @@ In File Explorer, right-click 90161Z-T01-renderer-test-r3.ps1 > Run with PowerSh
 
 Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each check (1-8) in the test plan that fails, with what I see.
 
-## Task 2: create the lists, r9 (passed 12 Nov 26; open: tell Claude test or real site, and the section 3 and 4 checks)
+## Task 2: create the lists, r9 (passed 11 Nov 26; open: tell Claude test or real site, and the section 3 and 4 checks)
 
 Folder: ...\90-161.Z\T02
 
@@ -64,7 +64,7 @@ Report: test site or real site; import ok or the exact error text; the Result te
 ## Done
 
 - Task 5, solution export sample (11 Nov 26): export received; Claude uses it for solution-aware flows. The flow used a SharePoint connection reference from another solution; future packages carry their own.
-- Task 2, create the lists r9 (12 Nov 26): pass. Result: Lists: 9, fields and views: 213, rows: 41, updates: 15.
+- Task 2, create the lists r9 (11 Nov 26): pass. Result: Lists: 9, fields and views: 213, rows: 41, updates: 15.
 - Task 1, renderer test r3 (11 Nov 26): pass (checks 1-6). One fix found: "(T-3)" can break across two lines at the hyphen; r4 will fix it.
 - Task 2, create the lists r1 (11 Nov 26): import and run ok, four lists created, but on the wrong site and before names were agreed (r2 replaces it).
 - Task 1, renderer test r2 (11 Nov 26): runner and validator ok; Word save failed (fixed in r3).
