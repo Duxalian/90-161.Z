@@ -6,6 +6,7 @@ Source: DAFMAN 90-161, 18 Oct 2023, Change 1, Corrective Action 1 May 2026. Stat
 
 | # | Stage | Ref | Exit condition | Target business days (Table A5.2) |
 |---|---|---|---|---|
+| 0 | AO appointment (PFM 2026-11-12): the PFM office mailbox e-mails the target organization's CSS org box: publications X with OPR Y are due for {reason}; an authorized official in the OPR must appoint an AO. The CSS answers with the appointee from the GAL. Usually 1 AO per office, at most 2. | Glossary (AO is designated by the OPR), 2.8 | AO named on the PFM Publications row | — |
 | 1 | Preparation: directive or not, existing pubs, prior record set, contact PCM/PFM | 3.1 | DAF Form 673 started | — |
 | 2 | Drafting with SMEs | 3.2, 4.2.2.1 | Draft meets format rules (draft mode) | 60 |
 | 3 | Pre-coordination (optional) | 3.3 | — | — |
@@ -37,6 +38,8 @@ Concur; Concur With Comment; Concur—No Response (good-faith effort recorded on
 Item number, Source, Type of comment (Administrative / Substantive / Critical; Critical = automatic nonconcur), Page, Paragraph, Line, Comment, Rationale, Decision. Ref 5.3.
 
 ## Mandatory coordinators
+
+Decided (PFM, 2026-11-12, Q6): the PFM keeps the mandatory coordinators in PFM Offices: JAG (legal, last), CIO and PFM. The AO, with the PCM, adds offices with functional interest (5.1.3). The OPR identifies its own certifying official (5.6.3) and approving official (5.7).
 
 Tables A3.1 / A3.2 not yet extracted. Records manager coordinates during formal coordination (7.1.3).
 
