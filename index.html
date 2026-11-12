@@ -2,17 +2,150 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>90-161.Z tasks</title>
 <style>
-:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--acc:#0b57d0;--line:#ddd}
-@media (prefers-color-scheme:dark){:root{--bg:#121212;--fg:#ececec;--mut:#aaa;--acc:#8ab4f8;--line:#333}}
+:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--acc:#0b57d0;--line:#d0d0d0;--card:#f6f7f9;--open-bg:#e7f1fb;--open-fg:#0b4a9e;--done-bg:#e5f4e4;--done-fg:#1e5b1f;--note-bg:#fff6dd;--note-fg:#5c4400;--focus:#0b57d0;--ctl:#767676}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121212;--fg:#ececec;--mut:#b0b0b0;--acc:#8ab4f8;--line:#3a3a3a;--card:#1d1f22;--open-bg:#163150;--open-fg:#b9d6ff;--done-bg:#173a1c;--done-fg:#b8e6b9;--note-bg:#3a2f0b;--note-fg:#ffe08a;--focus:#8ab4f8;--ctl:#8a8a8a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121212;--fg:#ececec;--mut:#b0b0b0;--acc:#8ab4f8;--line:#3a3a3a;--card:#1d1f22;--open-bg:#163150;--open-fg:#b9d6ff;--done-bg:#173a1c;--done-fg:#b8e6b9;--note-bg:#3a2f0b;--note-fg:#ffe08a;--focus:#8ab4f8;--ctl:#8a8a8a;color-scheme:dark}
+*{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
-main{max-width:760px;margin:0 auto;padding:24px 16px}
-h1{font-size:1.5rem;margin:0 0 12px}h2{font-size:1.15rem;margin:28px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
-p{margin:4px 0}a{color:var(--acc);word-break:break-all}.mut{color:var(--mut);font-size:.9rem}
+main{max-width:820px;margin:0 auto;padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-size:1.5rem;margin:0 0 4px;line-height:1.25}
+a{color:var(--acc)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.mut{color:var(--mut);font-size:.875rem}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+button{font:inherit;font-size:.875rem;min-height:36px;padding:6px 12px;border:1px solid var(--ctl);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+button:hover{border-color:var(--acc)}
+.toc li{margin:0}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:0;list-style:none}
+.toc a{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);text-decoration:none;color:var(--fg);font-size:.875rem}
+details.sec{border:1px solid var(--line);border-radius:8px;margin:0 0 12px;background:var(--bg)}
+details.sec>summary{list-style:none;cursor:pointer;padding:12px 16px;display:grid;grid-template-columns:1em 1fr auto;column-gap:8px;row-gap:4px;align-items:baseline}
+.meta{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;justify-content:flex-end}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary::before{content:"\25B8";color:var(--mut)}
+details.sec[open]>summary::before{content:"\25BE"}
+.st{font-weight:600;font-size:1.0625rem;min-width:0}
+.chip{font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.chip.open{background:var(--open-bg);color:var(--open-fg)}
+.chip.done{background:var(--done-bg);color:var(--done-fg)}
+.when{font-size:.8125rem;color:var(--mut);white-space:nowrap}
+.body{padding:0 16px 12px 40px}
+@media (max-width:520px){details.sec>summary{grid-template-columns:1em 1fr}.meta{grid-column:2;justify-content:flex-start}.body{padding:0 12px 12px 16px}}
+.body p{margin:8px 0}
+h3{font-size:1rem;margin:16px 0 4px}
+ol,ul{margin:8px 0;padding-left:24px}
+li{margin:6px 0}
+.lbl{font-weight:600}
+.folder{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:8px 12px;margin:8px 0}
+.folder code{font:14px/1.4 Consolas,"Cascadia Mono",monospace;word-break:break-all;flex:1 1 240px}
+.note{background:var(--note-bg);color:var(--note-fg);border-radius:6px;padding:8px 12px;margin:8px 0}
+.file{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:1px solid var(--line);border-radius:6px;padding:6px 8px 6px 12px;margin:6px 0;background:var(--card)}
+.file .fn{flex:1 1 240px;min-width:0}
+.file .fn a{font-weight:600;word-break:break-all}
+.file .fu{display:block;font-size:.75rem;color:var(--mut);word-break:break-all}
+.file button{min-height:32px;padding:4px 10px}
+.done-list li{color:var(--fg)}
+.foot{margin-top:24px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+@media print{details.sec>.body{display:block}.bar,.toc,button{display:none}}
 </style></head><body><main id="m"><p class="mut">Loading…</p></main>
 <script>
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function link(s){return esc(s).replace(/(https?:\/\/[^\s<]+|raw\.githubusercontent\.com\/[^\s<]+)/g,function(u){var h=u.indexOf('http')===0?u:'https://'+u;return '<a href="'+h+'">'+u+'</a>'})}
-fetch('https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.text()}).then(function(t){
-var o='';t.split('\n').forEach(function(l){if(/^## /.test(l))o+='<h2>'+link(l.slice(3))+'</h2>';else if(/^# /.test(l))o+='<h1>'+link(l.slice(2))+'</h1>';else if(l.trim())o+='<p>'+link(l)+'</p>'});
-document.getElementById('m').innerHTML=o+'<p class="mut">Source: go.md in rhope-ops/90-161.Z</p>'}).catch(function(e){document.getElementById('m').innerHTML='<p>Could not load go.md ('+esc(String(e.message))+').</p>'})
+(function(){
+var SRC='https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md';
+var KEY='go-open-v1';
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function inl(s){
+  // escape, then links, **bold**, `code`
+  var o=esc(s).replace(/(https?:\/\/[^\s<]+|(?:raw\.githubusercontent\.com|rhope-ops\.github\.io)\/[^\s<]*)/g,function(u){var h=u.indexOf('http')===0?u:'https://'+u;return '<a href="'+h+'">'+u+'</a>'});
+  o=o.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>');
+  return o;
+}
+function slug(s,i){return 's'+i+'-'+s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)}
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}}}
+function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+function copy(t,b){
+  var ok=function(){var x=b.textContent;b.textContent='Copied';setTimeout(function(){b.textContent=x},1200)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){fallback(t);ok()})}else{fallback(t);ok()}
+}
+function fallback(t){var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(a)}
+function fileCard(u){
+  var h=u.indexOf('http')===0?u:'https://'+u, name=h.split('/').pop();
+  return '<div class="file"><span class="fn"><a href="'+esc(h)+'">'+esc(name)+'</a><span class="fu">'+esc(h)+'</span></span>'+
+    '<button type="button" data-copy="'+esc(h)+'" aria-label="Copy link to '+esc(name)+'">Copy link</button></div>';
+}
+function folderBox(lbl,path){
+  return '<div class="folder"><span class="lbl">'+esc(lbl)+'</span><code>'+esc(path)+'</code>'+
+    '<button type="button" data-copy="'+esc(path)+'" aria-label="Copy folder path">Copy</button></div>';
+}
+function renderBody(lines){
+  var o='',list=null,item=false;
+  function closeItem(){if(item){o+='</li>';item=false}}
+  function closeList(){closeItem();if(list){o+='</'+list+'>';list=null}}
+  lines.forEach(function(l){
+    var t=l.trim(),m;
+    if(!t){return}
+    if(/^(https?:\/\/|raw\.githubusercontent\.com\/)\S+$/.test(t)){ // bare URL line: file card, kept inside the open step
+      o+=fileCard(t);return;
+    }
+    if((m=t.match(/^(\d+)\.\s+(.*)$/))){
+      if(list!=='ol'){closeList();o+='<ol>';list='ol'}
+      closeItem();o+='<li value="'+m[1]+'">'+inl(m[2]);item=true;return;
+    }
+    if((m=t.match(/^[-*]\s+(.*)$/))){
+      if(list!=='ul'){closeList();o+='<ul class="done-list">';list='ul'}
+      closeItem();o+='<li>'+inl(m[1]);item=true;return;
+    }
+    closeList();
+    if((m=t.match(/^(Folder|Bookmark[^:]*|Fallback[^:]*):\s*(.*)$/))&&/[\\\/]/.test(m[2])){
+      var path=m[2].replace(/\.\s.*$/,''),rest=m[2].slice(path.length).replace(/^\.\s*/,'');
+      o+=folderBox(m[1]+':',path)+(rest?'<p>'+inl(rest)+'</p>':'');return;
+    }
+    if((m=t.match(/^(Report|Status[^:]*|Decided|FAIL|WARN):\s*(.*)$/))){o+='<p class="note"><span class="lbl">'+esc(m[1])+':</span> '+inl(m[2])+'</p>';return}
+    if(/^[A-Z][^.]{2,80}:$/.test(t)||/^Part [A-Z]\b.*:$/.test(t)){o+='<h3>'+inl(t.slice(0,-1))+'</h3>';return}
+    o+='<p>'+inl(t)+'</p>';
+  });
+  closeList();
+  return o;
+}
+function render(md){
+  var lines=md.replace(/\r/g,'').split('\n'),title='',intro=[],secs=[],cur=null;
+  lines.forEach(function(l){
+    if(/^# /.test(l)&&!title){title=l.slice(2);return}
+    if(/^## /.test(l)){cur={h:l.slice(3),lines:[]};secs.push(cur);return}
+    (cur?cur.lines:intro).push(l);
+  });
+  var st=load(),o='<h1>'+inl(title)+'</h1>',nav='',body='';
+  var openCount=0;
+  secs.forEach(function(s,i){
+    var m=s.h.match(/^(.*?)\s*\((open|done)[,\s]*([^)]*)\)\s*$/i),name=m?m[1]:s.h,state=m?m[2].toLowerCase():(/^done$/i.test(s.h)?'done':''),when=m?m[3]:'';
+    var id=slug(name,i),isOpen;
+    if(state==='open')openCount++;
+    if(Object.prototype.hasOwnProperty.call(st,name))isOpen=st[name];else isOpen=(state==='open');
+    nav+='<li><a href="#'+id+'">'+inl(name)+(state==='open'?' • open':'')+'</a></li>';
+    body+='<details class="sec" id="'+id+'" data-name="'+esc(name)+'"'+(isOpen?' open':'')+'><summary><span class="st">'+inl(name)+'</span><span class="meta">'+
+      (state?'<span class="chip '+state+'">'+(state==='open'?'Open':'Done')+'</span>':'')+(when?'<span class="when">'+esc(when)+'</span>':'')+
+      (/^done$/i.test(s.h)?'<span class="when">'+s.lines.filter(function(x){return /^\s*-\s/.test(x)}).length+' items</span>':'')+
+      '</span></summary><div class="body">'+renderBody(s.lines)+'</div></details>';
+  });
+  var how=(Object.prototype.hasOwnProperty.call(st,'__how')?st.__how:false);
+  o+='<p class="mut">'+openCount+' open task'+(openCount===1?'':'s')+' · loaded '+new Date().toLocaleString()+'</p>';
+  o+='<div class="bar"><button type="button" id="ex">Expand all</button><button type="button" id="co">Collapse all</button><button type="button" id="rl">Reload</button></div>';
+  o+='<nav aria-label="Sections"><ul class="toc">'+nav+'</ul></nav>';
+  o+='<details class="sec" data-name="__how"'+(how?' open':'')+'><summary><span class="st">How to use this page</span></summary><div class="body">'+renderBody(intro)+'</div></details>';
+  o+=body+'<p class="mut foot">Source: <a href="'+SRC+'">go.md</a> in rhope-ops/90-161.Z. Open and closed sections are remembered in this browser.</p>';
+  var m=document.getElementById('m');m.innerHTML=o;
+  m.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button[data-copy]');if(b){e.preventDefault();copy(b.getAttribute('data-copy'),b)}});
+  var all=function(){return Array.prototype.slice.call(m.querySelectorAll('details.sec'))};
+  all().forEach(function(d){d.addEventListener('toggle',function(){var s=load();s[d.getAttribute('data-name')]=d.open;save(s)})});
+  document.getElementById('ex').onclick=function(){all().forEach(function(d){d.open=true})};
+  document.getElementById('co').onclick=function(){all().forEach(function(d){d.open=false})};
+  document.getElementById('rl').onclick=function(){location.reload()};
+  m.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('click',function(){var d=document.getElementById(a.getAttribute('href').slice(1));if(d)d.open=true})});
+  if(location.hash){var d=document.getElementById(location.hash.slice(1));if(d){d.open=true;d.scrollIntoView()}}
+  window.addEventListener('beforeprint',function(){all().forEach(function(d){d.open=true})});
+}
+if(typeof window.GO_MD==='string'){render(window.GO_MD);return}
+fetch(SRC,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(render).catch(function(e){
+  document.getElementById('m').innerHTML='<p>Could not load go.md ('+esc(e.message)+'). Fallback: <a href="'+SRC+'">'+SRC+'</a></p>'});
+})();
 </script></body></html>
