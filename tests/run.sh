@@ -12,21 +12,30 @@ scripts/lint.sh >/tmp/lint.out 2>&1 && ok "lint ($(tail -1 /tmp/lint.out))" || {
 out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path samples/publication.sample.json); rc=$?
 [ $rc -eq 0 ] && echo "$out" | tail -1 | grep -q '^VALIDATE fails=0 ' && ok "sample validates ($(echo "$out" | tail -1))" || { echo "$out"; bad "sample validates"; }
 
-# F-040 (Attachment 10 note 4): (T-3) in a wing or delta publication is redundant. Sample = wing (3 marks); same text from
-# a delta warns too; from a non-wing issuer (SECRETARY OF THE AIR FORCE) it does not.
+# F-040 (Attachment 10 note 4) and PFM 2B (2026-11-12): in a wing or delta publication (T-3) warns, a higher tier such as
+# the sample's (T-1) stays, and F-039 does not ask for a tier. Sample = wing with 0 (T-3). Copies add (T-3) to the 3
+# untiered statements: wing and delta warn 3 times with no F-039; a non-wing issuer has no F-040 but F-039 warns.
 t40=$(mktemp -d)
 python3 - "$t40" <<'PY40'
 import json, sys
 d = json.load(open('samples/publication.sample.json'))
+s = json.dumps(d)
+for t in ('15 business days.', 'in the record set.', 'coordination is complete.'):
+    assert s.count(t) == 1, t; s = s.replace(t, t + ' (T-3)')
+d = json.loads(s)
+json.dump(d, open(sys.argv[1] + '/wing.json', 'w'))
 d['meta']['issuerLine'] = 'SAMPLE DELTA'; d['meta'].pop('byOrderOfUnit', None)
 json.dump(d, open(sys.argv[1] + '/delta.json', 'w'))
 d['meta']['byOrderOf'] = 'SECRETARY OF THE AIR FORCE'; d['meta']['issuerLine'] = 'SAMPLE HEADQUARTERS'
-json.dump(d, open(sys.argv[1] + '/hq.json', 'w'))
+s = json.dumps(d).replace(' (T-3)', '')
+json.dump(json.loads(s), open(sys.argv[1] + '/hq.json', 'w'))
 PY40
-w=$(echo "$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path samples/publication.sample.json)" | grep -c '^WARN F-040 ')
-d=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path "$t40/delta.json" | grep -c '^WARN F-040 ')
-h=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path "$t40/hq.json" | grep -c '^WARN F-040 '); rm -rf "$t40"
-[ "$w" -eq 3 ] && [ "$d" -eq 3 ] && [ "$h" -eq 0 ] && ok "F-040 (T-3) in wing/delta publication warns (wing=$w delta=$d hq=$h)" || bad "F-040 wing=$w delta=$d hq=$h (want 3 3 0)"
+c40() { pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path "$1" | grep -c "^WARN $2 "; }
+s40=$(c40 samples/publication.sample.json F-040); s39=$(c40 samples/publication.sample.json F-039)
+w40=$(c40 "$t40/wing.json" F-040); w39=$(c40 "$t40/wing.json" F-039); d40=$(c40 "$t40/delta.json" F-040)
+h40=$(c40 "$t40/hq.json" F-040); h39=$(c40 "$t40/hq.json" F-039); rm -rf "$t40"
+r40="sample=$s40/$s39 wing=$w40/$w39 delta=$d40 hq=$h40/$h39"
+[ "$s40$s39$w40$w39$d40$h40" = "003030" ] && [ "$h39" -eq 3 ] && ok "F-040 and F-039 in wing/delta vs other issuers ($r40, F-040/F-039)" || bad "F-040/F-039 $r40 (want sample=0/0 wing=3/0 delta=3 hq=0/3)"
 
 out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path tests/fixtures/bad.publication.json); rc=$?
 got=$(echo "$out" | grep -oE '^FAIL [A-Z]+-?[0-9]*' | awk '{print $2}' | sort -u | tr '\n' ' ')

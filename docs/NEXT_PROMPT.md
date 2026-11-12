@@ -22,7 +22,7 @@ Updated: 2026-11-12 by Claude (T01 r5, T06, T07 results). Keep this file at 40 l
 1. Task 1 r5 and Task 7 Part A step 4: re-run with the new renderer; measure TOC (number 1.50, text 2.00, pitch 0.272) and seal top 1.47.
 2. Task 6 r1 done: GPT and Gemini 12/12; GPT is the extractor, Gemini fallback (PFM 1A). Grok dropped. Prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
-4. F-040 (Attachment 10 note 4, warn): open for the PFM: severity; tier for wing compliance statements instead of (T-3); keep (T-3) in the fake sample and T06 EXPECTED or not (docs/format-rules.md Open).
+4. F-040 decided (PFM 1A 2B 3A): no tier on wing statements except T-0/T-1/T-2 above the wing; prompt r2 (M8) ready for the next Task 6 run.
 5. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
 
 ## Next design (after Task 5)

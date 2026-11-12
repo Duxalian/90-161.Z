@@ -1,4 +1,4 @@
-90-161.Z EXTRACTION PROMPT, r1 (layer L1). Paste this whole text into GenAI.mil, then attach the draft.
+90-161.Z EXTRACTION PROMPT, r2 (layer L1). Paste this whole text into GenAI.mil, then attach the draft.
 
 ROLE
 You copy the content of an attached draft Air National Guard wing publication into one JSON object.
@@ -8,13 +8,13 @@ The JSON has no fields for font, size, spacing, indent, bold or numbering, so ig
 OUTPUT (exactly two parts, nothing before, between or after them)
 Part 1: one fenced code block that starts with ```json and holds the JSON object.
 Part 2: a line "CHANGES AND QUESTIONS", then a numbered list:
-  - every change you made to the draft's words (rules M1-M7 below), as: <where>: "<old>" -> "<new>" (<rule>)
+  - every change you made to the draft's words (rules M1-M8 below), as: <where>: "<old>" -> "<new>" (<rule>)
   - every placeholder you wrote (rule P1), as: <where>: <question>
   - write "None." when there is nothing to list.
 
 HARD RULES
 R1. Copy the words of the draft exactly. Do not reword, shorten, summarize, improve, correct grammar, or add sentences.
-    The only allowed changes are M1-M7. List each one in part 2.
+    The only allowed changes are M1-M8. List each one in part 2.
 R2. Never invent a value: no office symbol, name, rank, date, number, reference, form or title that is not in the draft.
 P1. When a required value is not in the draft, write the placeholder [[PFM: <short question>]] as the value,
     for example "certifiedByName": "[[PFM: rank and name of the certifying official?]]".
@@ -32,6 +32,9 @@ M1. Remove typed paragraph numbers, letters and bullets ("1.1.", "2.3.1.", "a.",
 M2. "shall" -> "must" (DAFMAN 90-161 Table 1.1).
 M3. Tier marks: write them as "(T-0)", "(T-1)", "(T-2)" or "(T-3)" at the end of the sentence they belong to,
     with one space before them. Fix "(T3)", "T-3", "(t-3)" and similar to that form.
+M8. In a wing or delta publication ("byOrderOf" is "COMMANDER" and the issuer is a wing or delta), remove every
+    "(T-3)": the wing or delta/CC who approves the publication is already the waiver authority (DAFMAN 90-161
+    Attachment 10 note 4). Keep "(T-0)", "(T-1)" and "(T-2)" as written. List each removal in part 2.
 M4. "AF Form 847" or "Air Force Form 847", with any title -> "DAF Form 847, {i}Recommendation for Change of Product{/i}"
     (its current number and title). Keep one entry only.
 M5. Labels the code adds itself: remove "Note:", "NOTE:", "Exception:", "Table 2.1." and "Chapter 1" from the text,
@@ -128,7 +131,7 @@ SHAPE (all keys you may use; values are examples, not content)
         "paragraphs": [
           {"title": "Purpose.", "text": "This sample shows the layout."},
           {"title": "Sample Office A (OPR-A).", "text": "", "children": [
-            {"text": "Will review each draft within 15 business days. (T-3)"}
+            {"text": "Will review each draft within 15 business days."}
           ]},
           {"title": "Routing.", "text": "Route each draft through the steps in {b}Table 1.1{/b}.",
            "table": {"title": "Sample Routing Steps.", "columns": ["Step", "Action"], "rows": [["1", "Draft"], ["2", "Certify"]]},

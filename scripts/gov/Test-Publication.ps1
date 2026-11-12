@@ -75,6 +75,10 @@ if ($bo -and $bo -notin @('SECRETARY OF THE AIR FORCE', 'COMMANDER', 'CHIEF, NAT
   Add-Finding 'FAIL' 'F-013' 'meta.byOrderOf' 'must be SECRETARY OF THE AIR FORCE, COMMANDER or CHIEF, NATIONAL GUARD BUREAU (4.5.4.1)'
 }
 
+# Wing level (F-039, F-040): By Order of the Commander and an issuer line or By Order unit line naming a WING or DELTA.
+$issuerText = ([string](Get-Prop $meta 'issuerLine') + ' ' + [string](Get-Prop $meta 'byOrderOfUnit')).ToUpper()
+$wingLevel = ($bo -eq 'COMMANDER') -and ($issuerText -match '\b(WING|DELTA)\b')
+
 # F-016 date placeholder (4.5.4.4)
 $date = [string](Get-Prop $meta 'date')
 if ($date -and $date -ne '(Date)' -and $date -notmatch "^\d{1,2} ($($months.ToUpper())) \d{4}$") {
@@ -279,7 +283,8 @@ foreach ($t in $allText) {
   foreach ($s in $sent) {
     $wc = @($s -split '\s+' | Where-Object { $_ -match '\w' -and $_ -notmatch '^\(T-[0-3]\)$' }).Count
     if ($wc -gt 20 -and $t -ne $opening) { Add-Finding 'WARN' 'W-002' "text block $pi" "sentence has $wc words; use 20 or fewer: '$($s.Substring(0, [Math]::Min(60, $s.Length)))...'" }
-    if ($s -match '\b(will|must)\b' -and $s -notmatch '\(T-[0-3]\)' -and $t -ne $opening) {
+    # PFM 2B (2026-11-12): wing or delta statements carry no tier unless the waiver authority is above the wing, so F-039 is off there.
+    if (-not $wingLevel -and $s -match '\b(will|must)\b' -and $s -notmatch '\(T-[0-3]\)' -and $t -ne $opening) {
       Add-Finding 'WARN' 'F-039' "text block $pi" "possible compliance statement without a tier number: '$($s.Substring(0, [Math]::Min(60, $s.Length)))...' (4.6.5)"
     }
   }
@@ -324,9 +329,7 @@ foreach ($lt in $locText) {
 # ---------- F-040 tier at the issuer's own level (Attachment 10 note 4) ----------
 # The wing or delta/CC who approved a wing or delta publication is already the default waiver authority,
 # so (T-3) in that publication is redundant. Wing level = By Order of the Commander and an issuer line
-# (or By Order unit line) that names a WING or DELTA.
-$issuerText = ([string](Get-Prop $meta 'issuerLine') + ' ' + [string](Get-Prop $meta 'byOrderOfUnit')).ToUpper()
-$wingLevel = ($bo -eq 'COMMANDER') -and ($issuerText -match '\b(WING|DELTA)\b')
+# (or By Order unit line) that names a WING or DELTA ($wingLevel, set after F-013).
 if ($wingLevel) {
   foreach ($lt in $locText) {
     $where = [string]$lt[0]; $plain = Get-PlainText ([string]$lt[1])

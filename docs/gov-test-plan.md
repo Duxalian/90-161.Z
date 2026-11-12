@@ -41,7 +41,7 @@ The "-File ... does not exist" error means the PowerShell window is not in the f
 | 3 | Draft header | "DRAFT—NOT FOR IMPLEMENTATION OR COMPLIANCE" on every page including page 1 (F-010) |
 | 4 | Final render | `.docx` and `.pdf` created; TOC present after the opening paragraph in both modes (F-027, always) |
 | 5 | Cover | Matches docs/reviews/2026-11-11-cover-consistency.md: seal 1.20 in at left; right column right-aligned at 7.50 in; 3 rules 0.75 pt; OPR value 0.50 in after label; "Certified by:" right with "(Col Sample A. Certifier)" under it; Supersedes value 1.00 in after label; Pages right on the Supersedes line |
-| 5a | Sentences | Two spaces before each new sentence; one space before (T-n) (L-004); no tier number splits across two lines (2.2 on page 4 ends on one line with "(T-3)"; r4) |
+| 5a | Sentences | Two spaces before each new sentence; one space before (T-n) (L-004); no tier number splits across two lines (r4; the sample from 2026-11-12 has one tier mark, "(T-1)" at the end of 2.1.3; an older sample download has "(T-3)" at the end of 2.2) |
 | 5c | Cover spacing (r5, L-008a, L-010c) | Gaps match DAFMAN 90-161 page 1 within 0.03 in: right-column groups 0.36 in apart; title to COMPLIANCE line 0.42 in; space under COMPLIANCE before its rule; RELEASABILITY to its rule 0.26 in. Claude measures this from the PDF you send |
 | 5d | Table of contents (r5, L-012) | 11 pt; "Chapter" lines bold; "1.1." lines not bold, number at 1.50 in, title at 2.00 in; page numbers right with dot leaders |
 | 5b | Opening paragraph | Built from parts: implements, purpose, applicability, records, DAF Form 847, supplement, waiver (4.5.5 order) |
@@ -51,17 +51,17 @@ The "-File ... does not exist" error means the PowerShell window is not in the f
 
 Report any check that fails with what you see. No real content is needed: the sample is fake.
 
-## Task 6: GenAI.mil extraction test (r1)
+## Task 6: GenAI.mil extraction test (r1; prompt r2)
 
 Goal: GenAI.mil turns a messy draft into content JSON, and the Task 1 renderer builds the publication from it.
 
-Files (T06 folder): `prompts/90161Z-T06-extract-prompt-r1.txt` (the prompt), `samples/90161Z-T06-messy-draft-r1.docx` (fake draft, built by `scripts/build_messy_draft.py`), `scripts/gov/90161Z-T06-extract-test-r1.ps1` (runner; uses the renderer scripts in the T01 folder, so Task 1 r5 first).
+Files (T06 folder): `prompts/90161Z-T06-extract-prompt-r2.txt` (the prompt; r2 removes (T-3) in wing publications, M8), `samples/90161Z-T06-messy-draft-r1.docx` (fake draft, built by `scripts/build_messy_draft.py`), `scripts/gov/90161Z-T06-extract-test-r1.ps1` (runner; uses the renderer scripts in the T01 folder, so Task 1 r5 first).
 
 | # | Check | Pass |
 |---|---|---|
 | 1 | Answer shape | One ```json block, then "CHANGES AND QUESTIONS" |
 | 2 | JSON saved | Saved as `90161Z-T06-extracted-r1.json`; runner step 1 shows no `FAIL SCHEMA` |
-| 3 | Content (Claude checks against `EXPECTED` in scripts/build_messy_draft.py) | 3 chapters; 7 paragraph titles; 6 tier marks as (T-3); 2 "shall" -> "must"; table 3 rows; 1 note; 2 bullets as children; 4 fixed sentences dropped; DAF Form 847 and AFI 33-322 in Attachment 1 |
+| 3 | Content (Claude checks against `EXPECTED` in scripts/build_messy_draft.py) | 3 chapters; 7 paragraph titles; 0 tier marks: all 6 (T-3) removed and listed (M8); 2 "shall" -> "must"; table 3 rows; 1 note; 2 bullets as children; 4 fixed sentences dropped; DAF Form 847 and AFI 33-322 in Attachment 1 |
 | 4 | Render | `RENDER docx=SAMPLEWINGI36-101.docx ... mode=final` and a PDF in the T06 folder |
 
 ## Task 7: seals (r1)

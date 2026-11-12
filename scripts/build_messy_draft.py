@@ -90,7 +90,7 @@ EXPECTED = {
     "meta.action": "rewrite (supersedes SAMPLEWINGI36-101, 3 March 2021)",
     "chapters": "3: GENERAL, RESPONSIBILITIES, FOLDER CONTENTS",
     "paragraph titles": "Purpose., Scope., Unit Training Manager (UTM)., Supervisor., Contents., Electronic folders., Closing folders.",
-    "tier marks": "6, all written (T-3)",
+    "tier marks": "0: all 6 (T-3) marks removed and each listed in part 2 (prompt r2 M8; F-040, PFM 2B 2026-11-12)",
     "shall -> must": "2 (Scope., Contents.)",
     "table": "Folder Contents., 2 columns, 3 rows",
     "notes": "1 (Electronic folders.)",

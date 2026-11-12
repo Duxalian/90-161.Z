@@ -61,20 +61,19 @@ Severity: `hard` = blocks output; `warn` = reported only.
 | F-036 | Additional attachments numbered in sequence, paragraphs A2.1, A3.1 | 4.5.11.2 | render | hard | 2026-11-10 |
 | F-037 | "Note:" and "Exception:" bold with colon | 4.6 | render | hard | 2026-11-10 |
 | F-038 | Figure/table number and title directly above the item; min 8 pt | 4.6 | render | hard | 2026-11-10 |
-| F-039 | Compliance statements use "will"/"must", name a responsible party, end with bold tier "(T-1)"; no blanket tiers | 4.6.5 | lint | warn | 2026-11-10 |
-| F-040 | Do not use a tier number at the issuer's own level: in a wing or delta publication, (T-3) is redundant because the wing or delta/CC who approved it is the default waiver authority. The validator treats a publication as wing level when `byOrderOf` is COMMANDER and `issuerLine` or `byOrderOfUnit` names a WING or DELTA (a keyword guess: the schema has no level field, so an abbreviated issuer such as WG is missed and a non-wing name with WING or DELTA is caught). What a wing compliance statement carries instead is open (see Open) | Attachment 10 note 4; 4.6.5.3.2 | lint | warn | 2026-11-12 |
+| F-039 | Compliance statements use "will"/"must", name a responsible party, end with bold tier "(T-1)"; no blanket tiers. In a wing or delta publication the validator does not ask for a tier (PFM 2B, 2026-11-12; see F-040) | 4.6.5 | lint | warn | 2026-11-10 |
+| F-040 | Do not use a tier number at the issuer's own level: in a wing or delta publication, (T-3) is redundant because the wing or delta/CC who approved it is the default waiver authority. The validator treats a publication as wing level when `byOrderOf` is COMMANDER and `issuerLine` or `byOrderOfUnit` names a WING or DELTA (a keyword guess: the schema has no level field, so an abbreviated issuer such as WG is missed and a non-wing name with WING or DELTA is caught). A wing or delta compliance statement carries no tier, except (T-0), (T-1) or (T-2) where the waiver authority is above the wing (PFM 2B, 2026-11-12). Severity warn (PFM 1A, 2026-11-12) | Attachment 10 note 4; 4.6.5.3.2 | lint | warn | 2026-11-12 |
 | W-001 | Use "must", not "shall" | T1.1 #5 | lint | hard | 2026-11-10 |
 | W-002 | Sentences 20 words or fewer; paragraphs 7 sentences or fewer | T1.1 #2 | lint | warn | 2026-11-10 |
 | W-003 | No all-caps for emphasis | T1.1 #4 | lint | warn | 2026-11-10 |
 | W-004 | Active voice; plain language | T1.1 #1, 1.2.2 | lint | warn | 2026-11-10 |
-| X-001 | No unresolved [[PFM: ...]] placeholder from the extraction prompt (prompts/90161Z-T06-extract-prompt-r1.txt); never invent a value (AGENTS.md) | - | lint | hard | 2026-11-11 |
+| X-001 | No unresolved [[PFM: ...]] placeholder from the extraction prompt (prompts/90161Z-T06-extract-prompt-r2.txt); never invent a value (AGENTS.md) | - | lint | hard | 2026-11-11 |
 | S-001 | File names without spaces (3.8.2). The rest of 3.8 (left flush template, separate figure files) is for e-Publishing submission and does not apply to ANG wing camera-ready posting | 3.8 | render | hard | 2026-11-10 |
 
 ## Open
 
 - Literal wording for Tables 4.2–4.5 and the statements in 4.5.5 is not yet extracted. The renderer must take them from the verified text, not from this summary.
 - Wing supplement rules (if any) override or add to this list.
-- F-040 (2026-11-12): open for the PFM. (1) Severity warn or fail. (2) What a wing compliance statement carries instead of (T-3). (3) Whether the fake sample (samples/publication.sample.json) and the T06 messy draft EXPECTED keep (T-3). F-039 still warns on a will/must sentence without a tier, so in a wing publication F-039 and F-040 can point in opposite directions until (2) is decided.
 
 ## Layout measured from ref/dafman90-161.pdf (2026-11-10)
 
