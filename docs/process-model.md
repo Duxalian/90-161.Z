@@ -46,3 +46,19 @@ Tables A3.1 / A3.2 not yet extracted. Records manager coordinates during formal 
 ## System boundary
 
 ANG wing (PFM, 2026-11-10): publications post to the wing's own site (1.1.3.2, 6.4), not e-Publishing through AFIMPT. 90-161.Z tracks through posting and keeps the PI (6.4.2).
+
+## Rules from the full DAFMAN check (12 Nov 26)
+
+Source and line references: docs/reviews/2026-11-12-dafman-full-gap-check.md (table A). Open choices are marked Decide.
+
+- Request: the PFM assigns the control number (at least 3 digits, consecutive in the series) and approves every number; supplements = parent number + _<unit>SUP; IC-1, IC-2 ... per product (4.3.8, 4.3.9). Checks at request: what may be supplemented (1.1.3.5.1), OI scope = one function (Table A11.1 item 8), AFR unit applicability (1.9).
+- Before Formal Coordination: 673 Section I and blocks 21a/22a filled (5.1.5). Before Legal: every coordinator shown on the 673 or marked N/A (2.8.13). Endorsements transcribed to a master 673 before certification (5.1.5).
+- Concur-No Response: explanation required in the staff package (5.4.3.2). Critical comment = nonconcur (5.3.3).
+- Certifier: one level above the OPR and one below the approver; the approver may sign both when they coincide (5.6.3.2).
+- Effective date = release date or later with justification; never backdated (3.7.5).
+- Action types added: Corrective Action (PFM, no 673; glossary), Reissue GM (4.3.7.2), Transfer with the new approving authority's concurrence first (7.10.1). Administrative Change is started only by the OPR or a PCM (7.8.3).
+- GMs: one active per publication (7.9.1); expire after 1 year or on IC/rewrite; a wing GM changes only wing publications (Table A11.1 item 7).
+- Rescind: retained forms are first linked to another prescribing publication; ANG notifies subscribers; copy to the information reports management and control office (8.12, 8.12.1, 8.12.2).
+- A higher-headquarters change opens a special review for each implementing row (2.6.19).
+- Days are calendar days unless stated; coordination stays 15 business days (glossary, 5.2).
+- Decide (12 Nov): FOIA review (1.5.3) and records manager review (7.1.3) owners; form actions, DAF Form 847 intake and waiver tracking (8.10.1, 7.4.5, 9.5.3) scope; who keeps record sets (7.2.2.3).
