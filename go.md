@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 1955 CT. Bookmark on my work computer (clickable links):
+Updated: 11 Nov 26, 2010 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -16,23 +16,26 @@ Reply with results in the Claude chat or by e-mail to my Gmail. Never send real 
 
 My T06 and T07 renders stopped with "Specified cast is not valid", so no PDFs. The seal prep passed. The new New-Publication.ps1 names the line that fails and still makes the PDF.
 
-1. Save this file into the T01 folder (replace the old one):
+This is the only place to download New-Publication.ps1. Tasks 1, 6 and 7 all use this one copy in the T01 folder.
+
+1. Save this file into the T01 folder. Replace the old one:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
-2. Run Task 1 r5 (below). Then Task 7 Part A step 4 again. Then Task 6 step 4 again.
-3. If a result shows FORMAT-FAIL or RENDER-ERROR lines, e-mail it anyway, with the PDFs that exist.
+2. Run Task 1 r5 (below).
+3. Run Task 7 Part A step 4 again. Steps 1-3 are done.
+4. Run Task 6 step 4 again.
+5. If a result shows FORMAT-FAIL or RENDER-ERROR lines, e-mail it anyway, with the PDFs that exist.
 
 ## Task 1: renderer test, r5 (open, 11 Nov 26, 1837 CT)
 
 Folder: ...\90-161.Z\T01
 
-r5 replaces r4 (do not run r4). r3 passed. r5 fixes what I saw and what Claude measured against DAFMAN 90-161 page 1 and its table of contents: (T-3) stays on one line; the space above and below the cover lines (rules) and the right-column groups now match DAFMAN within 0.03 in; the table of contents is 11 pt, with only the Chapter lines bold. Replace New-Publication.ps1 and the runner; the other three files are unchanged.
+r5 replaces r4 (do not run r4). r3 passed. r5 fixes what I saw and what Claude measured against DAFMAN 90-161 page 1 and its table of contents: (T-3) stays on one line; the space above and below the cover lines (rules) and the right-column groups now match DAFMAN within 0.03 in; the table of contents is 11 pt, with only the Chapter lines bold. New-Publication.ps1 comes from Fix first (above); do not download it again here. The other three files are unchanged.
 
 Steps and pass checks:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/gov-test-plan.md
 
-Save these two files into the T01 folder (delete the r3 and r4 runners):
+Save this file into the T01 folder (delete the r3 and r4 runners):
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T01-renderer-test-r5.ps1
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
 
 In File Explorer, right-click 90161Z-T01-renderer-test-r5.ps1 > Run with PowerShell. Type my DODID, or press Enter. It saves 90161Z-T01-result-r5.txt in the T01 folder.
 
@@ -40,7 +43,7 @@ Report: e-mail the result file, SAMPLEWINGI99-101.docx and SAMPLEWINGI99-101.pdf
 
 ## Task 6: GenAI.mil extraction test, r1 (open, 11 Nov 26, 1837 CT)
 
-Folder: ...\90-161.Z\T06. Do Task 1 r5 first: this task uses the renderer files in the T01 folder.
+Folder: ...\90-161.Z\T06. Do Fix first and Task 1 r5 first: this task uses the renderer files in the T01 folder.
 
 Goal: GenAI.mil turns a messy draft into content, and the renderer builds the publication from that content. The draft is fake.
 
@@ -62,8 +65,8 @@ Status 11 Nov 26: steps 1-3 done with Gemini, GPT and Grok; validation passed, r
 Folder: ...\90-161.Z\T07. Decided: each unit's own shield (1C), in a SharePoint library (2A); every seal is prepared to the same 1.20 in box, centered (1A 2A).
 
 Part A, test with fake seals (do this first):
-1. Save these two files into the T01 folder (they replace the files of the same name there). The renderer now accepts only prepared seals and fits every seal in the 1.20 in box:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
+Status 11 Nov 26: steps 1-3 done; seal prep passed; renders failed (Fix first). Now do only step 4.
+1. Save this file into the T01 folder (it replaces the file of the same name there). New-Publication.ps1 comes from Fix first:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Test-Publication.ps1
 2. Save these two files into the T07 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-prep-r1.ps1
