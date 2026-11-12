@@ -40,10 +40,23 @@ Rule for the live site: only ADD lists, columns and choice values. Nothing is re
 | | Also Certifies Current (yes/no) | 7.5.3 (R11): an IC that also certifies the publication current resets Last Certified Current Date |
 | PFM Endorsements | No Response Explanation (multi-line); Critical Comment (yes/no) | A7, A21 (critical comment forces Nonconcur) |
 | PFM Product Index | Edition Date; Locked (yes/no); Form Type (choice: Command or Field, Headquarters Unit, Office, One-Time, Test, Morale, Welfare, and Recreation); Privacy Act Statement Included (yes/no); Information Collection (choice); OMB Number (text); OMB Expiration (date); Markings (choice: None, CUI, Accountable, Safeguarded); Access Level (choice); Section 508 Checked (yes/no); Contains Waiver (yes/no); Adopted Forms (multi-line text: designation, number, title); Implements (text: higher-headquarters publication numbers) | B2, B3, B5, Table 8.1 and PFM 2A, 8.9.5 (classified left out, PFM 2026-11-11 decision 5), B18, B4, A17, 8.8.2 (R7), A13 |
+| PFM Process Steps | Applies To (multi-choice: the action types); seed = the walkthrough stages 0-12, each with the action types it applies to, from Table A5.1 (docs/dafman-coverage/part-6.md, section "Table A5.1 matrix") | PFM 1A (12 Nov, procedure gaps) |
 | PFM Offices | Suggest When (multi-line: Table A3.2 trigger questions, seeded from docs/coordination-table-a3-2.md, PFM 3B); PCM (person, optional) | A24, B19 |
 
 Lookup and person columns on PFM Publications after this design: 9 (Product, Series, Process Step, OPR, Requester, AO, Certifying Official, Approving Official, Government Decision Maker), 11 with Created By and Modified By. The list view lookup threshold is 12. Flows and the app query explicit column lists. AO allows multiple people and the app stops at 2 (Q1; PFM, 12 Nov); a multi-value column still counts once, so the count stays at 11 (R5).
 Action and product: Information Collection, Access Level, Section 508 Checked and Contains Waiver are on both lists. The action value is what the action proposes; at posting a flow copies it to the product; after posting the product value is the record (R6).
+
+## 3a. Proposed additions: new-publication path and out-of-cycle review (agent recommendation, not approved)
+
+From docs/process-model.md "New publication request" (DAFMAN 3.1) and "Special review out of cycle" (7.4.3, 7.4.4). Lookup and person count on PFM Publications unchanged (11).
+
+| List | Change | Why |
+|---|---|---|
+| PFM Product Index | Product Status: add value In Development. The PFM creates the product row when it assigns the number (N9), so the Product lookup is set from the request and the number is reserved. The "Library - Active" view shows only Active rows, so readers do not see it | 4.3.8 (numbers consecutive; PFM tracks numbers, 2.6.3) |
+| PFM Product Index | Publication Number: enforce unique values (indexed) | 4.3.2 (one number per product) |
+| PFM Reviews | Requesting Official (person); Review Reason (choice: Commander Request, Mission Change, Implemented Publication Change, Law Or Regulation Change, Policy Change, Reorganization, Other); Review Request ID (text, one per request, groups a batch); Review Scope (multi-line) | Special review out of cycle (process-model S1-S7; 7.4.3 wording). Lookup and person count on PFM Reviews: 3 (+ Created By, Modified By) |
+| PFM Activity Log | Event Type: add Review Requested | Trail for S1 |
+| PFM Publications | Need And Authority (multi-line: what it implements, why, risk of not acting); Existing Guidance Checked (yes/no); Implements PD Directly (yes/no) | N3-N5, N7 (3.1.2, 3.1.4, 3.1.8, 1.1.3.6.4) |
 
 ## 4. Library 90-161.Z folders (PFM creates by hand)
 

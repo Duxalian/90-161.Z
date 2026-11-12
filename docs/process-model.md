@@ -67,3 +67,39 @@ Source and line references: docs/reviews/2026-11-12-dafman-full-gap-check.md (ta
 - An IC may also certify the publication current (7.5.3). A rescind after a "No Response" review is the PFM rescission: 673 to the certifying and approving officials only (7.11.5.5).
 - Wing ICs (camera-ready): Rule 2, changed elements marked with manual margin bars, no asterisks, no "(Added)" (7.7.5 note, 7.7.8.5).
 - DAF Form 847: inbound for wing publications (7.4.5) and outbound for higher-headquarters publications (A6.3.1; the initiating level's PFM assigns the tracking number, Table A6.1).
+
+## New publication request: no publication exists yet (DAFMAN 3.1)
+
+Anyone may ask for a new publication. The app walks the request through these checks in order, before stage 1. Each check records its answer on the PFM Publications row (Action Type = New). The PFM confirms or overrules each answer.
+
+| # | Check | Result | DAFMAN |
+|---|---|---|---|
+| N1 | Owner: which office will own the publication (OPR)? The requester's office is not always the OPR. | OPR from PFM Offices. If the requester is not the AO the OPR designates, stage 0 (AO appointment) runs for that OPR | 2.7, 2.7.2, 3.1.5 |
+| N2 | Directive or non-directive? | Directive: continue. Non-directive (pamphlet, handbook, visual aid): outside 90-161.Z (DECISIONS 2026-11-11, directive only); the app says so and refers the requester to the PFM | 3.1.1, 1.1.2, Tables A11.1, A11.2 |
+| N3 | Does a wing publication already cover the subject? Search PFM Product Index by title, series and subject words | Yes: revise it (Interim Change or Rewrite), not New. No: continue | 3.1.2 |
+| N4 | Does a higher-headquarters publication cover the subject? | HHQ instruction or manual: a supplement extends its scope unless the HHQ publication allows otherwise; a wing instruction or manual may further implement it. Not allowed: supplementing a PD, PM, GM, MD, OI or a DoD issuance, or an HHQ publication that forbids supplements. A wing manual does not implement an HHQ manual: use a supplement | 1.1.3.5.1, 1.1.3.6.5, 4.7.3.4, Table A11.1 items 4-5 |
+| N5 | No departmental instruction or manual exists | A wing instruction or manual may directly implement a PD or a DAF supplement to a DoD issuance. The row is flagged: when departmental guidance appears later, the wing revises or rescinds it (special review) | 1.1.3.6.4 |
+| N6 | Publication type | Instruction (what to do); Manual (how to); Operating Instruction (one function at the lowest level; wider scope = instruction or manual); Instructional Checklist (supports a named instruction or manual; never collects data); Supplement (N4); Guidance Memorandum only when immediate release is needed for risk to life, safety, property or mission (justification required, expires in 1 year, a permanent publication must follow) | Table A11.1 items 4-8, 7.9.1, 5.1.7, Table A5.1 note 1 |
+| N7 | Higher authority implemented and need | The requester states what the publication implements, why it is needed and the risk of not issuing it | 3.1.4, 3.1.8, 4.4 |
+| N8 | Series | From PFM Series (Table A2.1). Series 1 is reserved for the SecAF, CSAF and CSO | 4.3.1, Table A2.1 |
+| N9 | Number | The PFM assigns the control number, consecutive in the series, at least 3 digits; a supplement takes the parent number + _<unit>SUP; a GM that creates a publication is numbered per 4.3.8.2. The PFM approves every number. The number is unique in PFM Product Index | 4.3.8, 4.3.8.1, 4.3.8.2, 2.6.3 |
+| N10 | Forms | New forms: the PFM assigns form numbers in sequence; adopt a higher-headquarters form first; no duplicate of an existing form; a new form posts with its publication | 8.1.3, 8.3, 8.6.1, 8.7 |
+| N11 | Officials | The OPR names its certifying official (one level above the OPR) and approving official | 5.6.3.2, 5.7 |
+
+Then the action follows stages 1-11 like any other New action. Prior record sets do not exist for a new publication (3.1.3 does not apply).
+
+## Special review out of cycle: commander request or other trigger (DAFMAN 7.4.3, 7.4.4)
+
+A commander (or director), the PFM or an OPR can ask for a review at any time; changes to mission, implemented publications, laws, regulations, policies or a reorganization also trigger one (7.4.3). The PFM opens the review task and tracks it (7.4.3, 2.6.11, T-1). It runs the same way for one product or for many.
+
+| # | Step | Who | Result | DAFMAN |
+|---|---|---|---|---|
+| S1 | Request: who asks (requesting official), the reason, the scope (one product; all products of an OPR, group or series; or all wing products) and any date the requester needs | Requester to the PFM (app or e-mail) | One review request | 7.4.3 |
+| S2 | The PFM selects the products in scope (filters on PFM Product Index: OPR, series, type, status Active) and confirms the list | PFM | List of products, with their prescribed forms (8.11.3.2) | 7.4.3, 8.11.3.2 |
+| S3 | A flow creates one PFM Reviews row per product: Review Type = Special, the request's reason and requesting official, OPR Response Due = opened + at least 30 days (later if the PFM sets it) | Flow | Rows grouped by one Review Request ID | 7.4.4 |
+| S4 | The PFM office mailbox e-mails each OPR (the organization's CSS org box and the product's AO, as in stage 0): the products, why, the due date, how to answer on a DAF Form 399 | Flow | Contact out of cycle; reminders in weekdays, measured tone | 7.4.4, 2.6.11 |
+| S5 | The OPR answers per product: Certify Current, Requires Revision, Requires Transfer, Is Obsolete, Other; prescribed forms reviewed with it | OPR | 399 uploaded; Certify Current resets the 4-year clock (7.5.2); other answers start a follow-up action within 180 days (7.4.4.3.3) | 7.4.4.1-7.4.4.3, 7.5 |
+| S6 | No answer by the due date: the PFM may start the PFM rescission (673 to the certifying and approving officials only) | PFM | Rescind action | 7.4.4.4, 7.11.5.5 |
+| S7 | Status to the requester: on demand and at close, the PFM sends a status report of the request (all products, answers, follow-up actions) | Flow | Report e-mail (DECISIONS 2026-11-11: status report to anyone at any time) | 2.6.8 |
+
+A higher-headquarters change (2.6.19, 4.7.3.5) and new departmental guidance (1.1.3.6.4) use the same path with the reason set by the PFM.
