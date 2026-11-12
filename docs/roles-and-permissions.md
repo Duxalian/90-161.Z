@@ -1,6 +1,6 @@
 # Roles, permissions and intake: design r1 (12 Nov 26)
 
-Status: design from phase 2+3 round 1 (PFM 4A 5A 6A 7A 8A+ 9A, 12 Nov; docs/phases.md). Items marked **REC:** are agent recommendations, open until the PFM approves. Items marked **Test** are not proven on the tenant (docs/rights-test-plan.md). Library layout and folder permissions: docs/reviews/2026-11-12-list-design-full-scope.md section 5 (decided in batch 2).
+Status: design from phase 2+3 rounds 1-2 (PFM 4A 5A 6A 7A 8A+ 9A; 10A 11A 12A+ 13A 14B, 12 Nov; docs/phases.md). Items marked **REC:** are agent recommendations, open until the PFM approves. Items marked **Test** are not proven on the tenant (docs/rights-test-plan.md). Library layout and folder permissions: docs/reviews/2026-11-12-list-design-full-scope.md section 5 (decided in batch 2).
 
 ## 1. Roles are data (PFM 4A, 6A)
 
@@ -46,9 +46,10 @@ Service accounts are not available in practice (PFM, 12 Nov). Flows run on the P
 | e-Publishing index (Task 9) | Cross-check by number | Report of mismatches |
 
 - Limit (high confidence): standard connectors cannot read the text of a PDF or .docx; AI Builder is premium. So OPR, certifier and dates come from typing, or from Q12.
-- **REC:** Q14: imported files stay where they are; the row links to them.
+- Decided 12A+ (12 Nov): the runner reads the covers; every value has a manual override. A row with Manual Override = Yes is never overwritten by a later import.
+- Decided 14B (12 Nov): existing files are copied into the 90-161.Z library and sorted (section 6).
 
-## 5. Open questions (round 2)
+## 5. Round 2 (answered 12 Nov: 10A 11A 12A with manual override, 13A, 14B)
 
 | Q | Question | Options | REC |
 |---|---|---|---|
@@ -57,3 +58,21 @@ Service accounts are not available in practice (PFM, 12 Nov). Flows run on the P
 | Q12 | Cover data of existing publications | A: a runner step on the gov device reads the covers of a folder of existing publications with Word COM (number, title, date, OPR, certifier) into the 3A CSV; real data stays on the device and in SharePoint. B: file name and properties only, the rest typed | A |
 | Q13 | Owner of the PFM Office group | A: the group itself. B: site Owners | A |
 | Q14 | Existing publication files | A: stay in place, the row links to them. B: copied into 90-161.Z Published | A (no broken links, no duplicates) |
+
+## 6. The publication package: one file, one place
+
+Problem (PFM, 12 Nov): the same publication can sit as a list attachment, in a folder, and as an app download. Three copies drift apart.
+
+Design:
+1. **Files live only in the 90-161.Z library.** **REC:** Q16: attachments are off on every PFM list. A list attachment has no metadata, no own permissions, no place in a record set, and is a second copy.
+2. **Metadata ties a file to its package, not the folder.** Library columns: Product (lookup PFM Product Index), Action (lookup PFM Publications, optional), Document Role (choice: Publication, Prescribed Form, Draft, DAF Form 673, CRM, Endorsement Evidence, Impasse Memo, Delegation Letter, Seal, Other), Edition Date, Is Current (yes/no). The package of a product = every file with that Product value, wherever its folder is.
+3. **Folders exist for permissions and for people who browse.** A flow makes the folder when it is missing and sets its permissions (layout: Q15).
+4. **The app reads the library.** Download = the library file's own link (one copy). "Package" panel = the files of that product the viewer may open. Download several at once: the app opens the library view filtered to the product, where SharePoint's own Download zips the selected files (medium confidence: works in SharePoint Online; no zip action in standard connectors).
+5. **"Attach all documentation you have"** (setup intake, and any time in the app): the user uploads any number of files on one screen. A Power Apps flow writes each file to the library with metadata; it suggests the Document Role from the file name (designator, 673, CRM, 847, _DRAFT) and the user can change it; files it cannot place go to folder Intake, view "PFM - Intake, Needs Sorting". Manual upload straight into the library also works: the same flow runs on new files in Intake. **Test:** largest file a Power Apps flow input takes on the tenant.
+
+| Q | Question | Options | REC |
+|---|---|---|---|
+| Q15 | Folder layout | A: top-level folders by permission (Published, Record Sets, Working Files, Delegation Letters, Seals, Intake), one subfolder per product or action inside each. B: one folder per product, with Published, Record Sets and Working Files inside it | A: matches the decided permissions; about 1 unique permission scope per action, against about 2 more per product for B; members browse one Published folder. The app gives the per-product view either way |
+| Q16 | List attachments | A: off on every PFM list; files only in the library. B: on, for convenience | A |
+| Q17 | Document Role on upload | A: the flow suggests it from the file name, the user confirms or changes it; unknown files go to Intake. B: the user picks it for every file | A |
+| Q18 | Originals after the copy (14B) | A: leave them; the PFM sets the old library to read-only after checking the copy. B: delete originals after the check. C: leave both open | A: no data loss, no drift |
