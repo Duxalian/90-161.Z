@@ -24,10 +24,12 @@ Status: draft (Agent, 2026-11-10). Items marked **Rec:** are not decisions until
 |---|---|---|---|
 | Data | `PFM Publications` list | SharePoint site | One row per action on a publication or form (Action Type: New, Rewrite, Interim Change, Administrative Change, Guidance Memorandum, Certify Current, Rescind, Transfer; supplement and OI are publication types, DECISIONS 2026-11-11) |
 | Data | `PFM Endorsements` list | SharePoint site | One row per endorser per publication: order, role, status, due date, response |
-| Data | `PFM Process Steps` list (PFMProcessSteps) | SharePoint site | Process steps derived from DAFMAN 90-161, with paragraph references. All list names: docs/power-automate-provisioning.md section 1 |
+| Data | `PFM Process Steps` list (PFMProcessSteps) | SharePoint site | The stages 0-12 of docs/process-model.md (PFM 1A, 12 Nov), with paragraph references and the action types each applies to. All list names: docs/power-automate-provisioning.md section 1 |
+| Data | Other live lists: `PFM Offices`, `PFM Series`, `PFM Settings`, `PFM Product Index`, `PFM Reviews`, `PFM Activity Log` | SharePoint site | Coordinators and their triggers, subject series (Table A2.1), settings, the product index (6.4.2), periodic and special reviews, the event trail |
+| Data | New lists (approved 12 Nov, built by T02 r10): `PFM Guidance`, `PFM Recommendations`, `PFM Waivers` | SharePoint site | Screen text and the screen path for the app (12A); DAF Form 847 intake and outbound; waivers written into wing publications (DAFMAN 9.5.3, ANGMAN 1.7.9). Design: docs/reviews/2026-11-12-list-design-full-scope.md |
 | Data | Library `90-161.Z` | SharePoint site | Folders Seals, Working Files (drafts, DAF Form 673, CRM; one subfolder per action, Q3A) and Record Sets (publications and forms apart, 15A); versioning on |
-| Logic | Power Automate flows | DoD365 | Endorsement requests, reminders, escalation, stage advance, status notices to customers |
-| UI | Power Apps canvas app | DoD365 | Customer intake (new request, endorser entry), status view, the PFM's work queue |
+| Logic | Power Automate flows | DoD365 | Endorsement requests, reminders, escalation, stage advance, status notices to customers; AO appointment (11A); periodic and special review tasks and the PFM rescind action on no answer (5A); DAF Form 847 routing; waiver renewal reminders. Rules: docs/flow-rules.md (written before any flow, PFM 2A) |
+| UI | Power Apps canvas app | DoD365 | Customer intake (new request, endorser entry), status view, the PFM's work queue; one screen per step from PFM Guidance (docs/guidance/customer-steps.md) |
 | UI | List views + JSON formatting | SharePoint | Fallback UI and the PFM's admin views |
 | AI | GenAI.mil assistant | GenAI.mil | Draft cleanup and formatting against DAFMAN 90-161 rules and the DAF template (G2) |
 | Source | Repo `rhope-ops/90-161.Z` | GitHub (public) | Code, schemas, prompts, decisions, handoff |

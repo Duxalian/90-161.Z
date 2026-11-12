@@ -189,7 +189,7 @@ Abbreviations in Covered by: pm = docs/process-model.md; ld = docs/reviews/2026-
 | Figure A5.1 step 1 PCM | 6726 | No prompt to ask the PCM about change size or coordinator list; PCM column only on PFM Offices | low | Add a PFM Guidance entry for step 1 (PCM contact, optional below HQ DAF). |
 | Figure A5.1 step 1 SMEs | 6728 | Organizations named in the draft roles are not suggested as coordinators | low | Add a request-time question: which organizations does the draft assign duties to; add them as PFM Offices rows. |
 | Figure A5.1 step 6 close task | 6783 | No Closed/Completed Action Status or close rule at posting; ActionStatus has On Track, On Hold, Stalled only | medium | Add Closed to Action Status (or close by Process Step = Posting plus Posted date) and set it in the posting flow. |
-| Table A5.1 columns / Applies To | 6787 | Applies To column decided (DECISIONS:7) but absent from the list design and PFMProcessSteps.json; coordination/OPR sign/certify/approve flags per action not stored | high | Add Applies To (multi-choice of Action Type) to PFM Process Steps and seed it from the Table A5.1 matrix below; add a stage for OPR sign. |
+| Table A5.1 columns / Applies To | 6787 | Resolved (12 Nov): Applies To is in the list design (section 3); the fill below uses the walkthrough stages 0-12 (PFM 1A); the OPR signature is given at stage 10, no new stage | high | Seed PFM Process Steps from the fill below in T02 r10 |
 | Table A5.1 Publications AC | 6825 | OPR signature and date are not recorded on an Administrative Change; Process Steps has no AC path | medium | Add OPR Signed Date on PFM Publications; AC Applies To = OPR sign, approve, post only. |
 | Table A5.1 Publications PM or GM | 6826 | Certify and approve steps for a GM, and legal-only coordination, not written as stage path; no OPR sign | medium | Applies To for GM: stages 1, 2, 6, 7, 8, 9, 10 (legal only, no Formal Coordination or Privacy stage unless the PFM adds one). |
 | Table A5.1 Publications Rescind | 6830 | Stage path for Rescind not stated (coordination, certify, approve, no create/change) | medium | Applies To for Rescind: stages 1, 4-10 per matrix; record that the step list differs after a PFM rescission (7.11.5.5). |
@@ -290,14 +290,14 @@ Forms Certify current | - | X | - | X | - | note 4 marker on this row: needs DAF
 Forms Rescind | X | - | X | X | - | -
 Forms Transfer | X | - | X | X | - | -
 
-### Applies To fill for PFM Process Steps (derived; stage numbers are process-model.md stages 1-10)
+### Applies To fill for PFM Process Steps (stage numbers = the walkthrough stages 0-12, the only stage table; PFM 1A, 12 Nov)
 
-Derived from the matrix above and the plan's stage meanings (5 Formal Coordination, 6 Legal, 7 Certification, 8 Approval, 9 Submission, 10 Posting). Stages 0 to 4 (AO appointment, preparation, drafting, pre-coordination, privacy review) are not in Table A5.1 and need a PFM decision per action (Decide). Items marked Decide are not in Table A5.1.
+Derived from the matrix above and the stage meanings in docs/process-model.md (6 Formal Coordination, 7 Legal, 8 Certification, 9 Approval, 10 Submission, 11 Final build and posting, 12 Periodic review). Stages 0 to 5 (AO appointment, request, drafting, clean and format, pre-coordination, privacy review) are not in Table A5.1 and follow the plan. Items marked Rec are agent recommendations with their DAFMAN basis (second independent review, 12 Nov); the PFM confirms them in the assumption register.
 
-- New, Rewrite, IC (publications): stages 0-10 (4 privacy review per Table A3.1 note 2).
-- Forms New, Revise, Rescind, Transfer: stages 1-3 as needed, 5, 6, 7, 8, 9, 10; Decide whether Posting (10) applies to a Rescind or Transfer (Table A5.1 marks no create/change).
-- Publications Rescind, Transfer: stages 1, 5, 6, 7, 8, 9, 10 (Decide for 10: no create/change mark). Transfer starts with the new approving authority concurrence (7.10.1).
-- GM: stages 1, 2, 6 (legal only), 7, 8, 9, 10; Decide for stage 5 (note 2 says only legal review) and for stage 4.
-- AC: stages 1, 8, 9, 10 plus an OPR sign step (new step needed); no Formal Coordination, Legal or Certification.
-- Periodic review (publication or form): OPR sign only (PFM Reviews, DAF Form 399); no process stage; Process Steps is not used.
-- Certify current: OPR sign and approver sign (no coordination, no certifier); PFM marks the publication (7.5.2). Stages 1, 8, 9 only; Decide for 10.
+- New, Rewrite, IC (publications): stages 0-11 (5 privacy review per Table A3.1 note 2).
+- Forms New, Revise, Rescind, Transfer: stages 1-3 as needed, 6, 7, 8, 9, 10, 11. Rec: stage 11 applies to Rescind and Transfer too (the PFM removes obsolete products and their links, 7.11.1, 8.12, and keeps the PI current, 6.4.2).
+- Publications Rescind, Transfer: stages 1, 6, 7, 8, 9, 10, 11 (Rec for 11, as above). Transfer starts with the new approving authority's concurrence (7.10.1).
+- GM: stages 1, 2, 3, 7 (legal only), 8, 9, 10, 11. Rec: no stage 5 and no stage 6 (Table A5.1 note 2 and 5.1.7: only legal review; 2.8.1 ties the privacy review to formal coordination, which a GM does not have).
+- AC: stages 1, 9, 10, 11. The OPR signature (Table A5.1 "OPR sign") is given at stage 10, so no new stage is needed. No Formal Coordination, Legal or Certification.
+- Periodic review (publication or form): stage 12 (PFM Reviews, DAF Form 399; OPR sign only).
+- Certify current: OPR sign and approver sign (no coordination, no certifier): stages 1, 9, 10, 11 (Rec for 11: the PFM marks "Certified Current on", 7.5.2).

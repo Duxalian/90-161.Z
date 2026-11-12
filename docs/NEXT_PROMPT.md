@@ -1,6 +1,6 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-12 by Claude (independent review of the list design; PFM 1A 2A 3B 4A 5A). Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-12 by Claude (second independent review; PFM 1A-5A; fixes made; assumed-decision batches open). Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State (main)
 
@@ -15,8 +15,9 @@ Updated: 2026-11-12 by Claude (independent review of the list design; PFM 1A 2A 
 - 15 business days (DAFMAN 5.2): a measure, not a hard deadline; reminders, warnings and escalation emails in a measured, professional tone; weekdays only.
 - Continuity: co-owners on every flow and the app; maintainer how-to written last, step by step for a non-expert.
 - Gap review: https://claude.ai/artifact/Ta3utvkZGP5aKXWWeRh7vU (open: test site, Accessibility Checker gate, CUI check for working files).
-- Full-scope list design (14A): docs/reviews/2026-11-12-list-design-full-scope.md, revised after the independent review (docs/reviews/2026-11-12-independent-review.md; PFM 1A 2A 3B 4A 5A). Approved by the PFM 12 Nov (multi-person AO, outbound 847s to the ANG functional at NGB, house column names); next: build T02 r10 (provisioning flow + seed rows + go.md task). Read ANGMAN 90-161 waivers first. Table A3.2 seed: docs/coordination-table-a3-2.md.
-- DAFMAN coverage map (12 Nov): docs/dafman-coverage/README.md (1,408 rows; gaps by theme T1-T12). New paths in process-model: new publication request (N1-N11), out-of-cycle special review (S1-S7); design proposals in list design section 3a (not approved). Order of work on hold (PFM 4, standby). Customer step guidance draft r2 (52 screens, audience pass done; PFM reviews in https://claude.ai/artifact/8qUeXnJNPhyEJNUYU6ShzV, then the text returns here): docs/guidance/customer-steps.md. e-Publishing blocks cloud sessions at its edge server (Akamai Access Denied); the title and number index comes from the government computer (go.md Task 9: 3 saved .mhtml pages, then a PowerShell 5.1 script).
+- Full-scope list design (14A, approved 12 Nov): docs/reviews/2026-11-12-list-design-full-scope.md, revised after the second independent review (https://claude.ai/artifact/VNBoH8i4SNy7do6py58YNM; PFM 1A-5A: one stage table 0-12, one AO plus one alternate, AO 1/2 Email columns, scope ladder with squadron and flight, flow opens the rescind on no answer). Next: T02 r10 (provisioning flow + seed rows + go.md task), after batch answers that add columns (register 1.3-1.5, 4.5). Table A3.2 seed: docs/coordination-table-a3-2.md.
+- DAFMAN coverage map (12 Nov): docs/dafman-coverage/README.md (1,408 rows: Covered 383, N/A 314, Gap 73; themes T1-T13). process-model: stages 0-12, new publication (N1-N11, N6 scope and N11 officials), special review (S1-S7). Customer guidance draft r3 (75 screens): docs/guidance/customer-steps.md; the PFM's review doc https://claude.ai/artifact/8qUeXnJNPhyEJNUYU6ShzV carries r3. e-Publishing index: go.md Task 9.
+- Open now: the PFM answers the assumed decisions in 5 batches (34 points): https://claude.ai/artifact/UAKZ89DXU6xJsedi1dpt7J. After each batch: record in DECISIONS, fix the docs, push.
 
 ## Waiting on the PFM (go.md)
 

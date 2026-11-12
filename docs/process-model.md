@@ -4,21 +4,25 @@ Source: DAFMAN 90-161, 18 Oct 2023, Change 1, Corrective Action 1 May 2026. Stat
 
 ## Stages (one publication action)
 
+One stage table (PFM 1A, 12 Nov 26, independent review): the walkthrough stages 0-12 (https://claude.ai/artifact/VLxDqQfhEfWSw4Ckrc52Ki). PFM Process Steps is seeded from this table.
+
 | # | Stage | Ref | Exit condition | Target business days (Table A5.2) |
 |---|---|---|---|---|
-| 0 | AO appointment (PFM 2026-11-12): the PFM office mailbox e-mails the target organization's CSS org box: publications X with OPR Y are due for {reason}; an authorized official in the OPR must appoint an AO. The CSS answers with the appointee from the GAL. Usually 1 AO per office, at most 2. | Glossary (AO is designated by the OPR), 2.8 | AO named on the PFM Publications row | — |
-| 1 | Preparation: directive or not, existing pubs, prior record set, contact PCM/PFM | 3.1 | DAF Form 673 started | — |
-| 2 | Drafting with SMEs | 3.2, 4.2.2.1 | Draft meets format rules (draft mode) | 60 |
-| 3 | Pre-coordination (optional) | 3.3 | — | — |
-| 4 | Privacy monitor review: the unit privacy monitor reviews the draft before formal coordination | 2.8.1, Table A3.1 note 2 | Privacy monitor review documented | — |
-| 5 | Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673 | 3.4, 5.1, 5.1.5 | All coordinators responded or marked N/A; all comments adjudicated (5.1.8.1, 2.8.13). An open nonconcur may go on to Legal and Certification (PFM 1A, Figure A5.1 step 4) | 20 |
-| 6 | Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication | 5.1.8.2, 3.4 | Legal concur | 20 |
-| 7 | Certification: certifying official endorses DAF Form 673 | 5.6 | Endorsed | 10 |
-| 8 | Approval: approving official endorses DAF Form 673; delegation letter on file. Needs Open Nonconcurs = 0 or an impasse memo in the record set (5.5.1, 5.5.2; PFM 1A) | 5.7 | Endorsed | 10 |
-| 9 | Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM | 6.6.1 | PFM has package | — |
-| 10 | Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI | 6.4.1-6.4.2, 1.1.3.2, Table A5.2 f (steps 9-10 together) | Posted on wing site | 15 |
+| 0 | AO appointment (PFM 2026-11-12): the PFM office mailbox e-mails the target organization's CSS org box: publications X with OPR Y are due for {reason}; an authorized official in the OPR must appoint an AO. The CSS picks the appointee from the GAL in the app (11A). One AO per publication plus at most one alternate (PFM 2A, 12 Nov). | Glossary (AO is designated by the OPR), 2.7.2, 2.8 | AO named on the PFM Publications row | — |
+| 1 | Request: action type, product (or new), OPR, who must follow it (scope level) and the officials that follow from it (N6, N11); preparation: directive or not, existing publications, prior record set, the PCM if the organization has one, notify the PFM. A New action runs checks N1-N11 first | 3.1, 2.3.2, 5.6.3, 5.7.6.3 | Request saved; PFM confirms; DAF Form 673 started | — |
+| 2 | Drafting with SMEs | 3.2, 4.2.2.1 | Draft uploaded | 60 |
+| 3 | Clean and format: the PFM runs GenAI.mil and the renderer (draft mode) (PFM Q2A) | Q2A, 3.1.7, Chapter 4 | Draft meets format rules (draft mode); PFM marks it ready | — |
+| 4 | Pre-coordination (optional) | 3.3 | — | — |
+| 5 | Privacy review: the unit privacy monitor reviews the draft before formal coordination | 2.8.1, Table A3.1 note 2 | Privacy monitor review documented | — |
+| 6 | Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673 | 3.4, 5.1, 5.1.5 | All coordinators responded or marked N/A; all comments adjudicated (5.1.8.1, 2.8.13). An open nonconcur may go on to Legal and Certification (PFM 1A, Figure A5.1 step 4) | 20 |
+| 7 | Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication | 5.1.8.2, 3.4 | Legal concur | 20 |
+| 8 | Certification: certifying official endorses DAF Form 673 | 5.6 | Endorsed | 10 |
+| 9 | Approval: approving official endorses DAF Form 673; delegation letter on file or attached when a delegate signs (5.7.4). Needs Open Nonconcurs = 0 or an impasse memo in the record set (5.5.1, 5.5.2; PFM 1A) | 5.7 | Endorsed | 10 |
+| 10 | Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM. The OPR signature that Table A5.1 marks for an AC and for Certify Current is given here | 6.6.1, Table A5.1 | PFM has package | — |
+| 11 | Final build and posting: the PFM renders the final (seal, page count), posts on the wing site and updates PFM Product Index; for a rescind, removes the product and its links; for Certify Current, marks "Certified Current on" | 6.4.1-6.4.2, 1.1.3.2, 7.11.1, 7.5.2, Table A5.2 f | Posted on wing site; PI updated | 15 |
+| 12 | Periodic review: Next Review Due = 4 years after the later of Effective Date and Last Certified Current Date; the review task opens 6 months before (PFM Reviews, DAF Form 399) | 7.4.2, 7.4.4 | OPR answer recorded | — |
 
-Variants: Rewrite and interim change = stages 4–9 (7.6, 7.7.9). Administrative change = no coordination; 3-Ltr/L3 approves (7.8.10). GM at wing level = local legal review (5.1.7). Periodic or special review (7.4.3, 7.4.4): OPR responds on a DAF Form 399 in at least 30 days. Certify Current = no changes: OPR and approving authority sign the 399, no coordination (7.5.1); the PFM marks "Certified Current on" plus the date (7.5.2). Requires Revision, Requires Transfer, Is Obsolete: the AO starts and completes that action within 180 days (7.4.4.3.3). No response: the PFM initiates a rescind action (7.4.4.4). Prescribed forms are reviewed with their publication and are not re-dated; the 399 joins the record set (8.11.3.2).
+Variants (stage numbers as above): Rewrite and interim change = stages 1-11 (7.6, 7.7.9). Administrative change = no coordination and no certifier; the OPR and the publication's approving official sign (7.8.10, Table A5.1; PFM 4A, 12 Nov: DAFMAN 7.8.3 names a 3-Ltr/L3 official at or above the OPR, and no wing level). GM at wing level = local legal review only (5.1.7; Table A5.1 note 2): stages 1-3, 7-11. Periodic or special review (7.4.3, 7.4.4): OPR responds on a DAF Form 399 in at least 30 days. Certify Current = no changes: OPR and approving authority sign the 399, no coordination (7.5.1); the PFM marks "Certified Current on" plus the date (7.5.2). Requires Revision, Requires Transfer, Is Obsolete: the AO starts and completes that action within 180 days (7.4.4.3.3). No response: the flow opens a PFM rescind action (7.4.4.4; route 7.11.5.5; PFM 5A, 12 Nov). Prescribed forms are reviewed with their publication and are not re-dated; the 399 joins the record set (8.11.3.2).
 
 ## Timing
 
@@ -41,7 +45,7 @@ Item number, Source, Type of comment (Administrative / Substantive / Critical; C
 
 Decided (PFM, 2026-11-12, Q6, Q13): the PFM keeps the mandatory coordinators in PFM Offices: JAG (legal, last), CIO, PFM, FOIA (1.5.3) and Records (7.1.3), each its own row. The AO, with the PCM, adds offices with functional interest (5.1.3). The OPR identifies its own certifying official (5.6.3) and approving official (5.7).
 
-Table A3.2 local offices and triggers: docs/coordination-table-a3-2.md (PFM 3B, 12 Nov), seed for PFM Offices. Table A3.1 is not extracted (Q6 stands for A3.1). Records manager coordinates during formal coordination (7.1.3). Forms changed out of cycle: the Table A3.1 item 3 office is the only required coordinator (A3.2 paragraph), plus legal after all other coordination (8.11.1.2).
+Table A3.2 local offices and triggers: docs/coordination-table-a3-2.md (PFM 3B, 12 Nov), seed for PFM Offices. Table A3.1 is not extracted (Q6 stands for A3.1). Open (assumption register): Table A3.1 item 3 also names the privacy official and the Federal Register and information-collection reviews for command or field publications; the Q13 rows do not include them. Records manager coordinates during formal coordination (7.1.3). Forms changed out of cycle: the Table A3.1 item 3 office is the only required coordinator (A3.2 paragraph), plus legal after all other coordination (8.11.1.2).
 
 ## System boundary
 
@@ -62,7 +66,7 @@ Source and line references: docs/reviews/2026-11-12-dafman-full-gap-check.md (ta
 - A higher-headquarters change opens a special review for each implementing row (2.6.19).
 - Days are calendar days unless stated; coordination stays 15 business days (glossary, 5.2).
 - Decided (PFM 12 Nov, 13 14A 15A): FOIA and Records are separate mandatory coordinators in PFM Offices (one person may hold several roles); full scope is built now; the PFM keeps record sets centrally in library 90-161.Z. A publication that prescribes paper records alerts SAF/CN (7.1.4).
-- Decided (PFM 12 Nov, independent review 1A 2A 3B 4A 5A): nonconcur gate as in stages 5 and 8; Form Type from Table 8.1, Prescribing Publication only for prescribed forms and forms that collect personal data (8.2.1, 8.7.4); Table A3.2 seeds PFM Offices; waiver renewal per waiver (9.5.1).
+- Decided (PFM 12 Nov, independent review 1A 2A 3B 4A 5A): nonconcur gate as in stages 5 and 8; Form Type from Table 8.1, Prescribing Publication only for prescribed forms and forms that collect personal data (8.2.1, 8.7.4); Table A3.2 seeds PFM Offices. Waiver renewal: replaced by coverage-map 1A (12 Nov): one Wing Commander Memorandum for Record within 90 days of a change of command revalidates all wing waivers (ANGMAN 1.7.9); a per-waiver date stays only for waivers a delegated squadron commander approved (9.5.1).
 - GMs: justification on the 673 or staff package (5.1.7, T-1); numbered per 4.3.8.2 (number unchanged on reissue); a wing GM changes only a wing instruction, manual or supplement (7.9.1, Table A11.1 item 7); an IC never changes a GM (7.7.6); follow-up action within 1 year (Table A5.1 note 1).
 - An IC may also certify the publication current (7.5.3). A rescind after a "No Response" review is the PFM rescission: 673 to the certifying and approving officials only (7.11.5.5).
 - Wing ICs (camera-ready): Rule 2, changed elements marked with manual margin bars, no asterisks, no "(Added)" (7.7.5 note, 7.7.8.5).
@@ -79,14 +83,14 @@ Anyone may ask for a new publication. The app walks the request through these ch
 | N3 | Does a wing publication already cover the subject? Search PFM Product Index by title, series and subject words | Yes: revise it (Interim Change or Rewrite), not New. No: continue | 3.1.2 |
 | N4 | Does a higher-headquarters publication cover the subject? | HHQ instruction or manual: a supplement extends its scope unless the HHQ publication allows otherwise; a wing instruction or manual may further implement it. Not allowed: supplementing a PD, PM, GM, MD, OI or a DoD issuance, or an HHQ publication that forbids supplements. A wing manual does not implement an HHQ manual: use a supplement | 1.1.3.5.1, 1.1.3.6.5, 4.7.3.4, Table A11.1 items 4-5 |
 | N5 | No departmental instruction or manual exists | A wing instruction or manual may directly implement a PD or a DAF supplement to a DoD issuance. The row is flagged: when departmental guidance appears later, the wing revises or rescinds it (special review) | 1.1.3.6.4 |
-| N6 | Publication type | Instruction (what to do); Manual (how to); Operating Instruction (one function at the lowest level; wider scope = instruction or manual); Instructional Checklist (supports a named instruction or manual; never collects data); Supplement (N4); Guidance Memorandum only when immediate release is needed for risk to life, safety, property or mission (justification required, expires in 1 year, a permanent publication must follow) | Table A11.1 items 4-8, 7.9.1, 5.1.7, Table A5.1 note 1 |
+| N6 | Who must follow it, then the publication type | Scope first (PFM 4A): the level that owns it (wing, group, squadron, flight, section) and whether units under that level must follow it. Staff of one office only = an operating instruction of that level; that level and the units under it = an instruction or manual of that level (Table A11.1 item 8: "a group OI applies to the group staff ... If applicability to subordinate squadrons is needed, process a group instruction or manual"); squadron and flight rows are by analogy, not named in DAFMAN. Stored in Applies To Level. Then the type: Instruction (what to do); Manual (how to); Operating Instruction (one function at the lowest level; wider scope = instruction or manual); Instructional Checklist (supports a named instruction or manual; never collects data); Supplement (N4); Guidance Memorandum only when immediate release is needed for risk to life, safety, property or mission (justification required, expires in 1 year, a permanent publication must follow) | Table A11.1 items 4-8, 1.1.3.5.1, 7.9.1, 5.1.7, Table A5.1 note 1 |
 | N7 | Higher authority implemented and need | The requester states what the publication implements, why it is needed and the risk of not issuing it | 3.1.4, 3.1.8, 4.4 |
 | N8 | Series | From PFM Series (Table A2.1). Series 1 is reserved for the SecAF, CSAF and CSO | 4.3.1, Table A2.1 |
 | N9 | Number | The PFM assigns the control number, consecutive in the series, at least 3 digits; a supplement takes the parent number + _<unit>SUP; a GM that creates a publication is numbered per 4.3.8.2. The PFM approves every number. The number is unique in PFM Product Index | 4.3.8, 4.3.8.1, 4.3.8.2, 2.6.3 |
 | N10 | Forms | New forms: the PFM assigns form numbers in sequence; adopt a higher-headquarters form first; no duplicate of an existing form; a new form posts with its publication | 8.1.3, 8.3, 8.6.1, 8.7 |
-| N11 | Officials | The OPR names its certifying official (one level above the OPR) and approving official | 5.6.3.2, 5.7 |
+| N11 | Officials (from the N6 scope; PFM 12 Nov) | Approving official: the commander or director over everyone who must follow it (a deputy or acting leader only when that leader cannot; 5.7.6.3). Certifying official: the lowest official with responsibility for the scope, normally one level above the OPR and one below the approver (5.6.3, 5.6.3.2.1). When the official one level above the OPR is the approver, the OPR's director or head certifies, or the approver signs both (5.6.3.2.2, 5.7.7). The app shows who and why; the OPR confirms the names. A delegate needs a delegation letter (5.7.4). Who leads a flight or section (not commands) is an open assumption | 5.6.3, 5.6.3.2, 5.7.4, 5.7.6.3, 5.7.7 |
 
-Then the action follows stages 1-11 like any other New action. Prior record sets do not exist for a new publication (3.1.3 does not apply).
+Then the action follows stages 1-11 (stage table above) like any other New action. Prior record sets do not exist for a new publication (3.1.3 does not apply).
 
 ## Special review out of cycle: commander request or other trigger (DAFMAN 7.4.3, 7.4.4)
 
@@ -94,12 +98,12 @@ A commander (or director), the PFM or an OPR can ask for a review at any time; c
 
 | # | Step | Who | Result | DAFMAN |
 |---|---|---|---|---|
-| S1 | Request: who asks (requesting official), the reason, the scope (one product; all products of an OPR, group or series; or all wing products) and any date the requester needs | Requester to the PFM (app or e-mail) | One review request | 7.4.3 |
+| S1 | Request: who asks (requesting official), the reason, the scope (one product; all products of an OPR, group or series; or all wing products) and any date the requester needs (Review Needed By) | Requester to the PFM (app screen REQ-01 or e-mail) | One review request | 7.4.3 |
 | S2 | The PFM selects the products in scope (filters on PFM Product Index: OPR, series, type, status Active) and confirms the list | PFM | List of products, with their prescribed forms (8.11.3.2) | 7.4.3, 8.11.3.2 |
 | S3 | A flow creates one PFM Reviews row per product: Review Type = Special, the request's reason and requesting official, OPR Response Due = opened + at least 30 days (later if the PFM sets it) | Flow | Rows grouped by one Review Request ID | 7.4.4 |
 | S4 | The PFM office mailbox e-mails each OPR (the organization's CSS org box and the product's AO, as in stage 0): the products, why, the due date, how to answer on a DAF Form 399 | Flow | Contact out of cycle; reminders in weekdays, measured tone | 7.4.4, 2.6.11 |
-| S5 | The OPR answers per product: Certify Current, Requires Revision, Requires Transfer, Is Obsolete, Other; prescribed forms reviewed with it | OPR | 399 uploaded; Certify Current resets the 4-year clock (7.5.2); other answers start a follow-up action within 180 days (7.4.4.3.3) | 7.4.4.1-7.4.4.3, 7.5 |
-| S6 | No answer by the due date: the PFM may start the PFM rescission (673 to the certifying and approving officials only) | PFM | Rescind action | 7.4.4.4, 7.11.5.5 |
+| S5 | The OPR answers per product: Certify Current, Requires Revision, Requires Transfer, Is Obsolete, Other; prescribed forms reviewed with it | OPR | 399 uploaded; Certify Current resets the 4-year clock (7.5.2); Requires Revision, Requires Transfer and Is Obsolete: the AO starts and completes the follow-up action within 180 days (7.4.4.3.3; Other has no 180-day rule) | 7.4.4.1-7.4.4.3, 7.5 |
+| S6 | No answer by the due date: the flow opens a PFM rescind action (PFM 5A, 12 Nov; 7.4.4.4 says "will", 7.11.5.5 "may"): the PFM staffs a 673 to the certifying and approving officials only | Flow, then PFM | Rescind action | 7.4.4.4, 7.11.5.5 |
 | S7 | Status to the requester: on demand and at close, the PFM sends a status report of the request (all products, answers, follow-up actions) | Flow | Report e-mail (DECISIONS 2026-11-11: status report to anyone at any time) | 2.6.8 |
 
 A higher-headquarters change (2.6.19, 4.7.3.5) and new departmental guidance (1.1.3.6.4) use the same path with the reason set by the PFM.
