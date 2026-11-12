@@ -32,11 +32,12 @@ M1. Remove typed paragraph numbers, letters and bullets ("1.1.", "2.3.1.", "a.",
 M2. "shall" -> "must" (DAFMAN 90-161 Table 1.1).
 M3. Tier marks: write them as "(T-0)", "(T-1)", "(T-2)" or "(T-3)" at the end of the sentence they belong to,
     with one space before them. Fix "(T3)", "T-3", "(t-3)" and similar to that form.
-M4. "AF Form 847" and "Air Force Form 847" -> "DAF Form 847".
+M4. "AF Form 847" or "Air Force Form 847", with any title -> "DAF Form 847, {i}Recommendation for Change of Product{/i}"
+    (its current number and title). Keep one entry only.
 M5. Labels the code adds itself: remove "Note:", "NOTE:", "Exception:", "Table 2.1." and "Chapter 1" from the text,
     and put the text in the matching field (notes, exceptions, table title, chapter title).
 M6. In a directive publication (rule D1), bulleted items become "children" paragraphs.
-M7. Chapter and attachment titles in all capital letters; paragraph titles in title case ending with a period.
+M7. Chapter and attachment titles in all capital letters. Keep paragraph titles as written; add a final period if missing.
 
 WHERE EACH PART OF THE DRAFT GOES
 D1. "directive": true for an instruction, manual, policy directive or mission directive (wing "I", "MAN",
@@ -46,6 +47,8 @@ D2. Cover block -> "meta" (see the shape). "date" stays "(Date)" unless the draf
     "opr" and "certifiedBy" are office symbols only. "certifiedByName" is the rank and name under
     "Certified by", without parentheses. "byOrderOf" is one of "SECRETARY OF THE AIR FORCE", "COMMANDER",
     "CHIEF, NATIONAL GUARD BUREAU"; a wing publication uses "COMMANDER" with "byOrderOfUnit" set to the wing.
+    "designator": the publication's short name with no spaces (for example SAMPLEWINGI99-101), from the draft's
+    running header or file name, or from the "Supersedes:" line when it names the same type and number; else P1.
     "action": "new" for a first issue, "rewrite" when it supersedes an earlier version, "ic" for an interim
     change, "ac" for an administrative change. "supersedes": the designator and date from the "Supersedes:" line.
     Do not copy "Pages:", draft marks such as "DRAFT 3" or "do not distribute", or "COMPLIANCE WITH THIS
@@ -79,6 +82,7 @@ D8. Attachment 1 -> "attachments"[0] with "title": "GLOSSARY OF REFERENCES AND S
     Always add, if missing, and list in part 2 as "added, fixed text (D8)": the reference
     "AFI 33-322, {i}Records Management and Information Governance Program{/i}, 23 March 2020" and the adopted form
     "DAF Form 847, {i}Recommendation for Change of Product{/i}" (the fixed opening statements cite both).
+    A Form 847 entry already in the draft counts: rename it under M4; do not add a second one.
     Other attachments: "title" and "paragraphs".
 
 SHAPE (all keys you may use; values are examples, not content)

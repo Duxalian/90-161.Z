@@ -50,11 +50,11 @@ $ReleaseRuleDist = 16          # L-008a: text-to-rule distance under RELEASABILI
 $ReleaseAfter = 16             # L-008a: rule to OPR line
 $BlockRuleBefore = 12.5        # L-008a: Supersedes/Pages line to the third rule
 $GroupBlankLine = 12           # L-010c: blank line between right-column groups, exactly 12 pt (group pitch 0.358 in on DAFMAN 90-161)
-$TocFontSize = 11              # L-011: TOC on DAFMAN 90-161 page 2: 11 pt; chapter and attachment lines bold (4.5.9.7.4.2), paragraph lines not bold
-$TocLine = 14.5                # L-011: 0.202 in between lines of one entry (exactly 14.5 pt)
-$TocAfter = 5                  # L-011: 0.272 in between entries
-$TocHang = 1.0 * $PT           # L-011: entry text and wrapped lines at 2.00 in (1.00 in from the margin)
-$TocNumber = 0.5 * $PT         # L-011: paragraph number at 1.50 in
+$TocFontSize = 11              # L-012: TOC on DAFMAN 90-161 page 2: 11 pt; chapter and attachment lines bold (4.5.9.7.4.2), paragraph lines not bold
+$TocLine = 14.5                # L-012: 0.202 in between lines of one entry (exactly 14.5 pt)
+$TocAfter = 5                  # L-012: 0.272 in between entries
+$TocHang = 1.0 * $PT           # L-012: entry text and wrapped lines at 2.00 in (1.00 in from the margin)
+$TocNumber = 0.5 * $PT         # L-012: paragraph number at 1.50 in
 $OprTab = 0.5 * $PT            # L-010f: office symbol 0.50 in after "OPR:"
 $SupTab = 1.0 * $PT            # L-010g: Supersedes value 1.00 in after the label, wraps under itself
 $OprLeftCol = 4.0 * $PT        # L-010g/h: Supersedes value wraps before 5.0 in; Certified by / Pages right-aligned at 7.50 in
@@ -144,7 +144,7 @@ function Add-TocEntry([string]$Entry, [int]$TocLevel) {
   # Hidden TC field; the TOC is built from these fields only, so entries hold headings, not body text.
   $clean = ($Entry -replace '"', "'")
   $wasBold = $script:sel.Font.Bold
-  $script:sel.Font.Bold = 0   # TOC style decides bold (L-011), not the heading run the field sits in
+  $script:sel.Font.Bold = 0   # TOC style decides bold (L-012), not the heading run the field sits in
   $script:sel.Fields.Add($script:sel.Range, -1, ('TC "' + $clean + '" \l ' + $TocLevel), $false) | Out-Null
   $script:sel.Font.Bold = $wasBold
 }
@@ -306,7 +306,7 @@ try {
     $t = [string](Get-Prop $P 'title')
     $x = [string](Get-Prop $P 'text')
     if ($t) { $sel.TypeText($Gap); Write-Rich $t $isTop }
-    if ($isTop) { Add-TocEntry ($Number + "`t" + ($t -replace '\{/?[ib]\}', '')) 2 }   # L-011: number at 1.50, text at 2.00   # TOC: main paragraph headings only (4.5.8.3)
+    if ($isTop) { Add-TocEntry ($Number + "`t" + ($t -replace '\{/?[ib]\}', '')) 2 }   # TOC: main paragraph headings only (4.5.8.3); number at 1.50, text at 2.00 (L-012)
     if ($x) { $sel.TypeText($Gap); Write-Rich $x }
     foreach ($n in @(Get-Prop $P 'notes' | Where-Object { $null -ne $_ })) { $sel.TypeText($Gap); Write-Rich 'Note:' $true; $sel.TypeText(' '); Write-Rich ([string]$n) }        # F-037 (4.6.2)
     foreach ($e in @(Get-Prop $P 'exceptions' | Where-Object { $null -ne $_ })) { $sel.TypeText($Gap); Write-Rich 'Exception:' $true; $sel.TypeText(' '); Write-Rich ([string]$e) }  # F-037 (4.6.3)
@@ -456,7 +456,7 @@ try {
   # ---------------- TOC and page count ----------------
   if ($null -ne $tocRange) {
     Format-Para $wdAlignLeft 0 0 0
-    foreach ($lv in @(@($wdStyleTOC1, $true, 0), @($wdStyleTOC2, $false, $TocNumber))) {   # L-011
+    foreach ($lv in @(@($wdStyleTOC1, $true, 0), @($wdStyleTOC2, $false, $TocNumber))) {   # L-012
       $st = $doc.Styles.Item($lv[0])
       $st.Font.Name = $FontName; $st.Font.Size = $TocFontSize; $st.Font.Bold = ConvertTo-WordBool $lv[1]; $st.Font.Italic = 0
       $pf = $st.ParagraphFormat

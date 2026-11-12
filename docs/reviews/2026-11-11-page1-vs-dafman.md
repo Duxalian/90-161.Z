@@ -19,7 +19,7 @@ Request: the PFM saw the cover rules did not match DAFMAN 90-161 and asked for a
 
 Fonts (Times New Roman 12 pt, bold italic header columns), left column at 1.00 and line pitch 0.192, right column right edge 7.50, COMPLIANCE line centered (1.91-6.64 vs 1.92-6.62), label values at 2.50 (L-005), OPR and Supersedes tabs, rules 6.50 in wide (Word border 6.54: 0.02 in each side, under 2 px at 96 dpi) and 0.72-0.75 pt vs 0.80 pt (L-008 allows 0.75-0.80; Word has no 0.80 pt border), opening paragraph justified 1.00-7.54 with 0.192 line pitch and two spaces between sentences, SUMMARY OF CHANGES bold italic at 1.00, no header or page number on page 1.
 
-## Table of contents (L-011)
+## Table of contents (L-012)
 
 | Item | DAFMAN p.2 | r3 | r5 |
 |---|---|---|---|

@@ -96,7 +96,7 @@ EXPECTED = {
     "notes": "1 (Electronic folders.)",
     "bullets -> children": "2 (Closing folders.)",
     "dropped fixed sentences": "4 (records, DAF Form 847, supplement, waiver)",
-    "AF Form 847 -> DAF Form 847": "adopted form; AFI 33-322 added to references",
+    "AF Form 847 -> DAF Form 847": "one adopted form entry, Recommendation for Change of Product; AFI 33-322 added to references",
 }
 
 
@@ -114,6 +114,8 @@ def build(path):
     cp = doc.core_properties
     cp.author = "Sample Author"
     cp.title = "Fake messy draft for 90-161.Z Task 6"
+    hdr = doc.sections[0].header.paragraphs[0]   # typed running header, as many drafts have
+    _run(hdr, "SAMPLEWINGI36-101  DRAFT", "Calibri", 9, False, False)
     for text, font, size, bold, italic in LINES:
         _run(doc.add_paragraph(), text, font, size, bold, italic)
     p = doc.add_paragraph()
@@ -130,7 +132,7 @@ def build(path):
 
 def text_of(path):
     d = Document(path)
-    parts = [p.text for p in d.paragraphs]
+    parts = [p.text for p in d.sections[0].header.paragraphs] + [p.text for p in d.paragraphs]
     for t in d.tables:
         for row in t.rows:
             parts.append(" | ".join(c.text for c in row.cells))

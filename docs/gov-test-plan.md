@@ -43,7 +43,7 @@ The "-File ... does not exist" error means the PowerShell window is not in the f
 | 5 | Cover | Matches docs/reviews/2026-11-11-cover-consistency.md: seal 1.20 in at left; right column right-aligned at 7.50 in; 3 rules 0.75 pt; OPR value 0.50 in after label; "Certified by:" right with "(Col Sample A. Certifier)" under it; Supersedes value 1.00 in after label; Pages right on the Supersedes line |
 | 5a | Sentences | Two spaces before each new sentence; one space before (T-n) (L-004); no tier number splits across two lines (2.2 on page 4 ends on one line with "(T-3)"; r4) |
 | 5c | Cover spacing (r5, L-008a, L-010c) | Gaps match DAFMAN 90-161 page 1 within 0.03 in: right-column groups 0.36 in apart; title to COMPLIANCE line 0.42 in; space under COMPLIANCE before its rule; RELEASABILITY to its rule 0.26 in. Claude measures this from the PDF you send |
-| 5d | Table of contents (r5, L-011) | 11 pt; "Chapter" lines bold; "1.1." lines not bold, number at 1.50 in, title at 2.00 in; page numbers right with dot leaders |
+| 5d | Table of contents (r5, L-012) | 11 pt; "Chapter" lines bold; "1.1." lines not bold, number at 1.50 in, title at 2.00 in; page numbers right with dot leaders |
 | 5b | Opening paragraph | Built from parts: implements, purpose, applicability, records, DAF Form 847, supplement, waiver (4.5.5 order) |
 | 6 | Pages line | "Pages: N" equals Word's page count |
 | 7 | Running header | Page 2+ only; odd/even sides swap (L-001) |
