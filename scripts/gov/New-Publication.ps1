@@ -535,6 +535,41 @@ try {
   $doc.Bookmarks.Item('PagesCount').Range.Text = [string]$pages
   $doc.Fields.Update() | Out-Null
 
+  # ---------------- self-measure (Stage 1, PFM 1A): Word read-back against the DAFMAN values, PASS/FAIL per line ----------------
+  # Positions from Range.Information (5 = horizontal, 6 = vertical, points from the page edge). Values: L-007 seal top 1.47 in;
+  # L-012 TOC number 1.50 in, text 2.00 in, line pitch 0.272 in (docs/format-rules.md). Tolerance 0.03 in (0.01 in for pitch).
+  try {
+    $measure = {
+      param([string]$What, [double]$GotPt, [double]$WantIn, [double]$TolIn)
+      $gotIn = [math]::Round($GotPt / 72, 3)
+      $verdict = 'FAIL'
+      if ([math]::Abs($gotIn - $WantIn) -le $TolIn) { $verdict = 'PASS' }
+      'MEASURE ' + $What + ' got=' + $gotIn + 'in want=' + $WantIn + 'in tol=' + $TolIn + ' ' + $verdict
+    }
+    if ($shield -and $pic) { Write-Output (& $measure 'L-007 seal top' ([double]$pic.Range.Information(6)) 1.47 0.03) }
+    if ($null -ne $tocRange -and $doc.TablesOfContents.Count -ge 1) {
+      $toc2 = @(); $tocAll = @()
+      foreach ($tp in $doc.TablesOfContents.Item(1).Range.Paragraphs) { $tocAll += $tp; if ($tp.Range.Text -match '^\s*\d') { $toc2 += $tp } }
+      if ($toc2.Count -ge 1) {
+        $first = $toc2[0].Range.Duplicate; $first.Collapse(1)
+        Write-Output (& $measure 'L-012 TOC number left' ([double]$first.Information(5)) 1.50 0.03)
+        $tab = $toc2[0].Range.Duplicate
+        if ($tab.Find.Execute('^t')) { $tab.Collapse(0); Write-Output (& $measure 'L-012 TOC text left' ([double]$tab.Information(5)) 2.00 0.03) }
+        else { Write-Output 'MEASURE-ERROR L-012 TOC text left: no tab in the first TOC 2 line' }
+      }
+      # Pitch between entries: the first one-line entry and the entry after it (a wrapped entry adds 0.202 in per line).
+      for ($k = 0; $k -lt $tocAll.Count - 1; $k++) {
+        $s1 = $tocAll[$k].Range.Duplicate; $s1.Collapse(1)
+        $e1 = $tocAll[$k].Range.Duplicate; $e1.MoveEnd(1, -1) | Out-Null; $e1.Collapse(0)
+        if ([math]::Abs([double]$e1.Information(6) - [double]$s1.Information(6)) -lt 1) {
+          $s2 = $tocAll[$k + 1].Range.Duplicate; $s2.Collapse(1)
+          Write-Output (& $measure 'L-012 TOC pitch' ([double]$s2.Information(6) - [double]$s1.Information(6)) 0.272 0.01)
+          break
+        }
+      }
+    }
+  } catch { Write-Output ('MEASURE-ERROR ' + $_.Exception.Message) }
+
   # Join-Path returns a PSObject-wrapped string; Word COM rejects it by ref (gov run 2026-11-11). Pass plain typed values.
   [string]$saveName = [string]$outDocx
   [int]$saveFormat = $wdFormatDocx
