@@ -40,6 +40,21 @@ $LabelTab = 1.5 * $PT          # L-005: ACCESSIBILITY/RELEASABILITY text starts 
 $SigIndent = 3.0 * $PT         # L-006: signature block starts 4.0 in from the page edge
 $ShieldWidth = 1.2 * $PT       # L-007: seal/shield 1.2 in wide
 $RuleWidth = 6                 # L-008: cover rules 0.75-0.80 pt measured on 7 covers (wdLineWidth075pt)
+# L-008a: cover spacing measured on DAFMAN 90-161 page 1 (baseline/rule gaps, inches): title->compliance 0.417,
+# compliance->rule 0.182, rule->ACCESSIBILITY 0.285, RELEASABILITY->rule 0.264, rule->OPR 0.394,
+# Supersedes->rule 0.415, rule->opening 0.369. Values below reproduce them within 0.02 in.
+$ComplianceBefore = 16         # L-010e / L-008a: space before the compliance line (pt)
+$ComplianceRuleDist = 11       # L-008a: text-to-rule distance under the compliance line (pt)
+$ComplianceAfter = 9           # L-008a: rule to ACCESSIBILITY
+$ReleaseRuleDist = 16          # L-008a: text-to-rule distance under RELEASABILITY (pt)
+$ReleaseAfter = 16             # L-008a: rule to OPR line
+$BlockRuleBefore = 12.5        # L-008a: Supersedes/Pages line to the third rule
+$GroupBlankLine = 12           # L-010c: blank line between right-column groups, exactly 12 pt (group pitch 0.358 in on DAFMAN 90-161)
+$TocFontSize = 11              # L-012: TOC on DAFMAN 90-161 page 2: 11 pt; chapter and attachment lines bold (4.5.9.7.4.2), paragraph lines not bold
+$TocLine = 14.5                # L-012: 0.202 in between lines of one entry (exactly 14.5 pt)
+$TocAfter = 5                  # L-012: 0.272 in between entries
+$TocHang = 1.0 * $PT           # L-012: entry text and wrapped lines at 2.00 in (1.00 in from the margin)
+$TocNumber = 0.5 * $PT         # L-012: paragraph number at 1.50 in
 $OprTab = 0.5 * $PT            # L-010f: office symbol 0.50 in after "OPR:"
 $SupTab = 1.0 * $PT            # L-010g: Supersedes value 1.00 in after the label, wraps under itself
 $OprLeftCol = 4.0 * $PT        # L-010g/h: Supersedes value wraps before 5.0 in; Certified by / Pages right-aligned at 7.50 in
@@ -54,6 +69,7 @@ $wdHeaderPrimary = 1; $wdHeaderFirst = 2; $wdHeaderEven = 3
 $wdFieldPage = 33; $wdStatisticPages = 2
 $wdFormatDocx = 16; $wdFormatPdf = 17
 $wdAlignTabRight = 2; $wdStory = 6; $wdPageBreak = 7
+$wdLineSpaceExactly = 4; $wdStyleTOC1 = -20; $wdStyleTOC2 = -21
 
 function ConvertTo-WordBool([bool]$Value) { if ($Value) { return -1 } return 0 }   # Word True = -1
 function Get-Prop($Obj, [string]$Name) {
@@ -127,13 +143,17 @@ function Complete-Para { $script:sel.TypeParagraph() }
 function Add-TocEntry([string]$Entry, [int]$TocLevel) {
   # Hidden TC field; the TOC is built from these fields only, so entries hold headings, not body text.
   $clean = ($Entry -replace '"', "'")
+  $wasBold = $script:sel.Font.Bold
+  $script:sel.Font.Bold = 0   # TOC style decides bold (L-012), not the heading run the field sits in
   $script:sel.Fields.Add($script:sel.Range, -1, ('TC "' + $clean + '" \l ' + $TocLevel), $false) | Out-Null
+  $script:sel.Font.Bold = $wasBold
 }
-function Add-BottomRule {
-  # applies to the paragraph just ended
+function Add-BottomRule([double]$Distance = 1) {
+  # applies to the paragraph just ended; $Distance = points between the text and the rule (L-008a)
   $p = $script:doc.Paragraphs.Item($script:doc.Paragraphs.Count - 1)
   $bd = $p.Borders.Item($wdBorderBottom)
   $bd.LineStyle = 1; $bd.LineWidth = $RuleWidth
+  $p.Borders.DistanceFromBottom = $Distance
 }
 
 try {
@@ -200,19 +220,21 @@ try {
     $pr = $tbl.Cell(1, 2).Range.Paragraphs.Item($k + 1).Range
     $pr.Font.Bold = ConvertTo-WordBool ($right[$k][1] -like '*b*')
     $pr.Font.Italic = ConvertTo-WordBool ($right[$k][1] -like '*i*')
+    if ($right[$k][0] -eq '') { $pr.ParagraphFormat.LineSpacingRule = $wdLineSpaceExactly; $pr.ParagraphFormat.LineSpacing = $GroupBlankLine }   # L-010c
   }
   $sel.EndKey($wdStory) | Out-Null
 
-  Format-Para $wdAlignCenter 0 0 $SpaceAfter
+  Format-Para $wdAlignCenter 0 0 $ComplianceAfter
+  $sel.ParagraphFormat.SpaceBefore = $ComplianceBefore   # L-010e: about 0.42 in below the title or seal
   if ($directive) { Write-Rich 'COMPLIANCE WITH THIS PUBLICATION IS MANDATORY' $true }  # F-019 (4.5.4.7)
-  Complete-Para; Add-BottomRule
+  Complete-Para; Add-BottomRule $ComplianceRuleDist
 
   Format-Para $wdAlignLeft $LabelTab (-$LabelTab) $SpaceAfter
   $sel.ParagraphFormat.TabStops.Add($LabelTab) | Out-Null
   Write-Rich 'ACCESSIBILITY:' $true; $sel.TypeText("`t"); Write-Rich ([string](Get-Prop $meta 'accessibility')); Complete-Para   # F-020
-  Format-Para $wdAlignLeft $LabelTab (-$LabelTab) $SpaceAfter
+  Format-Para $wdAlignLeft $LabelTab (-$LabelTab) $ReleaseAfter
   $sel.ParagraphFormat.TabStops.Add($LabelTab) | Out-Null
-  Write-Rich 'RELEASABILITY:' $true; $sel.TypeText("`t"); Write-Rich ([string](Get-Prop $meta 'releasability')); Complete-Para; Add-BottomRule
+  Write-Rich 'RELEASABILITY:' $true; $sel.TypeText("`t"); Write-Rich ([string](Get-Prop $meta 'releasability')); Complete-Para; Add-BottomRule $ReleaseRuleDist
 
   # OPR / Certified by / Supersedes / Pages block (L-010f-h), as a borderless 2-column table:
   # row 1: OPR | Certified by;  row 2: | (certifier name);  row 3: Supersedes | Pages
@@ -240,11 +262,13 @@ try {
   $doc.Bookmarks.Add('PagesCount', $doc.Range($pc.End - 2, $pc.End - 1)) | Out-Null
   $sel.EndKey($wdStory) | Out-Null
   Format-Para $wdAlignLeft 0 0 0
+  $sel.ParagraphFormat.SpaceBefore = $BlockRuleBefore   # L-008a
   Complete-Para; Add-BottomRule
 
   # ---------------- opening paragraph (F-024, F-025) ----------------
-  Format-Para $wdAlignJustify 0 0 $SpaceAfter
+  Format-Para $wdAlignJustify 0 0 0   # L-008a: blank line, no space after, then the opening paragraph
   Complete-Para
+  Format-Para $wdAlignJustify 0 0 $SpaceAfter
   Write-Rich (Get-OpeningParagraph $pub); Complete-Para   # 4.5.5: fixed statements from code, slots from content
 
   # ---------------- summary of changes (F-026, 4.5.6) ----------------
@@ -282,7 +306,7 @@ try {
     $t = [string](Get-Prop $P 'title')
     $x = [string](Get-Prop $P 'text')
     if ($t) { $sel.TypeText($Gap); Write-Rich $t $isTop }
-    if ($isTop) { Add-TocEntry ($Number + $Gap + ($t -replace '\{/?[ib]\}', '')) 2 }   # TOC: main paragraph headings only (4.5.8.3)
+    if ($isTop) { Add-TocEntry ($Number + "`t" + ($t -replace '\{/?[ib]\}', '')) 2 }   # TOC: main paragraph headings only (4.5.8.3); number at 1.50, text at 2.00 (L-012)
     if ($x) { $sel.TypeText($Gap); Write-Rich $x }
     foreach ($n in @(Get-Prop $P 'notes' | Where-Object { $null -ne $_ })) { $sel.TypeText($Gap); Write-Rich 'Note:' $true; $sel.TypeText(' '); Write-Rich ([string]$n) }        # F-037 (4.6.2)
     foreach ($e in @(Get-Prop $P 'exceptions' | Where-Object { $null -ne $_ })) { $sel.TypeText($Gap); Write-Rich 'Exception:' $true; $sel.TypeText(' '); Write-Rich ([string]$e) }  # F-037 (4.6.3)
@@ -432,6 +456,14 @@ try {
   # ---------------- TOC and page count ----------------
   if ($null -ne $tocRange) {
     Format-Para $wdAlignLeft 0 0 0
+    foreach ($lv in @(@($wdStyleTOC1, $true, 0), @($wdStyleTOC2, $false, $TocNumber))) {   # L-012
+      $st = $doc.Styles.Item($lv[0])
+      $st.Font.Name = $FontName; $st.Font.Size = $TocFontSize; $st.Font.Bold = ConvertTo-WordBool $lv[1]; $st.Font.Italic = 0
+      $pf = $st.ParagraphFormat
+      $pf.LeftIndent = $TocHang; $pf.FirstLineIndent = $lv[2] - $TocHang
+      $pf.SpaceBefore = 0; $pf.SpaceAfter = $TocAfter
+      $pf.LineSpacingRule = $wdLineSpaceExactly; $pf.LineSpacing = $TocLine
+    }
     $doc.TablesOfContents.Add($tocRange, $false, 1, 2, $true, '', $true, $true, '', $true, $true, $false) | Out-Null   # UseFields = TC entries only
     $doc.TablesOfContents.Item(1).Update()
   }

@@ -66,6 +66,7 @@ Severity: `hard` = blocks output; `warn` = reported only.
 | W-002 | Sentences 20 words or fewer; paragraphs 7 sentences or fewer | T1.1 #2 | lint | warn | 2026-11-10 |
 | W-003 | No all-caps for emphasis | T1.1 #4 | lint | warn | 2026-11-10 |
 | W-004 | Active voice; plain language | T1.1 #1, 1.2.2 | lint | warn | 2026-11-10 |
+| X-001 | No unresolved [[PFM: ...]] placeholder from the extraction prompt (prompts/90161Z-T06-extract-prompt-r1.txt); never invent a value (AGENTS.md) | - | lint | hard | 2026-11-11 |
 | S-001 | File names without spaces (3.8.2). The rest of 3.8 (left flush template, separate figure files) is for e-Publishing submission and does not apply to ANG wing camera-ready posting | 3.8 | render | hard | 2026-11-10 |
 
 ## Open
@@ -87,6 +88,8 @@ DAFMAN 90-161 itself is the template (4.5.4). These values are measured with pdf
 | L-006 | Signature block | Starts 4.00 in from the page edge (3.0 in from margin), about two lines below the last text | 109 |
 | L-007 | Seal/shield | x 1.00 in, top 1.47 in, 1.20 in square (7 of 7 covers; see docs/reviews/2026-11-11-cover-consistency.md) | 1 + 6 pubs |
 | L-008 | Cover rules | 3 rules, 6.50 in wide, 0.75-0.80 pt: below COMPLIANCE line, below RELEASABILITY, below Supersedes/Pages (7 of 7) | 1 + 6 pubs |
+| L-008a | Cover spacing | Baseline and rule gaps on DAFMAN 90-161 page 1 (in): title to compliance 0.417; compliance to rule 0.182; rule to ACCESSIBILITY 0.285; RELEASABILITY to rule 0.264; rule to OPR 0.394; Supersedes to rule 0.415; rule to opening 0.369. T01 r3 was 0.049-0.442 (PFM report 2026-11-11) | 1 |
+| L-012 | Table of contents | DAFMAN 90-161 page 2: 11 pt; chapter and attachment entries bold at 1.00 in, wrapped lines at 2.00 in; paragraph entries not bold, number at 1.50 in, text at 2.00 in; 0.202 in between lines of an entry, 0.272 in between entries; page numbers right at 7.50 in with dot leaders. Figures and tables are not listed (4.5.8.3 main paragraph headings only) | 1 |
 | L-009 | Chapters | Start on a new page; "Chapter N" bold centered; title bold centered all caps on the next line | 40 |
 | L-010 | Cover header | Two columns: left "BY ORDER OF ..." bold italic; right column right-aligned bold italic: issuer, type and number, date, series title, title | 1 |
 | L-011 | Attachments | New page; "Attachment N" bold centered; title bold centered all caps; glossary category titles bold at margin | 110 |

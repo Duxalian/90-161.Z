@@ -1,0 +1,159 @@
+90-161.Z EXTRACTION PROMPT, r1 (layer L1). Paste this whole text into GenAI.mil, then attach the draft.
+
+ROLE
+You copy the content of an attached draft Air National Guard wing publication into one JSON object.
+You do not format anything. Code builds the formatted publication from your JSON later.
+The JSON has no fields for font, size, spacing, indent, bold or numbering, so ignore all of that in the draft.
+
+OUTPUT (exactly two parts, nothing before, between or after them)
+Part 1: one fenced code block that starts with ```json and holds the JSON object.
+Part 2: a line "CHANGES AND QUESTIONS", then a numbered list:
+  - every change you made to the draft's words (rules M1-M7 below), as: <where>: "<old>" -> "<new>" (<rule>)
+  - every placeholder you wrote (rule P1), as: <where>: <question>
+  - write "None." when there is nothing to list.
+
+HARD RULES
+R1. Copy the words of the draft exactly. Do not reword, shorten, summarize, improve, correct grammar, or add sentences.
+    The only allowed changes are M1-M7. List each one in part 2.
+R2. Never invent a value: no office symbol, name, rank, date, number, reference, form or title that is not in the draft.
+P1. When a required value is not in the draft, write the placeholder [[PFM: <short question>]] as the value,
+    for example "certifiedByName": "[[PFM: rank and name of the certifying official?]]".
+    The validator stops the build until the PFM replaces every placeholder.
+R3. Output valid JSON: double quotes, no comments, no trailing commas, no keys that are not in the shape below.
+    Inside strings, escape double quotes as \" and use straight quotes in the JSON syntax itself.
+R4. Inline markup inside text is the only formatting you may write: {i}italic{/i} and {b}bold{/b}.
+    Use {i}..{/i} for the titles of publications and forms (for example
+    "AFI 33-322, {i}Records Management and Information Governance Program{/i}") and {b}..{/b} only for
+    references to a table or figure number in the text (for example "the steps in {b}Table 3.1{/b}").
+
+ALLOWED MECHANICAL CHANGES (list each one in part 2)
+M1. Remove typed paragraph numbers, letters and bullets ("1.1.", "2.3.1.", "a.", "(1)", "-", "*").
+    Show the level by nesting with "children" instead. Code numbers every paragraph.
+M2. "shall" -> "must" (DAFMAN 90-161 Table 1.1).
+M3. Tier marks: write them as "(T-0)", "(T-1)", "(T-2)" or "(T-3)" at the end of the sentence they belong to,
+    with one space before them. Fix "(T3)", "T-3", "(t-3)" and similar to that form.
+M4. "AF Form 847" or "Air Force Form 847", with any title -> "DAF Form 847, {i}Recommendation for Change of Product{/i}"
+    (its current number and title). Keep one entry only.
+M5. Labels the code adds itself: remove "Note:", "NOTE:", "Exception:", "Table 2.1." and "Chapter 1" from the text,
+    and put the text in the matching field (notes, exceptions, table title, chapter title).
+M6. In a directive publication (rule D1), bulleted items become "children" paragraphs.
+M7. Chapter and attachment titles in all capital letters. Keep paragraph titles as written; add a final period if missing.
+
+WHERE EACH PART OF THE DRAFT GOES
+D1. "directive": true for an instruction, manual, policy directive or mission directive (wing "I", "MAN",
+    "PD", "MD" in the designator); false for a pamphlet, handbook or other non-directive publication.
+D2. Cover block -> "meta" (see the shape). "date" stays "(Date)" unless the draft is a final with a real date.
+    "shieldImage" is always null (the PFM sets it on the gov device).
+    "opr" and "certifiedBy" are office symbols only. "certifiedByName" is the rank and name under
+    "Certified by", without parentheses. "byOrderOf" is one of "SECRETARY OF THE AIR FORCE", "COMMANDER",
+    "CHIEF, NATIONAL GUARD BUREAU"; a wing publication uses "COMMANDER" with "byOrderOfUnit" set to the wing.
+    "designator": the publication's short name with no spaces (for example SAMPLEWINGI99-101), from the draft's
+    running header or file name, or from the "Supersedes:" line when it names the same type and number; else P1.
+    "action": "new" for a first issue, "rewrite" when it supersedes an earlier version, "ic" for an interim
+    change, "ac" for an administrative change. "supersedes": the designator and date from the "Supersedes:" line.
+    Do not copy "Pages:", draft marks such as "DRAFT 3" or "do not distribute", or "COMPLIANCE WITH THIS
+    PUBLICATION IS MANDATORY": code writes them.
+D3. Opening paragraph -> "openingParts". Split it this way:
+    - "antecedent": only what follows "implements" (publication number and title, title in {i}..{/i}).
+      Code writes "This publication implements <antecedent>."
+    - "purpose": the sentence(s) on what the publication covers.
+    - "applicability": the sentence(s) on who it applies to, word for word.
+    - "privacyAct": an object with "authority" and "sorn" only when the draft has a Privacy Act statement, else null.
+    - "copyright", "paperworkReduction", "tradeNames": true only when the draft has that statement, else false.
+    - "punitiveScope": "section" or "paragraph X.Y" only when the draft says violations are punishable under
+      the UCMJ, else null. "statutory": other statutory text, else null.
+    - "supplement": "mayNot" when the draft says it may not be supplemented, else "may".
+    - Drop these sentences; code writes them in fixed DAFMAN 90-161 wording: the records statement
+      ("Ensure all records ... Air Force Records Disposition Schedule ..."), the DAF Form 847 statement
+      ("Refer recommended changes and questions ..."), the supplement statement, and the waiver statement
+      ("The authorities to waive ..."). List each dropped sentence in part 2 as "dropped, fixed text (D3)".
+D4. "summaryOfChanges": the text under SUMMARY OF CHANGES, or null for a new publication.
+D5. Body -> "body.chapters" when the draft has chapters (each with "title" and "paragraphs"),
+    else "body.paragraphs". Each paragraph: "title" (the bold run-in heading, if any, ending with a period),
+    "text" (the rest of the paragraph; "" when it has only a title), and as needed "notes", "exceptions",
+    "bullets" (non-directive only), "table", "children".
+D6. A table -> "table" on the paragraph that introduces it: "title" (without "Table 2.1."), "columns" (header
+    cells), "rows" (each row an array with exactly one string per column). Never put a table in text.
+D7. Signature block -> "signature": one string per line, for example ["SAMPLE A. SIGNER, Colonel, ANG", "Commander"].
+D8. Attachment 1 -> "attachments"[0] with "title": "GLOSSARY OF REFERENCES AND SUPPORTING INFORMATION" and
+    "glossary": "references", "prescribedForms", "adoptedForms" (each a list of strings, number then title in
+    {i}..{/i}, then the date for references), "abbreviations", "officeSymbols", "terms" (each a list of
+    {"term": "...", "definition": "..."}). Put each entry under the heading it has in the draft.
+    Always add, if missing, and list in part 2 as "added, fixed text (D8)": the reference
+    "AFI 33-322, {i}Records Management and Information Governance Program{/i}, 23 March 2020" and the adopted form
+    "DAF Form 847, {i}Recommendation for Change of Product{/i}" (the fixed opening statements cite both).
+    A Form 847 entry already in the draft counts: rename it under M4; do not add a second one.
+    Other attachments: "title" and "paragraphs".
+
+SHAPE (all keys you may use; values are examples, not content)
+{
+  "schemaVersion": "1",
+  "meta": {
+    "action": "rewrite",
+    "directive": true,
+    "byOrderOf": "COMMANDER",
+    "byOrderOfUnit": "SAMPLE AIRLIFT WING",
+    "issuerLine": "SAMPLE AIRLIFT WING",
+    "typeAndNumber": "INSTRUCTION 99-101",
+    "designator": "SAMPLEWINGI99-101",
+    "date": "(Date)",
+    "dateLines": [],
+    "seriesTitle": "Test and Evaluation",
+    "title": "SAMPLE PUBLICATION ROUTING PROCEDURES",
+    "accessibility": "This publication is only available directly from the OPR.",
+    "releasability": "There are no releasability restrictions on this publication",
+    "opr": "OPR-A",
+    "certifiedBy": "OPR-B",
+    "certifiedByName": "Col Sample A. Certifier",
+    "supersedes": [{"designator": "SAMPLEWINGI99-101", "date": "1 January 2020"}],
+    "shieldImage": null
+  },
+  "openingParts": {
+    "antecedent": "{i}Sample Parent Instruction 99-1, Sample Parent Title{/i}",
+    "purpose": "It provides guidance and procedures on routing sample publications.",
+    "applicability": "This publication applies to all civilian employees and uniformed members of the sample wing, including the Air National Guard (ANG).",
+    "privacyAct": null,
+    "copyright": false,
+    "paperworkReduction": false,
+    "punitiveScope": null,
+    "statutory": null,
+    "supplement": "may",
+    "tradeNames": false
+  },
+  "summaryOfChanges": "This document has been revised and should be completely reviewed.",
+  "body": {
+    "chapters": [
+      {
+        "title": "OVERVIEW",
+        "paragraphs": [
+          {"title": "Purpose.", "text": "This sample shows the layout."},
+          {"title": "Sample Office A (OPR-A).", "text": "", "children": [
+            {"text": "Will review each draft within 15 business days. (T-3)"}
+          ]},
+          {"title": "Routing.", "text": "Route each draft through the steps in {b}Table 1.1{/b}.",
+           "table": {"title": "Sample Routing Steps.", "columns": ["Step", "Action"], "rows": [["1", "Draft"], ["2", "Certify"]]},
+           "notes": ["This is a sample note."]}
+        ]
+      }
+    ]
+  },
+  "signature": ["SAMPLE A. SIGNER, Colonel, ANG", "Commander"],
+  "attachments": [
+    {
+      "title": "GLOSSARY OF REFERENCES AND SUPPORTING INFORMATION",
+      "glossary": {
+        "references": ["AFI 33-322, {i}Records Management and Information Governance Program{/i}, 23 March 2020"],
+        "prescribedForms": [],
+        "adoptedForms": ["DAF Form 847, {i}Recommendation for Change of Product{/i}"],
+        "abbreviations": [{"term": "ANG", "definition": "Air National Guard"}],
+        "officeSymbols": [{"term": "OPR-A", "definition": "Sample Office A"}],
+        "terms": []
+      }
+    }
+  ]
+}
+
+CHECK BEFORE YOU ANSWER
+- Every paragraph, table row, note and glossary entry of the draft is in the JSON once, in the draft's order.
+- No words were changed except M1-M7, and part 2 lists each change, dropped sentence and placeholder.
+- The JSON parses, and it uses only the keys in SHAPE.
