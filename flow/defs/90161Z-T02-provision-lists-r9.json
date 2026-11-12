@@ -1,6 +1,6 @@
 {
-  "displayName": "90161Z T02 Provision Lists r8",
-  "description": "Creates the nine Publications and Forms Manager (PFM) lists, their columns, views and indexes from flow/provisioning-payload.json (embedded at build), adds the series and settings rows, then sets display titles. Asks for the site address and the site title; stops before creating anything if the title does not match. One request at a time, in payload order. Process step rows are not sent (steps not yet approved).",
+  "displayName": "90161Z T02 Provision Lists r9",
+  "description": "Creates the nine Publications and Forms Manager (PFM) lists, their columns, views and indexes from flow/provisioning-payload.json (embedded at build), adds the series and settings rows, then sets display titles. Asks for the site address only. One request at a time, in payload order. Process step rows are not sent (steps not yet approved).",
   "connections": [
     "shared_sharepointonline"
   ],
@@ -21,87 +21,18 @@
               "x-ms-dynamically-added": true,
               "description": "Full site address, https://.../sites/...",
               "x-ms-content-hint": "TEXT"
-            },
-            "text_1": {
-              "title": "Site Title",
-              "type": "string",
-              "x-ms-dynamically-added": true,
-              "description": "The site's title exactly as it shows at the top of the site",
-              "x-ms-content-hint": "TEXT"
             }
           },
           "required": [
-            "text",
-            "text_1"
+            "text"
           ]
         }
       }
     }
   },
   "actions": {
-    "Get_Site_Title": {
-      "runAfter": {},
-      "type": "OpenApiConnection",
-      "inputs": {
-        "parameters": {
-          "dataset": "@triggerBody()['text']",
-          "parameters/method": "GET",
-          "parameters/uri": "_api/web?$select=Title",
-          "parameters/headers": {
-            "Accept": "application/json;odata=verbose"
-          }
-        },
-        "host": {
-          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
-          "connectionName": "shared_sharepointonline",
-          "operationId": "HttpRequest"
-        },
-        "authentication": {
-          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
-          "type": "Raw"
-        }
-      }
-    },
-    "Check_Site_Title": {
-      "runAfter": {
-        "Get_Site_Title": [
-          "Succeeded"
-        ]
-      },
-      "type": "If",
-      "expression": {
-        "and": [
-          {
-            "equals": [
-              "@toLower(trim(string(body('Get_Site_Title')?['d']?['Title'])))",
-              "@toLower(trim(triggerBody()['text_1']))"
-            ]
-          }
-        ]
-      },
-      "actions": {},
-      "else": {
-        "actions": {
-          "Stop_Wrong_Site": {
-            "runAfter": {},
-            "type": "Terminate",
-            "inputs": {
-              "runStatus": "Failed",
-              "runError": {
-                "code": "SiteTitleMismatch",
-                "message": "The site title does not match the title you typed. Nothing was created."
-              }
-            }
-          }
-        }
-      }
-    },
     "Payload": {
-      "runAfter": {
-        "Check_Site_Title": [
-          "Succeeded"
-        ]
-      },
+      "runAfter": {},
       "type": "Compose",
       "inputs": "replaced at build from flow/provisioning-payload.json"
     },

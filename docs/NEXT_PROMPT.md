@@ -1,13 +1,13 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-11 17:30 CT by Claude. Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-12 by Claude. Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State (main)
 
 - Cloud sessions: start on the environment "90-161.Z" (pwsh + PSScriptAnalyzer setup script; PII_GUARD_DENYLIST set).
 - Names and columns decided 2026-11-11 (docs/DECISIONS.md): 9 PFM lists (Offices, Series, Process Steps, Settings, Publications, Activity Log, Endorsements, Product Index, Reviews); Title Case; tests/check_names.py.
 - r7 (PFM 1A 2A 3A 4A, design check https://claude.ai/artifact/X8LbHd79Zh614i1qYzhyTW): 8 DAFMAN action types; Coordination Stage (Privacy Review, Formal Coordination, Legal); actions point to their Product Index row; PFM Reviews; certifier/approver fields. Flow and app rules from that doc's "Rules for the flows and the app" are not built yet.
-- Provisioning: flow/defs/90161Z-T02-provision-lists-r8.json -> flow/packages/90161Z-T02-provision-lists-r8.zip (145,661 bytes); site-title guard; 39 series rows (Table A2.1) + 2 settings rows (5.2, 5.2.2). Docs: docs/power-automate-provisioning.md.
+- Provisioning: flow/defs/90161Z-T02-provision-lists-r9.json -> flow/packages/90161Z-T02-provision-lists-r9.zip (143,327 bytes); site address only, no site-title check (PFM 2026-11-12); 39 series rows (Table A2.1) + 2 settings rows (5.2, 5.2.2). Docs: docs/power-automate-provisioning.md.
 - Mockup of all lists: https://claude.ai/artifact/2CtD3ASmmmzkz1EPErgCvh (python3 scripts/build_list_mockup.py <out.html>, then republish).
 - Style (PFM 2026-11-11): docs/style-standard.md, DAFMAN 90-161 + The Tongue and Quill; tests/check_names.py enforces it. Rules approved by the PFM 2026-11-11 (1A); No Response kept in PFM Reviews (2A). Apply it to flow e-mails and the app too.
 - Access: all site members read all rows; no item-level permissions; the app filters by Requester and AO.
@@ -18,7 +18,7 @@ Updated: 2026-11-11 17:30 CT by Claude. Keep this file at 40 lines or fewer. The
 
 ## Waiting on the PFM (go.md)
 
-1. Task 2 r8 on a test site, then the real site: Result text or failed step + HTTP status + error code.
+1. Task 2 r9 on a test site, then the real site: Result text or failed step + HTTP status + error code.
 2. Task 5: a real Dataverse solution export (publisher prefix pfm) emailed as file texts.
 3. Task 1 r3 renderer test (Word SaveAs fix).
 
