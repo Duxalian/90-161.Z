@@ -68,7 +68,9 @@ Design:
 2. **Metadata ties a file to its package, not the folder.** Library columns: Product (lookup PFM Product Index), Action (lookup PFM Publications, optional), Document Role (choice: Publication, Prescribed Form, Draft, DAF Form 673, CRM, Endorsement Evidence, Impasse Memo, Delegation Letter, Seal, Other), Edition Date, Is Current (yes/no). The package of a product = every file with that Product value, wherever its folder is.
 3. **Folders exist for permissions and for people who browse.** A flow makes the folder when it is missing and sets its permissions (layout: Q15).
 4. **The app reads the library.** Download = the library file's own link (one copy). "Package" panel = the files of that product the viewer may open. Download several at once: the app opens the library view filtered to the product, where SharePoint's own Download zips the selected files (medium confidence: works in SharePoint Online; no zip action in standard connectors).
-5. **"Attach all documentation you have"** (setup intake, and any time in the app): the user uploads any number of files on one screen. A Power Apps flow writes each file to the library with metadata; it suggests the Document Role from the file name (designator, 673, CRM, 847, _DRAFT) and the user can change it; files it cannot place go to folder Intake, view "PFM - Intake, Needs Sorting". Manual upload straight into the library also works: the same flow runs on new files in Intake. **Test:** largest file a Power Apps flow input takes on the tenant.
+5. **"Attach all documentation you have"** (setup intake, and any time in the app): the user uploads any number of files on one screen. A Power Apps flow writes each file to the library with metadata; it suggests the Document Role from the file name (designator, 673, CRM, 847, _DRAFT) and the user can change it; files it cannot place go to folder Intake, view "PFM - Intake, Needs Sorting". Manual upload straight into the library also works: the same flow runs on new files in Intake. **Test:** largest file a Power Apps flow input takes on the tenant (rights test P18, pilot). Multi-file zip download: rights test S15, go.md Task 11 check M20 (PFM, 12 Nov: test it).
+
+Answered 12 Nov: 15A 16A 17A 18A (with the user told the originals are theirs to keep, move or delete).
 
 | Q | Question | Options | REC |
 |---|---|---|---|
@@ -76,3 +78,5 @@ Design:
 | Q16 | List attachments | A: off on every PFM list; files only in the library. B: on, for convenience | A |
 | Q17 | Document Role on upload | A: the flow suggests it from the file name, the user confirms or changes it; unknown files go to Intake. B: the user picks it for every file | A |
 | Q18 | Originals after the copy (14B) | A: leave them; the PFM sets the old library to read-only after checking the copy. B: delete originals after the check. C: leave both open | A: no data loss, no drift |
+
+Intake screen text after the copy (18A, PFM 12 Nov): "Your original files are not changed. 90-161.Z works from its own copies. You may keep, move or delete the originals as you see fit. Tip: set the old library to read-only so no one edits a copy that 90-161.Z does not see."
