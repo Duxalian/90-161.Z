@@ -18,7 +18,7 @@ Source: DAFMAN 90-161, 18 Oct 2023, Change 1, Corrective Action 1 May 2026. Stat
 | 9 | Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM | 6.6.1 | PFM has package | — |
 | 10 | Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI | 6.4.1-6.4.2, 1.1.3.2, Table A5.2 f (steps 9-10 together) | Posted on wing site | 15 |
 
-Variants: Rewrite and interim change = stages 4–9 (7.6, 7.7.9). Administrative change = no coordination; 3-Ltr/L3 approves (7.8.10). GM at wing level = local legal review (5.1.7). Periodic review: OPR responds in 30+ days; actions complete within 180 days (7.4.4).
+Variants: Rewrite and interim change = stages 4–9 (7.6, 7.7.9). Administrative change = no coordination; 3-Ltr/L3 approves (7.8.10). GM at wing level = local legal review (5.1.7). Periodic or special review (7.4.3, 7.4.4): OPR responds on a DAF Form 399 in at least 30 days. Certify Current = no changes: OPR and approving authority sign the 399, no coordination (7.5.1); the PFM marks "Certified Current on" plus the date (7.5.2). Requires Revision, Requires Transfer, Is Obsolete: the AO starts and completes that action within 180 days (7.4.4.3.3). No response: the PFM initiates a rescind action (7.4.4.4). Prescribed forms are reviewed with their publication and are not re-dated; the 399 joins the record set (8.11.3.2).
 
 ## Timing
 
