@@ -5,7 +5,8 @@ A bundle is one PowerShell text (Windows PowerShell 5.1) that the PFM copies fro
 Windows PowerShell ISE, then runs with F5 (ISSM agreed to the trial, PFM 2026-11-12). It:
   1. asks for the DODID (Enter = profile folder), as the runners do;
   2. makes each task folder under C:\\Users\\<DODID>\\OneDrive - United States Air Force\\90-161.Z if it is missing;
-  3. writes every file (text as UTF-8 with BOM and CRLF, binary from base64), replacing older copies;
+  3. writes every file (text: same content, saved as UTF-8 with BOM and CRLF; binary: byte-exact from base64), replacing
+     older copies; the WROTE line shows src-sha256 = the first 12 hex of the repo file's sha256 (LF, no BOM);
   4. runs the runner's text in-process with -Id and -NoPause.
 Text files are embedded as readable single-quoted here-strings, so the PFM and the ISSM can read the code.
 Usage: python3 scripts/build_paste_bundles.py [--check]   (--check: exit 1 if a bundle is out of date)
@@ -82,14 +83,16 @@ try {
     } else {
       [System.IO.File]::WriteAllBytes($path, [System.Convert]::FromBase64String(($f.Data -replace '\s', '')))
     }
-    Write-Host ('WROTE ' + $f.Dir + '\' + $f.Name + ' sha256=' + $f.Sha)
+    Write-Host ('WROTE ' + $f.Dir + '\' + $f.Name + ' src-sha256=' + $f.Sha)
   }
   $runText = ($files | Where-Object { $_.Dir -eq $runDir -and $_.Name -eq $runName } | Select-Object -First 1).Data
   Write-Host ('RUN ' + $runName + ' (' + $bundle + ')')
-  & ([scriptblock]::Create($runText)) -Id $id -NoPause
+  Push-Location
+  try { & ([scriptblock]::Create($runText)) -Id $id -NoPause } finally { Pop-Location }
 } catch {
   $msg = [string]$_
-  foreach ($x in @($id, $profileLeaf, $env:USERNAME)) { if ($x -and $x.Length -ge 4) { $msg = $msg -replace [regex]::Escape($x), '<DODID>' } }
+  $secret = @($id, $profileLeaf, $env:USERNAME) | Where-Object { $_ -and $_.Length -ge 4 } | Sort-Object -Unique | Sort-Object Length -Descending
+  foreach ($x in $secret) { $msg = $msg -replace [regex]::Escape($x), '<DODID>' }
   Write-Host ''
   Write-Host ('STOPPED: ' + $msg)
   Write-Host 'Report this STOPPED line.'

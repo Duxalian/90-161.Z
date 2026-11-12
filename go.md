@@ -8,7 +8,7 @@ raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 Reload to see new tasks (GitHub can serve a copy up to 5 minutes old).
 Copy each URL below into the address bar. Save files with Ctrl+S.
 New files are named 90161Z-T<task>-<name>-r<revision> so they sort by task in my folders. Use the highest r number.
-How to paste and run (ISSM agreed to try this, 12 Nov 26): open the paste link, Ctrl+A, Ctrl+C. Start menu, type ISE, open Windows PowerShell ISE. File > New. Click in the white script pane, Ctrl+V, press F5. Type my DODID or press Enter. It makes the task folders if they are missing, saves the files into them and runs the test. Nothing to download or save by hand. If ISE is not there: open Windows PowerShell, right-click to paste, press Enter.
+How to paste and run (ISSM agreed to try this, 12 Nov 26): open the paste link, Ctrl+A, Ctrl+C. Start menu, type ISE, open Windows PowerShell ISE. File > New. Click in the white script pane, Ctrl+V, press F5. Type my DODID or press Enter. It makes the task folders if they are missing, saves the files into them and runs the test. Nothing to download or save by hand. If ISE is not there: open Windows PowerShell, right-click to paste, press Enter (not tested yet; tell Claude if it fails). Screenshots of the ISE window can show my DODID in the path: crop them.
 If a script will not run, stop that task and tell Claude with the STOPPED line. Do not work around it (risk R02).
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.

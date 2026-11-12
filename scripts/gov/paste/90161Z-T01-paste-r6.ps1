@@ -1290,14 +1290,16 @@ try {
     } else {
       [System.IO.File]::WriteAllBytes($path, [System.Convert]::FromBase64String(($f.Data -replace '\s', '')))
     }
-    Write-Host ('WROTE ' + $f.Dir + '\' + $f.Name + ' sha256=' + $f.Sha)
+    Write-Host ('WROTE ' + $f.Dir + '\' + $f.Name + ' src-sha256=' + $f.Sha)
   }
   $runText = ($files | Where-Object { $_.Dir -eq $runDir -and $_.Name -eq $runName } | Select-Object -First 1).Data
   Write-Host ('RUN ' + $runName + ' (' + $bundle + ')')
-  & ([scriptblock]::Create($runText)) -Id $id -NoPause
+  Push-Location
+  try { & ([scriptblock]::Create($runText)) -Id $id -NoPause } finally { Pop-Location }
 } catch {
   $msg = [string]$_
-  foreach ($x in @($id, $profileLeaf, $env:USERNAME)) { if ($x -and $x.Length -ge 4) { $msg = $msg -replace [regex]::Escape($x), '<DODID>' } }
+  $secret = @($id, $profileLeaf, $env:USERNAME) | Where-Object { $_ -and $_.Length -ge 4 } | Sort-Object -Unique | Sort-Object Length -Descending
+  foreach ($x in $secret) { $msg = $msg -replace [regex]::Escape($x), '<DODID>' }
   Write-Host ''
   Write-Host ('STOPPED: ' + $msg)
   Write-Host 'Report this STOPPED line.'

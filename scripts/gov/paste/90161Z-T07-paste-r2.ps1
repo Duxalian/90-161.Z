@@ -1181,7 +1181,7 @@ $files += @{ Dir = 'T01'; Name = 'publication.sample.json'; Kind = 'text'; Sha =
   ]
 }
 '@ }
-$files += @{ Dir = 'T07'; Name = '90161Z-T07-seal-prep-r1.ps1'; Kind = 'text'; Sha = 'fc3a5bfb5c76'; Data = @'
+$files += @{ Dir = 'T07'; Name = '90161Z-T07-seal-prep-r1.ps1'; Kind = 'text'; Sha = '50c6d22db3c0'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 7 seal prep, r1 (L-007, L-007a). Windows PowerShell 5.1, System.Drawing only (no modules).
@@ -1197,7 +1197,7 @@ $files += @{ Dir = 'T07'; Name = '90161Z-T07-seal-prep-r1.ps1'; Kind = 'text'; S
   Output: 90161Z-T07-result-r1.txt in the T07 folder, one line per seal by number only (seal01, seal02 ...),
   and 90161Z-T07-key-r1.txt that maps numbers to file names. Send only the result file; the key stays local.
   The DODID, profile folder name and user name are replaced by <DODID> in all output.
-  Parameters (used by 90161Z-T07-seal-test-r1.ps1): -Id, -SealDir, -ResultName, -NoPause skip the questions.
+  Parameters (used by the T07 seal test runner): -Id, -SealDir, -ResultName, -NoPause skip the questions.
 #>
 param([string]$Id, [string]$SealDir, [string]$ResultName = '90161Z-T07-result-r1.txt', [switch]$NoPause)
 $task = 'T07'
@@ -1686,14 +1686,16 @@ try {
     } else {
       [System.IO.File]::WriteAllBytes($path, [System.Convert]::FromBase64String(($f.Data -replace '\s', '')))
     }
-    Write-Host ('WROTE ' + $f.Dir + '\' + $f.Name + ' sha256=' + $f.Sha)
+    Write-Host ('WROTE ' + $f.Dir + '\' + $f.Name + ' src-sha256=' + $f.Sha)
   }
   $runText = ($files | Where-Object { $_.Dir -eq $runDir -and $_.Name -eq $runName } | Select-Object -First 1).Data
   Write-Host ('RUN ' + $runName + ' (' + $bundle + ')')
-  & ([scriptblock]::Create($runText)) -Id $id -NoPause
+  Push-Location
+  try { & ([scriptblock]::Create($runText)) -Id $id -NoPause } finally { Pop-Location }
 } catch {
   $msg = [string]$_
-  foreach ($x in @($id, $profileLeaf, $env:USERNAME)) { if ($x -and $x.Length -ge 4) { $msg = $msg -replace [regex]::Escape($x), '<DODID>' } }
+  $secret = @($id, $profileLeaf, $env:USERNAME) | Where-Object { $_ -and $_.Length -ge 4 } | Sort-Object -Unique | Sort-Object Length -Descending
+  foreach ($x in $secret) { $msg = $msg -replace [regex]::Escape($x), '<DODID>' }
   Write-Host ''
   Write-Host ('STOPPED: ' + $msg)
   Write-Host 'Report this STOPPED line.'

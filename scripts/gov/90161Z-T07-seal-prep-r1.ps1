@@ -13,7 +13,7 @@
   Output: 90161Z-T07-result-r1.txt in the T07 folder, one line per seal by number only (seal01, seal02 ...),
   and 90161Z-T07-key-r1.txt that maps numbers to file names. Send only the result file; the key stays local.
   The DODID, profile folder name and user name are replaced by <DODID> in all output.
-  Parameters (used by 90161Z-T07-seal-test-r1.ps1): -Id, -SealDir, -ResultName, -NoPause skip the questions.
+  Parameters (used by the T07 seal test runner): -Id, -SealDir, -ResultName, -NoPause skip the questions.
 #>
 param([string]$Id, [string]$SealDir, [string]$ResultName = '90161Z-T07-result-r1.txt', [switch]$NoPause)
 $task = 'T07'
