@@ -34,7 +34,7 @@ Status: draft (Agent, 2026-11-10). Items marked **Rec:** are not decisions until
 
 ## 4. Endorsement flow (G3), first version
 
-1. Customer submits the publication request and an ordered endorser list in the app.
+1. The AO submits the request in the app. Mandatory coordinators come from PFM Offices (JAG last, CIO, PFM; PFM 2026-11-12); the AO adds offices with functional interest (5.1.3) and names the OPR's certifying and approving officials (5.6.3, 5.7).
 2. Flow creates one `Endorsements` row per endorser, status `Not Started`.
 3. Flow sends the request to every endorser in the open Coordination Stage at the same time (Privacy Review, then Formal Coordination, then Legal; DAFMAN 3.4, 5.1.8.1, Table A3.1 note 2; PFM 2026-11-11), with the draft link and due date. A stage opens when the previous one is complete and has no open nonconcur (5.5).
 4. Endorser responds with one of the DAFMAN 5.4 responses in PFM Endorsements: Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment. Comments go to the CRM.
