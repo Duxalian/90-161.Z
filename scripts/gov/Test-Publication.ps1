@@ -55,6 +55,8 @@ try {
 
 $meta = Get-Prop $pub 'meta'
 if ($null -eq $meta) { Add-Finding 'FAIL' 'SCHEMA' 'meta' 'meta object is missing' ; $meta = [pscustomobject]@{} }
+# X-001: the extraction prompt writes [[PFM: question]] where the draft lacks a value; the build stops until the PFM replaces it.
+foreach ($ph in [regex]::Matches($raw, '\[\[PFM:[^\]]*\]\]')) { Add-Finding 'FAIL' 'X-001' 'placeholder' ($ph.Value + ' must be replaced before the build') }
 
 foreach ($f in 'action', 'directive', 'byOrderOf', 'issuerLine', 'typeAndNumber', 'designator', 'date', 'seriesTitle', 'title', 'accessibility', 'releasability', 'opr', 'certifiedBy', 'certifiedByName') {
   $v = Get-Prop $meta $f

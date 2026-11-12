@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 1827 CT. Bookmark on my work computer (clickable links):
+Updated: 11 Nov 26, 1837 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -12,57 +12,56 @@ If a downloaded script is blocked: open its raw link, Ctrl+A, Ctrl+C, paste into
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
 
-## Task 1: renderer test, r4 (open, 11 Nov 26, 1827 CT)
+## Task 1: renderer test, r5 (open, 11 Nov 26, 1837 CT)
 
 Folder: ...\90-161.Z\T01
 
-r3 result: passed. One fix: "(T-3)" broke across two lines at the hyphen (2.2, page 4). r4 keeps tier numbers on one line. Replace New-Publication.ps1 and the runner; the other three files are unchanged.
+r5 replaces r4 (do not run r4). r3 passed. r5 fixes what I saw and what Claude measured against DAFMAN 90-161 page 1 and its table of contents: (T-3) stays on one line; the space above and below the cover lines (rules) and the right-column groups now match DAFMAN within 0.03 in; the table of contents is 11 pt, with only the Chapter lines bold. Replace New-Publication.ps1 and the runner; the other three files are unchanged.
 
 Steps and pass checks:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/gov-test-plan.md
 
-Save these two files into the T01 folder (delete the r3 runner):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T01-renderer-test-r4.ps1
+Save these two files into the T01 folder (delete the r3 and r4 runners):
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T01-renderer-test-r5.ps1
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
 
-In File Explorer, right-click 90161Z-T01-renderer-test-r4.ps1 > Run with PowerShell. Type my DODID, or press Enter. It saves 90161Z-T01-result-r4.txt in the T01 folder.
+In File Explorer, right-click 90161Z-T01-renderer-test-r5.ps1 > Run with PowerShell. Type my DODID, or press Enter. It saves 90161Z-T01-result-r5.txt in the T01 folder.
 
-Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and check 5a: does "(T-3)" at the end of 2.2 on page 4 stay on one line? E-mail the result file and the PDF to my Gmail.
+Report: e-mail the result file, SAMPLEWINGI99-101.docx and SAMPLEWINGI99-101.pdf to my Gmail. Claude measures the cover and the table of contents from the PDF.
 
-## Task 2: create the lists, r9 (passed 11 Nov 26; open: tell Claude test or real site, and the section 3 and 4 checks)
+## Task 6: GenAI.mil extraction test, r1 (open, 11 Nov 26, 1837 CT)
 
-Folder: ...\90-161.Z\T02
+Folder: ...\90-161.Z\T06. Do Task 1 r5 first: this task uses the renderer files in the T01 folder.
 
-r9 replaces r6, r7 and r8 (do not run them). r9 = r8 without the site-title check: the flow asks only for the site address. r8 standardized every name, choice and description IAW DAFMAN 90-161 and The Tongue and Quill, and column descriptions that spell out abbreviations. r7 added the DAFMAN 90-161 check I approved: the eight DAFMAN action types, coordination stages (Privacy Review, Formal Coordination, Legal), nonconcur resolution, certifier and approver fields, a new PFM Reviews list for the 4-year reviews, Expired status, Superseded By and Parent Publication links, and two settings rows (15 business days, 30 calendar days).
+Goal: GenAI.mil turns a messy draft into content, and the renderer builds the publication from that content. The draft is fake.
 
-Run it on a TEST site first (a site or subsite only I use). After it passes there, run it again on the real site.
+Save these three files into the T06 folder:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/prompts/90161Z-T06-extract-prompt-r1.txt
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T06-messy-draft-r1.docx
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T06-extract-test-r1.ps1
 
-First: delete the four lists the r1 run made on the wrong site (Stages, Publications, Endorsements, PublicationIndex): Site contents > the list's ... menu > Delete.
+1. Open GenAI.mil. Open 90161Z-T06-extract-prompt-r1.txt in Notepad, Ctrl+A, Ctrl+C, and paste it into a new chat. Attach 90161Z-T06-messy-draft-r1.docx. Send.
+2. In the answer, copy only the text inside the json box. Paste it into Notepad. File > Save as, Save as type = All files, name 90161Z-T06-extracted-r1.json, Encoding = UTF-8, into the T06 folder.
+3. Copy the "CHANGES AND QUESTIONS" list into a second Notepad file, 90161Z-T06-changes-r1.txt, in the T06 folder.
+4. In File Explorer, right-click 90161Z-T06-extract-test-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter. It saves 90161Z-T06-result-r1.txt.
 
-What r9 does: on the site I paste, it creates nine lists: PFM Offices, PFM Process Steps, PFM Series, PFM Settings, PFM Product Index, PFM Publications, PFM Activity Log, PFM Endorsements, PFM Reviews. Details and checks:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/power-automate-provisioning.md
+Report: e-mail these to my Gmail: 90161Z-T06-extracted-r1.json, 90161Z-T06-changes-r1.txt, 90161Z-T06-result-r1.txt, and the PDF it made. Also say which GenAI.mil model I used. If GenAI.mil refused the file or cut off the answer, send its exact message.
 
-What the lists look like (opens in the Claude app, not on my work computer):
-https://claude.ai/artifact/2CtD3ASmmmzkz1EPErgCvh
+## Task 7: seal library on the real site (open, 11 Nov 26, 1837 CT)
 
-Download into the T02 folder (raw link only):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r9.zip
+No download. Decided: each unit's own shield (1C); seals live in a SharePoint library (2A).
 
-The file must be 143,327 bytes.
+1. On the real site: New > Document library. Name: PFM Seals. Create.
+2. Upload each unit's shield as a PNG file. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png). Square images work best; the renderer sets the width to 1.20 in.
+3. In the library, select Sync, so the files are also on my computer for the renderer.
 
-In Power Automate: My flows > Import > Import Package (Legacy) > Upload > 90161Z-T02-provision-lists-r9.zip.
-Import setup: flow = Create as new. SharePoint connection = Select during import > pick my existing SharePoint connection > Save. Then Import.
-Open the flow "90161Z T02 Provision Lists r9", Test > Manually > Run flow. Paste the full site address. Run it once per site.
-Pass: "Result" shows "Lists: 9, fields and views: 213, rows: 41, updates: 15. Provisioning finished." Then do the checks in section 3 and the settings in section 4 of the details page.
-Then delete the r1 flow "90161Z T02 Provision lists r1" and any r2 to r8 flow I imported.
-
-Report: test site or real site; import ok or the exact error text; the Result text, or for the first failed step only its name, HTTP status and error code.
+Report: done, and the number of seals uploaded. Do not send the seal files or unit names to Claude.
 
 ## Done
 
+- Task 2, create the lists r9 (11 Nov 26): pass on the real site. Lists: 9, fields and views: 213, rows: 41, updates: 15.
 - Task 5, solution export sample (11 Nov 26): export received; Claude uses it for solution-aware flows. The flow used a SharePoint connection reference from another solution; future packages carry their own.
-- Task 2, create the lists r9 (11 Nov 26): pass. Result: Lists: 9, fields and views: 213, rows: 41, updates: 15.
-- Task 1, renderer test r3 (11 Nov 26): pass (checks 1-6). One fix found: "(T-3)" can break across two lines at the hyphen; r4 will fix it.
+- Task 1, renderer test r3 (11 Nov 26): pass (checks 1-6). Fixes in r5: (T-3) line break, cover spacing, table of contents style.
 - Task 2, create the lists r1 (11 Nov 26): import and run ok, four lists created, but on the wrong site and before names were agreed (r2 replaces it).
 - Task 1, renderer test r2 (11 Nov 26): runner and validator ok; Word save failed (fixed in r3).
 - Task 4, SharePoint connection test r2 (11 Nov 26): import ok, existing SharePoint connection ok, run passed (Item count showed items read).

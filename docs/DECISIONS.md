@@ -4,6 +4,9 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-11 | Seals (DAFMAN 4.5.4.2): each unit's own shield (1C). The PFM believes MAJCOM approval was given in the past; no record is on file. (2A) Seal files live in a SharePoint library on the real site (PFM Seals), never in this public repo. | PFM (1C 2A) | Rec A: MAJCOM-level shield unless approval in writing |
+| 2026-11-11 | Build the GenAI.mil extraction prompt before the solution-aware flows (3A): prompts/90161Z-T06-extract-prompt-r1.txt, test Task 6. Placeholders [[PFM: ...]] stop the build (X-001). | PFM (3A) | Rec B: after the flows |
+| 2026-11-11 | T02 r9 ran on the real site (4B). | PFM (4B) | - |
 | 2026-11-12 | Task-result e-mails from the PFM's work address are deleted (moved to Trash) after an agent parses them and records the results in the repo. The agent always asks the PFM to confirm each deletion first (AGENTS.md Project rules). | PFM | Result e-mails kept in Gmail |
 | 2026-11-12 | Flow inputs the PFM fills in (labels and the gray help text under them) are written for a low-skill user: plain words, what to do and where to find it, no "https://.../sites/..." patterns. Applies to every future payload. | PFM | Technical help text ("Full site address, https://.../sites/...") |
 | 2026-11-12 | Remove the site-title check from the provisioning flow: the PFM pastes the correct site address, as in earlier tests. T02 r9 asks only for the site address. | PFM | Site-title guard (naming doc, 2026-11-11) |
