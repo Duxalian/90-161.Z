@@ -13,7 +13,7 @@ Status: the PFM's phase order (12 Nov, in chat) plus agent recommendations marke
 
 ## REC: changes to the plan
 
-1. **REC:** Phase 1 = runner only (test loop for gov-device code). SharePoint setup stays in Power Automate flows. Reason: the PnP sign-in failed (10 Nov), and other wings may have no PowerShell access to SharePoint (Deployable package rule), so a PowerShell installer would be a second path to keep working.
+1. **DECIDED (PFM 1A, 12 Nov):** Phase 1 = runner only (test loop for gov-device code). SharePoint setup stays in Power Automate flows. Reason: the PnP sign-in failed (10 Nov), and other wings may have no PowerShell access to SharePoint (Deployable package rule), so a PowerShell installer would be a second path to keep working.
 2. **REC:** Run phases 2 and 3 as one discussion pass while R01 waits on the gov device. Role re-assignment is a permissions design question: it changes the same Settings rows and groups as phase 3.
 3. **REC:** Add the phases that follow phase 4 (they are in NEXT_PROMPT "Next design" but not in this order):
    - 5. Flow rule catalog (docs/flow-rules.md, decided 2A) and T02 r10 provisioning.
