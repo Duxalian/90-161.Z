@@ -4,6 +4,9 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-12 | Seals live in a Seals folder of one project library named 90-161.Z (subfolders by content). Shields are uploaded by key personnel and almost never change; the folder keeps the site's permissions, no unique permissions (7B). | PFM (7B) | PFM Seals library (2A, 2026-11-11); Rec A: separate PFM Seals library |
+| 2026-11-12 | Users browse through the Power App; the PFM links it in the site navigation and header, which the PFM controls. PFM lists and libraries are not hidden. For users who do not use the app, one list with lookups to the other lists is the browse entry (8). Which list: open (Agent assumption: PFM Product Index). | PFM (8) | Rec A: hide PFM lists and libraries from Site Contents |
+| 2026-11-12 | No check of DAFMAN 90-161 1.1.3.2 and 6.4 against app-first browsing (9B). | PFM (9B) | Rec A: check the paragraphs |
 | 2026-11-12 | The first name in two old commits stays in history (no rewrite, no force-push). gh-pages gets index.html as one commit, not a full push of main (6A). | PFM (6A) | Push main to gh-pages |
 | 2026-11-12 | Task page (rhope-ops.github.io/90-161.Z, index.html): collapsible sections (open tasks expanded, Done collapsed, state remembered per browser), Open/Done labels, jump links, file cards with Copy link, folder boxes with Copy, numbered steps (3A, preview https://claude.ai/artifact/4XLxCcVfpdAWQaBwotUfX2). go.md keeps its patterns: "## Task N: name (open, date)", numbered steps, "Folder:" lines. | PFM (3A) | Plain line-by-line page |
 | 2026-11-12 | Task-result e-mails from the PFM's work address are deleted (moved to Trash) after an agent parses them and records the results in the repo. The agent always asks the PFM to confirm each deletion first (AGENTS.md Project rules). | PFM | Result e-mails kept in Gmail |

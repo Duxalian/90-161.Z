@@ -80,11 +80,14 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-tes
 5. E-mail to my Gmail: 90161Z-T07-test-result-r1.txt and the two PDFs it made (SAMPLEWINGI99-101-TALL.pdf, SAMPLEWINGI99-101-ROUND.pdf).
 
 Part B, real seals:
-1. On the real site: New > Document library. Name: PFM Seals. Create.
-2. Upload each unit's shield. Any size or format (PNG, JPG, GIF, BMP, TIF); the larger and cleaner the better. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png).
-3. In the library, select Sync, so the files are also on my computer.
-4. In File Explorer, right-click 90161Z-T07-seal-prep-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter. Press Enter again to find the synced PFM Seals folder (or paste its path). It writes the prepared seals into a Prepared folder inside the library.
-5. Send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
+Seals go in a Seals folder in the project library 90-161.Z (decided 12 Nov 26). Shields almost never change, so they stay there.
+1. On the real site, if the library does not exist yet: New > Document library. Name: 90-161.Z. Create. Keep the site's permissions (no special permissions on the library or the folder).
+2. In the library: New > Folder. Name: Seals.
+3. Upload each unit's shield into Seals. Any size or format (PNG, JPG, GIF, BMP, TIF); the larger and cleaner the better. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png).
+4. In the library, select Sync, so the files are also on my computer.
+5. In File Explorer, open the synced 90-161.Z library, then the Seals folder. Click the address bar, Ctrl+C.
+6. Right-click 90161Z-T07-seal-prep-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter. When it asks for the seal folder, paste the address (Ctrl+V) and press Enter. Do not just press Enter: r1 only finds a library named PFM Seals. It writes the prepared seals into Seals\Prepared.
+7. Send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
 
 FAIL = under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger file. WARN = under 150 dpi: usable, may print soft.
 
