@@ -1,6 +1,6 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-12 by Claude. Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-12 by Claude (T06/T07 results). Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State (main)
 
@@ -18,9 +18,10 @@ Updated: 2026-11-12 by Claude. Keep this file at 40 lines or fewer. The current 
 
 ## Waiting on the PFM (go.md)
 
+0. Renderer fix (go.md top): all 5 T06/T07 renders failed "Specified cast is not valid" (docs/reviews/2026-11-11-gov-results-t06-t07.md). New-Publication.ps1 now prints FORMAT-FAIL/RENDER-ERROR with the line; read those lines first, then fix the named step.
 1. Task 1 r5: cover spacing, TOC style, tier hyphen (docs/reviews/2026-11-11-page1-vs-dafman.md). Measure his PDF against DAFMAN page 1.
-2. Task 6 r1: GenAI.mil extraction of the fake messy draft; check against EXPECTED in scripts/build_messy_draft.py.
-3. Task 7 r1: Part A fake seals (prep + 2 renders; check PDFs per docs/gov-test-plan.md Task 7), Part B real seals (result by number only, L-007a). T02 r9 passed on the real site.
+2. Task 6 r1: validated (schema pass) with Gemini, GPT, Grok; waiting on the 3 JSON files to grade against EXPECTED in scripts/build_messy_draft.py.
+3. Task 7 r1: Part A prep PASS (4/4 lines); renders wait on the fix (then check PDFs per docs/gov-test-plan.md Task 7), Part B real seals (result by number only, L-007a). T02 r9 passed on the real site.
 4. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
 
 ## Next design (after Task 5)

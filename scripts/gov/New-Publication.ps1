@@ -113,6 +113,16 @@ if ($shield) {
 
 # ---------------- Word helpers ----------------
 $word = $null; $doc = $null
+# T06/T07 gov runs 2026-11-11: Word stopped with "Specified cast is not valid" and no line number.
+# Each layout step added after r3 now runs in Use-Format: a failure prints FORMAT-FAIL with the rule and
+# the script line, the build goes on (so the PDF still exists for measurement), and the exit code is 3.
+$script:formatFails = 0
+function Use-Format([string]$Rule, [scriptblock]$Do) {
+  try { & $Do } catch {
+    $script:formatFails++
+    Write-Output ('FORMAT-FAIL ' + $Rule + ' line ' + $_.InvocationInfo.ScriptLineNumber + ': ' + $_.Exception.Message)
+  }
+}
 function Format-Para([int]$Align = 3, [double]$Left = 0, [double]$First = 0, [double]$After = $SpaceAfter, [bool]$KeepNext = $false) {
   $pf = $script:sel.ParagraphFormat
   $pf.Alignment = $Align
@@ -143,7 +153,13 @@ function Write-Rich([string]$Text, [bool]$Bold = $false, [bool]$Italic = $false)
       '^\(T-[0-3]\)$' {
         # Word nonbreaking hyphen (character 30): "(T-3)" never splits across two lines (T01 r3 result, 2.2).
         $script:sel.Font.Bold = -1; $script:sel.Font.Italic = (ConvertTo-WordBool $i)
-        $script:sel.TypeText($t.Replace('-', [string][char]30)); continue
+        $nb = $t.Replace('-', [string][char]30)
+        try { $script:sel.TypeText([string]$nb) } catch {
+          $script:formatFails++
+          Write-Output ('FORMAT-FAIL F-039 nonbreaking hyphen line ' + $_.InvocationInfo.ScriptLineNumber + ': ' + $_.Exception.Message)
+          $script:sel.TypeText([string]$t)
+        }
+        continue
       }
       default {
         if ($t -ne '') { $script:sel.Font.Bold = (ConvertTo-WordBool $b); $script:sel.Font.Italic = (ConvertTo-WordBool $i); $script:sel.TypeText($t) }
@@ -156,7 +172,8 @@ function Complete-Para { $script:sel.TypeParagraph() }
 function Add-TocEntry([string]$Entry, [int]$TocLevel) {
   # Hidden TC field; the TOC is built from these fields only, so entries hold headings, not body text.
   $clean = ($Entry -replace '"', "'")
-  $wasBold = $script:sel.Font.Bold
+  [int]$wasBold = $script:sel.Font.Bold
+  if ($wasBold -ne 0 -and $wasBold -ne -1) { $wasBold = 0 }   # 9999999 = mixed
   $script:sel.Font.Bold = 0   # TOC style decides bold (L-012), not the heading run the field sits in
   $script:sel.Fields.Add($script:sel.Range, -1, ('TC "' + $clean + '" \l ' + $TocLevel), $false) | Out-Null
   $script:sel.Font.Bold = $wasBold
@@ -166,7 +183,7 @@ function Add-BottomRule([double]$Distance = 1) {
   $p = $script:doc.Paragraphs.Item($script:doc.Paragraphs.Count - 1)
   $bd = $p.Borders.Item($wdBorderBottom)
   $bd.LineStyle = 1; $bd.LineWidth = $RuleWidth
-  $p.Borders.DistanceFromBottom = $Distance
+  Use-Format 'L-008a rule distance' { $p.Borders.DistanceFromBottom = [int][math]::Round($Distance) }   # Long in Word
 }
 
 try {
@@ -205,8 +222,8 @@ try {
     $r.MoveEnd(1, -1) | Out-Null   # exclude the end-of-cell mark
     $r.Collapse(0)
     $pic = $doc.InlineShapes.AddPicture((Resolve-Path -LiteralPath $shield).Path, $false, $true, $r)
-    $pic.LockAspectRatio = 0
-    $pic.Width = $ShieldWidth; $pic.Height = $ShieldWidth   # square canvas: every seal fills the same 1.20 in box (L-007)
+    Use-Format 'L-007 seal aspect' { $pic.LockAspectRatio = 0 }   # msoFalse
+    $pic.Width = [single]$ShieldWidth; $pic.Height = [single]$ShieldWidth   # square canvas: every seal fills the same 1.20 in box (L-007)
   }
   $right = New-Object System.Collections.Generic.List[object]
   $right.Add(@([string](Get-Prop $meta 'issuerLine'), 'bi'))
@@ -232,12 +249,12 @@ try {
     $pr = $tbl.Cell(1, 2).Range.Paragraphs.Item($k + 1).Range
     $pr.Font.Bold = ConvertTo-WordBool ($right[$k][1] -like '*b*')
     $pr.Font.Italic = ConvertTo-WordBool ($right[$k][1] -like '*i*')
-    if ($right[$k][0] -eq '') { $pr.ParagraphFormat.LineSpacingRule = $wdLineSpaceExactly; $pr.ParagraphFormat.LineSpacing = $GroupBlankLine }   # L-010c
+    if ($right[$k][0] -eq '') { Use-Format 'L-010c group line' { $pr.ParagraphFormat.LineSpacingRule = [int]$wdLineSpaceExactly; $pr.ParagraphFormat.LineSpacing = [single]$GroupBlankLine } }
   }
   $sel.EndKey($wdStory) | Out-Null
 
   Format-Para $wdAlignCenter 0 0 $ComplianceAfter
-  $sel.ParagraphFormat.SpaceBefore = $ComplianceBefore   # L-010e: about 0.42 in below the title or seal
+  Use-Format 'L-010e space before compliance' { $sel.ParagraphFormat.SpaceBefore = [single]$ComplianceBefore }   # about 0.42 in below the title or seal
   if ($directive) { Write-Rich 'COMPLIANCE WITH THIS PUBLICATION IS MANDATORY' $true }  # F-019 (4.5.4.7)
   Complete-Para; Add-BottomRule $ComplianceRuleDist
 
@@ -274,7 +291,7 @@ try {
   $doc.Bookmarks.Add('PagesCount', $doc.Range($pc.End - 2, $pc.End - 1)) | Out-Null
   $sel.EndKey($wdStory) | Out-Null
   Format-Para $wdAlignLeft 0 0 0
-  $sel.ParagraphFormat.SpaceBefore = $BlockRuleBefore   # L-008a
+  Use-Format 'L-008a space before third rule' { $sel.ParagraphFormat.SpaceBefore = [single]$BlockRuleBefore }
   Complete-Para; Add-BottomRule
 
   # ---------------- opening paragraph (F-024, F-025) ----------------
@@ -469,12 +486,16 @@ try {
   if ($null -ne $tocRange) {
     Format-Para $wdAlignLeft 0 0 0
     foreach ($lv in @(@($wdStyleTOC1, $true, 0), @($wdStyleTOC2, $false, $TocNumber))) {   # L-012
-      $st = $doc.Styles.Item($lv[0])
-      $st.Font.Name = $FontName; $st.Font.Size = $TocFontSize; $st.Font.Bold = ConvertTo-WordBool $lv[1]; $st.Font.Italic = 0
-      $pf = $st.ParagraphFormat
-      $pf.LeftIndent = $TocHang; $pf.FirstLineIndent = $lv[2] - $TocHang
-      $pf.SpaceBefore = 0; $pf.SpaceAfter = $TocAfter
-      $pf.LineSpacingRule = $wdLineSpaceExactly; $pf.LineSpacing = $TocLine
+      [int]$styleId = $lv[0]; [bool]$styleBold = $lv[1]; [single]$styleFirst = $lv[2] - $TocHang
+      Use-Format ('L-012 TOC style ' + $styleId) {
+        $st = $doc.Styles.Item($styleId)
+        $st.Font.Name = [string]$FontName; $st.Font.Size = [single]$TocFontSize
+        $st.Font.Bold = [int](ConvertTo-WordBool $styleBold); $st.Font.Italic = 0
+        $pf = $st.ParagraphFormat
+        $pf.LeftIndent = [single]$TocHang; $pf.FirstLineIndent = $styleFirst
+        $pf.SpaceBefore = 0; $pf.SpaceAfter = [single]$TocAfter
+        $pf.LineSpacingRule = [int]$wdLineSpaceExactly; $pf.LineSpacing = [single]$TocLine
+      }
     }
     $doc.TablesOfContents.Add($tocRange, $false, 1, 2, $true, '', $true, $true, '', $true, $true, $false) | Out-Null   # UseFields = TC entries only
     $doc.TablesOfContents.Item(1).Update()
@@ -494,7 +515,17 @@ try {
     $doc.ExportAsFixedFormat([string]$outPdf, [int]$wdFormatPdf)
     Write-Output ("RENDER pdf=" + (Split-Path -Leaf $outPdf))
   }
+} catch {
+  # Name the line, so a gov-device result shows where Word stopped.
+  Write-Output ('RENDER-ERROR line ' + $_.InvocationInfo.ScriptLineNumber + ': ' + ([string]$_.InvocationInfo.Line).Trim() + ' :: ' + $_.Exception.Message)
+  throw
 } finally {
-  if ($doc) { $doc.Close([ref]0) }
-  if ($word) { $word.Quit(); [void][Runtime.InteropServices.Marshal]::ReleaseComObject($word) }
+  # Each cleanup step on its own, so a cleanup error never hides the real one or leaves WINWORD.EXE running.
+  [int]$noSave = 0
+  if ($doc) { try { $doc.Close([ref]$noSave) } catch { Write-Output ('CLEANUP close: ' + $_.Exception.Message) } }
+  if ($word) {
+    try { $word.Quit() } catch { Write-Output ('CLEANUP quit: ' + $_.Exception.Message) }
+    try { [void][Runtime.InteropServices.Marshal]::ReleaseComObject($word) } catch { Write-Output ('CLEANUP release: ' + $_.Exception.Message) }
+  }
 }
+if ($script:formatFails -gt 0) { Write-Output ('FORMAT-FAILS count=' + $script:formatFails); exit 3 }
