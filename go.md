@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 1905 CT. Bookmark on my work computer (clickable links):
+Updated: 11 Nov 26, 1955 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -11,6 +11,15 @@ New files are named 90161Z-T<task>-<name>-r<revision> so they sort by task in my
 If a downloaded script is blocked: open its raw link, Ctrl+A, Ctrl+C, paste into Notepad, File > Save as, Save as type = All files, the exact file name shown at the end of the link, into the task folder. All script files are plain ASCII, so the paste is exact.
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
+
+## Fix first: renderer cast error (open, 11 Nov 26, 1955 CT)
+
+My T06 and T07 renders stopped with "Specified cast is not valid", so no PDFs. The seal prep passed. The new New-Publication.ps1 names the line that fails and still makes the PDF.
+
+1. Save this file into the T01 folder (replace the old one):
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
+2. Run Task 1 r5 (below). Then Task 7 Part A step 4 again. Then Task 6 step 4 again.
+3. If a result shows FORMAT-FAIL or RENDER-ERROR lines, e-mail it anyway, with the PDFs that exist.
 
 ## Task 1: renderer test, r5 (open, 11 Nov 26, 1837 CT)
 
@@ -46,6 +55,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T06
 4. In File Explorer, right-click 90161Z-T06-extract-test-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter. It saves 90161Z-T06-result-r1.txt.
 
 Report: e-mail these to my Gmail: 90161Z-T06-extracted-r1.json, 90161Z-T06-changes-r1.txt, 90161Z-T06-result-r1.txt, and the PDF it made. Also say which GenAI.mil model I used. If GenAI.mil refused the file or cut off the answer, send its exact message.
+Status 11 Nov 26: steps 1-3 done with Gemini, GPT and Grok; validation passed, render failed (fix above). Also e-mail each model's JSON and changes list: rename them with the model at the end, for example 90161Z-T06-extracted-r1-grok.json. Run step 4 once, with any one of them saved as 90161Z-T06-extracted-r1.json.
 
 ## Task 7: seals, r1 (open, 11 Nov 26, 1905 CT)
 
