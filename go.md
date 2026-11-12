@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 1840 CT. Bookmark on my work computer (clickable links):
+Updated: 11 Nov 26, 1827 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -12,7 +12,7 @@ If a downloaded script is blocked: open its raw link, Ctrl+A, Ctrl+C, paste into
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
 
-## Task 1: renderer test, r4 (open, 11 Nov 26, 1840 CT)
+## Task 1: renderer test, r4 (open, 11 Nov 26, 1827 CT)
 
 Folder: ...\90-161.Z\T01
 
