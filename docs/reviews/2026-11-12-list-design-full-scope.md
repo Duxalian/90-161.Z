@@ -44,6 +44,9 @@ Rule for the live site: only ADD lists, columns and choice values. Nothing is re
 | PFM Product Index | Edition Date; Locked (yes/no); Form Type (choice: Command or Field, Headquarters Unit, Office, One-Time, Test, Morale, Welfare, and Recreation); Privacy Act Statement Included (yes/no); Information Collection (choice); OMB Number (text); OMB Expiration (date); Markings (choice: None, CUI, Accountable, Safeguarded); Access Level (choice); Section 508 Checked (yes/no); Contains Waiver (yes/no); Adopted Forms (multi-line text: designation, number, title); Implements (text: higher-headquarters publication numbers); Applies To Level (choice, as on PFM Publications) | B2, B3, B5, Table 8.1 and PFM 2A, 8.9.5 (classified left out, PFM 2026-11-11 decision 5), B18, B4, A17, 8.8.2 (R7), A13; Applies To Level copied at posting (PFM 4A) |
 | PFM Process Steps | Applies To (multi-choice: the action types); seed = the walkthrough stages 0-12 (13 rows), each with the action types it applies to, from Table A5.1 (docs/dafman-coverage/part-6.md, section "Applies To fill", same stage numbers) | PFM 1A (12 Nov, procedure gaps); PFM 1A (12 Nov, review: one stage table) |
 | PFM Offices | Suggest When (multi-line: Table A3.2 trigger questions, seeded from docs/coordination-table-a3-2.md, PFM 3B); PCM (person, optional) | A24, B19 |
+| | Org Box Email (text) | PFM 1.3A (12 Nov): stage 0 and S4 e-mail the organization's CSS org box |
+| | Level (choice: Wing, Group, Squadron, Flight, Section); Parent Office (lookup PFM Offices); Leader (person: the commander or director); Leader Title (text, for example Commander) | PFM 1.5A, 1.6A (12 Nov): the app names the approving and certifying officials from the scope (5.6.3, 5.7.6.3) and checks who leads an office. Office keeps the office's name; Leader is the person. The PFM fills them once and updates them at each change of leader |
+| PFM Endorsements | Transcribed (yes/no); Endorsement Evidence Link (URL) | PFM 1.4A (12 Nov): an answer that came by e-mail is entered by the AO or the PFM, with the e-mail attached (5.1.4.3) |
 
 Lookup and person columns on PFM Publications after this design: 9 (Product, Series, Process Step, OPR, Requester, AO, Certifying Official, Approving Official, Government Decision Maker), 11 with Created By and Modified By. The list view lookup threshold is 12. Flows and the app query explicit column lists. AO holds the AO and at most one alternate (PFM 2A, 12 Nov); a multi-value column still counts once, so the count stays at 11 (R5). AO 1 Email and AO 2 Email are text, so they add no lookup (PFM 3A).
 Action and product: Information Collection, Access Level, Section 508 Checked and Contains Waiver are on both lists. The action value is what the action proposes; at posting a flow copies it to the product; after posting the product value is the record (R6).
@@ -62,7 +65,7 @@ From docs/process-model.md "New publication request" (DAFMAN 3.1) and "Special r
 
 ## 4. Library 90-161.Z folders (PFM creates by hand)
 
-Seals; Working Files (one subfolder per action); Record Sets, with Publications and Forms subfolders kept apart (B7, 15A).
+Seals; Working Files (one subfolder per action); Record Sets, with Publications and Forms subfolders kept apart (B7, 15A); Delegation Letters (PFM 1.7A, 12 Nov; checked at each change of command).
 
 ## 5. What flows enforce (gates)
 
@@ -91,9 +94,9 @@ Recounted 12 Nov 26 (second independent review, finding 11), sections 1-5a.
 | Item | Count |
 |---|---|
 | New lists | 3, with 45 columns (PFM Guidance 10, PFM Recommendations 17, PFM Waivers 18) |
-| New columns on existing lists | 59: PFM Publications 35 (section 3: 32; 3a: 3), PFM Product Index 14, PFM Reviews 5, PFM Endorsements 2, PFM Offices 2, PFM Process Steps 1 |
+| New columns on existing lists | 66: PFM Publications 35 (section 3: 32; 3a: 3), PFM Product Index 14, PFM Offices 7, PFM Reviews 5, PFM Endorsements 4, PFM Process Steps 1 (batch 1 added 7, 12 Nov) |
 | New choice values | 15: Action Type 4; Coordination Role 2 on 2 lists = 4; Endorsement Status 1; Event Type 5 (4 + Review Requested); Product Status 1 (In Development) |
 | Property changes | 2: AO allows multiple values; Publication Number unique |
 | View filter changes | 3 (section 5a) |
-| Lookup and person columns (with Created By and Modified By) | PFM Publications 11, PFM Product Index 7, PFM Reviews 5, PFM Recommendations 5, PFM Waivers 4, PFM Guidance 3; all under the threshold of 12 |
-| Seed rows | PFM Offices 22 (Table A3.2); PFM Process Steps 13 (stages 0-12); PFM Guidance: the approved screens of docs/guidance/customer-steps.md, after the PFM's content approval |
+| Lookup and person columns (with Created By and Modified By) | PFM Publications 11, PFM Product Index 7, PFM Offices 6, PFM Reviews 5, PFM Recommendations 5, PFM Waivers 4, PFM Guidance 3; all under the threshold of 12 |
+| Seed rows | PFM Offices 22 (Table A3.2); PFM Settings 1 (PFM Office Mailbox, value entered by the PFM); PFM Process Steps 13 (stages 0-12); PFM Guidance: the approved screens of docs/guidance/customer-steps.md, after the PFM's content approval |
