@@ -1,14 +1,14 @@
 {
- "file": "docs/brief/90161Z-T10-installer-brief-r2.pptx",
+ "file": "docs/brief/90161Z-T10-installer-brief-r3.pptx",
  "title": "90-161.Z for wing PFMs: what it takes to install and run",
  "marking": "UNCLASSIFIED",
- "footer": "90-161.Z installer brief r2 · draft · 12 Nov 2026",
+ "footer": "90-161.Z installer brief r3 · palette preview · 12 Nov 2026",
  "slides": [
   {
    "type": "title",
    "section": "Summary",
    "title": "90-161.Z for wing PFMs: what it takes to install and run",
-   "subtitle": "For a Publications and Forms Manager deciding whether to install it\nDraft r2 · 12 November 2026",
+   "subtitle": "For a Publications and Forms Manager deciding whether to install it\nDraft r3 (palette preview) · 12 November 2026",
    "notes": "Audience: a wing PFM. Covers what it does, what you need, setup, updates, upkeep, limits, approvals and risks."
   },
   {
@@ -22,7 +22,7 @@
     },
     {
      "big": "4 parts",
-     "color": "amber",
+     "color": "warning",
      "label": "to set up: a rights check, the lists, the app and flows, then a first-run setup screen"
     },
     {
@@ -62,7 +62,7 @@
     3,
     11
    ],
-   "key": "Stages 0-12 per DAFMAN 90-161 (legal last: 3.4, 5.1.8.2). Amber: code, not people, applies the DAFMAN format and checks each format rule.",
+   "key": "Stages 0-12 per DAFMAN 90-161 (legal last: 3.4, 5.1.8.2). Yellow: code, not people, applies the DAFMAN format and checks each format rule.",
    "cards": [
     {
      "head": "Action officers",
@@ -365,7 +365,7 @@
     },
     {
      "head": "Logic update",
-     "color": "amber",
+     "color": "warning",
      "items": [
       "App screens and flow steps",
       "You import the new package",

@@ -1,14 +1,14 @@
 {
- "file": "docs/brief/90161Z-T10-command-brief-r2.pptx",
+ "file": "docs/brief/90161Z-T10-command-brief-r3.pptx",
  "title": "Publications tracker (90-161.Z): pilot decision",
  "marking": "UNCLASSIFIED",
- "footer": "90-161.Z command brief r2 · draft · 12 Nov 2026",
+ "footer": "90-161.Z command brief r3 · palette preview · 12 Nov 2026",
  "slides": [
   {
    "type": "title",
    "section": "Summary",
    "title": "Publications tracker (90-161.Z): pilot decision",
-   "subtitle": "For the commander and group commanders\nDraft r2 · 12 November 2026 · about 10 minutes",
+   "subtitle": "For the commander and group commanders\nDraft r3 (palette preview) · 12 November 2026 · about 10 minutes",
    "notes": "Purpose: decide whether to pilot the tracker at this wing and start the approval reviews. No government data is in this brief."
   },
   {
@@ -27,7 +27,7 @@
     },
     {
      "big": "Pilot",
-     "color": "amber",
+     "color": "warning",
      "label": "first at this wing with test data, then real publications, then one other wing"
     }
    ],

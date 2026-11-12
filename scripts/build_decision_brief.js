@@ -15,9 +15,12 @@ const RISKS = JSON.parse(fs.readFileSync(path.join(dir, "risks.json"), "utf8"));
 const DECISIONS = fs.readFileSync(path.join(root, "docs/DECISIONS.md"), "utf8").split("\n")
   .filter(l => /^\| 20\d\d-/.test(l) && /^PFM/.test((l.split("|")[3] || "").trim())).length;
 
-const HEX = { navy: "16324F", red: "C8102E", amber: "9A5B00", green: "2E7D4F", slate: "5B6B7F", grey: "6B6B6B",
-  pale: "EEF1F5", ink: "1B1F2A", white: "FFFFFF", mist: "8FA3B8", line: "C9D2DC", out: "F7F7F7",
-  redT: "F6D5DA", amberT: "F8E8C4", greenT: "D6EBDD", greyT: "E6E6E6" };
+// Colors come from docs/palette.json (PFM 1A, 12 Nov 26), the one palette for the briefs and the app theme.
+const T = JSON.parse(fs.readFileSync(path.join(root, "docs/palette.json"), "utf8")).tokens;
+const HEX = { navy: T.primary, red: T.red, amber: T.amber, green: T.green, slate: T.muted, grey: T.grey,
+  pale: T.surface, ink: T.ink, white: T.white, mist: T.mist, line: T.line, out: T.surfaceOut,
+  redT: T.redTint, amberT: T.amberTint, greenT: T.greenTint, greyT: T.greyTint,
+  warning: T.warning, accent: T.accentFill, onAccent: T.onAccentFill, onNavyMuted: T.onPrimaryMuted };
 const W = 13.333, M = 0.6, CW = W - 2 * M;
 const lv = { L: 0, M: 1, H: 2 };
 const sevColor = { H: HEX.red, M: HEX.amber, L: HEX.green };
@@ -32,7 +35,7 @@ function build(deckName) {
   const mark = (y, color) => ({ text: { text: B.marking, options: { x: 0, y, w: W, h: 0.3, align: "center", fontSize: 10, bold: true, color } } });
   pres.defineSlideMaster({ title: "DARK", background: { color: HEX.navy }, objects: [mark(0.05, HEX.white), mark(7.15, HEX.white),
     { placeholder: { options: { name: "title", type: "title", x: M, y: 1.9, w: CW, h: 1.7, fontFace: "Cambria", fontSize: 40, bold: true, color: HEX.white, valign: "bottom" }, text: "" } },
-    { placeholder: { options: { name: "body", type: "body", x: M, y: 3.8, w: CW, h: 2.9, fontSize: 18, color: "DDE5EE", valign: "top" }, text: "" } }] });
+    { placeholder: { options: { name: "body", type: "body", x: M, y: 3.8, w: CW, h: 2.9, fontSize: 18, color: HEX.onNavyMuted, valign: "top" }, text: "" } }] });
   pres.defineSlideMaster({ title: "CONTENT", background: { color: HEX.white }, margin: [0.9, M, 0.7, M], objects: [mark(0.05, HEX.ink), mark(7.15, HEX.ink),
     { placeholder: { options: { name: "title", type: "title", x: M, y: 0.4, w: CW, h: 0.9, fontFace: "Cambria", fontSize: 30, bold: true, color: HEX.navy, valign: "middle" }, text: "" } },
     { text: { text: B.footer, options: { x: M, y: 6.85, w: 8, h: 0.3, fontSize: 10, color: HEX.slate } } }],
@@ -75,8 +78,8 @@ function build(deckName) {
       const n = d.stages.length, gap = 0.08, cw = (CW - gap * (n - 1)) / n;
       d.stages.forEach((t, i) => {
         const x = M + i * (cw + gap);
-        s.addText(String(i), { shape: pres.shapes.PENTAGON, x, y: 2.35, w: cw, h: 0.8, fill: { color: (d.highlight || []).includes(i) ? HEX.amber : HEX.navy },
-          line: { color: HEX.white }, objectName: "stage-" + i, fontSize: 18, bold: true, color: HEX.white, align: "center", valign: "middle", margin: 0 });
+        s.addText(String(i), { shape: pres.shapes.PENTAGON, x, y: 2.35, w: cw, h: 0.8, fill: { color: (d.highlight || []).includes(i) ? HEX.accent : HEX.navy },
+          line: { color: HEX.white }, objectName: "stage-" + i, fontSize: 18, bold: true, color: (d.highlight || []).includes(i) ? HEX.onAccent : HEX.white, align: "center", valign: "middle", margin: 0 });
         txt(s, t, { x: x - 0.02, y: 3.3, w: cw + 0.04, h: 1.0, fontSize: 11, align: "center" });
       });
       txt(s, d.key, { x: M, y: 4.4, w: CW, h: 0.4, fontSize: 11, color: HEX.slate, italic: true });
@@ -114,7 +117,7 @@ function build(deckName) {
       const n = d.steps.length, gw = (CW - 0.3 * (n - 1)) / n;
       d.steps.forEach((p, i) => {
         const x = M + i * (gw + 0.3); card(s, x, 1.45, gw, 2.3, HEX.pale, "step-" + i);
-        txt(s, p[0], { x: x + 0.2, y: 1.55, w: gw - 0.4, h: 0.5, fontSize: 24, bold: true, fontFace: "Cambria", color: HEX.amber });
+        txt(s, p[0], { x: x + 0.2, y: 1.55, w: gw - 0.4, h: 0.5, fontSize: 24, bold: true, fontFace: "Cambria", color: HEX.warning });
         txt(s, p[1], { x: x + 0.2, y: 2.05, w: gw - 0.4, h: 0.4, fontSize: 15, bold: true, color: HEX.navy });
         txt(s, p[2], { x: x + 0.2, y: 2.45, w: gw - 0.4, h: 1.25, fontSize: 12 });
       });
@@ -144,7 +147,7 @@ function build(deckName) {
       const s = slide("CONTENT", d.section); s.addText(d.title, { placeholder: "title" });
       card(s, M, 1.45, 3.2, 3.9, HEX.navy, "big");
       txt(s, d.big, { x: M + 0.25, y: 1.7, w: 2.7, h: 1.1, fontSize: 60, bold: true, fontFace: "Cambria", color: HEX.white });
-      txt(s, d.bigLabel, { x: M + 0.25, y: 2.85, w: 2.7, h: 2.3, fontSize: 14, color: "DDE5EE" });
+      txt(s, d.bigLabel, { x: M + 0.25, y: 2.85, w: 2.7, h: 2.3, fontSize: 14, color: HEX.onNavyMuted });
       s.addTable([d.head.map(th), ...d.rows.map(r => [td(r[0], { bold: true, color: HEX.navy }), td(r[1])])],
         { x: M + 3.5, y: 1.45, w: CW - 3.5, colW: [2.1, CW - 5.6], border: { type: "solid", color: HEX.line, pt: 0.75 }, margin: 0.06 });
       return s;
@@ -235,11 +238,11 @@ function build(deckName) {
       s.addShape(pres.shapes.LINE, { x: M, y: 2.05, w: CW, h: 0, line: { color: HEX.mist, width: 2 } });
       d.phases.forEach((p, i) => {
         const x = M + i * (pw + 0.2), now = p.state === "now";
-        s.addShape(pres.shapes.OVAL, { x: x + pw / 2 - 0.2, y: 1.85, w: 0.4, h: 0.4, fill: { color: now ? HEX.amber : HEX.navy }, line: { color: HEX.white, width: 2 }, objectName: "ms-" + i });
+        s.addShape(pres.shapes.OVAL, { x: x + pw / 2 - 0.2, y: 1.85, w: 0.4, h: 0.4, fill: { color: now ? HEX.accent : HEX.navy }, line: { color: HEX.white, width: 2 }, objectName: "ms-" + i });
         txt(s, p.name + (now ? " (now)" : ""), { x, y: 2.4, w: pw, h: 0.75, fontSize: 15, bold: true, color: HEX.navy, align: "center" });
         card(s, x, 3.2, pw, 1.9, HEX.pale, "ph-" + i);
         txt(s, p.what, { x: x + 0.15, y: 3.3, w: pw - 0.3, h: 1.75, fontSize: 12 });
-        txt(s, "Gate: " + p.gate, { x: x + 0.05, y: 5.25, w: pw - 0.1, h: 1.3, fontSize: 12, bold: true, color: HEX.amber });
+        txt(s, "Gate: " + p.gate, { x: x + 0.05, y: 5.25, w: pw - 0.1, h: 1.3, fontSize: 12, bold: true, color: HEX.warning });
       });
       return s;
     },

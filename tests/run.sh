@@ -79,6 +79,7 @@ grep -q '$pic.Width = \[single\]$ShieldWidth; $pic.Height = \[single\]$ShieldWid
 grep -q "Write-Output ('RENDER-ERROR line '" scripts/gov/New-Publication.ps1 && grep -q "exit 3 }" scripts/gov/New-Publication.ps1 && ok "renderer names the failing line and flags FORMAT-FAIL (T06/T07 cast error)" || bad "renderer error line"
 
 python3 scripts/build_flow_payload.py --check >/dev/null && ok "flow payload up to date" || bad "flow payload stale"
+python3 tests/check_palette.py >/dev/null && ok "palette contrast (WCAG AA)" || bad "palette contrast"
 python3 scripts/build_rights_probe.py --check >/dev/null && ok "rights probe def up to date" || bad "rights probe def stale"
 python3 scripts/build_flow_package.py --check && ok "flow packages up to date" || bad "flow packages stale"
 python3 tests/check_flow_package.py && ok "flow packages match real export shape" || bad "flow package shape"
