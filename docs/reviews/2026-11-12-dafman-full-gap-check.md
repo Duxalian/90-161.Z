@@ -1,6 +1,6 @@
 # DAFMAN 90-161 full gap check against the plan (12 Nov 26)
 
-Method: 4 agents each read one quarter of ref/dafman90-161.txt (lines 1-2050, 2050-4100, 4100-6150, 6150-8146) in full and compared it with the plan (walkthrough https://claude.ai/artifact/VLxDqQfhEfWSw4Ckrc52Ki, docs/DECISIONS.md, docs/process-model.md). They reported 80 items (with overlaps). Claude checked 30 against the text: 28 hold, 1 is wrong, 1 is unclear. "Checked" = Claude read the cited lines. "Reported" = agent finding, not yet checked line by line.
+Method: 4 agents each read one quarter of ref/dafman90-161.txt (lines 1-2050, 2050-4100, 4100-6150, 6150-8146) in full and compared it with the plan (walkthrough https://claude.ai/artifact/VLxDqQfhEfWSw4Ckrc52Ki, docs/DECISIONS.md, docs/process-model.md). They reported 80 items (with overlaps). Claude read the cited lines for 30 of them: 25 change the plan (table A), 3 were already in the plan, 1 is wrong, 1 is unclear. "Checked" = Claude read the cited lines. "Reported" = agent finding, not yet checked line by line.
 No earlier paragraph-by-paragraph reference existed in the repo; the 11 Nov full-text check produced design rules (r7 design check), not a reference file. This file is that reference.
 
 ## A. Rules the plan states wrongly or leaves out (checked)
