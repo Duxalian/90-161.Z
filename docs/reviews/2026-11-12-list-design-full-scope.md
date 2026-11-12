@@ -101,3 +101,14 @@ Recounted 12 Nov 26 (second independent review, finding 11), sections 1-5a.
 | View filter changes | 3 (section 5a) |
 | Lookup and person columns (with Created By and Modified By) | PFM Publications 11, PFM Product Index 7, PFM Offices 6, PFM Reviews 5, PFM Recommendations 5, PFM Waivers 4, PFM Guidance 3; all under the threshold of 12 |
 | Seed rows | PFM Offices 22 (Table A3.2); PFM Settings 2 (PFM Office Mailbox; Escalation Weekdays for the org-box notice, 2.5B; values entered by the PFM); PFM Process Steps 13 (stages 0-12); PFM Guidance: the approved screens of docs/guidance/customer-steps.md, after the PFM's content approval |
+
+## 7. Batch 4 additions (PFM, 12 Nov)
+
+| List | Change | Why |
+|---|---|---|
+| PFM Recommendations | Squadron Concurrence, Group Concurrence, Wing Concurrence (choice each: Concur, Concur With Remarks, Nonconcur); Squadron Concurrence Date, Group Concurrence Date, Wing Concurrence Date | PFM 4.5A; Table A6.1 sections 3-5 (outbound 847s) |
+| PFM Offices | Seed 2 more mandatory rows: Privacy (Coordination Role Privacy), Information Collections (Coordination Role Information Collections) | PFM 4.2A; Table A3.1 item 3 |
+| PFM Waivers | Flow rule: warn when Tier is T-0, T-1 or T-2 and the Waiver Approver is a wing person (a Leader in PFM Offices) | PFM 4.4A; Table A10.1 |
+| PFM Settings | Working File Disposition Rule (the AFRIMS rule the PFM names) | PFM 4.6A |
+
+Counts after batch 4: PFM Recommendations 23 columns (new lists 51); PFM Settings seed rows 3; PFM Offices seed rows 22 + 2 mandatory. Columns on existing lists unchanged (67).
