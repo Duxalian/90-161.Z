@@ -53,7 +53,7 @@ Goal (PFM, 2026-11-10): rules force the output to look like DAFMAN 90-161 itself
 | Layer | Runs on | Does |
 |---|---|---|
 | L1 Model | GenAI.mil (required; every wing has it, PFM 2026-11-12) | Copies the draft's words exactly (prompt rule R1) and returns content only, as JSON in `schemas/publication.schema.json` (header fields, paragraphs with level, tables, attachments). No style fields exist in the schema. |
-| L2 Renderer | Gov device, PowerShell 5.1 or 7 (PFM 5.1B, 5.3A) | Builds the .docx file itself from the JSON and a DAFMAN template; Word COM only updates fields (table of contents) and saves the PDF. Build code is tested in the cloud on fake samples only. Font, margins, numbering, bolding, header block, draft marking are fixed in code. Two modes: `draft` (coordination, rule F-010) and `final`. |
+| L2 Renderer | Gov device, PowerShell 5.1 or 7 (5.3A) | Route on hold until renderer round 2 (PFM, 12 Nov): pass on L-012 and L-007 = keep Word COM step by step; a fail = the code builds the .docx from the JSON and a DAFMAN template, and Word COM only updates the table of contents and saves the PDF, tested in the cloud on fake samples. Font, margins, numbering, bolding, header block, draft marking are fixed in code. Two modes: `draft` (coordination, rule F-010) and `final`. |
 | L3 Validator | Same as L2 | Checks every rule in docs/format-rules.md; outputs a pass/fail report per rule ID. |
 
 - "Perfect" = 0 fails on `hard` rules, and PFM approves.

@@ -1,6 +1,6 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-12 by Claude (all 5 batches answered; 5.1B 5.2B 5.3A; open: 3.5 legal, test site). Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-12 by Claude (all batches answered; 5.1 on hold until renderer round 2; open: 3.5 legal, test site). Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State (main)
 
