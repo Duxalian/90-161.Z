@@ -32,7 +32,7 @@ M1. Remove typed paragraph numbers, letters and bullets ("1.1.", "2.3.1.", "a.",
 M2. "shall" -> "must" (DAFMAN 90-161 Table 1.1).
 M3. Tier marks: write them as "(T-0)", "(T-1)", "(T-2)" or "(T-3)" at the end of the sentence they belong to,
     with one space before them. Fix "(T3)", "T-3", "(t-3)" and similar to that form.
-M8. In a wing or delta publication ("byOrderOf" is "COMMANDER" and the issuer is a wing or delta), remove every
+M8. (Apply after M3.) In a wing or delta publication ("byOrderOf" is "COMMANDER" and the issuer is a wing or delta), remove every
     "(T-3)": the wing or delta/CC who approves the publication is already the waiver authority (DAFMAN 90-161
     Attachment 10 note 4). Keep "(T-0)", "(T-1)" and "(T-2)" as written. List each removal in part 2.
 M4. "AF Form 847" or "Air Force Form 847", with any title -> "DAF Form 847, {i}Recommendation for Change of Product{/i}"
