@@ -195,5 +195,22 @@ got=$(pwsh -NoProfile -c '. ./scripts/gov/Publication.Common.ps1; $p = Get-Conte
 
 ! grep -rniE "@us\.af\.mil|@mail\.mil|usaf\.dps\.mil/sites/[a-z0-9]" samples tests schemas docs scripts flow templates/build_crm_template.js >/dev/null && ok "no .mil addresses in repo content" || bad "no .mil addresses"
 
+out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
+[ "$out" = "PASTE bundles=2 stale=0" ] && ok "paste bundles current ($out)" || bad "paste bundles: $out (run python3 scripts/build_paste_bundles.py)"
+
+# Paste bundle end to end in pwsh (Linux): DODID and C:\Users swapped for a temp root; every written file must equal its
+# source (text: BOM and CR removed, same swaps applied). The runner then starts in-process with -Id and stops at Unblock-File (Windows only).
+tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pb=0; pf=0
+for b in scripts/gov/paste/*.ps1; do
+  sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#'C:\\\\Users'#'$tp/u'#" "$b" > "$tp/b.ps1"
+  pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1; grep -q '^RUN ' "$tp/out.txt" && pb=$((pb+1))
+done
+while IFS=$'\t' read -r dir src; do
+  got="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z/${dir//\\//}/$(basename "$src")"
+  case "$src" in *.png) cmp -s "$got" "$src" || pf=$((pf+1));; *) cmp -s <(tail -c +4 "$got" | tr -d '\r') <(sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#'C:\\\\Users'#'$tp/u'#" "$src") || pf=$((pf+1));; esac
+done < <(python3 -c "import json;[print(f['dir']+'\t'+f['src']) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] for f in b['files']]")
+rm -rf "$tp"
+[ $pb -eq 2 ] && [ $pf -eq 0 ] && ok "paste bundles write exact files and start the runner (bundles=$pb mismatches=$pf)" || bad "paste bundles run: started=$pb mismatches=$pf"
+
 echo "TESTS pass=$pass fail=$fail"
 [ $fail -eq 0 ]

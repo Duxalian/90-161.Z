@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-12 | Paste and run for gov-device tasks (trial): the PFM reports the ISSM agreed to try it. A task is one generated text (scripts/gov/paste, from scripts/paste_bundles.json via scripts/build_paste_bundles.py) pasted into Windows PowerShell ISE; it makes the task folders, writes the files and runs the runner in-process. First use: go.md Fix first (T01 r6, T07 r2). Download steps stay as reference. Written ISSM approval and the R02 status in docs/brief/risks.json are not updated yet. | PFM | Download each file, Run with PowerShell |
 | 2026-11-12 | Command brief: 1 to 2 concepts per slide, each a question the commanders answer Yes, No or Pending evaluation, with an answer sheet; plain words. | PFM | Table-heavy command brief r2/r3 |
 | 2026-11-12 | Briefs scoped: the command and installer briefs cover use inside one wing only. Promotion to NGB and ANG-wide adoption goes in a third brief (adoption brief), used only after the PFM confirms interest among wing PFMs. | PFM | NGB content in the wing briefs |
 | 2026-11-12 | Network details removed from the public repo now (PFM yes to item 2): blocked-service wording reworded, the gov-device environment check reduced to its design rules, and the Notepad and ExecutionPolicy workarounds removed until the ISSM decides (risk R02). Git history still holds the old text. | PFM | Keep until PA and OPSEC review |

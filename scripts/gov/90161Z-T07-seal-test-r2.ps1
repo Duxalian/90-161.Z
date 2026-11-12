@@ -1,14 +1,16 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 7 seal test runner, r1 (L-007, L-007a). Windows PowerShell 5.1.
+  90-161.Z Task 7 seal test runner, r2 (L-007, L-007a). Windows PowerShell 5.1.
 .DESCRIPTION
   Asks for the DODID (Enter = this computer's profile folder), goes to the Task 7 folder
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T07, checks the 4 fake test seals in its
   TestSeals subfolder and the renderer scripts in the T01 folder, runs 90161Z-T07-seal-prep-r1.ps1 on the test
   seals, then renders the T01 sample twice (tall seal, round seal) as final .docx and PDF in the T07 folder.
-  Saves the output to 90161Z-T07-test-result-r1.txt. The DODID, profile folder name and user name are replaced
+  Saves the output to 90161Z-T07-test-result-r2.txt. The DODID, profile folder name and user name are replaced
   by <DODID> in all output.
+  Parameters (used by the paste bundle, scripts/gov/paste): -Id skips the DODID question, -NoPause skips the final Enter.
 #>
+param([string]$Id, [switch]$NoPause)
 $task = 'T07'
 $tail = 'OneDrive - United States Air Force\90-161.Z\' + $task
 $need = @('90161Z-T07-seal-prep-r1.ps1', 'TestSeals\90161Z-T07-testseal-round-r1.png', 'TestSeals\90161Z-T07-testseal-tall-r1.png', 'TestSeals\90161Z-T07-testseal-soft-r1.png', 'TestSeals\90161Z-T07-testseal-tiny-r1.png')
@@ -23,7 +25,8 @@ try {
   $ErrorActionPreference = 'Stop'
   $profileLeaf = ''
   if ($env:USERPROFILE) { $profileLeaf = Split-Path -Leaf $env:USERPROFILE }
-  $id = ([string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')).Trim()
+  $id = ([string]$Id).Trim()
+  if (-not $id) { $id = ([string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')).Trim() }
   if (-not $id) { $id = $profileLeaf }
   if ($id -notmatch '^[A-Za-z0-9._-]{4,}$') { throw 'DODID not valid: use the folder name under C:\Users (4 or more letters, digits, dot, dash or underscore).' }
   # Longest first, so a longer name is masked before a shorter one inside it.
@@ -43,10 +46,10 @@ try {
   # Files pasted into Notepad and saved locally need no unblock; a failed unblock is not an error here.
   Get-ChildItem -LiteralPath $dir -Filter *.ps1 | ForEach-Object { Unblock-File -LiteralPath $_.FullName -ErrorAction SilentlyContinue }
 
-  $log = Join-Path $dir '90161Z-T07-test-result-r1.txt'
+  $log = Join-Path $dir '90161Z-T07-test-result-r2.txt'
   $testDir = Join-Path $dir 'TestSeals'
   $lines = New-Object System.Collections.Generic.List[string]
-  $lines.Add('TASK ' + $task + ' seal test r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
+  $lines.Add('TASK ' + $task + ' seal test r2, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
 
   # Step 1: seal prep on the fake test seals (no questions; it writes its own result file).
   Write-Host 'STEP 1 seal prep running...'
@@ -97,5 +100,5 @@ try {
   Write-Host ('STOPPED: ' + $msg)
   Write-Host 'Result file is NOT complete. Report this STOPPED line.'
 } finally {
-  [void](Read-Host 'Press Enter to close')
+  if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }

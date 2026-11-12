@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 12 Nov 26, 1600 CT. Bookmark on my work computer (clickable links):
+Updated: 12 Nov 26, 1800 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -8,7 +8,8 @@ raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 Reload to see new tasks (GitHub can serve a copy up to 5 minutes old).
 Copy each URL below into the address bar. Save files with Ctrl+S.
 New files are named 90161Z-T<task>-<name>-r<revision> so they sort by task in my folders. Use the highest r number.
-If a downloaded script will not run, stop that task and tell Claude. Do not work around it: the way scripts reach my work computer waits on the ISSM (risk R02).
+How to paste and run (ISSM agreed to try this, 12 Nov 26): open the paste link, Ctrl+A, Ctrl+C. Start menu, type ISE, open Windows PowerShell ISE. File > New. Click in the white script pane, Ctrl+V, press F5. Type my DODID or press Enter. It makes the task folders if they are missing, saves the files into them and runs the test. Nothing to download or save by hand. If ISE is not there: open Windows PowerShell, right-click to paste, press Enter.
+If a script will not run, stop that task and tell Claude with the STOPPED line. Do not work around it (risk R02).
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
 
@@ -16,11 +17,12 @@ Reply with results in the Claude chat or by e-mail to my Gmail. Never send real 
 
 Your 11 Nov runs worked: every render made a PDF, the cover spacing matches DAFMAN, and the seals are the right size. Two things are left: the table of contents indents (the "Specified cast" line) and the seal sits 0.09 in too high. The new New-Publication.ps1 fixes both and prints which fix worked.
 
-1. Save this file into the T01 folder. Replace the old one:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
-2. Run Task 1 r5 again (below). No other file changes.
-3. Run Task 7 Part A step 4 again.
-4. E-mail both result files and the 3 PDFs (SAMPLEWINGI99-101.pdf, -TALL.pdf, -ROUND.pdf), also if they show FORMAT-FAIL lines.
+First time with paste and run (see the top of this page). Two pastes, no downloads:
+1. Paste and run Task 1 r6 (it writes the new New-Publication.ps1 into T01):
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-T01-paste-r6.ps1
+2. Paste and run Task 7 seal test r2:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-T07-paste-r2.ps1
+3. E-mail 90161Z-T01-result-r6.txt, 90161Z-T07-test-result-r2.txt and the 3 PDFs (SAMPLEWINGI99-101.pdf, -TALL.pdf, -ROUND.pdf), also if they show FORMAT-FAIL lines. If a paste stops, send the STOPPED line and say ISE or PowerShell window.
 
 ## Task 12: color sources, r1 (open, 12 Nov 26, 1530 CT)
 
@@ -73,19 +75,19 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-
 2. Open each in PowerPoint. Check that it opens without a repair message and that no text runs off a slide.
 3. Reply in the Claude chat: changes I want, and whether each may go to its audience.
 
-## Task 1: renderer test, r5 (open, 11 Nov 26, 1837 CT)
+## Task 1: renderer test, r6 (open, 12 Nov 26, 1800 CT)
 
 Folder: ...\90-161.Z\T01
 
-r5 replaces r4 (do not run r4). r3 passed. r5 fixes what I saw and what Claude measured against DAFMAN 90-161 page 1 and its table of contents: (T-3) stays on one line; the space above and below the cover lines (rules) and the right-column groups now match DAFMAN within 0.03 in; the table of contents is 11 pt, with only the Chapter lines bold. New-Publication.ps1 comes from Fix first (above); do not download it again here. The other three files are unchanged.
+r6 = r5 run by paste and run, with the renderer fixes from Fix first. Do it as Fix first step 1; this section is the reference. Old r3, r4 and r5 runners in T01 can be deleted.
 
 Steps and pass checks:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/gov-test-plan.md
 
-Save this file into the T01 folder (delete the r3 and r4 runners):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T01-renderer-test-r5.ps1
+Paste and run:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-T01-paste-r6.ps1
 
-In File Explorer, right-click 90161Z-T01-renderer-test-r5.ps1 > Run with PowerShell. Type my DODID, or press Enter. It saves 90161Z-T01-result-r5.txt in the T01 folder.
+It saves 90161Z-T01-result-r6.txt in the T01 folder.
 
 Report: e-mail the result file, SAMPLEWINGI99-101.docx and SAMPLEWINGI99-101.pdf to my Gmail. Claude measures the cover and the table of contents from the PDF.
 
@@ -105,19 +107,21 @@ Report: reply "Task 8 done" and the step 4 result (Edit shown or not shown).
 Folder: ...\90-161.Z\T07. Decided: each unit's own shield (1C), in a SharePoint library (2A); every seal is prepared to the same 1.20 in box, centered (1A 2A).
 
 Part A, test with fake seals (do this first):
-Status 11 Nov 26, 2045: seal prep passed; seal size passed; seal 0.09 in too high (Fix first). Now do only step 4.
+Status 12 Nov 26, 1800: seal prep passed; seal size passed; seal 0.09 in too high. Now Part A is one paste (Fix first step 2), which does steps 1 to 4 below:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-T07-paste-r2.ps1
+Reference only, the old download steps:
 1. Save this file into the T01 folder (it replaces the file of the same name there). New-Publication.ps1 comes from Fix first:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Test-Publication.ps1
 2. Save these two files into the T07 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-prep-r1.ps1
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-test-r1.ps1
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-test-r2.ps1
 3. Make a folder TestSeals inside the T07 folder. Save these four fake seals into it:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-round-r1.png
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-tall-r1.png
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-soft-r1.png
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-tiny-r1.png
-4. In File Explorer, right-click 90161Z-T07-seal-test-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter.
-5. E-mail to my Gmail: 90161Z-T07-test-result-r1.txt and the two PDFs it made (SAMPLEWINGI99-101-TALL.pdf, SAMPLEWINGI99-101-ROUND.pdf).
+4. In File Explorer, right-click 90161Z-T07-seal-test-r2.ps1 > Run with PowerShell. Type my DODID, or press Enter.
+5. E-mail to my Gmail: 90161Z-T07-test-result-r2.txt and the two PDFs it made (SAMPLEWINGI99-101-TALL.pdf, SAMPLEWINGI99-101-ROUND.pdf).
 
 Part B, real seals:
 Seals go in a Seals folder in the project library 90-161.Z (decided 12 Nov 26). Shields almost never change, so they stay there.
