@@ -12,6 +12,22 @@ scripts/lint.sh >/tmp/lint.out 2>&1 && ok "lint ($(tail -1 /tmp/lint.out))" || {
 out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path samples/publication.sample.json); rc=$?
 [ $rc -eq 0 ] && echo "$out" | tail -1 | grep -q '^VALIDATE fails=0 ' && ok "sample validates ($(echo "$out" | tail -1))" || { echo "$out"; bad "sample validates"; }
 
+# F-040 (Attachment 10 note 4): (T-3) in a wing or delta publication is redundant. Sample = wing (3 marks); same text from
+# a delta warns too; from a non-wing issuer (SECRETARY OF THE AIR FORCE) it does not.
+t40=$(mktemp -d)
+python3 - "$t40" <<'PY40'
+import json, sys
+d = json.load(open('samples/publication.sample.json'))
+d['meta']['issuerLine'] = 'SAMPLE DELTA'; d['meta'].pop('byOrderOfUnit', None)
+json.dump(d, open(sys.argv[1] + '/delta.json', 'w'))
+d['meta']['byOrderOf'] = 'SECRETARY OF THE AIR FORCE'; d['meta']['issuerLine'] = 'SAMPLE HEADQUARTERS'
+json.dump(d, open(sys.argv[1] + '/hq.json', 'w'))
+PY40
+w=$(echo "$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path samples/publication.sample.json)" | grep -c '^WARN F-040 ')
+d=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path "$t40/delta.json" | grep -c '^WARN F-040 ')
+h=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path "$t40/hq.json" | grep -c '^WARN F-040 '); rm -rf "$t40"
+[ "$w" -eq 3 ] && [ "$d" -eq 3 ] && [ "$h" -eq 0 ] && ok "F-040 (T-3) in wing/delta publication warns (wing=$w delta=$d hq=$h)" || bad "F-040 wing=$w delta=$d hq=$h (want 3 3 0)"
+
 out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path tests/fixtures/bad.publication.json); rc=$?
 got=$(echo "$out" | grep -oE '^FAIL [A-Z]+-?[0-9]*' | awk '{print $2}' | sort -u | tr '\n' ' ')
 want="F-005 F-013 F-018 F-020 F-021 F-022 F-025 F-026 F-029 F-031 F-033 F-034 F-035 F-037 SCHEMA W-001 "

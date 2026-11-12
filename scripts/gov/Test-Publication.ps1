@@ -321,6 +321,22 @@ foreach ($lt in $locText) {
   }
 }
 
+# ---------- F-040 tier at the issuer's own level (Attachment 10 note 4) ----------
+# The wing or delta/CC who approved a wing or delta publication is already the default waiver authority,
+# so (T-3) in that publication is redundant. Wing level = By Order of the Commander and an issuer line
+# (or By Order unit line) that names a WING or DELTA.
+$issuerText = ([string](Get-Prop $meta 'issuerLine') + ' ' + [string](Get-Prop $meta 'byOrderOfUnit')).ToUpper()
+$wingLevel = ($bo -eq 'COMMANDER') -and ($issuerText -match '\b(WING|DELTA)\b')
+if ($wingLevel) {
+  foreach ($lt in $locText) {
+    $where = [string]$lt[0]; $plain = Get-PlainText ([string]$lt[1])
+    foreach ($m in [regex]::Matches($plain, '\(T-3\)')) {
+      $start = [Math]::Max(0, $m.Index - 50)
+      Add-Finding 'WARN' 'F-040' $where ("(T-3) is redundant in a wing or delta publication; the wing or delta/CC who approved it is already the waiver authority: '..." + $plain.Substring($start, $m.Index + $m.Length - $start).Trim() + "' (Attachment 10 note 4)")
+    }
+  }
+}
+
 # ---------- report ----------
 $fails = @($script:Findings | Where-Object { $_.Level -eq 'FAIL' }).Count
 $warns = @($script:Findings | Where-Object { $_.Level -eq 'WARN' }).Count

@@ -28,7 +28,7 @@ No earlier paragraph-by-paragraph reference existed in the repo; the 11 Nov full
 | A19 | Only OPRs or PCMs may initiate an Administrative Change | 7.8.3 | Not stated | Who can start an AC |
 | A20 | The command or field PFM, with the senior communications, information and knowledge operations manager, decides who keeps record sets locally (T-3) | 7.2.2.3 | Not decided | Decide 15 |
 | A21 | Critical comment = automatic nonconcur, resolved before publication | Glossary, 5.3.3 | CRM link only | Comment type on the CRM |
-| A22 | Do not use a tier number at the issuer's own level: (T-3) is redundant in a wing publication | Attachment 10 note 4 | Renderer and T06 sample use (T-3) | Format rule and validator change (separate task) |
+| A22 | Do not use a tier number at the issuer's own level: (T-3) is redundant in a wing publication | Attachment 10 note 4 | Renderer and T06 sample use (T-3) | Done 2026-11-12: F-040 (warn) in docs/format-rules.md and scripts/gov/Test-Publication.ps1. Open for the PFM: severity, the tier a wing compliance statement carries instead, sample and T06 EXPECTED |
 | A23 | Wing ICs use Rule 2: full text, changed elements marked with an asterisk, camera-ready | 7.7.3, 7.7.5 | Not in the renderer | Renderer backlog |
 | A24 | Base and wing units coordinate with local offices; Table A3.2 lists the local offices and their triggers | A3.1, A3.2 | AO adds offices freely | Seed PFM Offices with A3.2 offices and trigger questions |
 | A25 | Unless stated, days are calendar days | Glossary | Mixed | Store the day type with each limit; 5.2 coordination stays 15 business days |

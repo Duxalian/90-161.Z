@@ -62,6 +62,7 @@ Severity: `hard` = blocks output; `warn` = reported only.
 | F-037 | "Note:" and "Exception:" bold with colon | 4.6 | render | hard | 2026-11-10 |
 | F-038 | Figure/table number and title directly above the item; min 8 pt | 4.6 | render | hard | 2026-11-10 |
 | F-039 | Compliance statements use "will"/"must", name a responsible party, end with bold tier "(T-1)"; no blanket tiers | 4.6.5 | lint | warn | 2026-11-10 |
+| F-040 | Do not use a tier number at the issuer's own level: in a wing or delta publication, (T-3) is redundant because the wing or delta/CC who approved it is the default waiver authority. The validator treats a publication as wing level when `byOrderOf` is COMMANDER and `issuerLine` or `byOrderOfUnit` names a WING or DELTA. What a wing compliance statement carries instead is open (see Open) | Attachment 10 note 4; 4.6.5.3.2 | lint | warn | 2026-11-12 |
 | W-001 | Use "must", not "shall" | T1.1 #5 | lint | hard | 2026-11-10 |
 | W-002 | Sentences 20 words or fewer; paragraphs 7 sentences or fewer | T1.1 #2 | lint | warn | 2026-11-10 |
 | W-003 | No all-caps for emphasis | T1.1 #4 | lint | warn | 2026-11-10 |
@@ -73,6 +74,7 @@ Severity: `hard` = blocks output; `warn` = reported only.
 
 - Literal wording for Tables 4.2–4.5 and the statements in 4.5.5 is not yet extracted. The renderer must take them from the verified text, not from this summary.
 - Wing supplement rules (if any) override or add to this list.
+- F-040 (2026-11-12): open for the PFM. (1) Severity warn or fail. (2) What a wing compliance statement carries instead of (T-3). (3) Whether the fake sample (samples/publication.sample.json) and the T06 messy draft EXPECTED keep (T-3). F-039 still warns on a will/must sentence without a tier, so in a wing publication F-039 and F-040 can point in opposite directions until (2) is decided.
 
 ## Layout measured from ref/dafman90-161.pdf (2026-11-10)
 
