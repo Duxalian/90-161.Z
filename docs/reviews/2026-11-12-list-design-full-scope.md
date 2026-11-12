@@ -34,6 +34,7 @@ Rule for the live site: only ADD lists, columns and choice values. Nothing is re
 | | AO Is Contractor (yes/no); Government Decision Maker (person) | B14 |
 | | Access Level (choice: Public, Restricted, CUI) | B18 |
 | | Effective Date Justification (multi-line) | A9 (future date) |
+| | All Comments Adjudicated (yes/no; the AO confirms before Legal, the PFM spot-checks; PFM 3.3A) |
 | | Directive Guidance Moved (yes/no); Retained Forms Relinked (yes/no) | Figure A5.1 note, A16 (rescind gates) |
 | | Section 508 Checked (yes/no) | B4 |
 | | Guidance Memorandum Justification (multi-line) | 5.1.7 (T-1; R9) |
@@ -65,7 +66,7 @@ From docs/process-model.md "New publication request" (DAFMAN 3.1) and "Special r
 
 ## 4. Library 90-161.Z folders (PFM creates by hand)
 
-Seals; Working Files (one subfolder per action); Record Sets, with Publications and Forms subfolders kept apart (B7, 15A); Delegation Letters (PFM 1.7A, 12 Nov; checked at each change of command). Permissions (PFM batch 2, 12 Nov): each Working Files action folder gets its own permissions from a flow (AO, alternate, the action's coordinators, the PFM office group; 2.3B); Record Sets and Delegation Letters: PFM office group and co-owners only (2.4A). Site Members = the wing's existing directory group (2.1A); the app is shared with it (2.6A).
+Seals; Working Files (one subfolder per action); Published (posted publications and forms, read for all members; PFM 3.6B); Record Sets, with Publications and Forms subfolders kept apart (B7, 15A); Delegation Letters (PFM 1.7A, 12 Nov; checked at each change of command). Permissions (PFM batch 2, 12 Nov): each Working Files action folder gets its own permissions from a flow (AO, alternate, the action's coordinators, the PFM office group; 2.3B); Record Sets and Delegation Letters: PFM Office group and co-owners only (2.4A). The PFM Office group is a new SharePoint group with the people who work the PFM org box (3.7B). Published: read for all members, edit for the PFM Office group (3.6B). Site Members = the wing's existing directory group (2.1A); the app is shared with it (2.6A).
 
 ## 5. What flows enforce (gates)
 
@@ -94,7 +95,7 @@ Recounted 12 Nov 26 (second independent review, finding 11), sections 1-5a.
 | Item | Count |
 |---|---|
 | New lists | 3, with 45 columns (PFM Guidance 10, PFM Recommendations 17, PFM Waivers 18) |
-| New columns on existing lists | 66: PFM Publications 35 (section 3: 32; 3a: 3), PFM Product Index 14, PFM Offices 7, PFM Reviews 5, PFM Endorsements 4, PFM Process Steps 1 (batch 1 added 7, 12 Nov) |
+| New columns on existing lists | 67: PFM Publications 36 (section 3: 33; 3a: 3), PFM Product Index 14, PFM Offices 7, PFM Reviews 5, PFM Endorsements 4, PFM Process Steps 1 (batch 1 added 7, 12 Nov) |
 | New choice values | 15: Action Type 4; Coordination Role 2 on 2 lists = 4; Endorsement Status 1; Event Type 5 (4 + Review Requested); Product Status 1 (In Development) |
 | Property changes | 2: AO allows multiple values; Publication Number unique |
 | View filter changes | 3 (section 5a) |
