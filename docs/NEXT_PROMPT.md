@@ -10,7 +10,7 @@ Updated: 2026-11-12 by Claude (T06/T07 results). Keep this file at 40 lines or f
 - Provisioning: flow/defs/90161Z-T02-provision-lists-r9.json -> flow/packages/90161Z-T02-provision-lists-r9.zip (143,327 bytes); site address only, no site-title check (PFM 2026-11-12); 39 series rows (Table A2.1) + 2 settings rows (5.2, 5.2.2). Docs: docs/power-automate-provisioning.md.
 - Mockup of all lists: https://claude.ai/artifact/2CtD3ASmmmzkz1EPErgCvh (python3 scripts/build_list_mockup.py <out.html>, then republish).
 - Style (PFM 2026-11-11): docs/style-standard.md, DAFMAN 90-161 + The Tongue and Quill; tests/check_names.py enforces it. Rules approved by the PFM 2026-11-11 (1A); No Response kept in PFM Reviews (2A). Apply it to flow e-mails and the app too.
-- Access: all site members read all rows; no item-level permissions; the app filters by Requester and AO.
+- Access (PFM 10A, 2026-11-12): all site members read all rows; on PFM Publications and PFM Endorsements they edit only rows they created (go.md Task 8, manual); endorser results go through an app flow; the app filters by Requester and AO.
 - Records: AFRIMS T 33-38 R 07 (destroy record set - DAF Forms 673/399 and paperwork - when superseded or rescinded). Publications stay browsable. Working files: rule open.
 - 15 business days (DAFMAN 5.2): a measure, not a hard deadline; reminders, warnings and escalation emails in a measured, professional tone; weekdays only.
 - Continuity: co-owners on every flow and the app; maintainer how-to written last, step by step for a non-expert.

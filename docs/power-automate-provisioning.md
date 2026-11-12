@@ -60,10 +60,11 @@ If a step fails, open it and send only the HTTP status code and the error code (
 
 ## 4. Permissions and site settings (manual)
 
-Decided (PFM, 2026-11-11, replaces the 2026-11-10 creator-only rule): all site members read all rows; people add and change rows through the app. Do not turn on item-level permissions: it would hide rows from the AO and endorsers, and from anyone when a flow creates the row.
+Decided (PFM, 2026-11-12, 10A): all site members read all rows. On PFM Publications and PFM Endorsements, members edit only rows they created. Read access stays "Read all items", so the AO, endorsers and flows still see every row. A row a flow creates is "created by" the flow's connection owner, so customers and endorsers change those rows through the app, which runs a flow (endorser results). Site collection administrators and people with Manage Lists edit every row.
 
-1. Leave each PFM list on the site's permissions (no unique permissions, no Advanced settings change).
-2. Site settings > Regional settings > Time zone: (UTC-06:00) Central Time. Date-only columns (suspense, due and review dates) then show the same day for everyone.
+1. Leave each PFM list on the site's permissions (no unique permissions).
+2. PFM Publications and PFM Endorsements only: List settings > Advanced settings > Item-level Permissions. Read access: Read all items. Create and Edit access: Create items and edit items that were created by the user. OK. Other lists: no change.
+3. Site settings > Regional settings > Time zone: (UTC-06:00) Central Time. Date-only columns (suspense, due and review dates) then show the same day for everyone.
 
 ## Change a list or column
 

@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 2010 CT. Bookmark on my work computer (clickable links):
+Updated: 11 Nov 26, 2100 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -59,6 +59,17 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T06
 
 Report: e-mail these to my Gmail: 90161Z-T06-extracted-r1.json, 90161Z-T06-changes-r1.txt, 90161Z-T06-result-r1.txt, and the PDF it made. Also say which GenAI.mil model I used. If GenAI.mil refused the file or cut off the answer, send its exact message.
 Status 11 Nov 26: steps 1-3 done with Gemini, GPT and Grok; validation passed, render failed (fix above). Also e-mail each model's JSON and changes list: rename them with the model at the end, for example 90161Z-T06-extracted-r1-grok.json. Run step 4 once, with any one of them saved as 90161Z-T06-extracted-r1.json.
+
+## Task 8: edit own rows only, r1 (open, 11 Nov 26, 2100 CT)
+
+No files. Decided 10A: everyone reads all rows; people edit only rows they created, on two lists.
+
+1. On the real site, open PFM Publications. Settings (gear) > List settings > Advanced settings.
+2. Item-level Permissions. Read access: Read all items. Create and Edit access: Create items and edit items that were created by the user. Select OK.
+3. Do the same for PFM Endorsements. Leave the other seven lists as they are.
+4. Check: as a site member who is not an owner (or ask one), open PFM Publications. A row that person did not create shows no Edit.
+
+Report: reply "Task 8 done" and the step 4 result (Edit shown or not shown).
 
 ## Task 7: seals, r1 (open, 11 Nov 26, 1905 CT)
 
