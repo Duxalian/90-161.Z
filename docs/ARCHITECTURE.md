@@ -22,10 +22,10 @@ Status: draft (Agent, 2026-11-10). Items marked **Rec:** are not decisions until
 
 | Layer | Component | Where | Purpose |
 |---|---|---|---|
-| Data | `Publications` list | SharePoint site | One row per publication action (new, rewrite, change, supplement, OI, certify-as-current, rescind) |
-| Data | `Endorsements` list | SharePoint site | One row per endorser per publication: order, role, status, due date, response |
+| Data | `PFM Publications` list | SharePoint site | One row per action on a publication or form (Action Type: New, Rewrite, Interim Change, Administrative Change, Guidance Memorandum, Certify Current, Rescind, Transfer; supplement and OI are publication types, DECISIONS 2026-11-11) |
+| Data | `PFM Endorsements` list | SharePoint site | One row per endorser per publication: order, role, status, due date, response |
 | Data | `PFM Process Steps` list (PFMProcessSteps) | SharePoint site | Process steps derived from DAFMAN 90-161, with paragraph references. All list names: docs/power-automate-provisioning.md section 1 |
-| Data | `Drafts` library | SharePoint site | Draft versions, AF Form 673, CRM files; versioning on |
+| Data | Library `90-161.Z` | SharePoint site | Folders Seals, Working Files (drafts, DAF Form 673, CRM; one subfolder per action, Q3A) and Record Sets (publications and forms apart, 15A); versioning on |
 | Logic | Power Automate flows | DoD365 | Endorsement requests, reminders, escalation, stage advance, status notices to customers |
 | UI | Power Apps canvas app | DoD365 | Customer intake (new request, endorser entry), status view, the PFM's work queue |
 | UI | List views + JSON formatting | SharePoint | Fallback UI and the PFM's admin views |
@@ -34,15 +34,15 @@ Status: draft (Agent, 2026-11-10). Items marked **Rec:** are not decisions until
 
 ## 4. Endorsement flow (G3), first version
 
-1. The AO submits the request in the app. Mandatory coordinators come from PFM Offices (JAG last, CIO, PFM; PFM 2026-11-12); the AO adds offices with functional interest (5.1.3) and names the OPR's certifying and approving officials (5.6.3, 5.7).
+1. The AO submits the request in the app. Mandatory coordinators come from PFM Offices (JAG last, CIO, PFM, FOIA, Records; PFM 2026-11-12, Q6 and Q13); the AO adds offices with functional interest (5.1.3) and names the OPR's certifying and approving officials (5.6.3, 5.7).
 2. Flow creates one `Endorsements` row per endorser, status `Not Started`.
-3. Flow sends the request to every endorser in the open Coordination Stage at the same time (Privacy Review, then Formal Coordination, then Legal; DAFMAN 3.4, 5.1.8.1, Table A3.1 note 2; PFM 2026-11-11), with the draft link and due date. A stage opens when the previous one is complete and has no open nonconcur (5.5).
+3. Flow sends the request to every endorser in the open Coordination Stage at the same time (Privacy Review, then Formal Coordination, then Legal; DAFMAN 3.4, 5.1.8.1, Table A3.1 note 2; PFM 2026-11-11), with the draft link and due date. Legal opens when every other row is final or Not Applicable and every comment is adjudicated (5.1.8.1, 2.8.13); an open nonconcur may go on to Legal and Certification, and approval needs it resolved or an impasse memo (5.5.1, 5.5.2; PFM 1A, 2026-11-12).
 4. Endorser responds with one of the DAFMAN 5.4 responses in PFM Endorsements: Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment. Comments go to the CRM.
 5. Reminder at due date minus 2 workdays; escalation to customer and PFM when overdue.
-6. `Non-concur` stops the chain and notifies customer and PFM.
+6. A Nonconcur notifies the customer and the PFM and raises Open Nonconcurs; the OPR resolves it or elevates it (5.5).
 7. When all required endorsements are complete, flow moves the publication to the next stage and notifies the customer.
 
-The exact stages, mandatory coordinators and time limits come from DAFMAN 90-161 and the wing supplement (step 3 of the plan). No value is invented here.
+The exact stages, mandatory coordinators and time limits come from DAFMAN 90-161 (no wing supplement exists). No value is invented here.
 
 ## 5. Document engine (G2)
 
@@ -73,9 +73,9 @@ Transfer path (PFM, 2026-11-10): GitHub is reachable from NIPR; PFM opens the re
 |---|---|---|
 | Gov data enters GitHub or Claude by mistake | Policy violation, PII spill | Rule in AGENTS.md; fake sample data only; sanitized bug reports |
 | Site collection admin only: tenant admin, app registration and app catalog not available | PnP.PowerShell may need an Entra app registration | Check available modules first; fallback = build by hand from repo specs |
-| Final submission goes through AFIMPT (6.6, T-1) | 90-161.Z cannot replace that step | Track up to submission; PFM submits in AFIMPT |
+| AFIMPT steps in DAFMAN (6.6) | Do not apply to ANG wing products, which post on the wing site (1.1.3.2, 6.4.1, 8.4.1; PFM 2026-11-10) | 90-161.Z tracks through posting |
 | Power Automate premium connectors not licensed | Some flow steps unavailable | Use standard connectors only (SharePoint, Outlook, Teams, Approvals) |
 | Customers edit each other's items | Data changes between units | Closed (PFM, 2026-11-12, 10A): edit own rows only on PFM Publications and PFM Endorsements; others change rows through flows |
 | Customers see each other's items | Data exposure between units | Accepted (PFM, 2026-11-11): all site members read all rows; the app filters by Requester and AO. Coordination data is internal to the wing |
 | GenAI.mil output looks right but breaks a rule | Bad final publication | Deterministic checklist; PFM review; no auto-publish |
-| Local wing supplement differs from DAFMAN | Wrong stages | Read the wing supplement before the stage model is fixed |
+| Wing files (template, AO guide, checklist) differ from DAFMAN | Wrong stages or format | No wing supplement exists (PFM 2026-11-10); DAFMAN wins on any conflict (PFM 2026-11-11) |

@@ -1,6 +1,6 @@
 # Process model: 90-161.Z (wing/installation)
 
-Source: DAFMAN 90-161, 18 Oct 2023, Change 1, Corrective Action 1 May 2026. Status: **draft, not verified** (extracted through a web summary). Verify each reference before the `Stages` list is built.
+Source: DAFMAN 90-161, 18 Oct 2023, Change 1, Corrective Action 1 May 2026. Status: draft. Paragraph references checked against ref/dafman90-161.txt on 12 Nov 26 (docs/reviews/2026-11-12-dafman-full-gap-check.md, docs/reviews/2026-11-12-independent-review.md).
 
 ## Stages (one publication action)
 
@@ -11,10 +11,10 @@ Source: DAFMAN 90-161, 18 Oct 2023, Change 1, Corrective Action 1 May 2026. Stat
 | 2 | Drafting with SMEs | 3.2, 4.2.2.1 | Draft meets format rules (draft mode) | 60 |
 | 3 | Pre-coordination (optional) | 3.3 | — | — |
 | 4 | Privacy monitor review: the unit privacy monitor reviews the draft before formal coordination | 2.8.1, Table A3.1 note 2 | Privacy monitor review documented | — |
-| 5 | Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673 | 3.4, 5.1, 5.1.5 | All coordinators responded; all nonconcurs resolved (5.5.1) | 20 |
+| 5 | Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673 | 3.4, 5.1, 5.1.5 | All coordinators responded or marked N/A; all comments adjudicated (5.1.8.1, 2.8.13). An open nonconcur may go on to Legal and Certification (PFM 1A, Figure A5.1 step 4) | 20 |
 | 6 | Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication | 5.1.8.2, 3.4 | Legal concur | 20 |
 | 7 | Certification: certifying official endorses DAF Form 673 | 5.6 | Endorsed | 10 |
-| 8 | Approval: approving official endorses DAF Form 673; delegation letter on file | 5.7 | Endorsed | 10 |
+| 8 | Approval: approving official endorses DAF Form 673; delegation letter on file. Needs Open Nonconcurs = 0 or an impasse memo in the record set (5.5.1, 5.5.2; PFM 1A) | 5.7 | Endorsed | 10 |
 | 9 | Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM | 6.6.1 | PFM has package | — |
 | 10 | Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI | 6.4.1-6.4.2, 1.1.3.2, Table A5.2 f (steps 9-10 together) | Posted on wing site | 15 |
 
@@ -25,11 +25,11 @@ Variants: Rewrite and interim change = stages 4–9 (7.6, 7.7.9). Administrative
 | Item | Value | Ref |
 |---|---|---|
 | Coordinator suspense | 15 business days (T-3) | 5.2 |
-| ARC applicability review below MAJCOM/FLDCOM | at least 30 calendar days | 5.2.2 |
+| ARC applicability review below MAJCOM/FLDCOM | at least 30 calendar days (written for guard and reserve applicability reviews; whether it covers wing-to-unit coordination is open, gap check) | 5.2.2 |
 | Extension request | before suspense date, with rationale and estimated completion date | 5.2.1 |
 | Re-coordination | not required if coordination is 365 days old or less and changes are not significant | 5.1 |
 
-## Endorsement responses (Endorsements.Status choices)
+## Endorsement responses (PFM Endorsements, Endorsement Status choices)
 
 Concur; Concur With Comment; Concur—No Response (good-faith effort recorded on 673); Nonconcur; No Comment. Ref 5.4.
 
@@ -41,7 +41,7 @@ Item number, Source, Type of comment (Administrative / Substantive / Critical; C
 
 Decided (PFM, 2026-11-12, Q6, Q13): the PFM keeps the mandatory coordinators in PFM Offices: JAG (legal, last), CIO, PFM, FOIA (1.5.3) and Records (7.1.3), each its own row. The AO, with the PCM, adds offices with functional interest (5.1.3). The OPR identifies its own certifying official (5.6.3) and approving official (5.7).
 
-Tables A3.1 / A3.2 not yet extracted. Records manager coordinates during formal coordination (7.1.3).
+Table A3.2 local offices and triggers: docs/coordination-table-a3-2.md (PFM 3B, 12 Nov), seed for PFM Offices. Table A3.1 is not extracted (Q6 stands for A3.1). Records manager coordinates during formal coordination (7.1.3). Forms changed out of cycle: the Table A3.1 item 3 office is the only required coordinator (A3.2 paragraph), plus legal after all other coordination (8.11.1.2).
 
 ## System boundary
 
@@ -62,3 +62,8 @@ Source and line references: docs/reviews/2026-11-12-dafman-full-gap-check.md (ta
 - A higher-headquarters change opens a special review for each implementing row (2.6.19).
 - Days are calendar days unless stated; coordination stays 15 business days (glossary, 5.2).
 - Decided (PFM 12 Nov, 13 14A 15A): FOIA and Records are separate mandatory coordinators in PFM Offices (one person may hold several roles); full scope is built now; the PFM keeps record sets centrally in library 90-161.Z. A publication that prescribes paper records alerts SAF/CN (7.1.4).
+- Decided (PFM 12 Nov, independent review 1A 2A 3B 4A 5A): nonconcur gate as in stages 5 and 8; Form Type from Table 8.1, Prescribing Publication only for prescribed forms and forms that collect personal data (8.2.1, 8.7.4); Table A3.2 seeds PFM Offices; waiver renewal per waiver (9.5.1).
+- GMs: justification on the 673 or staff package (5.1.7, T-1); numbered per 4.3.8.2 (number unchanged on reissue); a wing GM changes only a wing instruction, manual or supplement (7.9.1, Table A11.1 item 7); an IC never changes a GM (7.7.6); follow-up action within 1 year (Table A5.1 note 1).
+- An IC may also certify the publication current (7.5.3). A rescind after a "No Response" review is the PFM rescission: 673 to the certifying and approving officials only (7.11.5.5).
+- Wing ICs (camera-ready): Rule 2, changed elements marked with manual margin bars, no asterisks, no "(Added)" (7.7.5 note, 7.7.8.5).
+- DAF Form 847: inbound for wing publications (7.4.5) and outbound for higher-headquarters publications (A6.3.1; the initiating level's PFM assigns the tracking number, Table A6.1).

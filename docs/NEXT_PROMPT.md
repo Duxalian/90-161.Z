@@ -1,6 +1,6 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-12 by Claude (T01 r5, T06, T07 results). Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-12 by Claude (independent review of the list design; PFM 1A 2A 3B 4A 5A). Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State (main)
 
@@ -15,6 +15,7 @@ Updated: 2026-11-12 by Claude (T01 r5, T06, T07 results). Keep this file at 40 l
 - 15 business days (DAFMAN 5.2): a measure, not a hard deadline; reminders, warnings and escalation emails in a measured, professional tone; weekdays only.
 - Continuity: co-owners on every flow and the app; maintainer how-to written last, step by step for a non-expert.
 - Gap review: https://claude.ai/artifact/Ta3utvkZGP5aKXWWeRh7vU (open: test site, Accessibility Checker gate, CUI check for working files).
+- Full-scope list design (14A): docs/reviews/2026-11-12-list-design-full-scope.md, revised after the independent review (docs/reviews/2026-11-12-independent-review.md; PFM 1A 2A 3B 4A 5A). Not built. Open for the PFM before build: approve the design; AO count (Q1 "at most 2" vs one person column); ANG channel for outbound DAF Form 847s; Guidance column names. Read ANGMAN 90-161 waivers first. Table A3.2 seed: docs/coordination-table-a3-2.md.
 
 ## Waiting on the PFM (go.md)
 

@@ -40,19 +40,21 @@ Sample: DAFMAN 90-161 (2023, C1, CA 2026); AFI 33-332 JB Charleston SUP (2026); 
 
 ## Second sample: certifier name line (12 more covers, measured 2026-11-11)
 
+Names are shown as their pattern only (PFM 5A, 2026-11-12: no real names in this public repo).
+
 | Publication | Level | Name line under "Certified by:" | Position |
 |---|---|---|---|
-| SHEPPARDAFBI 90-302 | base | (David Nelson) | right-aligned 7.50, +0.19 in |
-| DAFI 21-101 3 WG SUP | wing | (Christopher A. Tooman) | right 7.50, +0.20 |
-| AFI 21-101 1 FW SUP | wing | Col Daniel P. Willison Jr. (no parentheses; page not in AFDPO layout: margins about 0.76 in) | right |
-| AFMAN 11-202V2 ACC SUP 57 WG SUP | wing | (Brig Gen Richard Goodman) | right 7.50, +0.19 |
-| AFI 11-418 354 FW SUP | wing (parent block shown) | (Mr. William D. Dries, Jr.) | right 7.50, +0.19 |
+| SHEPPARDAFBI 90-302 | base | (First Last) | right-aligned 7.50, +0.19 in |
+| DAFI 21-101 3 WG SUP | wing | (First M. Last) | right 7.50, +0.20 |
+| AFI 21-101 1 FW SUP | wing | Col First M. Last Jr. (no parentheses; page not in AFDPO layout: margins about 0.76 in) | right |
+| AFMAN 11-202V2 ACC SUP 57 WG SUP | wing | (Brig Gen First Last) | right 7.50, +0.19 |
+| AFI 11-418 354 FW SUP | wing (parent block shown) | (Mr. First M. Last, Jr.) | right 7.50, +0.19 |
 | DAFI 90-160 Maxwell AFB SUP | base | none (42 MSG/CC) | — |
-| AFI 33-360 914 AW SUP | wing (parent block) | (Lt Gen Michael Basla) | right 7.50, +0.20 |
-| DAFI 32-2001 934 AW SUP | wing (parent block) | (Col Thomas A. Bongiovi) | right 7.50, +0.19 |
-| DAFI 21-101 ANG SUP | NGB | (BGen Kimbra L. Sterr) | right 7.50, +0.19 |
+| AFI 33-360 914 AW SUP | wing (parent block) | (Lt Gen First Last) | right 7.50, +0.20 |
+| DAFI 32-2001 934 AW SUP | wing (parent block) | (Col First M. Last) | right 7.50, +0.19 |
+| DAFI 21-101 ANG SUP | NGB | (BGen First M. Last) | right 7.50, +0.19 |
 | DAFI 36-2110 | HAF | none (SAF/MR) | — |
-| DAFI 32-1015 | HAF | (Michael E. Saunders) | right 7.50, +0.19 |
-| DAFI 31-117 | HAF | (Col Brian A. Filler) | right, +0.19 |
+| DAFI 32-1015 | HAF | (First M. Last) | right 7.50, +0.19 |
+| DAFI 31-117 | HAF | (Col First M. Last) | right, +0.19 |
 
 Format: one line, in parentheses, rank (if any) + name, right-aligned at 7.50 in, 0.19-0.20 in below the Certified by line. Rank forms seen: Col, Lt Col, Brig Gen, BGen, Lt Gen, Mr., Ms., Dr., none.
