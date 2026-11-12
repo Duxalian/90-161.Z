@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 12 Nov 26, 1430 CT. Bookmark on my work computer (clickable links):
+Updated: 12 Nov 26, 1500 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -21,6 +21,18 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Public
 2. Run Task 1 r5 again (below). No other file changes.
 3. Run Task 7 Part A step 4 again.
 4. E-mail both result files and the 3 PDFs (SAMPLEWINGI99-101.pdf, -TALL.pdf, -ROUND.pdf), also if they show FORMAT-FAIL lines.
+
+## Task 12: color sources, r1 (open, 12 Nov 26, 1500 CT)
+
+Folder: ...\90-161.Z\T12
+
+Claude cannot open Air Force websites from the cloud, and the repo's privacy check blocks writing their addresses here. These 3 public documents set the official Air Force and ANG colors for our briefs and the app. Search for each title on my work computer. About 10 minutes.
+
+1. "ANG Graphics Standard" (PDF on the Air National Guard public website). Save it into the T12 folder.
+2. "Guide to Air Force Heraldry" June 2022 (PDF on the DAF History website, Organizational Records). Save it into the T12 folder.
+3. "Air Force Symbol" page on the Air Force Trademark and Licensing website (Branding). Press Ctrl+S, Save as type Webpage, Single File (*.mhtml), into the T12 folder.
+
+Report: e-mail the 3 files to my Gmail, subject "90161Z T12 r1". They are public documents.
 
 ## Task 11: rights test, r1 (open, 12 Nov 26, 1400 CT)
 
