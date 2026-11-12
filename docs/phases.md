@@ -14,8 +14,8 @@ Status: the PFM's phase order (12 Nov, in chat) plus agent recommendations marke
 ## REC: changes to the plan
 
 1. **DECIDED (PFM 1A, 12 Nov):** Phase 1 = runner only (test loop for gov-device code). SharePoint setup stays in Power Automate flows. Reason: the PnP sign-in failed (10 Nov), and other wings may have no PowerShell access to SharePoint (Deployable package rule), so a PowerShell installer would be a second path to keep working.
-2. **REC:** Run phases 2 and 3 as one discussion pass while R01 waits on the gov device. Role re-assignment is a permissions design question: it changes the same Settings rows and groups as phase 3.
-3. **REC:** Add the phases that follow phase 4 (they are in NEXT_PROMPT "Next design" but not in this order):
+2. **DECIDED (PFM 2A, 12 Nov):** Run phases 2 and 3 as one discussion pass while R01 waits on the gov device. Role re-assignment is a permissions design question: it changes the same Settings rows and groups as phase 3.
+3. **DECIDED (PFM 3A, 12 Nov):** Add the phases that follow phase 4 (they are in NEXT_PROMPT "Next design" but not in this order):
    - 5. Flow rule catalog (docs/flow-rules.md, decided 2A) and T02 r10 provisioning.
    - 6. Flows build (solution-aware, connection references).
    - 7. App build (Power Apps canvas), Accessibility Checker 0 errors.
@@ -28,3 +28,16 @@ Status: the PFM's phase order (12 Nov, in chat) plus agent recommendations marke
 - **REC:** roles as data, not names in code: PFM Settings rows PFM, Alternate PFM, Acting PFM (with Acting Until); the app shows PFM screens to members of the PFM office SharePoint group; flows address the role, not a person. Re-assign = one screen, one flow (group membership, Settings row, Activity Log row).
 - Existing groups (high confidence): SharePoint permissions can be granted to existing Entra/AD security groups, M365 groups and SharePoint groups. A flow can set them through SharePoint REST if the installer has Manage Permissions (R5); otherwise a checklist for the site owner.
 - Intake of existing data, candidates: existing site groups and members (offered as choices, not copied); posted publications in an existing library (designator, title, date from file names and properties, the PFM confirms each row); the products CSV (3A); the e-Publishing index (Task 9). Org box addresses for PFM Offices are entered or loaded by CSV (org boxes are not users; directory lookup is unlikely to find them).
+
+## Phase 2+3 round 1 (12 Nov): open questions Q4-Q9
+
+| Q | Question | Options | REC |
+|---|---|---|---|
+| Q4 | Role model for PFM away | A: PFM, Alternate PFM, Acting PFM (+ Acting Until) as PFM Settings rows; PFM screens open to the PFM Office group; flows address the role. B: Person columns, edited by hand | A |
+| Q5 | Whose connections run the flows | A: the PFM's, connection references, the alternate re-binds by runbook. B: the alternate keeps disabled backup copies. C: ask the communications squadron for a non-person service account | A now; ask about C |
+| Q6 | Rights of the Acting PFM | A: full PFM rights, logged, reminder before Acting Until. B: no Settings changes | A |
+| Q7 | Permission groups | A: setup makes one SharePoint group "PFM Office" (edit all PFM lists and the library; config lists edit only for it); wing access group read/contribute per P2A and 10A; existing AD groups nested where they exist. B: only the site's existing Owners/Members groups | A |
+| Q8 | Intake sources in setup | A: existing site groups (as choices), scan of a library of posted publications into PFM Product Index (view "PFM - Imported, Not Confirmed"), products CSV (3A), e-Publishing index cross-check. B: CSV only | A |
+| Q9 | Where posted wing publications live now | A: a library on the same site. B: a library on another site. C: mixed, or only on e-Publishing | Fact from the PFM |
+
+Scale (REC, no question): PFM Activity Log reaches the 5,000-item view threshold in about 2.5 years at an estimated 2,000 rows a year (50 actions x 40 events; estimate, not measured). Index Created and Action ID at provisioning; views filter on indexed columns; a yearly archive flow.
