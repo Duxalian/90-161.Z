@@ -11,6 +11,8 @@ const JSZip = require("jszip");
 const root = path.join(__dirname, "..");
 const dir = path.join(root, "docs/brief");
 const ALL_RISKS = JSON.parse(fs.readFileSync(path.join(dir, "risks.json"), "utf8"));
+const DECKS = fs.readdirSync(dir).filter(f => f.endsWith(".json") && f !== "risks.json").map(f => f.replace(/\.json$/, ""));
+for (const r of ALL_RISKS) for (const n of r.hideIn || []) if (!DECKS.includes(n)) throw new Error(r.id + ": hideIn names unknown deck " + n);
 // "{decisions}" in any slide text = dated PFM rows in docs/DECISIONS.md (column "By" starts with PFM), counted at build.
 const DECISIONS = fs.readFileSync(path.join(root, "docs/DECISIONS.md"), "utf8").split("\n")
   .filter(l => /^\| 20\d\d-/.test(l) && /^PFM/.test((l.split("|")[3] || "").trim())).length;
@@ -29,8 +31,9 @@ const tone = { red: [HEX.red, HEX.redT], amber: [HEX.amber, HEX.amberT], green: 
 function build(deckName) {
   const B = JSON.parse(fs.readFileSync(path.join(dir, deckName + ".json"), "utf8").split("{decisions}").join(String(DECISIONS)));
   // A deck shows only the risks in its scope ("wing" deck: wing + both; "ang" deck: ang + both). Default scope = wing.
+  // A risk with "hideIn": [deck names] is left out of those decks (R02 off the command brief, PFM 2026-11-12).
   const scope = B.scope || "wing";
-  const RISKS = ALL_RISKS.filter(r => [scope, "both"].includes(r.scope || "wing"));
+  const RISKS = ALL_RISKS.filter(r => [scope, "both"].includes(r.scope || "wing") && !(r.hideIn || []).includes(deckName));
   const pres = new pptxgen();
   pres.layout = "LAYOUT_WIDE"; // 13.333 x 7.5 in
   pres.title = B.title; pres.subject = "Decision brief"; pres.author = "90-161.Z project";

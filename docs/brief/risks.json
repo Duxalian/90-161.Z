@@ -14,14 +14,18 @@
  {
   "id": "R02",
   "area": "Cyber",
-  "risk": "Unsigned scripts reach the gov computer from a public site, with a manual step around download blocking; no ISSM approval",
+  "risk": "Each wing's ISSM must approve how scripts reach its gov computers. This wing's ISSM approved paste and run in writing (12 Nov 2026); other wings start without that approval",
   "l": "H",
   "i": "H",
-  "mit": "Written ISSM approval; signed scripts through an approved channel (D2)",
+  "mit": "Each wing gets written ISSM approval for paste and run (this wing's approval is the precedent); signed scripts through an approved channel (D2) as an alternative",
   "owner": "Wing ISSM",
-  "status": "Open",
-  "plain": "The way scripts reach the work computer is not approved by cyber security",
-  "plainMit": "Get the ISSM's written approval, or switch to an approved channel"
+  "status": "Closed here; open per wing",
+  "plain": "Each wing's cyber security office must approve how scripts reach its work computers (approved here)",
+  "plainMit": "Each wing gets its ISSM's written approval; this wing's approval shows how",
+  "hideIn": [
+   "command"
+  ],
+  "scope": "both"
  },
  {
   "id": "R03",

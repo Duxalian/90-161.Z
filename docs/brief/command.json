@@ -1,15 +1,15 @@
 {
- "file": "docs/brief/90161Z-T10-command-brief-r4.pptx",
+ "file": "docs/brief/90161Z-T10-command-brief-r5.pptx",
  "title": "Publications tracker (90-161.Z): seven questions for the commander",
  "scope": "wing",
  "marking": "UNCLASSIFIED",
- "footer": "90-161.Z command brief r4 · draft · 12 Nov 2026",
+ "footer": "90-161.Z command brief r5 · draft · 12 Nov 2026",
  "slides": [
   {
    "type": "title",
    "section": "Start",
    "title": "Publications tracker (90-161.Z): seven questions",
-   "subtitle": "For the commander and group commanders\nDraft r4 · 12 November 2026 · about 10 minutes",
+   "subtitle": "For the commander and group commanders\nDraft r5 · 12 November 2026 · about 10 minutes",
    "notes": "Wing-internal brief. Each slide asks one question. No government data is in this brief."
   },
   {
@@ -127,10 +127,9 @@
   {
    "type": "ask",
    "section": "Questions",
-   "title": "7. Do you accept the top three risks with these fixes?",
+   "title": "7. Do you accept the top two risks with these fixes?",
    "facts": [
     "Design files are public: Public Affairs and OPSEC review them.",
-    "The way scripts reach work computers is not approved yet: the ISSM decides.",
     "Some features need access we may not have: we test it first; each has a fallback."
    ],
    "choices": [
@@ -139,7 +138,7 @@
     "Review after the access tests."
    ],
    "rec": "Yes",
-   "notes": "Risks R01, R02, R30 in the risk register."
+   "notes": "Risks R01 and R30 in the risk register."
   },
   {
    "type": "sheet",

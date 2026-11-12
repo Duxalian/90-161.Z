@@ -8,7 +8,7 @@ raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 Reload to see new tasks (GitHub can serve a copy up to 5 minutes old).
 Copy each URL below into the address bar. Save files with Ctrl+S.
 New files are named 90161Z-T<task>-<name>-r<revision> so they sort by task in my folders. Use the highest r number.
-How to paste and run (ISSM agreed to try this, 12 Nov 26): open the paste link, Ctrl+A, Ctrl+C. Start menu, type ISE, open Windows PowerShell ISE. File > New. Click in the white script pane, Ctrl+V, press F5. Type my DODID or press Enter. It makes the task folders if they are missing, saves the files into them and runs the test. Nothing to download or save by hand. If ISE is not there: open Windows PowerShell, right-click to paste, press Enter (not tested yet; tell Claude if it fails). Screenshots of the ISE window can show my DODID in the path: crop them.
+How to paste and run (ISSM approved in writing, 12 Nov 26): open the paste link, Ctrl+A, Ctrl+C. Start menu, type ISE, open Windows PowerShell ISE. File > New. Click in the white script pane, Ctrl+V, press F5. Type my DODID or press Enter. It makes the task folders if they are missing, saves the files into them and runs the test. Nothing to download or save by hand. If ISE is not there: open Windows PowerShell, right-click to paste, press Enter (not tested yet; tell Claude if it fails). Screenshots of the ISE window can show my DODID in the path: crop them.
 If a script will not run, stop that task and tell Claude with the STOPPED line. Do not work around it (risk R02).
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
@@ -59,19 +59,19 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/rights-test-plan.
 
 Report: e-mail the result file and my Part B notes to my Gmail, subject "90161Z T11 r1". No names, no site address, no group names in the notes: write "my AD group", "the office mailbox".
 
-## Task 10: decision briefs, r4 (open, 12 Nov 26, 1600 CT)
+## Task 10: decision briefs, r5 (open, 12 Nov 26)
 
 Folder: ...\90-161.Z\T10
 
 Three drafts (older revisions are gone):
-- Command brief r4 (10 slides): 7 questions for my commanders, each answered Yes, No or Pending evaluation, with an answer sheet.
-- Installer brief r4 (22 slides): for a PFM installing it at their own wing.
-- Adoption brief r1 (12 slides): the path to ANG-wide use. Use only after other wing PFMs show interest.
+- Command brief r5 (10 slides): 7 questions for my commanders, each answered Yes, No or Pending evaluation, with an answer sheet. Script delivery is gone (ISSM approved it); question 7 is now the top two risks.
+- Installer brief r5 (22 slides): for a PFM installing it at their own wing. R02 now says each wing's ISSM must approve paste and run; ours did.
+- Adoption brief r2 (12 slides): the path to ANG-wide use. R02 added to the risks across wings. Use only after other wing PFMs show interest.
 
 1. Save the three files into the T10 folder:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-command-brief-r4.pptx
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-installer-brief-r4.pptx
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-adoption-brief-r1.pptx
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-command-brief-r5.pptx
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-installer-brief-r5.pptx
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-adoption-brief-r2.pptx
 2. Open each in PowerPoint. Check that it opens without a repair message and that no text runs off a slide.
 3. Reply in the Claude chat: changes I want, and whether each may go to its audience.
 

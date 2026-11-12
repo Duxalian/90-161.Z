@@ -1,14 +1,14 @@
 {
- "file": "docs/brief/90161Z-T10-installer-brief-r4.pptx",
+ "file": "docs/brief/90161Z-T10-installer-brief-r5.pptx",
  "title": "90-161.Z for wing PFMs: what it takes to install and run",
  "marking": "UNCLASSIFIED",
- "footer": "90-161.Z installer brief r4 · draft · 12 Nov 2026",
+ "footer": "90-161.Z installer brief r5 · draft · 12 Nov 2026",
  "slides": [
   {
    "type": "title",
    "section": "Summary",
    "title": "90-161.Z for wing PFMs: what it takes to install and run",
-   "subtitle": "For a Publications and Forms Manager deciding whether to install it at their wing\nDraft r4 · 12 November 2026",
+   "subtitle": "For a Publications and Forms Manager deciding whether to install it at their wing\nDraft r5 · 12 November 2026",
    "notes": "Audience: a wing PFM. Covers what it does, what you need, setup, updates, upkeep, limits, approvals and risks."
   },
   {

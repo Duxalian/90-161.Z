@@ -2,7 +2,7 @@
 """Build the paste bundles in scripts/gov/paste from scripts/paste_bundles.json.
 
 A bundle is one PowerShell text (Windows PowerShell 5.1) that the PFM copies from its raw page and pastes into
-Windows PowerShell ISE, then runs with F5 (ISSM agreed to the trial, PFM 2026-11-12). It:
+Windows PowerShell ISE, then runs with F5 (ISSM approved in writing, PFM 2026-11-12). It:
   1. asks for the DODID (Enter = profile folder), as the runners do;
   2. makes each task folder under C:\\Users\\<DODID>\\OneDrive - United States Air Force\\90-161.Z if it is missing;
   3. writes every file (text: same content, saved as UTF-8 with BOM and CRLF; binary: byte-exact from base64), replacing

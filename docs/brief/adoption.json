@@ -1,12 +1,12 @@
 {
-  "file": "docs/brief/90161Z-T10-adoption-brief-r1.pptx",
+  "file": "docs/brief/90161Z-T10-adoption-brief-r2.pptx",
   "title": "90-161.Z: a path to ANG-wide adoption",
   "scope": "ang",
   "marking": "UNCLASSIFIED",
-  "footer": "90-161.Z adoption brief r1 · draft · use only once interest is confirmed · 12 Nov 2026",
+  "footer": "90-161.Z adoption brief r2 · draft · use only once interest is confirmed · 12 Nov 2026",
   "slides": [
     {"type": "title", "section": "Summary", "title": "90-161.Z: a path to ANG-wide adoption",
-     "subtitle": "Draft r1 · 12 November 2026\nFor use only after wing PFMs confirm interest. Offices above wing level are not yet identified.",
+     "subtitle": "Draft r2 · 12 November 2026\nFor use only after wing PFMs confirm interest. Offices above wing level are not yet identified.",
      "notes": "This deck is separate from the wing briefs. It starts only if the interest check shows demand."},
     {"type": "stats", "section": "Summary", "title": "Why look beyond one wing",
      "cards": [
