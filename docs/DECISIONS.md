@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-12 | Item-level permissions on PFM Publications and PFM Endorsements: Read all items; Create and Edit: only items the user created. Other lists unchanged. Endorser results and other changes to rows a flow created go through an app flow. Set by hand (List settings > Advanced settings), go.md Task 8; not in the provisioning flow (REST support for this setting is unverified). | PFM (10A) | 1A (2026-11-11) edit part: any member edits any row |
 | 2026-11-12 | Seals live in a Seals folder of one project library named 90-161.Z (subfolders by content). Shields are uploaded by key personnel and almost never change; the folder keeps the site's permissions, no unique permissions (7B). | PFM (7B) | PFM Seals library (2A, 2026-11-11); Rec A: separate PFM Seals library |
 | 2026-11-12 | Users browse through the Power App; the PFM links it in the site navigation and header, which the PFM controls. PFM lists and libraries are not hidden. For users who do not use the app, one list with lookups to the other lists is the browse entry (8). Which list: open (Agent assumption: PFM Product Index). | PFM (8) | Rec A: hide PFM lists and libraries from Site Contents |
 | 2026-11-12 | No check of DAFMAN 90-161 1.1.3.2 and 6.4 against app-first browsing (9B). | PFM (9B) | Rec A: check the paragraphs |
