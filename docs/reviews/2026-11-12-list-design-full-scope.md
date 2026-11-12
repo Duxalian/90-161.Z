@@ -111,4 +111,6 @@ Recounted 12 Nov 26 (second independent review, finding 11), sections 1-5a.
 | PFM Waivers | Flow rule: warn when Tier is T-0, T-1 or T-2 and the Waiver Approver is a wing person (a Leader in PFM Offices) | PFM 4.4A; Table A10.1 |
 | PFM Settings | Working File Disposition Rule (the AFRIMS rule the PFM names) | PFM 4.6A |
 
+Testing (PFM 5.7B, 12 Nov): no test site; T02 r10 runs its checks on the live site with lists named with a TEST prefix and removes them afterwards.
+
 Counts after batch 4: PFM Recommendations 23 columns (new lists 51); PFM Settings seed rows 3; PFM Offices seed rows 22 + 2 mandatory. Columns on existing lists unchanged (67).
