@@ -65,7 +65,7 @@ From docs/process-model.md "New publication request" (DAFMAN 3.1) and "Special r
 
 ## 4. Library 90-161.Z folders (PFM creates by hand)
 
-Seals; Working Files (one subfolder per action); Record Sets, with Publications and Forms subfolders kept apart (B7, 15A); Delegation Letters (PFM 1.7A, 12 Nov; checked at each change of command).
+Seals; Working Files (one subfolder per action); Record Sets, with Publications and Forms subfolders kept apart (B7, 15A); Delegation Letters (PFM 1.7A, 12 Nov; checked at each change of command). Permissions (PFM batch 2, 12 Nov): each Working Files action folder gets its own permissions from a flow (AO, alternate, the action's coordinators, the PFM office group; 2.3B); Record Sets and Delegation Letters: PFM office group and co-owners only (2.4A). Site Members = the wing's existing directory group (2.1A); the app is shared with it (2.6A).
 
 ## 5. What flows enforce (gates)
 
@@ -99,4 +99,4 @@ Recounted 12 Nov 26 (second independent review, finding 11), sections 1-5a.
 | Property changes | 2: AO allows multiple values; Publication Number unique |
 | View filter changes | 3 (section 5a) |
 | Lookup and person columns (with Created By and Modified By) | PFM Publications 11, PFM Product Index 7, PFM Offices 6, PFM Reviews 5, PFM Recommendations 5, PFM Waivers 4, PFM Guidance 3; all under the threshold of 12 |
-| Seed rows | PFM Offices 22 (Table A3.2); PFM Settings 1 (PFM Office Mailbox, value entered by the PFM); PFM Process Steps 13 (stages 0-12); PFM Guidance: the approved screens of docs/guidance/customer-steps.md, after the PFM's content approval |
+| Seed rows | PFM Offices 22 (Table A3.2); PFM Settings 2 (PFM Office Mailbox; Escalation Weekdays for the org-box notice, 2.5B; values entered by the PFM); PFM Process Steps 13 (stages 0-12); PFM Guidance: the approved screens of docs/guidance/customer-steps.md, after the PFM's content approval |

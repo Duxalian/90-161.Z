@@ -78,6 +78,6 @@ Transfer path (PFM, 2026-11-10): GitHub is reachable from NIPR; PFM opens the re
 | AFIMPT steps in DAFMAN (6.6) | Do not apply to ANG wing products, which post on the wing site (1.1.3.2, 6.4.1, 8.4.1; PFM 2026-11-10) | 90-161.Z tracks through posting |
 | Power Automate premium connectors not licensed | Some flow steps unavailable | Use standard connectors only (SharePoint, Outlook, Teams, Approvals) |
 | Customers edit each other's items | Data changes between units | Closed (PFM, 2026-11-12, 10A): edit own rows only on PFM Publications and PFM Endorsements; others change rows through flows |
-| Customers see each other's items | Data exposure between units | Accepted (PFM, 2026-11-11): all site members read all rows; the app filters by Requester and AO. Coordination data is internal to the wing |
+| Customers see each other's items | Data exposure between units | Accepted (PFM, 2026-11-11): all site members read all rows; the app filters by Requester and AO. Coordination data is internal to the wing. Files: per-action Working Files folders and PFM-only Record Sets (PFM 2.3B, 2.4A, 12 Nov) |
 | GenAI.mil output looks right but breaks a rule | Bad final publication | Deterministic checklist; PFM review; no auto-publish |
 | Wing files (template, AO guide, checklist) differ from DAFMAN | Wrong stages or format | No wing supplement exists (PFM 2026-11-10); DAFMAN wins on any conflict (PFM 2026-11-11) |
