@@ -30,6 +30,9 @@ except ImportError:
 jsonschema.validate(json.load(open('samples/publication.sample.json')), json.load(open('schemas/publication.schema.json')))
 PY
 
+grep -q "TypeText(\$t.Replace('-', \[string\]\[char\]30))" scripts/gov/New-Publication.ps1 && ok "tier numbers use a Word nonbreaking hyphen (T01 r4)" || bad "tier nonbreaking hyphen"
+[ "$(ls scripts/gov/90161Z-T01-renderer-test-r*.ps1 | wc -l)" -eq 1 ] && ok "one T01 runner revision" || bad "more than one T01 runner"
+
 python3 scripts/build_flow_payload.py --check >/dev/null && ok "flow payload up to date" || bad "flow payload stale"
 python3 scripts/build_flow_package.py --check && ok "flow packages up to date" || bad "flow packages stale"
 python3 tests/check_flow_package.py && ok "flow packages match real export shape" || bad "flow package shape"

@@ -111,7 +111,11 @@ function Write-Rich([string]$Text, [bool]$Bold = $false, [bool]$Italic = $false)
       '^\{/i\}$' { $i = $Italic; continue }
       '^\{b\}$' { $b = $true; continue }
       '^\{/b\}$' { $b = $Bold; continue }
-      '^\(T-[0-3]\)$' { $script:sel.Font.Bold = -1; $script:sel.Font.Italic = (ConvertTo-WordBool $i); $script:sel.TypeText($t); continue }
+      '^\(T-[0-3]\)$' {
+        # Word nonbreaking hyphen (character 30): "(T-3)" never splits across two lines (T01 r3 result, 2.2).
+        $script:sel.Font.Bold = -1; $script:sel.Font.Italic = (ConvertTo-WordBool $i)
+        $script:sel.TypeText($t.Replace('-', [string][char]30)); continue
+      }
       default {
         if ($t -ne '') { $script:sel.Font.Bold = (ConvertTo-WordBool $b); $script:sel.Font.Italic = (ConvertTo-WordBool $i); $script:sel.TypeText($t) }
       }

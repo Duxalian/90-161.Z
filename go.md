@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 1821 CT. Bookmark on my work computer (clickable links):
+Updated: 11 Nov 26, 1827 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -12,25 +12,22 @@ If a downloaded script is blocked: open its raw link, Ctrl+A, Ctrl+C, paste into
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
 
-## Task 1: renderer test, r3 (passed 11 Nov 26; r4 fix coming, nothing to run now)
+## Task 1: renderer test, r4 (open, 11 Nov 26, 1827 CT)
 
 Folder: ...\90-161.Z\T01
 
-r2 result: runner and validator ok; Word could not save. r3 fixes the save. Replace New-Publication.ps1 and the runner; the other three files are unchanged.
+r3 result: passed. One fix: "(T-3)" broke across two lines at the hyphen (2.2, page 4). r4 keeps tier numbers on one line. Replace New-Publication.ps1 and the runner; the other three files are unchanged.
 
 Steps and pass checks:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/gov-test-plan.md
 
-Save these five files into the T01 folder (delete the r2 runner):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T01-renderer-test-r3.ps1
+Save these two files into the T01 folder (delete the r3 runner):
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T01-renderer-test-r4.ps1
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Publication.Common.ps1
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Test-Publication.ps1
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/publication.sample.json
 
-In File Explorer, right-click 90161Z-T01-renderer-test-r3.ps1 > Run with PowerShell. Type my DODID, or press Enter. It saves 90161Z-T01-result-r3.txt in the T01 folder.
+In File Explorer, right-click 90161Z-T01-renderer-test-r4.ps1 > Run with PowerShell. Type my DODID, or press Enter. It saves 90161Z-T01-result-r4.txt in the T01 folder.
 
-Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each check (1-8) in the test plan that fails, with what I see.
+Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and check 5a: does "(T-3)" at the end of 2.2 on page 4 stay on one line? E-mail the result file and the PDF to my Gmail.
 
 ## Task 2: create the lists, r9 (passed 11 Nov 26; open: tell Claude test or real site, and the section 3 and 4 checks)
 
