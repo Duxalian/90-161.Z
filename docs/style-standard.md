@@ -41,7 +41,8 @@ Sources:
    - Times are 24-hour without a colon and without "hours": 1708 CT.
 5. **Numbers** (T&Q chapter 28): in sentences, write one through nine as words and 10 and above as figures. Use figures in tables, counts in tool output, time periods (30 days, 15 business days), money, measurements, references (5.2, Table A5.2) and compound modifiers (4-year review).
 6. **Punctuation** (T&Q chapter 25): em dash (—) without spaces for a break; hyphen in compound modifiers before a noun (follow-up action, 4-year cycle); "e-mail". Exception (PFM naming rule 5, 2026-11-11): view names use "<audience> - <what>" with a spaced hyphen, because an em dash cannot be typed on the gov device and breaks the view address.
-7. **Publications.** Two spaces between sentences, format and layout come from DAFMAN 90-161 and docs/format-rules.md; plain language per DAFMAN 4.5.9.7 and T&Q.
+7. **Flow inputs** (PFM, 2026-11-12): every input label and its gray help text tells a low-skill user what to do and where to find it, in plain words (DAFMAN 1.2.4 plain language). Example help text: "Open the SharePoint site, copy the whole address from the bar at the top of the browser, and paste it here."
+8. **Publications.** Two spaces between sentences, format and layout come from DAFMAN 90-161 and docs/format-rules.md; plain language per DAFMAN 4.5.9.7 and T&Q.
 
 ## Change a rule
 
