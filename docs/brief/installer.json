@@ -1,0 +1,629 @@
+{
+ "file": "docs/brief/90161Z-T10-installer-brief-r2.pptx",
+ "title": "90-161.Z for wing PFMs: what it takes to install and run",
+ "marking": "UNCLASSIFIED",
+ "footer": "90-161.Z installer brief r2 · draft · 12 Nov 2026",
+ "slides": [
+  {
+   "type": "title",
+   "section": "Summary",
+   "title": "90-161.Z for wing PFMs: what it takes to install and run",
+   "subtitle": "For a Publications and Forms Manager deciding whether to install it\nDraft r2 · 12 November 2026",
+   "notes": "Audience: a wing PFM. Covers what it does, what you need, setup, updates, upkeep, limits, approvals and risks."
+  },
+  {
+   "type": "stats",
+   "section": "Summary",
+   "title": "What you get, and what it asks of you",
+   "cards": [
+    {
+     "big": "13",
+     "label": "stages of DAFMAN 90-161 tracked per action, from appointment of the action officer to the 4-year review"
+    },
+    {
+     "big": "4 parts",
+     "color": "amber",
+     "label": "to set up: a rights check, the lists, the app and flows, then a first-run setup screen"
+    },
+    {
+     "big": "$0",
+     "color": "green",
+     "label": "new licenses expected: standard DoD365 tools only (confirm with your license manager)"
+    }
+   ],
+   "listTitle": "Before you decide",
+   "list": [
+    "It is not approved for use yet: your wing needs the reviews on slide 13.",
+    "Setup checks your rights first and tells you what to ask for; every right has a fallback.",
+    "It needs a little upkeep each month and a handover plan before you move (slide 11)."
+   ]
+  },
+  {
+   "type": "stages",
+   "section": "What it does",
+   "title": "One tracked path from request to posted publication",
+   "lead": "One record per action; coordination routed and tracked; format applied by code; every event logged.",
+   "stages": [
+    "AO appoint-ment",
+    "Request",
+    "Drafting",
+    "Clean and format",
+    "Pre-coord (optional)",
+    "Privacy review",
+    "Formal coord",
+    "Legal",
+    "Certify",
+    "Approve",
+    "Submit",
+    "Build and post",
+    "Periodic review"
+   ],
+   "highlight": [
+    3,
+    11
+   ],
+   "key": "Stages 0-12 per DAFMAN 90-161 (legal last: 3.4, 5.1.8.2). Amber: code, not people, applies the DAFMAN format and checks each format rule.",
+   "cards": [
+    {
+     "head": "Action officers",
+     "body": "Request an action, upload drafts, name coordinators, see status at any time."
+    },
+    {
+     "head": "Coordinators and officials",
+     "body": "Get the request with a due date and reminders; answer Concur, Concur with comment, Nonconcur or No comment."
+    },
+    {
+     "head": "You, the PFM",
+     "body": "One queue: format and check drafts, post, keep the product index, run periodic reviews."
+    }
+   ]
+  },
+  {
+   "type": "arch",
+   "section": "What it does",
+   "title": "Built only on what every wing already has",
+   "inTitle": "DoD systems (government data stays here)",
+   "inside": [
+    [
+     "SharePoint lists",
+     "9 lists today, 3 more approved: actions, coordination, product index, reviews, settings, activity log"
+    ],
+    [
+     "Power Automate flows",
+     "Routing, weekday reminders, escalation, stage gates, review timers"
+    ],
+    [
+     "Power Apps app",
+     "Intake, status, PFM queue, first-run setup, settings, update check"
+    ],
+    [
+     "Renderer on your gov computer",
+     "PowerShell and Word build the DAFMAN format and check every rule"
+    ],
+    [
+     "GenAI.mil",
+     "Extracts the draft's words as data; it never sets format"
+    ],
+    [
+     "Central releases list",
+     "Tells your app that a new version exists"
+    ]
+   ],
+   "outTitle": "Outside (no government data)",
+   "outside": [
+    [
+     "Public GitHub repository",
+     "Design, code and fake sample data; you download the packages from it"
+    ],
+    [
+     "Commercial AI, personal device",
+     "Used by the maintainer for design with fake data only"
+    ],
+    [
+     "Public task page",
+     "Step-by-step tasks for the gov computer"
+    ]
+   ]
+  },
+  {
+   "type": "procon",
+   "section": "Should you install it",
+   "title": "For and against, for your wing",
+   "pros": [
+    "Every action and its status in one place; customers see their own status",
+    "DAFMAN format and rules enforced by code, not memory",
+    "Weekday reminders and escalation without chasing by hand",
+    "Product index and 4-year reviews tracked",
+    "Works with a site owner's rights; each extra right has a fallback",
+    "Updates announced in the app; most updates are data copies"
+   ],
+   "cons": [
+    "Not approved for use yet; your wing needs its own reviews unless NGB sponsors one set",
+    "Built and supported by one maintainer today",
+    "Needs setup time and a backup person",
+    "SharePoint and Power Apps limits apply (slide 12)",
+    "Coordinators outside the wing work by e-mail, not in the app",
+    "The formatter needs Word and PowerShell on a gov computer"
+   ]
+  },
+  {
+   "type": "table",
+   "section": "Before you start",
+   "title": "What you need, and what happens if you lack it",
+   "lead": "Setup checks each of these first. Full list with test steps: docs/rights-test-plan.md.",
+   "head": [
+    "You need",
+    "Who grants it",
+    "If you cannot get it"
+   ],
+   "colW": [
+    4.3,
+    3.6,
+    4.3
+   ],
+   "rows": [
+    [
+     "Power Apps and Power Automate in your license",
+     "Help desk",
+     "Setup stops; nothing to work around"
+    ],
+    [
+     "Site owner on your PFM office site",
+     "The site's owner or site collection admin",
+     "A site owner runs list setup from a checklist"
+    ],
+    [
+     "SharePoint and Outlook allowed together in flows",
+     "Power Platform admins (help desk)",
+     "Setup stops; ask the admins"
+    ],
+    [
+     "Send As on the office mailbox",
+     "Exchange admins (help desk)",
+     "Notices come from you, office box on copy and as Reply-To"
+    ],
+    [
+     "A group of wing members (any type)",
+     "Communications squadron or site owner",
+     "Share the app with named people"
+    ],
+    [
+     "An alternate PFM",
+     "Your leadership",
+     "Setup finishes with a standing warning"
+    ],
+    [
+     "Gov computer with Windows PowerShell 5.1 and Word",
+     "Communications squadron",
+     "Format by hand with the DAFMAN template"
+    ]
+   ],
+   "fs": 14
+  },
+  {
+   "type": "steps",
+   "section": "Setup",
+   "title": "Setup: one person, four parts, stops cleanly if a right is missing",
+   "steps": [
+    [
+     "0",
+     "Rights check",
+     "A small flow tests each right and writes PASS or MISSING, with the request text to send"
+    ],
+    [
+     "1",
+     "Lists",
+     "A flow builds the lists, columns, views and starting rows, and records the version"
+    ],
+    [
+     "2",
+     "App and flows",
+     "Import the package; you make your own connections"
+    ],
+    [
+     "3",
+     "First-run setup",
+     "The app asks for your wing's values, checks each, runs a self-test, then opens"
+    ]
+   ],
+   "table": {
+    "head": [
+     "First-run value",
+     "Checked by"
+    ],
+    "colW": [
+     5,
+     7
+    ],
+    "rows": [
+     [
+      "Access group type and group",
+      "Resolves on the site; type matches your choice"
+     ],
+     [
+      "PFM and alternate",
+      "Both resolve; not the same person"
+     ],
+     [
+      "Office mailbox and sender mode",
+      "Test message"
+     ],
+     [
+      "Time zone",
+      "Used by every date"
+     ],
+     [
+      "Releases list address",
+      "Read works, else manual check mode"
+     ]
+    ]
+   }
+  },
+  {
+   "type": "table",
+   "section": "Setup",
+   "title": "Pick the access group your wing already uses",
+   "lead": "The SharePoint group protects the data. Sharing the app only decides who can open it.",
+   "head": [
+    "Your wing uses",
+    "Site access",
+    "App sharing",
+    "Fit"
+   ],
+   "colW": [
+    3.2,
+    2.8,
+    3.6,
+    2.6
+   ],
+   "recCol": 3,
+   "rows": [
+    [
+     "One AD security group of all members",
+     "Add it to site Members",
+     "Share with the same group",
+     "Best: one group does both"
+    ],
+    [
+     "The site's Microsoft 365 group",
+     "Group members are site members",
+     "Share with that group",
+     "Good"
+    ],
+    [
+     "SharePoint-only groups",
+     "The SharePoint group",
+     "Everyone in the tenant if allowed, else named people",
+     "Works; more upkeep"
+    ],
+    [
+     "AD groups inside a SharePoint group",
+     "The SharePoint group",
+     "Share with the AD groups",
+     "Good"
+    ]
+   ],
+   "note": "You can change this later on the app's Settings screen (PFM decision P6, 12 Nov).",
+   "fs": 14
+  },
+  {
+   "type": "table",
+   "section": "Setup",
+   "title": "Choices you make at setup, and can change later",
+   "head": [
+    "Choice",
+    "Options",
+    "Where to change it later"
+   ],
+   "colW": [
+    2.8,
+    5.6,
+    3.6
+   ],
+   "rows": [
+    [
+     "Access group",
+     "AD security group, Microsoft 365 group, SharePoint group, nested",
+     "App Settings screen"
+    ],
+    [
+     "Who sends notices",
+     "Office mailbox (needs Send As) or you, office box on copy",
+     "App Settings screen"
+    ],
+    [
+     "Time zone",
+     "Your wing's time zone",
+     "App Settings screen"
+    ],
+    [
+     "PFM and alternate",
+     "Two different people",
+     "App Settings screen"
+    ],
+    [
+     "Update source",
+     "Central releases list, or manual check on the public page",
+     "App Settings screen"
+    ]
+   ],
+   "fs": 14
+  },
+  {
+   "type": "twoCol",
+   "section": "Updates",
+   "title": "Updates: your app tells you, at start or on demand",
+   "cols": [
+    {
+     "head": "Data-only update",
+     "color": "green",
+     "items": [
+      "Settings, process steps, guidance text, series, coordination table",
+      "An opt-in flow copies the new rows",
+      "You approve each copy first"
+     ]
+    },
+    {
+     "head": "Logic update",
+     "color": "amber",
+     "items": [
+      "App screens and flow steps",
+      "You import the new package",
+      "Release notes list each step; a version check stops a mismatch"
+     ]
+    }
+   ],
+   "flow": [
+    "App knows its own version",
+    "At start, reads the newest release",
+    "Newer: banner for you and your alternate",
+    "Check for updates button runs it on demand",
+    "Read fails: no banner; shows the public page"
+   ],
+   "rule": "Design rule: every rule that can change lives in list rows, so most updates are data copies, not re-imports."
+  },
+  {
+   "type": "table",
+   "section": "Upkeep",
+   "title": "Maintenance actions",
+   "lead": "Planned design; the pilot measures the time each takes.",
+   "head": [
+    "When",
+    "What",
+    "Who"
+   ],
+   "colW": [
+    2.2,
+    7.6,
+    2.2
+   ],
+   "rows": [
+    [
+     "Daily",
+     "Read the health-check e-mail if one arrives (a flow failed or a connection broke)",
+     "PFM"
+    ],
+    [
+     "Weekly",
+     "Work the PFM queue; look at overdue coordination",
+     "PFM"
+    ],
+    [
+     "Monthly",
+     "Check flow run failures; confirm the alternate can open everything",
+     "PFM, alternate"
+    ],
+    [
+     "Each release",
+     "Read the notes; approve data copies; import logic updates; run the self-test",
+     "PFM"
+    ],
+    [
+     "DAFMAN change",
+     "Apply the rule update when it is released",
+     "PFM"
+    ],
+    [
+     "Yearly",
+     "Archive the activity log; restore drill; review the access group; watch list sizes",
+     "PFM"
+    ],
+    [
+     "Before you move",
+     "Handover: successor becomes co-owner, makes connections, takes over settings",
+     "PFM, successor"
+    ]
+   ],
+   "fs": 14
+  },
+  {
+   "type": "table",
+   "section": "Upkeep",
+   "title": "Known limits",
+   "head": [
+    "Limit",
+    "Effect",
+    "How the design handles it"
+   ],
+   "colW": [
+    3,
+    4.2,
+    4.8
+   ],
+   "rows": [
+    [
+     "SharePoint list views: 5,000 items",
+     "Large lists slow or fail",
+     "Indexed columns; activity log archived each year"
+    ],
+    [
+     "Power Apps search over large lists",
+     "Searches can miss rows",
+     "Search by title start, or in a flow"
+    ],
+    [
+     "Coordinators outside the wing",
+     "May not open site files",
+     "PDF by e-mail; you record the answer"
+    ],
+    [
+     "Phones",
+     "Power Apps needs a managed device",
+     "Desktop use only"
+    ],
+    [
+     "Formatter",
+     "Needs Word and PowerShell on a gov computer",
+     "Format by hand as the fallback"
+    ],
+    [
+     "Flows idle for 90 days",
+     "May be turned off",
+     "Monthly heartbeat run"
+    ]
+   ],
+   "fs": 14
+  },
+  {
+   "type": "table",
+   "section": "Approvals",
+   "title": "Approvals your wing needs before real use",
+   "head": [
+    "Office",
+    "Ask them"
+   ],
+   "colW": [
+    3,
+    9
+   ],
+   "rows": [
+    [
+     "ISSM",
+     "May this tool and its setup scripts be used, and how should scripts be delivered?"
+    ],
+    [
+     "Public Affairs and OPSEC",
+     "Do the public design files need a review before we rely on them?"
+    ],
+    [
+     "Staff Judge Advocate",
+     "Under what terms may our wing use code built by another wing?"
+    ],
+    [
+     "Privacy Act Officer",
+     "Do names and work e-mails in the lists need a privacy assessment?"
+    ],
+    [
+     "Records Manager",
+     "Which records rules apply to the lists and the activity log?"
+    ]
+   ],
+   "note": "If NGB sponsors the tool, one set of reviews can cover every wing.",
+   "fs": 14
+  },
+  {
+   "type": "heat",
+   "section": "Risks",
+   "title": "Risk picture: {hh} risks are likely and severe today",
+   "key": [
+    "Likelihood and impact: High, Medium or Low, rated by the project; judgment, not measurement.",
+    "IDs match the appendix.",
+    "Red: act before the next build or a second wing. Amber: plan a response. Green: watch.",
+    "Governance ratings rest on policy titles not yet read in full (confidence medium)."
+   ]
+  },
+  {
+   "type": "risks",
+   "section": "Risks",
+   "title": "Red risks and what reduces them",
+   "ids": [
+    "R01",
+    "R02",
+    "R03",
+    "R04",
+    "R05",
+    "R06",
+    "R07",
+    "R08",
+    "R09",
+    "R10",
+    "R11",
+    "R30"
+   ]
+  },
+  {
+   "type": "statTable",
+   "section": "Decisions",
+   "title": "Decided so far: the foundations",
+   "big": "{decisions}",
+   "bigLabel": "dated decisions by the maintaining PFM, 10-12 Nov 2026, in docs/DECISIONS.md",
+   "head": [
+    "Theme",
+    "Decided"
+   ],
+   "rows": [
+    [
+     "Rule source",
+     "DAFMAN 90-161 wins over any wing file or habit"
+    ],
+    [
+     "Platform",
+     "SharePoint, Power Automate, Power Apps in DoD365; standard connectors only"
+    ],
+    [
+     "Data boundary",
+     "Government data stays in DoD365 and GenAI.mil; outside systems hold fake data only"
+    ],
+    [
+     "Format",
+     "Code applies the format, never the AI"
+    ],
+    [
+     "Install",
+     "Settings in lists; the site address is the only per-wing value"
+    ],
+    [
+     "Access group",
+     "Chosen at setup per wing; changeable in the app"
+    ],
+    [
+     "Updates",
+     "Checked at start and on demand"
+    ]
+   ]
+  },
+  {
+   "type": "riskAppendix",
+   "section": "Appendix",
+   "title": "Appendix: risk register"
+  },
+  {
+   "type": "sources",
+   "section": "Appendix",
+   "title": "Appendix: where the full record lives",
+   "rows": [
+    [
+     "Decisions log",
+     "raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/DECISIONS.md"
+    ],
+    [
+     "Setup and update design",
+     "raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/setup-and-updates.md"
+    ],
+    [
+     "Rights test plan",
+     "raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/rights-test-plan.md"
+    ],
+    [
+     "Plan audit",
+     "raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-12-plan-audit-assumptions-gaps.md"
+    ],
+    [
+     "Process model",
+     "raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/process-model.md"
+    ]
+   ],
+   "method": "Prepared with AI assistance (a commercial assistant on a personal device, fake data only). Independent read-only reviews on 12 Nov 2026 covered design choices against the decisions log, engineering gaps and governance. Policy items come from search summaries; the named offices confirm them. Built from docs/brief/installer.json and docs/brief/risks.json by scripts/build_decision_brief.js."
+  }
+ ]
+}

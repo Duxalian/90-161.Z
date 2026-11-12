@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 12 Nov 26, 1320 CT. Bookmark on my work computer (clickable links):
+Updated: 12 Nov 26, 1430 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -22,16 +22,36 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Public
 3. Run Task 7 Part A step 4 again.
 4. E-mail both result files and the 3 PDFs (SAMPLEWINGI99-101.pdf, -TALL.pdf, -ROUND.pdf), also if they show FORMAT-FAIL lines.
 
-## Task 10: decision brief, r1 (open, 12 Nov 26, 1320 CT)
+## Task 11: rights test, r1 (open, 12 Nov 26, 1400 CT)
+
+Folder: ...\90-161.Z\T11
+
+Tests what I can and cannot do as a regular user, as site owner and as site collection admin, plus the office mailbox and Power Platform. Every later design step depends on these answers. About 45 minutes.
+
+Part A, the probe flow (about 10 minutes):
+1. Save this file into the T11 folder:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T11-rights-probe-r1.zip
+2. Power Automate, My flows, Import, Import Package (Legacy), pick the zip. For the SharePoint connection pick my existing one. Import.
+3. Run "90161Z T11 Rights Probe r1". Site address: the site where the PFM lists are. Coworker e-mail: one regular member of that site (not an owner). Wing group e-mail: the group that gives wing members access, if it has an e-mail address.
+4. The flow creates test lists and a test group named "PFM Rights Probe ..." and deletes them at the end. If the run stops early, delete anything named that way by hand. The deleted test lists also sit in the site recycle bin; I may empty them there.
+5. Open the site's Documents library and download 90161Z-T11-rights-result-r1.json.
+
+Part B, manual checks (about 35 minutes): follow section 6 of this page and write down what each row asks for:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/rights-test-plan.md
+
+Report: e-mail the result file and my Part B notes to my Gmail, subject "90161Z T11 r1". No names, no site address, no group names in the notes: write "my AD group", "the office mailbox".
+
+## Task 10: decision briefs, r2 (open, 12 Nov 26, 1430 CT)
 
 Folder: ...\90-161.Z\T10
 
-A draft PowerPoint for wing leadership, staff offices and NGB: what is decided, 7 decisions they need to make, and 29 risks. Read it before anyone else sees it.
+Two drafts now (r1 is gone): one for my commanders (11 slides, plain words: does it work, what if it breaks, cost, approval, why) and one for a PFM who may install it (22 slides: needs, setup, access group, updates, upkeep, limits, approvals, risks). Read both before anyone else sees them.
 
-1. Save this file into the T10 folder:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-decision-brief-r1.pptx
-2. Open it in PowerPoint. Check that it opens without a repair message and that no text runs off a slide.
-3. Reply in the Claude chat: changes I want, and whether it may go to leadership.
+1. Save both files into the T10 folder:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-command-brief-r2.pptx
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-installer-brief-r2.pptx
+2. Open each in PowerPoint. Check that it opens without a repair message and that no text runs off a slide.
+3. Reply in the Claude chat: changes I want, and whether each may go to its audience.
 
 ## Task 1: renderer test, r5 (open, 11 Nov 26, 1837 CT)
 

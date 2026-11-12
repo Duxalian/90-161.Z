@@ -33,7 +33,7 @@ Each row: what setup needs, how Part 0 detects it, and what to do if it is missi
 | R5 | Full Control (site owner) on that site: Manage Lists, Manage Permissions | Part 1, permissions | SharePoint REST `effectivebasepermissions` on the web, checked for ManageLists and ManagePermissions | The site owner or site collection admin: "add me to the site Owners group" | Part 1 can run with Manage Lists only; permission steps go to a site owner as a checklist |
 | R6 | Site collection admin | Nothing required | REST `currentuser/IsSiteAdmin` (report only) | - | Not needed (Rec: design keeps it optional) |
 | R7 | Standard connectors allowed together by the data policy (SharePoint, Office 365 Outlook, Office 365 Users) | Flows | **Test**: Part 0 itself uses SharePoint and Outlook; save fails on a DLP block | Tenant Power Platform admins: "allow SharePoint and Office 365 Outlook in the same data group in the Default environment" | None; stop |
-| R8 | A security or M365 group of wing members | Sharing the app (a SharePoint group cannot be used) | Installer enters the group; Part 0 resolves it through Office 365 Users or SharePoint `ensureuser` | Communications squadron: "the AD group of all wing members" | Share with named people; slower upkeep |
+| R8 | The group that gives wing members access (type differs by wing: section 4a) | Site access and app sharing | Installer picks the type and the group; Part 0 resolves it with SharePoint `ensureuser` and reports its type (probe R13) | Communications squadron for an AD group; the site owner for a SharePoint group | Section 4a fallbacks |
 | R9 | Send As or Send on Behalf for the PFM office mailbox | Office-mailbox e-mails | **Test**: Part 0 sends a test from the shared mailbox; failure = missing | Exchange admins through the help desk | Send from the installer, office box on CC and Reply-To (Settings switch) |
 | R10 | A second person (co-owner, alternate PFM) | Continuity | Installer enters the person; Part 0 checks the account resolves | Wing leadership names an alternate | Setup completes with a warning that stays on the PFM screen |
 | R11 | Read access to the central Releases list | Update check | Part 0 reads the list | The product maintainer: "add our wing PFM to the readers" | Manual check on the public hand-off page |
@@ -49,11 +49,32 @@ Values the installer enters, each checked before save:
 | Wing display name (subtitle) | Not empty |
 | PFM, alternate PFM (Person) | Both resolve; not the same person |
 | PFM office mailbox | Valid address; R9 result decides the send mode |
-| Wing members group | Resolves (R8) |
+| Access group type and group (section 4a) | Resolves (R8); type matches the choice |
 | Time zone | One of the Windows time zones; used by every date-only flow step |
 | Releases list address | Read works (R11), else manual check mode |
 
 Self-test at the end: create a fake TEST publication, run one flow round trip, read back the Activity Log row, delete the test rows. Pass = Setup Complete = Yes.
+
+## 4a. Access group (PFM P6, 12 Nov)
+
+Wings give members access in different ways: one AD (Entra) security group for read; SharePoint-only groups; AD groups only. Setup asks which one this wing uses and explains the best fit. The PFM can change it later on the app's Settings screen.
+
+Two separate things, often confused:
+- **Data access** = SharePoint permissions on the site and lists. This is what protects the data.
+- **App access** = who can open the app. Sharing the app grants no data access.
+
+| Wing uses | Site access | App sharing | Fit |
+|---|---|---|---|
+| One AD or Entra security group of all members | Add the group to site Members (or Visitors) | Share with the same group | **Best**: one group does both; membership stays with the communications squadron |
+| The site's M365 group (group-connected site, probe R03) | Group members are site members | Share with the M365 group | Good: one group does both |
+| SharePoint-only groups | The SharePoint group | A SharePoint group cannot be used (rights test P12). Share with Everyone in the tenant if allowed (P11), or with named people | Works; data stays protected by the SharePoint group. Named people = upkeep at every arrival |
+| AD groups nested in a SharePoint group | The SharePoint group | Share with the AD group(s) | Good |
+
+Text the setup screen shows (plain words): "Pick the group your wing already uses to give members access to SharePoint. If you have an AD security group of all wing members, pick it: it opens both the site and the app. If you use only SharePoint groups, the app is opened to the whole tenant or to named people, and your SharePoint group still decides who sees the data."
+
+Settings rows (PFM Settings): Access Group Type (AD Security Group, M365 Group, SharePoint Group, Nested), Access Group (sign-in name or group ID), App Share Mode (Group, Everyone, Named People).
+
+Change later (Settings screen, PFM and alternate only): the app calls a flow on the PFM's connection that adds the new group to the site role and removes the old one (needs Manage Permissions: rights S4, S7). App sharing changes are a manual step the screen walks through, unless the Power Apps for Makers connector is allowed (rights P3); then a flow does it.
 
 ## 5. Update check
 
@@ -69,6 +90,6 @@ Self-test at the end: create a fake TEST publication, run one flow round trip, r
 
 ## 6. Open items
 
-1. **Test** R3, R7 and R9 on the DoD tenant before the setup flow is built (go.md task).
+1. Test every right in docs/rights-test-plan.md (go.md Task 11) before the setup flow is built.
 2. Who hosts the central Releases list long term: this PFM's site (continuity risk at PCS) or an NGB-owned site (Rec, needs an owner).
 3. Whether the preflight report goes by e-mail, run output or a list row (Rec: a list row plus e-mail, so it survives the 28-day run history).
