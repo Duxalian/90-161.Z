@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves Rounds\90161Z-R01-results-r1.zip. No download, no admin rights, nothing outside that folder.
 #>
-$buildId = '87c05b6a'
+$buildId = 'b60abd8b'
 $round = 'R01'
 $usersRoot = 'C:\Users'
 $files = @()
@@ -442,7 +442,7 @@ Write-Output "VALIDATE fails=$fails warns=$warns"
 if ($fails -gt 0) { exit 1 }
 exit 0
 '@ }
-$files += @{ Dir = 'T01'; Name = 'New-Publication.ps1'; Kind = 'text'; Sha = '61b54e6eae3a'; Data = @'
+$files += @{ Dir = 'T01'; Name = 'New-Publication.ps1'; Kind = 'text'; Sha = '5fc6ce6a666f'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z renderer (layer L2). Builds a camera-ready Word file that looks like DAFMAN 90-161
@@ -984,14 +984,19 @@ try {
   # Positions from Range.Information (5 = horizontal, 6 = vertical, points from the page edge). Values: L-007 seal top 1.47 in;
   # L-012 TOC number 1.50 in, text 2.00 in, line pitch 0.272 in (docs/format-rules.md). Tolerance 0.03 in (0.01 in for pitch).
   try {
+    try { $doc.ActiveWindow.View.Type = 3 } catch { Write-Output ('MEASURE-ERROR print layout view: ' + $_.Exception.Message) }   # wdPrintView: Information() needs layout
     $measure = {
       param([string]$What, [double]$GotPt, [double]$WantIn, [double]$TolIn)
+      if ($GotPt -lt 0) { return ('MEASURE-ERROR ' + $What + ' not laid out (Information returned ' + $GotPt + ')') }
       $gotIn = [math]::Round($GotPt / 72, 3)
       $verdict = 'FAIL'
       if ([math]::Abs($gotIn - $WantIn) -le $TolIn) { $verdict = 'PASS' }
       'MEASURE ' + $What + ' got=' + $gotIn + 'in want=' + $WantIn + 'in tol=' + $TolIn + ' ' + $verdict
     }
-    if ($shield -and $pic) { Write-Output (& $measure 'L-007 seal top' ([double]$pic.Range.Information(6)) 1.47 0.03) }
+    if ($shield) {
+      if ($pic) { $sealAt = $pic.Range.Duplicate; $sealAt.Collapse(1); Write-Output (& $measure 'L-007 seal top' ([double]$sealAt.Information(6)) 1.47 0.03) }
+      else { Write-Output 'MEASURE-ERROR L-007 seal top not measured: no picture' }
+    }
     if ($null -ne $tocRange -and $doc.TablesOfContents.Count -ge 1) {
       $toc2 = @(); $tocAll = @()
       foreach ($tp in $doc.TablesOfContents.Item(1).Range.Paragraphs) { $tocAll += $tp; if ($tp.Range.Text -match '^\s*\d') { $toc2 += $tp } }
@@ -1001,7 +1006,8 @@ try {
         $tab = $toc2[0].Range.Duplicate
         if ($tab.Find.Execute('^t')) { $tab.Collapse(0); Write-Output (& $measure 'L-012 TOC text left' ([double]$tab.Information(5)) 2.00 0.03) }
         else { Write-Output 'MEASURE-ERROR L-012 TOC text left: no tab in the first TOC 2 line' }
-      }
+      } else { Write-Output 'MEASURE-ERROR L-012 TOC not measured: no numbered TOC line found' }
+      $pitchDone = $false
       # Pitch between entries: the first one-line entry and the entry after it (a wrapped entry adds 0.202 in per line).
       for ($k = 0; $k -lt $tocAll.Count - 1; $k++) {
         $s1 = $tocAll[$k].Range.Duplicate; $s1.Collapse(1)
@@ -1009,9 +1015,10 @@ try {
         if ([math]::Abs([double]$e1.Information(6) - [double]$s1.Information(6)) -lt 1) {
           $s2 = $tocAll[$k + 1].Range.Duplicate; $s2.Collapse(1)
           Write-Output (& $measure 'L-012 TOC pitch' ([double]$s2.Information(6) - [double]$s1.Information(6)) 0.272 0.01)
-          break
+          $pitchDone = $true; break
         }
       }
+      if (-not $pitchDone) { Write-Output 'MEASURE-ERROR L-012 TOC pitch not measured: no one-line entry followed by another' }
     }
   } catch { Write-Output ('MEASURE-ERROR ' + $_.Exception.Message) }
 
@@ -1837,10 +1844,16 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
   $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
   $r = @{ Pass = 0; Fail = 0; Exit = $null }
   $p = [System.Diagnostics.Process]::Start($psi)
+  $script:child = $p
+  $deadline = (Get-Date).AddMinutes($stepMinutes)
   $errTask = $p.StandardError.ReadToEndAsync()
   $lineTask = $p.StandardOutput.ReadLineAsync()
   while ($true) {
-    while (-not $lineTask.Wait(150)) { & $Tick }
+    while (-not $lineTask.Wait(150)) {
+      & $Tick
+      if ((Get-Date) -gt $deadline) { try { $p.Kill() } catch { $null = $_ }; $r.Fail++; & $Say ('STOPPED: step took more than ' + $stepMinutes + ' minutes; ended it'); break }
+    }
+    if (-not $lineTask.IsCompleted) { break }
     $line = $lineTask.Result
     if ($null -eq $line) { break }
     $line = ConvertTo-Masked $line
@@ -1850,6 +1863,7 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
     $lineTask = $p.StandardOutput.ReadLineAsync()
   }
   $p.WaitForExit()
+  $script:child = $null
   foreach ($e in @(([string]$errTask.Result) -split "`r?`n" | Where-Object { $_ })) { $r.Fail++; & $Say ('ERR ' + (ConvertTo-Masked $e)) }
   $r.Exit = $p.ExitCode
   return $r
@@ -1897,7 +1911,7 @@ function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scr
   return ,$summary
 }
 
-$script:secret = @(); $script:dodid = ''
+$script:secret = @(); $script:dodid = ''; $script:child = $null; $stepMinutes = 30
 $gui = $true
 try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false }
 if ($gui) {
@@ -1923,9 +1937,9 @@ if ($gui) {
     $copy.Text = 'Copy summary'; $copy.Location = New-Object System.Drawing.Point(140, 556); $copy.Width = 120; $copy.Enabled = $false
     $form.Controls.AddRange(@($lbl, $idBox, $list, $log, $run, $copy))
     $script:lastSummary = @()
-    $say = { param($t) $log.AppendText($t + "`r`n"); [System.Windows.Forms.Application]::DoEvents() }
+    $say = { param($t) try { $log.AppendText($t + "`r`n"); [System.Windows.Forms.Application]::DoEvents() } catch { Write-Host $t } }
     $tick = { [System.Windows.Forms.Application]::DoEvents() }
-    $onStep = { param($k, $line) $list.Items[$k] = $line }
+    $onStep = { param($k, $line) $list.Items[$k] = $line; $list.SetItemChecked($k, $true) }
     $run.Add_Click({
       $run.Enabled = $false; $copy.Enabled = $false
       $sel = @(); for ($k = 0; $k -lt $steps.Count; $k++) { $sel += $list.GetItemChecked($k) }
@@ -1933,7 +1947,11 @@ if ($gui) {
       catch { & $say ('STOPPED: ' + (ConvertTo-Masked ([string]$_))) }
       $run.Enabled = $true
     })
-    $copy.Add_Click({ [System.Windows.Forms.Clipboard]::SetText(($script:lastSummary -join "`r`n")); & $say 'Summary copied. Paste it into the e-mail body.' })
+    $copy.Add_Click({
+      try { [System.Windows.Forms.Clipboard]::SetText(($script:lastSummary -join "`r`n")); & $say 'Summary copied. Paste it into the e-mail body.' }
+      catch { & $say ('Clipboard busy; press Copy summary again. (' + $_.Exception.Message + ')') }
+    })
+    $form.Add_FormClosing({ if ($script:child -and -not $script:child.HasExited) { try { $script:child.Kill() } catch { $null = $_ } } })
     [void]$form.ShowDialog()
     return
   } catch { $gui = $false; Write-Host ('No window (' + $_.Exception.Message + '); text mode.') }

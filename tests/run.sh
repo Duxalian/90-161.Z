@@ -211,7 +211,7 @@ for b in scripts/gov/paste/*.ps1; do
   base="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"
   st=$(grep -c '^STEP .* running' "$tp/out.txt"); sm=$(grep -c ': \(OK\|CHECK\) (PASS' "$tp/out.txt")
   [ "$st" -eq "$n" ] && [ "$sm" -eq "$n" ] && [ -f "$base/Rounds/90161Z-$r-summary-r1.txt" ] && unzip -l "$base/Rounds/90161Z-$r-results-r1.zip" 2>/dev/null | grep -q "90161Z-$r-summary-r1.txt" && pr=$((pr+1)) || { cat "$tp/out.txt" | tail -20; }
-  ! grep -q "test1234" "$tp/out.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
+  ! grep -rq "test1234" "$tp/out.txt" "$base/Rounds/90161Z-$r-summary-r1.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
 done
 while IFS=$'\t' read -r dir src; do
   got="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z/${dir//\\//}/$(basename "$src")"

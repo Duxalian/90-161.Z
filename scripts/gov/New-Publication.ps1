@@ -539,14 +539,19 @@ try {
   # Positions from Range.Information (5 = horizontal, 6 = vertical, points from the page edge). Values: L-007 seal top 1.47 in;
   # L-012 TOC number 1.50 in, text 2.00 in, line pitch 0.272 in (docs/format-rules.md). Tolerance 0.03 in (0.01 in for pitch).
   try {
+    try { $doc.ActiveWindow.View.Type = 3 } catch { Write-Output ('MEASURE-ERROR print layout view: ' + $_.Exception.Message) }   # wdPrintView: Information() needs layout
     $measure = {
       param([string]$What, [double]$GotPt, [double]$WantIn, [double]$TolIn)
+      if ($GotPt -lt 0) { return ('MEASURE-ERROR ' + $What + ' not laid out (Information returned ' + $GotPt + ')') }
       $gotIn = [math]::Round($GotPt / 72, 3)
       $verdict = 'FAIL'
       if ([math]::Abs($gotIn - $WantIn) -le $TolIn) { $verdict = 'PASS' }
       'MEASURE ' + $What + ' got=' + $gotIn + 'in want=' + $WantIn + 'in tol=' + $TolIn + ' ' + $verdict
     }
-    if ($shield -and $pic) { Write-Output (& $measure 'L-007 seal top' ([double]$pic.Range.Information(6)) 1.47 0.03) }
+    if ($shield) {
+      if ($pic) { $sealAt = $pic.Range.Duplicate; $sealAt.Collapse(1); Write-Output (& $measure 'L-007 seal top' ([double]$sealAt.Information(6)) 1.47 0.03) }
+      else { Write-Output 'MEASURE-ERROR L-007 seal top not measured: no picture' }
+    }
     if ($null -ne $tocRange -and $doc.TablesOfContents.Count -ge 1) {
       $toc2 = @(); $tocAll = @()
       foreach ($tp in $doc.TablesOfContents.Item(1).Range.Paragraphs) { $tocAll += $tp; if ($tp.Range.Text -match '^\s*\d') { $toc2 += $tp } }
@@ -556,7 +561,8 @@ try {
         $tab = $toc2[0].Range.Duplicate
         if ($tab.Find.Execute('^t')) { $tab.Collapse(0); Write-Output (& $measure 'L-012 TOC text left' ([double]$tab.Information(5)) 2.00 0.03) }
         else { Write-Output 'MEASURE-ERROR L-012 TOC text left: no tab in the first TOC 2 line' }
-      }
+      } else { Write-Output 'MEASURE-ERROR L-012 TOC not measured: no numbered TOC line found' }
+      $pitchDone = $false
       # Pitch between entries: the first one-line entry and the entry after it (a wrapped entry adds 0.202 in per line).
       for ($k = 0; $k -lt $tocAll.Count - 1; $k++) {
         $s1 = $tocAll[$k].Range.Duplicate; $s1.Collapse(1)
@@ -564,9 +570,10 @@ try {
         if ([math]::Abs([double]$e1.Information(6) - [double]$s1.Information(6)) -lt 1) {
           $s2 = $tocAll[$k + 1].Range.Duplicate; $s2.Collapse(1)
           Write-Output (& $measure 'L-012 TOC pitch' ([double]$s2.Information(6) - [double]$s1.Information(6)) 0.272 0.01)
-          break
+          $pitchDone = $true; break
         }
       }
+      if (-not $pitchDone) { Write-Output 'MEASURE-ERROR L-012 TOC pitch not measured: no one-line entry followed by another' }
     }
   } catch { Write-Output ('MEASURE-ERROR ' + $_.Exception.Message) }
 

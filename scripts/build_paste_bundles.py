@@ -84,10 +84,16 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
   $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
   $r = @{ Pass = 0; Fail = 0; Exit = $null }
   $p = [System.Diagnostics.Process]::Start($psi)
+  $script:child = $p
+  $deadline = (Get-Date).AddMinutes($stepMinutes)
   $errTask = $p.StandardError.ReadToEndAsync()
   $lineTask = $p.StandardOutput.ReadLineAsync()
   while ($true) {
-    while (-not $lineTask.Wait(150)) { & $Tick }
+    while (-not $lineTask.Wait(150)) {
+      & $Tick
+      if ((Get-Date) -gt $deadline) { try { $p.Kill() } catch { $null = $_ }; $r.Fail++; & $Say ('STOPPED: step took more than ' + $stepMinutes + ' minutes; ended it'); break }
+    }
+    if (-not $lineTask.IsCompleted) { break }
     $line = $lineTask.Result
     if ($null -eq $line) { break }
     $line = ConvertTo-Masked $line
@@ -97,6 +103,7 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
     $lineTask = $p.StandardOutput.ReadLineAsync()
   }
   $p.WaitForExit()
+  $script:child = $null
   foreach ($e in @(([string]$errTask.Result) -split "`r?`n" | Where-Object { $_ })) { $r.Fail++; & $Say ('ERR ' + (ConvertTo-Masked $e)) }
   $r.Exit = $p.ExitCode
   return $r
@@ -144,7 +151,7 @@ function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scr
   return ,$summary
 }
 
-$script:secret = @(); $script:dodid = ''
+$script:secret = @(); $script:dodid = ''; $script:child = $null; $stepMinutes = 30
 $gui = $true
 try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false }
 if ($gui) {
@@ -170,9 +177,9 @@ if ($gui) {
     $copy.Text = 'Copy summary'; $copy.Location = New-Object System.Drawing.Point(140, 556); $copy.Width = 120; $copy.Enabled = $false
     $form.Controls.AddRange(@($lbl, $idBox, $list, $log, $run, $copy))
     $script:lastSummary = @()
-    $say = { param($t) $log.AppendText($t + "`r`n"); [System.Windows.Forms.Application]::DoEvents() }
+    $say = { param($t) try { $log.AppendText($t + "`r`n"); [System.Windows.Forms.Application]::DoEvents() } catch { Write-Host $t } }
     $tick = { [System.Windows.Forms.Application]::DoEvents() }
-    $onStep = { param($k, $line) $list.Items[$k] = $line }
+    $onStep = { param($k, $line) $list.Items[$k] = $line; $list.SetItemChecked($k, $true) }
     $run.Add_Click({
       $run.Enabled = $false; $copy.Enabled = $false
       $sel = @(); for ($k = 0; $k -lt $steps.Count; $k++) { $sel += $list.GetItemChecked($k) }
@@ -180,7 +187,11 @@ if ($gui) {
       catch { & $say ('STOPPED: ' + (ConvertTo-Masked ([string]$_))) }
       $run.Enabled = $true
     })
-    $copy.Add_Click({ [System.Windows.Forms.Clipboard]::SetText(($script:lastSummary -join "`r`n")); & $say 'Summary copied. Paste it into the e-mail body.' })
+    $copy.Add_Click({
+      try { [System.Windows.Forms.Clipboard]::SetText(($script:lastSummary -join "`r`n")); & $say 'Summary copied. Paste it into the e-mail body.' }
+      catch { & $say ('Clipboard busy; press Copy summary again. (' + $_.Exception.Message + ')') }
+    })
+    $form.Add_FormClosing({ if ($script:child -and -not $script:child.HasExited) { try { $script:child.Kill() } catch { $null = $_ } } })
     [void]$form.ShowDialog()
     return
   } catch { $gui = $false; Write-Host ('No window (' + $_.Exception.Message + '); text mode.') }
