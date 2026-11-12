@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 1837 CT. Bookmark on my work computer (clickable links):
+Updated: 11 Nov 26, 1905 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -47,15 +47,32 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T06
 
 Report: e-mail these to my Gmail: 90161Z-T06-extracted-r1.json, 90161Z-T06-changes-r1.txt, 90161Z-T06-result-r1.txt, and the PDF it made. Also say which GenAI.mil model I used. If GenAI.mil refused the file or cut off the answer, send its exact message.
 
-## Task 7: seal library on the real site (open, 11 Nov 26, 1837 CT)
+## Task 7: seals, r1 (open, 11 Nov 26, 1905 CT)
 
-No download. Decided: each unit's own shield (1C); seals live in a SharePoint library (2A).
+Folder: ...\90-161.Z\T07. Decided: each unit's own shield (1C), in a SharePoint library (2A); every seal is prepared to the same 1.20 in box, centered (1A 2A).
 
+Part A, test with fake seals (do this first):
+1. Save this file into the T01 folder (it replaces New-Publication.ps1 there; same name). It now accepts only prepared seals and fits every seal in the 1.20 in box:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/New-Publication.ps1
+2. Save these two files into the T07 folder:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-prep-r1.ps1
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-test-r1.ps1
+3. Make a folder TestSeals inside the T07 folder. Save these four fake seals into it:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-round-r1.png
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-tall-r1.png
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-soft-r1.png
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-tiny-r1.png
+4. In File Explorer, right-click 90161Z-T07-seal-test-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter.
+5. E-mail to my Gmail: 90161Z-T07-test-result-r1.txt and the two PDFs it made (SAMPLEWINGI99-101-TALL.pdf, SAMPLEWINGI99-101-ROUND.pdf).
+
+Part B, real seals:
 1. On the real site: New > Document library. Name: PFM Seals. Create.
-2. Upload each unit's shield as a PNG file. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png). Square images work best; the renderer sets the width to 1.20 in.
-3. In the library, select Sync, so the files are also on my computer for the renderer.
+2. Upload each unit's shield. Any size or format (PNG, JPG, GIF, BMP, TIF); the larger and cleaner the better. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png).
+3. In the library, select Sync, so the files are also on my computer.
+4. In File Explorer, right-click 90161Z-T07-seal-prep-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter. Press Enter again to find the synced PFM Seals folder (or paste its path). It writes the prepared seals into a Prepared folder inside the library.
+5. Send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
 
-Report: done, and the number of seals uploaded. Do not send the seal files or unit names to Claude.
+FAIL = under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger file. WARN = under 150 dpi: usable, may print soft.
 
 ## Done
 

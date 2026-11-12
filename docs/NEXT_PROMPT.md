@@ -20,7 +20,7 @@ Updated: 2026-11-12 by Claude. Keep this file at 40 lines or fewer. The current 
 
 1. Task 1 r5: cover spacing, TOC style, tier hyphen (docs/reviews/2026-11-11-page1-vs-dafman.md). Measure his PDF against DAFMAN page 1.
 2. Task 6 r1: GenAI.mil extraction of the fake messy draft; check against EXPECTED in scripts/build_messy_draft.py.
-3. Task 7: PFM Seals library on the real site (unit shields, 1C 2A). T02 r9 passed on the real site.
+3. Task 7 r1: Part A fake seals (prep + 2 renders; check PDFs per docs/gov-test-plan.md Task 7), Part B real seals (result by number only, L-007a). T02 r9 passed on the real site.
 4. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
 
 ## Next design (after Task 5)

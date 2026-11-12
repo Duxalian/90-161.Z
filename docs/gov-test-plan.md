@@ -63,3 +63,13 @@ Files (T06 folder): `prompts/90161Z-T06-extract-prompt-r1.txt` (the prompt), `sa
 | 2 | JSON saved | Saved as `90161Z-T06-extracted-r1.json`; runner step 1 shows no `FAIL SCHEMA` |
 | 3 | Content (Claude checks against `EXPECTED` in scripts/build_messy_draft.py) | 3 chapters; 7 paragraph titles; 6 tier marks as (T-3); 2 "shall" -> "must"; table 3 rows; 1 note; 2 bullets as children; 4 fixed sentences dropped; DAF Form 847 and AFI 33-322 in Attachment 1 |
 | 4 | Render | `RENDER docx=SAMPLEWINGI36-101.docx ... mode=final` and a PDF in the T06 folder |
+
+## Task 7: seals (r1)
+
+Part A uses 4 fake seals from `scripts/build_test_seals.py` (EXPECTED there). Runner `90161Z-T07-seal-test-r1.ps1` runs the seal prep, then renders the T01 sample with the tall and the round prepared seal.
+
+| # | Check | Pass |
+|---|---|---|
+| 1 | Prep lines | seal01 round PASS (emblem 501x501, dpi 417, placed 360x360); seal02 soft WARN (161x161, dpi 134); seal03 tall PASS (261x401, dpi 334, placed 234x360); seal04 tiny FAIL (101x101, dpi 84); `SEALS total=4 pass=2 warn=1 fail=1` |
+| 2 | Renders | Two `RENDER docx=SAMPLEWINGI99-101-TALL.docx` / `-ROUND.docx` lines, exit 0 |
+| 3 | Seal on the cover (Claude measures the PDFs) | Box 1.20 x 1.20 in at x 1.00, top 1.47 in (L-007); the tall shield 1.20 in high, centered in the box; the round seal fills the box |

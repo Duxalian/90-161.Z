@@ -38,7 +38,8 @@ $SpaceAfter = 6                # L-003: 6 pt between paragraphs
 $Gap = '  '                    # L-004: two spaces after paragraph numbers, headings, and in the running header
 $LabelTab = 1.5 * $PT          # L-005: ACCESSIBILITY/RELEASABILITY text starts 1.5 in from the margin
 $SigIndent = 3.0 * $PT         # L-006: signature block starts 4.0 in from the page edge
-$ShieldWidth = 1.2 * $PT       # L-007: seal/shield 1.2 in wide
+$ShieldWidth = 1.2 * $PT       # L-007: seal/shield box 1.20 in square
+$SealPx = 360                  # L-007a: prepared seals are 360 x 360 px PNG (Task 7 seal prep), emblem centered (PFM 2A)
 $RuleWidth = 6                 # L-008: cover rules 0.75-0.80 pt measured on 7 covers (wdLineWidth075pt)
 # L-008a: cover spacing measured on DAFMAN 90-161 page 1 (baseline/rule gaps, inches): title->compliance 0.417,
 # compliance->rule 0.182, rule->ACCESSIBILITY 0.285, RELEASABILITY->rule 0.264, rule->OPR 0.394,
@@ -97,6 +98,18 @@ $OutDir = (Resolve-Path -LiteralPath $OutDir).Path   # Word needs an absolute pa
 $suffix = ''
 if ($Mode -eq 'draft') { $suffix = '_DRAFT' }
 $outDocx = Join-Path $OutDir ($designator + $suffix + '.docx')   # S-001: file name without spaces (3.8.2)
+
+# ---------------- seal check (L-007a), before Word starts ----------------
+$shield = [string](Get-Prop $meta 'shieldImage')
+if ($shield) {
+  if (-not (Test-Path -LiteralPath $shield -PathType Leaf)) { throw ('SEAL not found (L-007a): ' + $shield) }
+  Add-Type -AssemblyName System.Drawing
+  $probe = [System.Drawing.Image]::FromFile((Resolve-Path -LiteralPath $shield).Path)
+  try {
+    $sealOk = ($probe.Width -eq $SealPx -and $probe.Height -eq $SealPx -and $probe.RawFormat.Guid -eq [System.Drawing.Imaging.ImageFormat]::Png.Guid)
+  } finally { $probe.Dispose() }
+  if (-not $sealOk) { throw ('SEAL not prepared (L-007a): use the PNG in the "Prepared" folder made by the Task 7 seal prep (' + $SealPx + ' x ' + $SealPx + ' px).') }
+}
 
 # ---------------- Word helpers ----------------
 $word = $null; $doc = $null
@@ -186,15 +199,14 @@ try {
   $byUnit = [string](Get-Prop $meta 'byOrderOfUnit')
   if ($byUnit) { $c1.InsertAfter("`r" + $byUnit) }
   $c1.Font.Bold = -1; $c1.Font.Italic = -1; $c1.ParagraphFormat.Alignment = $wdAlignLeft
-  $shield = [string](Get-Prop $meta 'shieldImage')
-  if ($shield -and (Test-Path -LiteralPath $shield)) {
+  if ($shield) {   # checked above (L-007a)
     $tbl.Cell(1, 1).Range.InsertAfter("`r")
     $r = $tbl.Cell(1, 1).Range
     $r.MoveEnd(1, -1) | Out-Null   # exclude the end-of-cell mark
     $r.Collapse(0)
     $pic = $doc.InlineShapes.AddPicture((Resolve-Path -LiteralPath $shield).Path, $false, $true, $r)
-    $ratio = $pic.Height / $pic.Width
-    $pic.Width = $ShieldWidth; $pic.Height = $ShieldWidth * $ratio
+    $pic.LockAspectRatio = 0
+    $pic.Width = $ShieldWidth; $pic.Height = $ShieldWidth   # square canvas: every seal fills the same 1.20 in box (L-007)
   }
   $right = New-Object System.Collections.Generic.List[object]
   $right.Add(@([string](Get-Prop $meta 'issuerLine'), 'bi'))

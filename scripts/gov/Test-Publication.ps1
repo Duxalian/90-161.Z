@@ -94,6 +94,8 @@ if ($title) {
 }
 
 # F-020 accessibility / releasability (4.5.4.8-9)
+$seal = [string](Get-Prop $meta 'shieldImage')
+if ($seal -and $seal -notmatch '[\\/]Prepared[\\/][^\\/]+\.png$') { Add-Finding 'FAIL' 'L-007a' 'meta.shieldImage' 'use a seal from the "Prepared" folder made by the Task 7 seal prep (360 x 360 px PNG)' }
 foreach ($f in 'accessibility', 'releasability') {
   $v = [string](Get-Prop $meta $f)
   if ($v -match '^(ACCESSIBILITY|RELEASABILITY):') { Add-Finding 'FAIL' 'F-020' "meta.$f" 'give only the statement text; the renderer adds the bold label' }
