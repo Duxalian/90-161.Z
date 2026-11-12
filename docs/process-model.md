@@ -39,7 +39,7 @@ Item number, Source, Type of comment (Administrative / Substantive / Critical; C
 
 ## Mandatory coordinators
 
-Decided (PFM, 2026-11-12, Q6): the PFM keeps the mandatory coordinators in PFM Offices: JAG (legal, last), CIO and PFM. The AO, with the PCM, adds offices with functional interest (5.1.3). The OPR identifies its own certifying official (5.6.3) and approving official (5.7).
+Decided (PFM, 2026-11-12, Q6, Q13): the PFM keeps the mandatory coordinators in PFM Offices: JAG (legal, last), CIO, PFM, FOIA (1.5.3) and Records (7.1.3), each its own row. The AO, with the PCM, adds offices with functional interest (5.1.3). The OPR identifies its own certifying official (5.6.3) and approving official (5.7).
 
 Tables A3.1 / A3.2 not yet extracted. Records manager coordinates during formal coordination (7.1.3).
 
@@ -61,4 +61,4 @@ Source and line references: docs/reviews/2026-11-12-dafman-full-gap-check.md (ta
 - Rescind: retained forms are first linked to another prescribing publication; ANG notifies subscribers; copy to the information reports management and control office (8.12, 8.12.1, 8.12.2).
 - A higher-headquarters change opens a special review for each implementing row (2.6.19).
 - Days are calendar days unless stated; coordination stays 15 business days (glossary, 5.2).
-- Decide (12 Nov): FOIA review (1.5.3) and records manager review (7.1.3) owners; form actions, DAF Form 847 intake and waiver tracking (8.10.1, 7.4.5, 9.5.3) scope; who keeps record sets (7.2.2.3).
+- Decided (PFM 12 Nov, 13 14A 15A): FOIA and Records are separate mandatory coordinators in PFM Offices (one person may hold several roles); full scope is built now; the PFM keeps record sets centrally in library 90-161.Z. A publication that prescribes paper records alerts SAF/CN (7.1.4).
