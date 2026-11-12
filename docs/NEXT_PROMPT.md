@@ -15,7 +15,7 @@ Updated: 2026-11-12 by Claude (independent review of the list design; PFM 1A 2A 
 - 15 business days (DAFMAN 5.2): a measure, not a hard deadline; reminders, warnings and escalation emails in a measured, professional tone; weekdays only.
 - Continuity: co-owners on every flow and the app; maintainer how-to written last, step by step for a non-expert.
 - Gap review: https://claude.ai/artifact/Ta3utvkZGP5aKXWWeRh7vU (open: test site, Accessibility Checker gate, CUI check for working files).
-- Full-scope list design (14A): docs/reviews/2026-11-12-list-design-full-scope.md, revised after the independent review (docs/reviews/2026-11-12-independent-review.md; PFM 1A 2A 3B 4A 5A). Not built. Open for the PFM before build: approve the design; AO count (Q1 "at most 2" vs one person column); ANG channel for outbound DAF Form 847s; Guidance column names. Read ANGMAN 90-161 waivers first. Table A3.2 seed: docs/coordination-table-a3-2.md.
+- Full-scope list design (14A): docs/reviews/2026-11-12-list-design-full-scope.md, revised after the independent review (docs/reviews/2026-11-12-independent-review.md; PFM 1A 2A 3B 4A 5A). Approved by the PFM 12 Nov (multi-person AO, outbound 847s to the ANG functional at NGB, house column names); next: build T02 r10 (provisioning flow + seed rows + go.md task). Read ANGMAN 90-161 waivers first. Table A3.2 seed: docs/coordination-table-a3-2.md.
 
 ## Waiting on the PFM (go.md)
 
