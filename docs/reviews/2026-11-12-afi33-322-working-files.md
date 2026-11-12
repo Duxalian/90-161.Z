@@ -32,4 +32,4 @@ DAFMAN 90-161 7.2.3.5 puts "all documents that show coordination, comments, and 
 
 - Split each action's area in two: records go straight to the action's Record Sets folder through the app (a flow files them, because Record Sets is PFM Office only, 2.4A); Working Files holds drafts only (AFI 3.4.2, 4.6.1.2).
 - At closeout a flow deletes the action's Working Files folder, unless PFM Publications "Legal Hold" (yes/no) is set or PFM Settings shows a records freeze (AFI 9.1.3, 6.1.1.4.3).
-- The PFM, as base records manager, checks AFRIMS Table 33-38 for any rule written for publication working files; if one exists, it replaces the closeout deletion.
+- The PFM checks AFRIMS Table 33-38 for any rule written for publication working files; if one exists, it replaces the closeout deletion.
