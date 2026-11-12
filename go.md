@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 2045 CT. Bookmark on my work computer (clickable links):
+Updated: 11 Nov 26, 2202 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -79,6 +79,20 @@ Seals go in a Seals folder in the project library 90-161.Z (decided 12 Nov 26). 
 7. Send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
 
 FAIL = under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger file. WARN = under 150 dpi: usable, may print soft.
+
+## Task 9: e-Publishing pages for the numbering index, r1 (open, 11 Nov 26, 2202 CT)
+
+Folder: ...\90-161.Z\T09
+
+No files to download. Claude cannot open e-Publishing from the cloud (the site answers "Access Denied"); my computer can. Claude needs 3 saved pages to write the script that reads publication titles and numbers. Decided 1A 2A: departmental, Air National Guard and my gaining MAJCOM publications.
+
+1. On my work computer, open e-Publishing (the Air Force publications website). Go to the product index for departmental publications and open one series with many publications (for example 33). Wait until the list of publications shows.
+2. Press Ctrl+S. Save as type: Webpage, Single File (*.mhtml). Save it in the T09 folder as 90161Z-T09-epubs-departmental-r1.mhtml.
+3. Do the same for Air National Guard publications, one series. Save as 90161Z-T09-epubs-ang-r1.mhtml.
+4. Do the same for my gaining MAJCOM's publications, one series. Save as 90161Z-T09-epubs-majcom-r1.mhtml. Do not type the MAJCOM's name in the e-mail text.
+5. Write down what I clicked to get to each list (menu names only).
+
+Report: e-mail the 3 files and the click path from step 5 to my Gmail, subject "90161Z T09 r1". These pages are public; they hold no wing data. Claude keeps them out of the repository.
 
 ## Done
 
