@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 11 Nov 26, 1801 CT. Bookmark on my work computer (clickable links):
+Updated: 12 Nov 26, 0930 CT. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -12,7 +12,7 @@ If a downloaded script is blocked: open its raw link, Ctrl+A, Ctrl+C, paste into
 Each task has its own folder: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task> (for example ...\90-161.Z\T01). Save that task's files there. Scripts ask for my DODID and go to that folder themselves.
 Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
 
-## Task 1: renderer test, r3 (open, 11 Nov 26, 1543 CT)
+## Task 1: renderer test, r3 (passed 11 Nov 26; r4 fix coming, nothing to run now)
 
 Folder: ...\90-161.Z\T01
 
@@ -32,7 +32,7 @@ In File Explorer, right-click 90161Z-T01-renderer-test-r3.ps1 > Run with PowerSh
 
 Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each check (1-8) in the test plan that fails, with what I see.
 
-## Task 2: create the lists, r9 (open, 11 Nov 26, 1801 CT)
+## Task 2: create the lists, r9 (passed 12 Nov 26; open: tell Claude test or real site, and the section 3 and 4 checks)
 
 Folder: ...\90-161.Z\T02
 
@@ -61,23 +61,11 @@ Then delete the r1 flow "90161Z T02 Provision lists r1" and any r2 to r8 flow I 
 
 Report: test site or real site; import ok or the exact error text; the Result text, or for the first failed step only its name, HTTP status and error code.
 
-## Task 5: solution export sample (open, 11 Nov 26, 1606 CT)
-
-Folder: ...\90-161.Z\T05
-
-Goal: a real export so Claude can build flows as Dataverse solutions (easier to move and hand over than legacy packages). Like Task 3, Claude needs a real file before building one.
-
-In Power Automate:
-1. Solutions > New solution. Display name: 90161Z T05 Solution Sample. Publisher: New publisher > Display name: PFM, Name: pfm, Prefix: pfm > Save > Create.
-2. Open the solution > New > Automation > Cloud flow > Instant. Name: 90161Z T05 Sample. Trigger: Manually trigger a flow. Create.
-3. Add the SharePoint action Get items. Site Address and List Name: any site and list on my test site. Save.
-4. Back in the solution: Export solution > Next > Unmanaged > Export. Save the zip into the T05 folder.
-5. Open the zip. Send me by e-mail (to my Gmail) the list of file and folder names in it, and the full text of: solution.xml, customizations.xml, [Content_Types].xml and the .json file in the Workflows folder.
-
-Report: also tell me if step 1 or step 4 was blocked, with the exact message. Never send list contents.
-
 ## Done
 
+- Task 5, solution export sample (11 Nov 26): export received; Claude uses it for solution-aware flows. The flow used a SharePoint connection reference from another solution; future packages carry their own.
+- Task 2, create the lists r9 (12 Nov 26): pass. Result: Lists: 9, fields and views: 213, rows: 41, updates: 15.
+- Task 1, renderer test r3 (11 Nov 26): pass (checks 1-6). One fix found: "(T-3)" can break across two lines at the hyphen; r4 will fix it.
 - Task 2, create the lists r1 (11 Nov 26): import and run ok, four lists created, but on the wrong site and before names were agreed (r2 replaces it).
 - Task 1, renderer test r2 (11 Nov 26): runner and validator ok; Word save failed (fixed in r3).
 - Task 4, SharePoint connection test r2 (11 Nov 26): import ok, existing SharePoint connection ok, run passed (Item count showed items read).

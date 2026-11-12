@@ -148,6 +148,7 @@ The project log feeds a timeline of milestones, breakthroughs and narratives for
 - Formatting (PFM, 2026-11-10): rules force output to look like DAFMAN 90-161. Format comes from code, never from the model. Rule catalog: docs/format-rules.md. Do not use AFIMPT for formatting or tracking.
 - System of record (PFM, 2026-11-10): 90-161.Z owns endorsement tracking (no TMT).
 - Architecture: docs/ARCHITECTURE.md. Process: docs/process-model.md.
+- Result e-mails (PFM, 2026-11-12): in scope are e-mails from the PFM's work address that carry go.md task results or files. After an agent parses one and records its results in the repo (pushed to main), it asks the PFM to confirm deletion, listing each e-mail by date, time and subject only (never body text, sender name or signature). It deletes (moves to Trash) only the e-mails the PFM confirms in that turn. Never delete without confirmation; a confirmation covers only the e-mails listed with it.
 - Project log location (PFM, 2026-11-11): this repo is public, so the "Project log" lives in the private Claude doc https://claude.ai/artifact/9zLxe6e9vJPKtRQv5xSSzk (Claude Docs tools; any chat can open it by link), never in this repo. It uses the "Project log" columns and an Arcs table. Agents without Docs tools give the entry under Copy, "Paste into: project log".
 
 <!-- Add rules for this project below. Date each PFM decision, for example "(PFM, 2026-11-09)". -->
