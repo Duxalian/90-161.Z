@@ -29,7 +29,7 @@ Status: the PFM's phase order (12 Nov, in chat) plus agent recommendations marke
 - Existing groups (high confidence): SharePoint permissions can be granted to existing Entra/AD security groups, M365 groups and SharePoint groups. A flow can set them through SharePoint REST if the installer has Manage Permissions (R5); otherwise a checklist for the site owner.
 - Intake of existing data, candidates: existing site groups and members (offered as choices, not copied); posted publications in an existing library (designator, title, date from file names and properties, the PFM confirms each row); the products CSV (3A); the e-Publishing index (Task 9). Org box addresses for PFM Offices are entered or loaded by CSV (org boxes are not users; directory lookup is unlikely to find them).
 
-## Phase 2+3 round 1 (12 Nov): open questions Q4-Q9
+## Phase 2+3 round 1 (12 Nov): Q4-Q9 answered (4A 5A 6A 7A 8A plus manual upload, 9A); design and round 2 (Q10-Q14): docs/roles-and-permissions.md
 
 | Q | Question | Options | REC |
 |---|---|---|---|
