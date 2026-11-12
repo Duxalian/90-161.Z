@@ -19,7 +19,7 @@ Updated: 2026-11-12 by Claude. Keep this file at 40 lines or fewer. The current 
 ## Waiting on the PFM (go.md)
 
 1. Task 2 r9 passed (9/213/41/15). Open: test or real site; section 3 checks and section 4 settings.
-2. Results 12 Nov: docs/reviews/2026-11-12-gov-results-t01-t02-t05.md. Task 5 export received. Task 1 r3 passed; r4 = nonbreaking hyphen in tier numbers (not built).
+2. Results 12 Nov: docs/reviews/2026-11-12-gov-results-t01-t02-t05.md. Task 5 export received. Task 1 r3 passed; r4 (nonbreaking hyphen in tier numbers) is in go.md, waiting on the PFM.
 3. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules, 2026-11-12).
 
 ## Next design (after Task 5)
