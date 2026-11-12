@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-12 | (4C) Next apps: both small trackers and process apps; the kit starts with what every app needs (lists, flows, runner). (5A) The kit is a new repo on the archimedes_lever baseline, with 90-161.Z as app #1; framed first as a fast test-and-iterate loop for gov-device code, installer second. (6A) Stage 1 runner approved as a bootstrapper, function over form; preview on a branch, merged after the first gov run works. | PFM | - |
 | 2026-11-12 | (1A) Pipeline tool in two stages: Stage 1 now = a GUI runner inside the paste text plus faster test rounds (on-device PASS/FAIL measurement, one paste per round, one results zip, commit-pinned links); Stage 2 = a reusable app generator after 90-161.Z provisions a real site once. Where Stage 2 lives (question 2) is open. | PFM | - |
 | 2026-11-12 | (3A) The GUI runner never fetches code at run time: it runs only the steps embedded in its paste, inside the ISSM's paste-and-run approval. | PFM | - |
 | 2026-11-12 | ISSM written approval for paste and run (PFM reports it). R02 closed for this wing: removed from the command brief (r5; question 7 = top two risks); kept, reworded as "each wing's ISSM must approve", in the installer brief (r5) and added to the adoption (NGB tier) brief (r2). risks.json R02: scope both, hideIn command. | PFM | Paste and run as a trial; R02 open in all briefs |
