@@ -87,10 +87,10 @@ page = f'''<title>PFM Lists Mockup</title>
 {CSS}
 </style>
 <div class="wrap">
-<header><h1>90-161.Z SharePoint lists</h1><p class="lede">The {num(len(ORD))} lists that Task 2 r8 creates, in creation order, with every column. r7 added the DAFMAN 90-161 design check (eight action types, Coordination Stage, PFM Reviews, product links); r8 standardizes every name IAW DAFMAN 90-161 and The Tongue and Quill. Sample rows are fake. Open "columns" under each list for types, choices, lookup targets and the DAFMAN source of each column.</p></header>
+<header><h1>90-161.Z SharePoint lists</h1><p class="lede">The {num(len(ORD))} lists that Task 2 r9 creates, in creation order, with every column. r7 added the DAFMAN 90-161 design check (eight action types, Coordination Stage, PFM Reviews, product links); r8 standardizes every name IAW DAFMAN 90-161 and The Tongue and Quill. Sample rows are fake. Open "columns" under each list for types, choices, lookup targets and the DAFMAN source of each column.</p></header>
 <nav aria-label="Lists">{''.join(nav)}</nav>
 {''.join(secs)}
-<p class="foot">Generated from schemas/lists/*.json and samples/lists/*.csv (T02 r8). Built-in columns Created, Modified, Created By and Modified By exist on every list and are not shown.</p>
+<p class="foot">Generated from schemas/lists/*.json and samples/lists/*.csv (T02 r9). Built-in columns Created, Modified, Created By and Modified By exist on every list and are not shown.</p>
 </div>
 '''
 open(OUT, 'w', encoding='utf-8').write(page)

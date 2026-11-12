@@ -36,7 +36,7 @@ Report: the RENDER, VALIDATE and exit lines (or the STOPPED line), and each chec
 
 Folder: ...\90-161.Z\T02
 
-r9 replaces r6, r7 and r8 (do not run them). r9 = r8 without the site-title check: the flow asks only for the site address. r8 standardized every name, choice and description standardized IAW DAFMAN 90-161 and The Tongue and Quill, and column descriptions that spell out abbreviations. r7 added the DAFMAN 90-161 check I approved: the eight DAFMAN action types, coordination stages (Privacy Review, Formal Coordination, Legal), nonconcur resolution, certifier and approver fields, a new PFM Reviews list for the 4-year reviews, Expired status, Superseded By and Parent Publication links, and two settings rows (15 business days, 30 calendar days).
+r9 replaces r6, r7 and r8 (do not run them). r9 = r8 without the site-title check: the flow asks only for the site address. r8 standardized every name, choice and description IAW DAFMAN 90-161 and The Tongue and Quill, and column descriptions that spell out abbreviations. r7 added the DAFMAN 90-161 check I approved: the eight DAFMAN action types, coordination stages (Privacy Review, Formal Coordination, Legal), nonconcur resolution, certifier and approver fields, a new PFM Reviews list for the 4-year reviews, Expired status, Superseded By and Parent Publication links, and two settings rows (15 business days, 30 calendar days).
 
 Run it on a TEST site first (a site or subsite only I use). After it passes there, run it again on the real site.
 
