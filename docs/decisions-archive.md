@@ -133,7 +133,6 @@ Every current row of docs/DECISIONS.md before the short index (B2A, 2026-11-13),
 | 2026-11-11 | New CRM template from DAFMAN 90-161 Figure A12.1 (Word, measured column widths): templates/CRM_A12-1.docx. Replaces the PFM's old CRM. | PFM | Old CRM |
 | 2026-11-11 | CRM resolution codes A/R/M (Figure A12.1 key), not A/R/P (its column header). | PFM | — |
 | 2026-11-11 | Endorser is a Person field (enables flow alerts to the endorser). | PFM | Endorser as text (Agent placeholder) |
-| 2026-11-11 | Item-level permissions: customers read and edit only rows they created, on Publications and Endorsements. | PFM | — |
 | 2026-11-10 | Create the SharePoint lists with a Power Automate flow (docs/power-automate-provisioning.md); PowerShell/PnP path dropped (sign-in window never opened). | PFM | PnP provisioning |
 | 2026-11-10 | Site URL: repo holds only the domain pattern https://usaf.dps.mil/sites/<your-site>; the real site path stays on the gov device and in the flow. | PFM | — |
 | 2026-11-10 | Build both lanes in parallel: (A) renderer + validator, (B) SharePoint lists + PnP provisioning. | PFM | — |
@@ -152,7 +151,6 @@ Every current row of docs/DECISIONS.md before the short index (B2A, 2026-11-13),
 | 2026-11-10 | Scope: wing/installation publications. | PFM | — |
 | 2026-11-10 | Platform: SharePoint Lists + Power Automate + Power Apps in DoD365. | PFM | — |
 | 2026-11-10 | Data boundary: government data stays in DoD365/GenAI.mil only; GitHub holds code, schemas, prompts and fake data. | PFM | — |
-| 2026-11-10 | Use the rhope-ops/standard_project baseline instructions. | PFM | — |
 
 ## Replaced rows
 
@@ -171,3 +169,5 @@ Rows from docs/DECISIONS.md that a later row replaces in full, moved word for wo
 | 2026-11-10 | **Rec:** Enforce format in 3 layers: schema (model returns content only), deterministic renderer, rule validator. See docs/format-rules.md. | Agent | — | 2026-11-12 Document engine (5.1B) |
 | 2026-11-10 | **Rec:** Pilot the document engine on ChatGPT Mil and Gemini (GenAI.mil) with the same 3 test drafts; pick by checklist pass rate. | Agent | — | 2026-11-12 Assumed decisions, batch 5 and 4.7; 2026-11-12 GPT is the GenAI.mil extractor |
 | 2026-11-10 | Repo: private rhope-ops/90-161.Z, bootstrapped from standard_project. | PFM | — | 2026-11-10 Repo is public |
+| 2026-11-11 | Item-level permissions: customers read and edit only rows they created, on Publications and Endorsements. | PFM | — | 2026-11-11 Gap review (1A); 2026-11-12 Item-level permissions on PFM Publications and PFM Endorsements |
+| 2026-11-10 | Use the rhope-ops/standard_project baseline instructions. | PFM | — | 2026-11-11 The baseline is now rhope-ops/archimedes_lever |

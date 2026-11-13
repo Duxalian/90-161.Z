@@ -1,17 +1,17 @@
 # Decisions: 90-161.Z
 
 Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that PFM has not approved yet.
-Short index; full text in docs/decisions-archive.md.
+Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters or fewer. A new decision gets a short line here and its full row in docs/decisions-archive.md "Full text of current rows". Read the full row before you act on a decision.
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
 | 2026-11-13 | B1A "e-mail" spelling. B2A short index. B3A one gov task-script source. B4A, B5A check-in fix, PII-guard PR Action. | PFM | docs/reviews/2026-11-13-bloat-audit.md |
 | 2026-11-13 | Cover gaps stay as DAFMAN page 1. The "ppt master" e-mail is this project's; leave it untouched. | PFM | docs/reviews/2026-11-13-r01-results.md |
 | 2026-11-13 | Word files get the Purview label automatically from a one-time capture. Test: R02. | PFM | archive |
-| 2026-11-13 | go.md and runner messages say "email", never the PFM's personal mail service. | PFM | archive |
-| 2026-11-13 | **Rec:** use the r2 look of the wing PowerPoint master (kept off this repo) as theme. | PFM; Agent (Rec) | archive |
+| 2026-11-13 | go.md and runner messages say e-mail (spelling per B1A), never the PFM's personal mail service. | PFM | archive |
+| 2026-11-13 | Wing PowerPoint master kept off this repo. **Rec:** use its r2 look as the theme for the briefs and the app (not yet approved). | Agent (Rec) | archive |
 | 2026-11-13 | Screen map: (26A) UI text in app code. (27A) one responsive app. (28A) My Work home. (29A) Action Status open to all. No previews. | PFM | docs/app/screen-map.md |
-| 2026-11-13 | Phase 4 (25A): screen map first, then clickable previews at 375 and 1440 px, light and dark. | PFM | docs/app/screen-map.md |
+| 2026-11-13 | Phase 4 (25A): screen map first (docs/app/screen-map.md). The planned previews were dropped by the screen-map row (no previews). | PFM | docs/app/screen-map.md |
 | 2026-11-13 | Periodic bloat, drift, duplication and assumption checks in every repo; question tool for 1-4 questions. | PFM | archive |
 | 2026-11-13 | Bloat audit: 14 days or 30 commits; 12,000 tokens; +25% timing (1A). Other repos (2B). Sync after check: mil (3A). Audit next (4A). | PFM | archive |
 | 2026-11-13 | Gov-device usability bar for go.md and runner windows; results folder Rounds\\<round>, no zips. | PFM | archive |
@@ -76,7 +76,7 @@ Short index; full text in docs/decisions-archive.md.
 | 2026-11-12 | Q6: PFM enters mandatory coordinators JAG (last), CIO, PFM; OPR names its certifying and approving officials. No agent extraction of A3.1, A3.2. | PFM | archive |
 | 2026-11-12 | Item-level permissions on PFM Publications, PFM Endorsements: Read all; Create and Edit own items only. | PFM (10A) | archive |
 | 2026-11-12 | Seals live in a Seals folder of library 90-161.Z, no unique permissions (7B). | PFM | archive |
-| 2026-11-12 | Users browse through the Power App; PFM lists not hidden. One list with lookups for non-app users (8); which list open. | PFM | archive |
+| 2026-11-12 | Users browse through the Power App; PFM lists not hidden. One list with lookups is the browse entry for non-app users (8); which list is open (Agent assumption: PFM Product Index). | PFM | archive |
 | 2026-11-12 | No check of DAFMAN 90-161 1.1.3.2 and 6.4 against app-first browsing (9B). | PFM | archive |
 | 2026-11-12 | First name in two old commits stays in history. gh-pages gets index.html as one commit (6A). | PFM | archive |
 | 2026-11-12 | Task page (index.html): collapsible sections, Open/Done labels, file cards, numbered steps (3A). | PFM | https://claude.ai/artifact/4XLxCcVfpdAWQaBwotUfX2 |
@@ -84,7 +84,7 @@ Short index; full text in docs/decisions-archive.md.
 | 2026-11-12 | Flow inputs the PFM fills in use plain words for a low-skill user. Applies to every future payload. | PFM | archive |
 | 2026-11-12 | Remove the site-title check from the provisioning flow; T02 r9 asks only for the site address. | PFM | archive |
 | 2026-11-11 | Seal prep and renderer check now (1A). Narrow seal centered in 1.20 in box (2A). 360 x 360 px PNG, 300 dpi; <100 fails, <150 warns. | PFM (1A 2A); Agent | archive |
-| 2026-11-11 | Seals (DAFMAN 4.5.4.2): each unit's own shield (1C), no MAJCOM approval in writing, PFM accepts the risk (1B). (2A) Seal files in library PFM Seals, not this repo. | PFM | archive |
+| 2026-11-11 | Seals (DAFMAN 4.5.4.2): each unit's own shield (1C), no MAJCOM approval in writing, PFM accepts the risk (1B). (2A) seal files stay in SharePoint, never in this repo (place: Seals folder row, 12 Nov). | PFM | archive |
 | 2026-11-11 | Build the GenAI.mil extraction prompt before the solution-aware flows (3A). Placeholders stop the build. | PFM | prompts/90161Z-T06-extract-prompt-r1.txt |
 | 2026-11-11 | T02 r9 ran on the real site (4B). | PFM | archive |
 | 2026-11-11 | Style rules in docs/style-standard.md approved (1A). PFM Reviews keeps OPR Response "No Response" (2A). | PFM | docs/style-standard.md |
@@ -124,10 +124,9 @@ Short index; full text in docs/decisions-archive.md.
 | 2026-11-11 | Cover line reads "Certified by:". | PFM | archive |
 | 2026-11-11 | New CRM template from DAFMAN Figure A12.1: templates/CRM_A12-1.docx, replaces the old CRM. Resolution codes A/R/M, not A/R/P. | PFM | templates/CRM_A12-1.docx |
 | 2026-11-11 | Endorser is a Person field. | PFM | archive |
-| 2026-11-11 | Customers read and edit only rows they created, on Publications and Endorsements. | PFM | archive |
 | 2026-11-10 | Create SharePoint lists with a Power Automate flow; PnP path dropped. | PFM | docs/power-automate-provisioning.md |
 | 2026-11-10 | Repo holds only the pattern https://usaf.dps.mil/sites/<your-site>; real site path stays on the gov device. | PFM | archive |
-| 2026-11-10 | Build both lanes in parallel: (A) renderer + validator, (B) lists + PnP provisioning. | PFM | archive |
+| 2026-11-10 | Build both lanes in parallel: (A) renderer + validator, (B) lists + provisioning (PnP later replaced by a flow). | PFM | archive |
 | 2026-11-10 | Public repo uses "PFM", not the PFM's name. | PFM | archive |
 | 2026-11-10 | Repo is public; gov device reads it without a login; no wing name, people or office symbols in it. | PFM | archive |
 | 2026-11-10 | Renderer: try both A (PowerShell + Word COM) and C (Power Automate "Populate a Microsoft Word template"). | PFM | archive |
@@ -142,4 +141,3 @@ Short index; full text in docs/decisions-archive.md.
 | 2026-11-10 | Scope: wing/installation publications. | PFM | archive |
 | 2026-11-10 | Platform: SharePoint Lists + Power Automate + Power Apps in DoD365. | PFM | archive |
 | 2026-11-10 | Data boundary: government data stays in DoD365/GenAI.mil only. | PFM | archive |
-| 2026-11-10 | Use the rhope-ops/standard_project baseline instructions. | PFM | archive |
