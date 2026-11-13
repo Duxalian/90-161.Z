@@ -5,6 +5,7 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-13 | Deployer first: every gov-device step a script can do runs in the round, now and later; R08 replaces R07 and carries Tasks 10, 12, 14, 7. | PFM | AGENTS.md Project rules |
 | 2026-11-13 | Round e-mails: Claude watches Gmail for the round subject every 10 min for up to 2 h after a round goes live (no chat message needed). | PFM | AGENTS.md Unattended work |
 | 2026-11-13 | Speed: (A) one docs commit and PR per round; (B) project log "Next row: N" line; (C) one decisions table. Bloat audit every 300 commits. | PFM | docs/reviews/2026-11-13-speed-analysis.md |
 | 2026-11-13 | R06: Deployer name; real path on screen; To box saved in Config; cleanup of finished files to the Recycle Bin; Window-OK box; OK/CHECK subject; progress, estimates, help lines; Copy script. | PFM | docs/reviews/2026-11-13-r05-results.md |

@@ -2,9 +2,9 @@
   "_doc": "Source for scripts/build_paste_bundles.py. Each bundle is one round: a self-contained PowerShell text the PFM copies from its raw page and pastes into Windows PowerShell ISE (F5). It writes the files, then opens the 90-161.Z Deployer (a window; text prompts if no window can open): steps run one by one with a live log and PASS/FAIL counts, then one results folder (Rounds\\\\<round>: a report file plus copies of the PDFs, to attach to one e-mail; zips do not cross the boundary) and a summary for the clipboard. It runs only the steps inside it (PFM 3A). Never hand-edit scripts/gov/paste/*.ps1: change this file or the sources and rebuild.",
   "bundles": [
     {
-      "out": "scripts/gov/paste/90161Z-R07-round-r1.ps1",
-      "round": "R07",
-      "title": "Round R07: Deployer window fix (R06 fell back to text mode); the report names any no-window cause; recycles Rounds\\R06; renderer test r8",
+      "out": "scripts/gov/paste/90161Z-R08-round-r1.ps1",
+      "round": "R08",
+      "title": "Round R08: Deployer window fix (from R07) plus open tasks through the Deployer: T10 brief check in PowerPoint, T12 color sources download, T14 logo files, T07 seal prep (optional, asks for the synced Seals folder); renderer test r8",
       "files": [
         {
           "dir": "T01",
@@ -25,6 +25,22 @@
         {
           "dir": "T01",
           "src": "scripts/gov/90161Z-T01-renderer-test-r8.ps1"
+        },
+        {
+          "dir": "T07",
+          "src": "scripts/gov/90161Z-T07-seal-prep-r2.ps1"
+        },
+        {
+          "dir": "T10",
+          "src": "scripts/gov/90161Z-T10-brief-check-r1.ps1"
+        },
+        {
+          "dir": "T14",
+          "src": "assets/logo/90161Z-T14-site-logo-r1.png"
+        },
+        {
+          "dir": "T14",
+          "src": "assets/logo/90161Z-T14-site-logo-tile-r1.png"
         }
       ],
       "steps": [
@@ -32,12 +48,50 @@
           "name": "T01 renderer test r8",
           "dir": "T01",
           "file": "90161Z-T01-renderer-test-r8.ps1"
+        },
+        {
+          "name": "T10 brief check r1",
+          "dir": "T10",
+          "file": "90161Z-T10-brief-check-r1.ps1"
+        },
+        {
+          "name": "T07 seal prep r2 (only after the shields are uploaded and synced)",
+          "dir": "T07",
+          "file": "90161Z-T07-seal-prep-r2.ps1",
+          "default": false,
+          "ask": {
+            "param": "SealDir",
+            "prompt": "Pick the synced Seals folder (in the 90-161.Z library). Cancel skips seal prep."
+          },
+          "screenOnly": "^seal\\d+ detail:"
         }
       ],
       "collect": [
         {
           "dir": "T01",
           "name": "SAMPLEWINGI99-101.pdf"
+        },
+        {
+          "dir": "T10",
+          "name": "90161Z-T10-check-r1.txt",
+          "step": "T10 brief check r1"
+        },
+        {
+          "dir": "T12",
+          "name": "90161Z-T12-ang-graphics-standard-r1.pdf"
+        },
+        {
+          "dir": "T12",
+          "name": "90161Z-T12-af-heraldry-guide-r1.pdf"
+        },
+        {
+          "dir": "T12",
+          "name": "90161Z-T12-af-symbol-page-r1.htm"
+        },
+        {
+          "dir": "T07",
+          "name": "90161Z-T07-result-r1.txt",
+          "step": "T07 seal prep r2 (only after the shields are uploaded and synced)"
         }
       ],
       "cleanup": [
@@ -76,6 +130,39 @@
         {
           "path": "Rounds\\R06",
           "kind": "dir"
+        },
+        {
+          "path": "Rounds\\R07",
+          "kind": "dir"
+        }
+      ],
+      "fetch": [
+        {
+          "dir": "T10",
+          "src": "docs/brief/90161Z-T10-command-brief-r5.pptx"
+        },
+        {
+          "dir": "T10",
+          "src": "docs/brief/90161Z-T10-installer-brief-r6.pptx"
+        },
+        {
+          "dir": "T10",
+          "src": "docs/brief/90161Z-T10-adoption-brief-r2.pptx"
+        },
+        {
+          "dir": "T12",
+          "name": "90161Z-T12-ang-graphics-standard-r1.pdf",
+          "url": "https://www.ang.af.mil/Portals/77/documents/ANG%20Graphics%20Standard.pdf"
+        },
+        {
+          "dir": "T12",
+          "name": "90161Z-T12-af-heraldry-guide-r1.pdf",
+          "url": "https://www.dafhistory.af.mil/Portals/16/documents/Organizational-Records/GuideAirForceHeraldryJune2022.pdf"
+        },
+        {
+          "dir": "T12",
+          "name": "90161Z-T12-af-symbol-page-r1.htm",
+          "url": "https://www.trademark.af.mil/Branding/Air-Force-Symbol/"
         }
       ]
     }
