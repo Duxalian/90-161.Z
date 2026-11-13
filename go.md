@@ -39,8 +39,8 @@ Steps:
 **Time:** about 8 minutes (estimate); add 2 minutes if seal prep runs.
 **Changes:** writes into T01, T07, T10, T12, T14, Config and Rounds\R08. Downloads 3 briefs from GitHub (checked) and 3 public documents from Air Force public websites. Opens PowerPoint without a window and closes it. Seal prep (if checked) writes prepared seals into the Seals folder I pick and 2 text files in T07. Moves Rounds\R06 and R07 to the Recycle Bin. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build BUILDID.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/COMMIT/scripts/gov/paste/90161Z-R08-round-r1.ps1
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build d1605b13.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/d4d8a71738b182e8c1dc5b4227bac497df2f2e82/scripts/gov/paste/90161Z-R08-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
 3. The 90-161.Z Deployer window opens. In "Send results to", type the address you send results to (only this once), then Enter.
 4. Seal prep is unchecked. Check it only if the unit shields are already in the synced Seals folder (Task 7 steps 1-4); Run then asks for that folder.
