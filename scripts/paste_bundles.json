@@ -2,10 +2,14 @@
   "_doc": "Source for scripts/build_paste_bundles.py. Each bundle is one round: a self-contained PowerShell text the PFM copies from its raw page and pastes into Windows PowerShell ISE (F5). It writes the files, then opens the round runner (a window; text prompts if no window can open): steps run one by one with a live log and PASS/FAIL counts, then one results folder (Rounds\\\\<round>: a report file plus copies of the PDFs, to attach to one e-mail; zips do not cross the boundary) and a summary for the clipboard. It runs only the steps inside it (PFM 3A). Never hand-edit scripts/gov/paste/*.ps1: change this file or the sources and rebuild.",
   "bundles": [
     {
-      "out": "scripts/gov/paste/90161Z-R01-round-r3.ps1",
-      "round": "R01",
-      "title": "Round R01: renderer round 2 (T01 r6) and seal test (T07 r2)",
+      "out": "scripts/gov/paste/90161Z-R02-round-r1.ps1",
+      "round": "R02",
+      "title": "Round R02: sensitivity label capture (T13) and renderer test with label and calibrated MEASURE lines (T01 r6)",
       "files": [
+        {
+          "dir": "T13",
+          "src": "scripts/gov/90161Z-T13-label-capture-r1.ps1"
+        },
         {
           "dir": "T01",
           "src": "scripts/gov/Publication.Common.ps1"
@@ -25,56 +29,24 @@
         {
           "dir": "T01",
           "src": "scripts/gov/90161Z-T01-renderer-test-r6.ps1"
-        },
-        {
-          "dir": "T07",
-          "src": "scripts/gov/90161Z-T07-seal-prep-r1.ps1"
-        },
-        {
-          "dir": "T07",
-          "src": "scripts/gov/90161Z-T07-seal-test-r2.ps1"
-        },
-        {
-          "dir": "T07\\TestSeals",
-          "src": "samples/90161Z-T07-testseal-round-r1.png"
-        },
-        {
-          "dir": "T07\\TestSeals",
-          "src": "samples/90161Z-T07-testseal-tall-r1.png"
-        },
-        {
-          "dir": "T07\\TestSeals",
-          "src": "samples/90161Z-T07-testseal-soft-r1.png"
-        },
-        {
-          "dir": "T07\\TestSeals",
-          "src": "samples/90161Z-T07-testseal-tiny-r1.png"
         }
       ],
       "steps": [
         {
-          "name": "T01 renderer test r6",
-          "dir": "T01",
-          "file": "90161Z-T01-renderer-test-r6.ps1"
+          "name": "T13 label capture r1",
+          "dir": "T13",
+          "file": "90161Z-T13-label-capture-r1.ps1"
         },
         {
-          "name": "T07 seal test r2",
-          "dir": "T07",
-          "file": "90161Z-T07-seal-test-r2.ps1"
+          "name": "T01 renderer test r6 (label + MEASURE)",
+          "dir": "T01",
+          "file": "90161Z-T01-renderer-test-r6.ps1"
         }
       ],
       "collect": [
         {
           "dir": "T01",
           "name": "SAMPLEWINGI99-101.pdf"
-        },
-        {
-          "dir": "T07",
-          "name": "SAMPLEWINGI99-101-TALL.pdf"
-        },
-        {
-          "dir": "T07",
-          "name": "SAMPLEWINGI99-101-ROUND.pdf"
         }
       ]
     }

@@ -10,7 +10,7 @@ bootstrapper for fast test rounds (PFM 1A, 6A: function over form):
   3. runs the steps one by one (each a runner file, as a child powershell.exe with -Id and -NoPause), with a live
      log, DODID masked, and PASS/FAIL counts per step;
   4. writes a results folder Rounds\\<round> with one report file (summary + full masked log) and copies of the
-     collect files (PDFs), ready to attach to one e-mail (no zip: zips do not cross the boundary, PFM 13 Nov), and
+     collect files (PDFs), ready to attach to one email (no zip: zips do not cross the boundary, PFM 13 Nov), and
      offers the summary for the clipboard and an Open results folder button.
 It runs only the steps embedded in it and never fetches code (PFM 3A). If no window can open (no Windows Forms),
 it runs the same steps as text.
@@ -116,7 +116,7 @@ function Get-StepLine($Step, $R) {
 }
 function Add-RunLog([string]$T) { if ($null -ne $script:runLog) { $script:runLog.Add($T) } }
 function Export-RoundResult([string]$Base, [string[]]$Summary) {
-  # One folder of plain files to attach to one e-mail (zips do not cross the boundary, PFM 13 Nov).
+  # One folder of plain files to attach to one email (zips do not cross the boundary, PFM 13 Nov).
   $out = Join-Path (Join-Path $Base 'Rounds') $round
   if (-not (Test-Path -LiteralPath $out -PathType Container)) { [void](New-Item -ItemType Directory -Path $out -Force) }
   $count = 1; $missing = @()
@@ -146,7 +146,7 @@ function Get-RoundPlan([string]$Typed) {
     $p = Join-Path (Join-Path $base $f.Dir) $f.Name
     $lines += ('  ' + $f.Dir + '\' + $f.Name + $(if (Test-Path -LiteralPath $p -PathType Leaf) { '   (replaces the file there)' } else { '   (new)' }))
   }
-  $lines += ('  Rounds\' + $round + '\   (results folder: one report file + copies of the PDFs, to attach to one e-mail)')
+  $lines += ('  Rounds\' + $round + '\   (results folder: one report file + copies of the PDFs, to attach to one email)')
   $lines += 'Folders are made when missing. Files of the same name are replaced. Nothing else is changed, moved or deleted.'
   $lines += 'Steps then write their own results and PDFs into these task folders.'
   return @{ Shown = $shown; Found = $found; Lines = $lines }
@@ -184,10 +184,10 @@ function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scr
   }
   if ($script:textMode) {
     & $Say ('DONE. The results folder ...\90-161.Z\Rounds\' + $round + ' opens now and the summary is on the clipboard.')
-    & $Say ('Attach all ' + $z.Count + ' files in that folder to one e-mail to your Gmail, subject "90161Z ' + $round + '", and paste the summary into the body.')
+    & $Say ('Attach all ' + $z.Count + ' files in that folder to one email, subject "90161Z ' + $round + '", and paste the summary into the email body.')
   } else {
-    & $Say ('DONE. Press Open results folder and attach all ' + $z.Count + ' files in it to one e-mail to your Gmail, subject "90161Z ' + $round + '".')
-    & $Say 'Then press Copy summary and paste it into the e-mail body.'
+    & $Say ('DONE. Press Open results folder and attach all ' + $z.Count + ' files in it to one email, subject "90161Z ' + $round + '".')
+    & $Say 'Then press Copy summary and paste it into the email body.'
   }
   return ,$summary
 }
@@ -226,7 +226,7 @@ if ($gui) {
     $first = & $showPlan
     $howTo = @('HOW TO USE', '  1. Check the "Writes to" line above. Leave the DODID box empty unless that line says NOT found.',
       '  2. Press Run. Word steps take a few minutes; keep this window open until it says DONE.',
-      '  3. Press Open results folder, attach all files in it to one e-mail, press Copy summary, paste it into the body.',
+      '  3. Press Open results folder, attach all files in it to one email, press Copy summary, paste it into the body.',
       '  Uncheck a step to skip it. Closing the window stops a running step.', '')
     $log.Text = (($howTo + $first.Lines) -join "`r`n") + "`r`n"
 
@@ -242,7 +242,7 @@ if ($gui) {
       $run.Enabled = $true
     })
     $copy.Add_Click({
-      try { [System.Windows.Forms.Clipboard]::SetText(($script:lastSummary -join "`r`n")); & $say 'Summary copied. Paste it into the e-mail body.' }
+      try { [System.Windows.Forms.Clipboard]::SetText(($script:lastSummary -join "`r`n")); & $say 'Summary copied. Paste it into the email body.' }
       catch { & $say ('Clipboard busy; press Copy summary again. (' + $_.Exception.Message + ')') }
     })
     $open.Add_Click({ if ($script:resultsDir) { Start-Process -FilePath 'explorer.exe' -ArgumentList ('"' + $script:resultsDir + '"') } })
@@ -292,7 +292,7 @@ def build(b):
             '  How to run: open Windows PowerShell ISE, File > New, paste all of this text into the script pane, press F5.\n'
             '  A window opens: DODID (empty = profile folder), Run. It writes the files below into the task folders under\n'
             '  C:\\Users\\<DODID>\\OneDrive - United States Air Force\\90-161.Z (replacing older copies), runs the steps,\n'
-            '  and saves its results in Rounds\\%s (attach all files to one e-mail). No download, no admin rights.\n'
+            '  and saves its results in Rounds\\%s (attach all files to one email). No download, no admin rights.\n'
             '#>\n$buildId = \'%s\'\n' % (b['title'], b['round'], build_id))
     return head + body
 
