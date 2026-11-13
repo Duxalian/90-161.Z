@@ -228,9 +228,9 @@ out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
 # log) with no DODID. The window path (Windows Forms) cannot run here: lint only.
 tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pf=0; pr=0; pc=0
 # R06 cleanup fixture: finished folders with our files and one file 90-161.Z did not make (must stay).
-ob="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"; mkdir -p "$ob/T02" "$ob/T13" "$ob/Rounds/R01" "$ob/T07" "$ob/T09"
+ob="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"; mkdir -p "$ob/T02" "$ob/T13" "$ob/Rounds/R06" "$ob/T07" "$ob/T09"
 touch "$ob/T02/90161Z-T02-provision-lists-r9.zip" "$ob/T02/Provision-Lists.ps1" "$ob/T13/90161Z-T13-label-capture-r1.ps1" "$ob/T13/my-notes.docx" \
-  "$ob/Rounds/R01/90161Z-R01-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r3.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
+  "$ob/Rounds/R06/90161Z-R06-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r3.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
 swap() { sed -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
   swap "$b" > "$tp/b.ps1"; USERPROFILE="$tp/u/test1234" pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
@@ -243,7 +243,8 @@ for b in scripts/gov/paste/*.ps1; do
   ! { grep -v '^WRITES TO ' "$tp/out.txt" | grep -q "test1234"; } && ! grep -q "test1234" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
   grep -q "^WRITES TO $tp/u/test1234/" "$tp/out.txt" || { echo "real path not shown"; pf=$((pf+1)); }
   grep -q "^WHAT TO DO: Open Outlook" "$tp/out.txt" || { echo "no plain-words help after the draft fallback"; pf=$((pf+1)); }
-  [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R01" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r3.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r1.ps1" ] \
+  grep -q "^NOTE: no window, text mode: " "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "report does not name the no-window cause"; pf=$((pf+1)); }
+  [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R06" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r3.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r1.ps1" ] \
     && [ -f "$ob/T07/90161Z-T07-key-r1.txt" ] && [ -f "$ob/T09/90161Z-T09-page-r1.htm" ] \
     && grep -q "^CLEANUP to Recycle Bin: files=5 folders=2 kept-other=1 failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" \
     && grep -q "^LEFT .*T13(1, 1 other)" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && head -1 "$base/Rounds/$r/90161Z-$r-report-r1.txt" | tr -d "\r" | grep -q "90161Z $r CHECK$" \
@@ -269,6 +270,11 @@ done; rm -rf "$te"
 # No DODID question in rounds (PFM 2026-11-13): the profile folder is the DODID.
 dq=0; for b in scripts/gov/paste/*.ps1; do sed -n '/round runner (generated/,$p' "$b" | grep -qE "Read-Host 'DODID|idBox" && dq=$((dq+1)); done
 [ "$dq" -eq 0 ] && ok "rounds ask no DODID (bundles that ask: $dq)" || bad "rounds ask no DODID (bundles that ask: $dq)"
+# R06 lesson: New-Object with a string for an enum argument can match two overloads ("Multiple ambiguous overloads") and
+# drop the Deployer to text mode. Binding check in pwsh for every New-Object System.Drawing.Font call in the bundles.
+fa=$(grep -ohE "New-Object System\.Drawing\.Font\('[^']*', *[0-9]+, *'[A-Za-z]+'\)" scripts/gov/paste/*.ps1 scripts/build_paste_bundles.py | wc -l)
+amb=$(pwsh -NoProfile -c 'Add-Type -AssemblyName System.Drawing.Common; try { $null = New-Object System.Drawing.Font("Segoe UI", 10, "Bold"); "bound" } catch { if ($_.Exception.Message -match "ambiguous") { "ambiguous" } else { "bound" } }' 2>&1 | tail -1)
+[ "$fa" -eq 0 ] && [ "$amb" = "ambiguous" ] && ok "Deployer fonts: no string enum in Font() (found: $fa; pwsh confirms the string form is $amb)" || bad "Deployer fonts: string enum in Font() found=$fa (pwsh: $amb)"
 # R05 (PFM 2026-11-13): every bundle makes an Outlook draft and never sends it; off Windows it falls back to folder + clipboard.
 nd=$(grep -L 'ComObject Outlook.Application' scripts/gov/paste/*.ps1 | wc -l); ns=$(grep -ciE '\.Send\(|\.Send\b *$' scripts/gov/paste/*.ps1 | awk -F: '{s+=$NF} END{print s+0}')
 grep -q '\$script:draftMade = (-not \$why)' scripts/build_paste_bundles.py && grep -q "Outlook draft not made" scripts/build_paste_bundles.py; fb=$?
