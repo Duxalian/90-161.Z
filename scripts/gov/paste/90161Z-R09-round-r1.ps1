@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R09, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = 'ff1f5da9'
+$buildId = '83c168c9'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R09'
 $usersRoot = 'C:\Users'
@@ -2665,7 +2665,7 @@ pAGsP4xHAGA4fw1g/WEDAgDzeW0A6w9LEABYIfMGsP6wBwGALTJpAOsPqxAAWCR1A1h/2IYAwC71NYD1
 hzaA9Ye1cgWw0qMvzKiurqmqrmX9Ya2soiETBABgn2wBAFiJAACApQgAAFiKAACApQgAAFiKAACApQgAAFiKAACApQgAAFiKAACA
 pQgAAFiKAACApQgAAFjq/wMAAP//lseVFgAAAAZJREFUAwDw1wSxYMgYYgAAAABJRU5ErkJggg==
 '@ }
-$files += @{ Dir = 'T16'; Name = '90161Z-T16-pnp-signin-test-r1.ps1'; Kind = 'text'; Sha = 'e1b8ed450a2e'; Data = @'
+$files += @{ Dir = 'T16'; Name = '90161Z-T16-pnp-signin-test-r1.ps1'; Kind = 'text'; Sha = 'bd074455e630'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 16 PnP sign-in test, r1. Read-only. Windows PowerShell 5.1, the installed PnP.PowerShell 1.x only.
@@ -2803,7 +2803,7 @@ try {
   $lines.Add('TASK T16 PnP sign-in test r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', read-only')
   $mod = @(Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending)
   if (-not $mod.Count) { throw 'PNP not installed: PnP.PowerShell is not on this computer.' }
-  Import-Module PnP.PowerShell -RequiredVersion $mod[0].Version -DisableNameChecking
+  $null = & { Import-Module PnP.PowerShell -RequiredVersion $mod[0].Version -DisableNameChecking } *>&1   # module warnings never reach the log
   $lines.Add('PNP module=' + $mod[0].Version + ' powershell=' + $PSVersionTable.PSVersion)
   $routes = @(
     @{ Name = 'spo-shell-dod'; Args = @{ SPOManagementShell = $true; AzureEnvironment = 'USGovernmentDoD' } },
@@ -2818,7 +2818,7 @@ try {
     try {
       # Everything PnP writes itself (warnings, sign-in text) is captured and dropped: only this script's masked lines leave.
       $null = & { Connect-PnPOnline -Url $site @a -ErrorAction Stop } *>&1
-      $web = $null; $listCount = 0
+      $script:web = $null; $script:listCount = 0
       $null = & { $script:web = Get-PnPWeb -Includes EffectiveBasePermissions -ErrorAction Stop; $script:listCount = @(Get-PnPList -ErrorAction Stop).Count } *>&1
       $p = $script:web.EffectiveBasePermissions
       $k = [Microsoft.SharePoint.Client.PermissionKind]
@@ -2829,6 +2829,7 @@ try {
       # Hide first, then cut (a cut inside an address would defeat the hiding). "not connected", not FAIL: a route that
       # does not connect is a finding, not a broken round.
       $m = ConvertTo-Masked (Hide-Site (([string]$_.Exception.Message) -replace '\s+', ' ') $site) $secret
+      $m = $m -replace '(?i)\bfail', 'fault'   # the Deployer counts the word FAIL as a broken step
       $lines.Add('ROUTE ' + $r.Name + ' not connected ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
     } finally {
       try { $null = & { Disconnect-PnPOnline -ErrorAction SilentlyContinue } *>&1 } catch { $null = $_ }

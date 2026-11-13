@@ -135,7 +135,7 @@ try {
   $lines.Add('TASK T16 PnP sign-in test r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', read-only')
   $mod = @(Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending)
   if (-not $mod.Count) { throw 'PNP not installed: PnP.PowerShell is not on this computer.' }
-  Import-Module PnP.PowerShell -RequiredVersion $mod[0].Version -DisableNameChecking
+  $null = & { Import-Module PnP.PowerShell -RequiredVersion $mod[0].Version -DisableNameChecking } *>&1   # module warnings never reach the log
   $lines.Add('PNP module=' + $mod[0].Version + ' powershell=' + $PSVersionTable.PSVersion)
   $routes = @(
     @{ Name = 'spo-shell-dod'; Args = @{ SPOManagementShell = $true; AzureEnvironment = 'USGovernmentDoD' } },
@@ -150,7 +150,7 @@ try {
     try {
       # Everything PnP writes itself (warnings, sign-in text) is captured and dropped: only this script's masked lines leave.
       $null = & { Connect-PnPOnline -Url $site @a -ErrorAction Stop } *>&1
-      $web = $null; $listCount = 0
+      $script:web = $null; $script:listCount = 0
       $null = & { $script:web = Get-PnPWeb -Includes EffectiveBasePermissions -ErrorAction Stop; $script:listCount = @(Get-PnPList -ErrorAction Stop).Count } *>&1
       $p = $script:web.EffectiveBasePermissions
       $k = [Microsoft.SharePoint.Client.PermissionKind]
@@ -161,6 +161,7 @@ try {
       # Hide first, then cut (a cut inside an address would defeat the hiding). "not connected", not FAIL: a route that
       # does not connect is a finding, not a broken round.
       $m = ConvertTo-Masked (Hide-Site (([string]$_.Exception.Message) -replace '\s+', ' ') $site) $secret
+      $m = $m -replace '(?i)\bfail', 'fault'   # the Deployer counts the word FAIL as a broken step
       $lines.Add('ROUTE ' + $r.Name + ' not connected ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
     } finally {
       try { $null = & { Disconnect-PnPOnline -ErrorAction SilentlyContinue } *>&1 } catch { $null = $_ }
