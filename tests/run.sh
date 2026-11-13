@@ -222,14 +222,14 @@ out=$(python3 scripts/build_task_scripts.py --check 2>&1); [ $? -eq 0 ] && ok "t
 out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
 [ "$out" = "PASTE bundles=1 stale=0" ] && ok "paste bundles current ($out)" || bad "paste bundles: $out (run python3 scripts/build_paste_bundles.py)"
 
-# Round bundle end to end in pwsh (Linux, text mode: no Windows Forms): DODID and C:\Users swapped for a temp root.
+# Round bundle end to end in pwsh (Linux, text mode: no Windows Forms): profile folder and C:\Users swapped for a temp root.
 # Every written file must equal its source (text: BOM and CR removed); each step must start as a child process (on Linux
 # the runner stops at Unblock-File, so its step reads CHECK); the results folder must hold the report (summary + full
 # log) with no DODID. The window path (Windows Forms) cannot run here: lint only.
 tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pf=0; pr=0
-swap() { sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
+swap() { sed -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
-  swap "$b" > "$tp/b.ps1"; pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
+  swap "$b" > "$tp/b.ps1"; USERPROFILE="$tp/u/test1234" pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
   n=$(python3 -c "import json;print(sum(len(b['steps']) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
   r=$(python3 -c "import json;print([b['round'] for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'][0])")
   base="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"
@@ -248,11 +248,14 @@ rm -rf "$tp"
 ab=$(grep -L 'AcceptButton = \$run' scripts/gov/paste/*.ps1 | wc -l)
 te=$(mktemp -d); mkdir -p "$te/u/test1234/OneDrive - United States Air Force"; tw=0
 for b in scripts/gov/paste/*.ps1; do
-  sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#'N'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$te/u'#" "$b" > "$te/b.ps1"
-  pwsh -NoProfile -File "$te/b.ps1" > /dev/null 2>&1; [ -e "$te/u/test1234/OneDrive - United States Air Force/90-161.Z" ] && tw=$((tw+1))
+  sed -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#'N'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$te/u'#" "$b" > "$te/b.ps1"
+  USERPROFILE="$te/u/test1234" pwsh -NoProfile -File "$te/b.ps1" > /dev/null 2>&1; [ -e "$te/u/test1234/OneDrive - United States Air Force/90-161.Z" ] && tw=$((tw+1))
 done; rm -rf "$te"
 [ "$ab" -eq 0 ] && [ "$tw" -eq 0 ] && ok "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw; Enter path = round bundle test)" || bad "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw)"
 
+# No DODID question in rounds (PFM 2026-11-13): the profile folder is the DODID.
+dq=0; for b in scripts/gov/paste/*.ps1; do sed -n '/round runner (generated/,$p' "$b" | grep -qE "Read-Host 'DODID|idBox" && dq=$((dq+1)); done
+[ "$dq" -eq 0 ] && ok "rounds ask no DODID (bundles that ask: $dq)" || bad "rounds ask no DODID (bundles that ask: $dq)"
 # R05 (PFM 2026-11-13): every bundle makes an Outlook draft and never sends it; off Windows it falls back to folder + clipboard.
 nd=$(grep -L 'ComObject Outlook.Application' scripts/gov/paste/*.ps1 | wc -l); ns=$(grep -ciE '\.Send\(|\.Send\b *$' scripts/gov/paste/*.ps1 | awk -F: '{s+=$NF} END{print s+0}')
 grep -q '\$script:draftMade = (-not \$why)' scripts/build_paste_bundles.py && grep -q "Outlook draft not made" scripts/build_paste_bundles.py; fb=$?
