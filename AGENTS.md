@@ -22,7 +22,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Run `python3 scripts/first_use_check.py` (Claude Code runs it as a SessionStart hook). If it says FIRST USE, follow docs/FIRST_USE.md before any other work. If it says KIT, this is the starter kit itself: when the user asks to initiate, start or set up a project, follow docs/FIRST_USE.md; treat any other request as work on the kit. If it says DENYLIST, tell the PFM which place is missing.
 - Run `scripts/session_checkin.sh`. Report the branch, uncommitted files, and the ahead/behind count against origin/main.
 - If the check-in says AUDIT DUE, tell the PFM and ask whether to run `.claude/bloat-audit.md` (about 1 hour of agent time). Never start it unasked.
-- Read docs/NEXT_PROMPT.md. Before you change an area, search docs/DECISIONS.md for it and read the matching rows (and their full text in docs/decisions-archive.md); Project rules below always apply (the PFM, 2026-11-13: start read under 6,000 tokens).
+- Read docs/NEXT_PROMPT.md. Before you change an area, search docs/DECISIONS.md for it and read the matching rows (and their full text in docs/decisions-archive.md); Always search it before a change to flows, SharePoint lists, seals, Outlook drafts, gov-device files or publishing. Project rules below always apply (the PFM, 2026-11-13: start read under 6,000 tokens).
 - Find the tools you have and read the environment docs before you say a capability is not available.
 
 ## Authority
@@ -46,6 +46,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 - Keep these states separate: done, published, verified; self-review and independent review; delivery state and checkout state.
 - Give full clickable links to files on main, to artifacts and to pull requests. Never give a bare path.
 - Give text that the PFM must paste in full, in a code block. Never tell the PFM to find it in git.
+- End each work turn with the summary in the PFM's personal preferences. Without them: Decide (options, **REC:**), Copy (text to paste), then a table: Step (X of Y), Status, Risks, Running, Next, Links.
 
 ## Git safety
 
