@@ -53,7 +53,7 @@
         "parameters": {
           "dataset": "@parameters('Site URL (pfm_SiteUrl)')",
           "table": "@parameters('List PFM Endorsements (pfm_ListEndorsements)')",
-          "$filter": "EndorsementStatus eq 'Not Started' and DueDate eq null and CoordinationStage ne 'Legal' and CoordinationRole ne 'Legal'",
+          "$filter": "EndorsementStatus eq 'Not Started' and DueDate eq null and CoordinationStage ne 'Legal' and (CoordinationRole ne 'Legal' or CoordinationRole eq null)",
           "$top": 5000
         },
         "authentication": "@parameters('$authentication')"
@@ -232,12 +232,12 @@
                 },
                 "Copy_to": {
                   "runAfter": {
-                    "Select_AO_emails": [
+                    "Filter_AO_emails": [
                       "Succeeded"
                     ]
                   },
                   "type": "Compose",
-                  "inputs": "@if(equals(outputs('Tier'), 'Escalation'), concat(join(body('Select_AO_emails'), ';'), if(and(greater(length(body('Select_AO_emails')), 0), not(empty(body('Get_publication')?['Requester']?['Email']))), ';', ''), coalesce(body('Get_publication')?['Requester']?['Email'], '')), '')"
+                  "inputs": "@if(equals(outputs('Tier'), 'Escalation'), concat(join(body('Filter_AO_emails'), ';'), if(and(greater(length(body('Filter_AO_emails')), 0), not(empty(body('Get_publication')?['Requester']?['Email']))), ';', ''), coalesce(body('Get_publication')?['Requester']?['Email'], '')), '')"
                 },
                 "Send_an_email_(V2)": {
                   "runAfter": {
@@ -296,6 +296,18 @@
                   "inputs": {
                     "from": "@coalesce(body('Get_publication')?['AO'], json('[]'))",
                     "select": "@item()?['Email']"
+                  }
+                },
+                "Filter_AO_emails": {
+                  "runAfter": {
+                    "Select_AO_emails": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Query",
+                  "inputs": {
+                    "from": "@body('Select_AO_emails')",
+                    "where": "@not(empty(item()))"
                   }
                 }
               },
