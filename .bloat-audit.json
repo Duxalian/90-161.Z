@@ -22,5 +22,6 @@
     "date": "2026-11-13",
     "commit": "e44c29b",
     "report": "docs/reviews/2026-11-13-bloat-audit-2.md"
-  }
+  },
+  "every_commits": 300
 }

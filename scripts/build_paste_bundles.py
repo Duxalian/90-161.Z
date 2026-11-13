@@ -117,7 +117,7 @@ function Get-LastRoundText($Hist) {
   return ('Last round: ' + $l.Round + ' ' + $l.Status + ', ' + $l.Finished + ' (took ' + (Format-Duration ([double]$l.Seconds)) + ').')
 }
 function Get-StepEstimate($Hist, [string]$Name) {
-  $r = @($Hist | Where-Object { $_.Step -eq $Name -and $_.Seconds })
+  $r = @($Hist | Where-Object { $_.Step -eq $Name -and $_.Status -eq 'OK' -and $_.Seconds })   # last good run only
   if ($r.Count) { return [int]$r[-1].Seconds }
   return 0
 }
@@ -323,7 +323,8 @@ function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock
   & $speak ('ROUND ' + $round + ' build ' + $buildId + ' -> ' + (ConvertTo-Masked $base))
   if (Test-WordOpen) { & $speak 'NOTE: Word is open. Renders use Word: save your documents and close Word if a step stops.' }
   Write-BundleFile $base $speak
-  if ($To) { try { Save-MailTo $base $To } catch { & $speak ('NOTE: could not save the e-mail address: ' + $_.Exception.Message) } }
+  # An empty box clears the saved address (review R06 #5).
+  try { if ($To -or (Test-Path -LiteralPath (Get-ConfigFile $base '90161Z-mail-to.txt') -PathType Leaf)) { Save-MailTo $base $To } } catch { & $speak ('NOTE: could not save the e-mail address: ' + (ConvertTo-Masked $_.Exception.Message)) }
   if ($cleanup.Count) {
     if ($Clean) { $n++; & $OnStatus $n $units 'Clean up finished files' 0; $summary += (Invoke-Cleanup $base $speak) }
     else { $summary += 'CLEANUP skipped' }
@@ -444,6 +445,10 @@ if ($gui) {
     $form.ResumeLayout($false); $form.PerformLayout()
     # Enter starts the run (PFM 13 Nov). Focus: the address box when it is empty, else Run.
     $form.AcceptButton = $run
+    # Enter in the address box moves to Run instead of starting the round (review R06 #3: a stray Enter must not start a cleanup).
+    $toBox.Add_Enter({ $form.AcceptButton = $null })
+    $toBox.Add_Leave({ $form.AcceptButton = $run })
+    $toBox.Add_KeyDown({ if ($_.KeyCode -eq 'Return') { $_.SuppressKeyPress = $true; $run.Focus() | Out-Null } })
     $form.Add_Shown({ if ($toBox.Text) { $run.Focus() | Out-Null } else { $toBox.Focus() | Out-Null } })
     $first = Get-RoundPlan
     $where.Text = 'Writes to: ' + $first.Shown + $(if ($first.Found) { '' } else { '   (NOT found)' })
@@ -453,7 +458,7 @@ if ($gui) {
     $warn.Text = ($warnings -join "`r`n"); $warn.Visible = [bool]$warnings.Count
     $est = 0; foreach ($s in $steps) { $est += Get-StepEstimate $hist0 $s.Name }
     $status.Text = 'Ready. Press Enter or Run.' + $(if ($est) { ' About ' + (Format-Duration $est) + ' (your last run).' } else { ' Word steps take a few minutes each.' })
-    $howTo = @('HOW TO USE', '  1. Check the "Writes to" line above (your own OneDrive folder). Type the e-mail address the results go to (saved for next time).',
+    $howTo = @('HOW TO USE', '  1. Check the "Writes to" line above (your own OneDrive folder). Type the e-mail address the results go to (saved for next time), then Enter.',
       '  2. Press Enter or Run. Keep this window open until it says DONE. Uncheck a step to skip it.',
       '  3. At DONE an Outlook draft opens with the subject, summary and all files. Check it, then Send.',
       '     If no draft opens: the results folder opens and the summary is on the clipboard (paste into a new e-mail body,',

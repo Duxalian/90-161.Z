@@ -14,7 +14,7 @@ The checks are not the cause: all of them run in seconds. The cause is the **num
 | scripts/lint.sh | 4.9 s |
 | pre-push hook (PII guard + checks) | 4.1 s |
 | session check-in / Stop hook | 0.6 s / 0.1 s |
-| Start-read instructions (bloat_check) | ~12,000 tokens, budget 12,000 (at limit) |
+| Start-read instructions | ~12,000 tokens per the check-in: AGENTS.md + handoff ~5,750 (bloat_check) + docs/DECISIONS.md ~6,200 |
 | AGENTS.md | 2,965 words, 91 rules; 16 commits changed it on 13 Nov (2 on 12 Nov) |
 | docs/DECISIONS.md | 4,069 words |
 | Personal preferences | ~2,000 words (estimate) |

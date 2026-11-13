@@ -33,6 +33,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 
 ## Delivery
 
+- Batch (the PFM, 2026-11-13): one docs commit and one pull request per round or per request, not per change.
 - Deliver every change without being asked, by pull request (the PFM, 2026-11-13): commit, push your branch, open a pull request to main, turn on auto-merge (else merge it once the pii-guard check passes and, for code, checks or scripts, the fresh review in "Delegation" finds no MAJOR finding; a MAJOR finding: ask the PFM), verify that origin/main has the commit, and republish the affected artifacts. GitHub deletes the merged branch.
 - A host limit wins over this section (for example a required branch, or a push or merge the host does not allow without the PFM): do the steps it allows, then report each other step as blocked, with its cause and what unblocks it.
 - Exception: for a UI or design change that the PFM has not approved, show a preview first (a preview artifact, or the pull request as a draft). Merge after the PFM approves. Delete previews after they ship.
@@ -120,7 +121,7 @@ Chat history, Project files and remembered copies are not authority. If you cann
 The project log records how the project got there (milestones, breakthroughs, misses, decisions) for a timeline and a narrative deck (the PFM, 2026-11-11). Decisions also go in docs/DECISIONS.md.
 
 - Location: docs/LOG.md, unless "Project rules" names another place. A public repo must name a private place (for example a private Claude doc), because entries can hold environment or security detail.
-- Write a row only for a story event: a decision, milestone, breakthrough or miss, in the turn it happens. The log is not a change log: no row per commit, merge or file change (git log holds those). Before you write a row, read `.claude/project-log.md` (columns, types, arcs, story fields). `python3 scripts/log_check.py` checks the format.
+- Write a row only for a story event: a decision, milestone, breakthrough or miss, in the turn it happens. The log is not a change log: no row per commit, merge or file change (git log holds those). Before you write a row, read `.claude/project-log.md` (columns, types, arcs, story fields). `python3 scripts/log_check.py` checks the format. The line "Next row: N" under the log's Log heading gives the number: one search reads it, one update writes the row and N+1 (the PFM, 2026-11-13).
 - If you cannot write to the log (no tool for it), put the full entry in your turn summary under Copy, with "Paste into: project log".
 
 ## Delegation

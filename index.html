@@ -81,15 +81,15 @@ function fileCard(u){
 function blocked(b){b.textContent='Copy blocked: open the link, Ctrl+A, Ctrl+C';b.disabled=true}
 function copyScript(b){
   var h=b.getAttribute('data-script'),t=SCRIPTS[h];
-  if(typeof t!=='string'){blocked(b);return}
+  if(typeof t!=='string'){if(b.getAttribute('data-state')==='loading'){b.textContent='Still loading; press again in a moment'}else{blocked(b)}return}
   var ok=function(){b.textContent='Copied ('+t.split('\n').length.toLocaleString()+' lines). Now paste in ISE.';setTimeout(function(){b.textContent='Copy script'},4000)};
   var viaArea=function(){var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();var r=false;try{r=document.execCommand('copy')}catch(e){}document.body.removeChild(a);return r};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){viaArea()?ok():blocked(b)})}else{viaArea()?ok():blocked(b)}
 }
 function preload(m){
   Array.prototype.forEach.call(m.querySelectorAll('button[data-script]'),function(b){
-    var h=b.getAttribute('data-script');b.textContent='Copy script (loading)';
-    fetch(h,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(t){SCRIPTS[h]=t;b.textContent='Copy script'}).catch(function(){blocked(b)});
+    var h=b.getAttribute('data-script');b.textContent='Copy script (loading)';b.setAttribute('data-state','loading');
+    fetch(h,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(t){SCRIPTS[h]=t;b.removeAttribute('data-state');b.disabled=false;b.textContent='Copy script'}).catch(function(){b.removeAttribute('data-state');blocked(b)});
   });
 }
 function folderBox(lbl,path){
