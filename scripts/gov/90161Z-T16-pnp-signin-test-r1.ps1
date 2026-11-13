@@ -101,10 +101,17 @@ function Hide-Site([string]$Text, [string]$Site) {
   if ($Site) {
     $Text = $Text -replace [regex]::Escape($Site.TrimEnd('/')), '<SITE>'
     try {
-      $h = ([uri]$Site).Host
-      $Text = $Text -replace [regex]::Escape($h), '<SITE-HOST>'
-      $tenant = ($h -split '\.')[0]
-      if ($tenant.Length -ge 3) { $Text = $Text -replace [regex]::Escape($tenant), '<TENANT>' }
+      $u = [uri]$Site
+      $Text = $Text -replace [regex]::Escape($u.Host), '<SITE-HOST>'
+      $path = $u.AbsolutePath.TrimEnd('/')   # /sites/<name>: also in server-relative and URL-encoded form
+      if ($path.Length -gt 1) {
+        $Text = $Text -replace [regex]::Escape($path), '<SITE-PATH>'
+        $Text = $Text -replace [regex]::Escape([uri]::EscapeDataString($path)), '<SITE-PATH>'
+        $leaf = ($path -split '/')[-1]
+        if ($leaf.Length -ge 3) { $Text = $Text -replace ('\b' + [regex]::Escape($leaf) + '\b'), '<SITE-NAME>' }
+      }
+      $tenant = ($u.Host -split '\.')[0]
+      if ($tenant.Length -ge 3) { $Text = $Text -replace ('\b' + [regex]::Escape($tenant) + '\b'), '<TENANT>' }
     } catch { $null = $_ }
   }
   $Text = $Text -replace 'https?://\S+', '<URL>'
@@ -141,12 +148,14 @@ try {
     Write-Host ('Trying ' + $r.Name + ': a sign-in window may open; sign in with your CAC...')
     $a = $r.Args
     try {
-      Connect-PnPOnline -Url $site @a -ErrorAction Stop
-      $web = Get-PnPWeb -Includes EffectiveBasePermissions -ErrorAction Stop
-      $p = $web.EffectiveBasePermissions
+      # Everything PnP writes itself (warnings, sign-in text) is captured and dropped: only this script's masked lines leave.
+      $null = & { Connect-PnPOnline -Url $site @a -ErrorAction Stop } *>&1
+      $web = $null; $listCount = 0
+      $null = & { $script:web = Get-PnPWeb -Includes EffectiveBasePermissions -ErrorAction Stop; $script:listCount = @(Get-PnPList -ErrorAction Stop).Count } *>&1
+      $p = $script:web.EffectiveBasePermissions
       $k = [Microsoft.SharePoint.Client.PermissionKind]
       $lines.Add('ROUTE ' + $r.Name + ' PASS manage-lists=' + $p.Has($k::ManageLists) + ' manage-site=' + $p.Has($k::ManageWeb) +
-        ' add-items=' + $p.Has($k::AddListItems) + ' lists=' + @(Get-PnPList -ErrorAction Stop).Count)
+        ' add-items=' + $p.Has($k::AddListItems) + ' lists=' + $script:listCount)
       if (-not $okRoute) { $okRoute = $r.Name }
     } catch {
       # Hide first, then cut (a cut inside an address would defeat the hiding). "not connected", not FAIL: a route that
@@ -154,7 +163,7 @@ try {
       $m = ConvertTo-Masked (Hide-Site (([string]$_.Exception.Message) -replace '\s+', ' ') $site) $secret
       $lines.Add('ROUTE ' + $r.Name + ' not connected ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
     } finally {
-      try { Disconnect-PnPOnline -ErrorAction SilentlyContinue } catch { $null = $_ }
+      try { $null = & { Disconnect-PnPOnline -ErrorAction SilentlyContinue } *>&1 } catch { $null = $_ }
     }
   }
   $lines.Add('PNP result: ' + $(if ($okRoute) { 'connected with ' + $okRoute + ' (PASS)' } else { 'no route connected' }))

@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R09, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = '39117c00'
+$buildId = 'ff1f5da9'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R09'
 $usersRoot = 'C:\Users'
@@ -2665,7 +2665,7 @@ pAGsP4xHAGA4fw1g/WEDAgDzeW0A6w9LEABYIfMGsP6wBwGALTJpAOsPqxAAWCR1A1h/2IYAwC71NYD1
 hzaA9Ye1cgWw0qMvzKiurqmqrmX9Ya2soiETBABgn2wBAFiJAACApQgAAFiKAACApQgAAFiKAACApQgAAFiKAACApQgAAFiKAACA
 pQgAAFiKAACApQgAAFjq/wMAAP//lseVFgAAAAZJREFUAwDw1wSxYMgYYgAAAABJRU5ErkJggg==
 '@ }
-$files += @{ Dir = 'T16'; Name = '90161Z-T16-pnp-signin-test-r1.ps1'; Kind = 'text'; Sha = 'be5a7fa2e65f'; Data = @'
+$files += @{ Dir = 'T16'; Name = '90161Z-T16-pnp-signin-test-r1.ps1'; Kind = 'text'; Sha = 'e1b8ed450a2e'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 16 PnP sign-in test, r1. Read-only. Windows PowerShell 5.1, the installed PnP.PowerShell 1.x only.
@@ -2769,10 +2769,17 @@ function Hide-Site([string]$Text, [string]$Site) {
   if ($Site) {
     $Text = $Text -replace [regex]::Escape($Site.TrimEnd('/')), '<SITE>'
     try {
-      $h = ([uri]$Site).Host
-      $Text = $Text -replace [regex]::Escape($h), '<SITE-HOST>'
-      $tenant = ($h -split '\.')[0]
-      if ($tenant.Length -ge 3) { $Text = $Text -replace [regex]::Escape($tenant), '<TENANT>' }
+      $u = [uri]$Site
+      $Text = $Text -replace [regex]::Escape($u.Host), '<SITE-HOST>'
+      $path = $u.AbsolutePath.TrimEnd('/')   # /sites/<name>: also in server-relative and URL-encoded form
+      if ($path.Length -gt 1) {
+        $Text = $Text -replace [regex]::Escape($path), '<SITE-PATH>'
+        $Text = $Text -replace [regex]::Escape([uri]::EscapeDataString($path)), '<SITE-PATH>'
+        $leaf = ($path -split '/')[-1]
+        if ($leaf.Length -ge 3) { $Text = $Text -replace ('\b' + [regex]::Escape($leaf) + '\b'), '<SITE-NAME>' }
+      }
+      $tenant = ($u.Host -split '\.')[0]
+      if ($tenant.Length -ge 3) { $Text = $Text -replace ('\b' + [regex]::Escape($tenant) + '\b'), '<TENANT>' }
     } catch { $null = $_ }
   }
   $Text = $Text -replace 'https?://\S+', '<URL>'
@@ -2809,12 +2816,14 @@ try {
     Write-Host ('Trying ' + $r.Name + ': a sign-in window may open; sign in with your CAC...')
     $a = $r.Args
     try {
-      Connect-PnPOnline -Url $site @a -ErrorAction Stop
-      $web = Get-PnPWeb -Includes EffectiveBasePermissions -ErrorAction Stop
-      $p = $web.EffectiveBasePermissions
+      # Everything PnP writes itself (warnings, sign-in text) is captured and dropped: only this script's masked lines leave.
+      $null = & { Connect-PnPOnline -Url $site @a -ErrorAction Stop } *>&1
+      $web = $null; $listCount = 0
+      $null = & { $script:web = Get-PnPWeb -Includes EffectiveBasePermissions -ErrorAction Stop; $script:listCount = @(Get-PnPList -ErrorAction Stop).Count } *>&1
+      $p = $script:web.EffectiveBasePermissions
       $k = [Microsoft.SharePoint.Client.PermissionKind]
       $lines.Add('ROUTE ' + $r.Name + ' PASS manage-lists=' + $p.Has($k::ManageLists) + ' manage-site=' + $p.Has($k::ManageWeb) +
-        ' add-items=' + $p.Has($k::AddListItems) + ' lists=' + @(Get-PnPList -ErrorAction Stop).Count)
+        ' add-items=' + $p.Has($k::AddListItems) + ' lists=' + $script:listCount)
       if (-not $okRoute) { $okRoute = $r.Name }
     } catch {
       # Hide first, then cut (a cut inside an address would defeat the hiding). "not connected", not FAIL: a route that
@@ -2822,7 +2831,7 @@ try {
       $m = ConvertTo-Masked (Hide-Site (([string]$_.Exception.Message) -replace '\s+', ' ') $site) $secret
       $lines.Add('ROUTE ' + $r.Name + ' not connected ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
     } finally {
-      try { Disconnect-PnPOnline -ErrorAction SilentlyContinue } catch { $null = $_ }
+      try { $null = & { Disconnect-PnPOnline -ErrorAction SilentlyContinue } *>&1 } catch { $null = $_ }
     }
   }
   $lines.Add('PNP result: ' + $(if ($okRoute) { 'connected with ' + $okRoute + ' (PASS)' } else { 'no route connected' }))
