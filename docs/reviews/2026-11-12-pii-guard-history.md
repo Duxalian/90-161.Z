@@ -11,3 +11,7 @@ Found when main was pushed to gh-pages (range origin/gh-pages..main, 87 commits)
 Removing 1-4 needs a history rewrite and force-push, which AGENTS.md "Git safety" forbids and the pre-push hook blocks. Branches cc/columns-r5, cc/naming, cc/r6 and any clone or fork also hold the commits.
 
 Workaround in use: gh-pages gets one commit that copies index.html from main (f9a4f60), so the push range holds no old commits.
+
+## Update 13 Nov 26: history cleaned
+
+Full scan (unshallow, 314 commits): about 70 first-name and 178 old-owner-name matches in main, plus 5 false ".mil" matches on the phrase "Gmail-to-.mil". After the rewrite: 0 name matches in all file versions (text and the 47 zipped files), commit messages and author fields; the 5 ".mil" matches stay (not personal data). Method and delivery: docs/decisions-archive.md, 2026-11-13 "One-time history clean". Commits named above have new SHAs.
