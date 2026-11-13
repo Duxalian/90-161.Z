@@ -1,0 +1,95 @@
+{
+  "source": "docs/rights-test-plan.md section 6",
+  "rows": [
+    {
+      "id": "M03",
+      "do": "Power Automate: new instant flow. Add one action each: SharePoint Get items, Office 365 Outlook Send an email (V2), Office 365 Users Get my profile (V2), Approvals Start and wait for an approval, Microsoft Teams Post message, RSS List all RSS feed items, Power Apps for Makers Get Apps. Save.",
+      "note": "Saved, or the data policy error and which connectors it names"
+    },
+    {
+      "id": "M04",
+      "do": "Power Apps: Solutions, Import solution, choose the T05 sample zip you exported earlier",
+      "note": "Imported, or the error"
+    },
+    {
+      "id": "M05",
+      "do": "In a new solution: New, More, Environment variable, Data type Data source, Connector SharePoint, Parameter type Site",
+      "note": "Allowed, or not offered"
+    },
+    {
+      "id": "M06",
+      "do": "Power Apps: create a blank canvas app, save it as \"90161Z TEST\"",
+      "note": "Saved"
+    },
+    {
+      "id": "M07",
+      "do": "Share \"90161Z TEST\": type the wing's AD group, an M365 group name, a SharePoint group name, and look for \"Everyone\". Do not press Share",
+      "note": "Which kinds show up"
+    },
+    {
+      "id": "M08",
+      "do": "Share the M03 flow run-only with one coworker; open \"Manage run-only permissions\"",
+      "note": "Whether \"Use this connection\" is offered for SharePoint and Outlook"
+    },
+    {
+      "id": "M09",
+      "do": "Add a coworker as co-owner of the M03 flow and of \"90161Z TEST\"; then remove them",
+      "note": "Allowed or not"
+    },
+    {
+      "id": "M10",
+      "do": "Power Platform admin center or the environment picker: is \"New environment\" or \"Create developer environment\" offered (do not create)",
+      "note": "Offered or not"
+    },
+    {
+      "id": "M11",
+      "do": "Power Automate: Settings (gear), View my licenses",
+      "note": "License names only"
+    },
+    {
+      "id": "M12",
+      "do": "In the M03 flow: Send an email (V2) to yourself; run it",
+      "note": "Arrived or error"
+    },
+    {
+      "id": "M13",
+      "do": "Outlook: Add shared folder or mailbox, the office mailbox",
+      "note": "Opens or not"
+    },
+    {
+      "id": "M14",
+      "do": "M03 flow: Send an email from a shared mailbox (V2), office mailbox, to yourself; run",
+      "note": "Arrived (and the From line) or error"
+    },
+    {
+      "id": "M15",
+      "do": "M03 flow: Send an email (V2), show advanced, From (Send as) = office mailbox, to yourself; run",
+      "note": "Arrived (From shows \"on behalf of\"?) or error"
+    },
+    {
+      "id": "M16",
+      "do": "New automated flow: When a new email arrives in a shared mailbox (V2), office mailbox; save; send a test mail to the office box",
+      "note": "Flow ran or error"
+    },
+    {
+      "id": "M17",
+      "do": "Outlook: New, Group (look only)",
+      "note": "Offered or not"
+    },
+    {
+      "id": "M18",
+      "do": "SharePoint start page: Create site (look only)",
+      "note": "Offered or not"
+    },
+    {
+      "id": "M20",
+      "do": "SharePoint: open any document library you can read, tick 2 or 3 files, press Download",
+      "note": "One .zip downloaded, or each file separately, or Download not offered"
+    },
+    {
+      "id": "M19",
+      "do": "Clean up: delete the M03 and M16 flows, \"90161Z TEST\" and its solution",
+      "note": "Done"
+    }
+  ]
+}

@@ -162,7 +162,7 @@ Steps:
 3. Upload each unit's shield into Seals. Any size or format (PNG, JPG, GIF, BMP, TIF); the larger and cleaner the better. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png).
 4. In the library, select Sync, so the files are also on my computer.
 5. In File Explorer, open the synced 90-161.Z library, then the Seals folder. Click the address bar, Ctrl+C.
-6. Run the current round with "T07 seal prep" checked and pick the Seals folder when it asks (the round attaches only the result file). Without a round: in the T07 folder, right-click 90161Z-T07-seal-prep-r2.ps1 > Run with PowerShell, press Enter at the DODID question, then paste the folder path (Ctrl+V, Enter).
+6. Run the current round with "T07 seal prep" checked and pick the Seals folder when it asks (the round attaches only the result file). Without a round: in the T07 folder, right-click 90161Z-T07-seal-prep-r3.ps1 > Run with PowerShell, then paste the folder path when it asks (Ctrl+V, Enter).
 Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
 **If it fails:** FAIL means under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger file. WARN means under 150 dpi: usable, may print soft. If the script stops, send its STOPPED line.
 

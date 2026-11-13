@@ -219,6 +219,8 @@ out=$(cd ref && sha256sum -c --quiet SHA256SUMS 2>&1) && ok "ref files match ref
 # B3A/P3 (PFM 2026-11-13): one source for the gov task-script block; no task script asks for the DODID outside it.
 out=$(python3 scripts/build_task_scripts.py --check 2>&1); [ $? -eq 0 ] && ok "task scripts share one block ($(echo "$out" | tail -1))" || { echo "$out"; bad "task-common block (run python3 scripts/build_task_scripts.py)"; }
 
+# Task 11 Part B rows come from docs/rights-test-plan.md section 6 (one source; the Deployer form reads the JSON).
+out=$(python3 scripts/build_rights_rows.py --check 2>&1 | tail -1); [ $? -eq 0 ] && echo "$out" | grep -q "stale=0" && ok "T11 Part B rows match the plan ($out)" || bad "T11 Part B rows stale: $out (run python3 scripts/build_rights_rows.py)"
 out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
 [ "$out" = "PASTE bundles=1 stale=0" ] && ok "paste bundles current ($out)" || bad "paste bundles: $out (run python3 scripts/build_paste_bundles.py)"
 
@@ -229,8 +231,8 @@ out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
 tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pf=0; pr=0; pc=0
 # R06 cleanup fixture: finished folders with our files and one file 90-161.Z did not make (must stay).
 ob="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"; mkdir -p "$ob/T02" "$ob/T13" "$ob/Rounds/R06" "$ob/T07" "$ob/T09"
-touch "$ob/T02/90161Z-T02-provision-lists-r9.zip" "$ob/T02/Provision-Lists.ps1" "$ob/T13/90161Z-T13-label-capture-r1.ps1" "$ob/T13/my-notes.docx" \
-  "$ob/Rounds/R06/90161Z-R06-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r3.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
+touch "$ob/T02/90161Z-T02-provision-lists-r9.zip" "$ob/T02/Provision-Lists.ps1" "$ob/T13/90161Z-T13-label-capture-r2.ps1" "$ob/T13/my-notes.docx" \
+  "$ob/Rounds/R06/90161Z-R06-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r4.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
 echo "public sample" > "$tp/fx.bin"
 swap() { sed -e "s#Url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/#Url = 'file://$PWD/#" -e "s#Url = 'https://www\.[^']*'#Url = 'file://$tp/fx.bin'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
@@ -250,7 +252,7 @@ for b in scripts/gov/paste/*.ps1; do
   nf=$(python3 -c "import json;print(sum(len(b.get('fetch',[])) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
   grep -q "^FETCH files=$nf failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "downloads: want FETCH files=$nf failed=0"; grep "^FETCH" "$base/Rounds/$r/90161Z-$r-report-r1.txt"; pf=$((pf+1)); }
   ! grep -q "90161Z-T07-result-r1.txt" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "a skipped step's file was expected"; pf=$((pf+1)); }
-  [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R06" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r3.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r1.ps1" ] \
+  [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R06" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r4.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r2.ps1" ] \
     && [ -f "$ob/T07/90161Z-T07-key-r1.txt" ] && [ -f "$ob/T09/90161Z-T09-page-r1.htm" ] \
     && grep -q "^CLEANUP to Recycle Bin: files=5 folders=2 kept-other=1 failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" \
     && grep -q "^LEFT .*T13(1, 1 other)" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && head -1 "$base/Rounds/$r/90161Z-$r-report-r1.txt" | tr -d "\r" | grep -q "90161Z $r CHECK$" \

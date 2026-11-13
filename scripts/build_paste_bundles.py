@@ -262,13 +262,14 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
   $r = @{ Pass = 0; Fail = 0; Exit = $null }
   $p = [System.Diagnostics.Process]::Start($psi)
   $script:child = $p
-  $deadline = (Get-Date).AddMinutes($stepMinutes)
+  $limit = $stepMinutes; if ($Step.Minutes) { $limit = [int]$Step.Minutes }   # a step that waits for a person sets its own limit
+  $deadline = (Get-Date).AddMinutes($limit)
   $errTask = $p.StandardError.ReadToEndAsync()
   $lineTask = $p.StandardOutput.ReadLineAsync()
   while ($true) {
     while (-not $lineTask.Wait(150)) {
       & $Tick
-      if ((Get-Date) -gt $deadline) { try { $p.Kill() } catch { $null = $_ }; $r.Fail++; & $Say ('STOPPED: step took more than ' + $stepMinutes + ' minutes; ended it'); break }
+      if ((Get-Date) -gt $deadline) { try { $p.Kill() } catch { $null = $_ }; $r.Fail++; & $Say ('STOPPED: step took more than ' + $limit + ' minutes; ended it'); break }
     }
     if (-not $lineTask.IsCompleted) { break }
     $line = $lineTask.Result
@@ -628,9 +629,10 @@ def build(b):
             body, kind = "@'\n" + '\n'.join(textwrap.wrap(b64, 100)) + "\n'@", 'base64'
         parts.append("$files += @{ Dir = %s; Name = %s; Kind = '%s'; Sha = '%s'; Data = %s }"
                      % (q(f['dir']), q(src.name), kind, sha, body))
-    steps = ['$steps += @{ Name = %s; Dir = %s; File = %s; Default = $%s; AskParam = %s; AskPrompt = %s; ScreenOnly = %s }'
+    steps = ['$steps += @{ Name = %s; Dir = %s; File = %s; Default = $%s; AskParam = %s; AskPrompt = %s; ScreenOnly = %s; Minutes = %d }'
              % (q(s['name']), q(s['dir']), q(s['file']), 'true' if s.get('default', True) else 'false',
-                q(s.get('ask', {}).get('param', '')), q(s.get('ask', {}).get('prompt', '')), q(s.get('screenOnly', '')))
+                q(s.get('ask', {}).get('param', '')), q(s.get('ask', {}).get('prompt', '')), q(s.get('screenOnly', '')),
+                int(s.get('minutes', 30)))
              for s in b['steps']]
     # Data files the round downloads (not code, PFM 3A): repo files from raw main, checked by SHA-256; public pages as they are.
     fetch = []

@@ -13,7 +13,7 @@ function Get-TaskId([string]$Id) {
   $leaf = ''
   if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
   $value = ([string]$Id).Trim()
-  if (-not $value) { $value = ([string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')).Trim() }
+  # No DODID question (PFM 13 Nov 26): the Windows profile folder name is used when -Id is not given.
   if (-not $value) { $value = $leaf }
   if ($value -notmatch '^[A-Za-z0-9._-]{4,}$') { throw 'DODID not valid: use the folder name under C:\Users (4 or more letters, digits, dot, dash or underscore).' }
   $secret = @(@($value, $leaf, $env:USERNAME) |

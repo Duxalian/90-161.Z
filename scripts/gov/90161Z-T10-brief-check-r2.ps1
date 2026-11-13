@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 10 brief check, r1. Windows PowerShell 5.1, PowerPoint 16 COM only (no modules).
+  90-161.Z Task 10 brief check, r2. Windows PowerShell 5.1, PowerPoint 16 COM only (no modules).
 .DESCRIPTION
   Opens each decision brief in the T10 folder read-only and without a window, and checks what a person would
   look for first: the file opens (no repair), the slide count, text taller than its box (overflow) and shapes
@@ -25,7 +25,7 @@ function Get-TaskId([string]$Id) {
   $leaf = ''
   if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
   $value = ([string]$Id).Trim()
-  if (-not $value) { $value = ([string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')).Trim() }
+  # No DODID question (PFM 13 Nov 26): the Windows profile folder name is used when -Id is not given.
   if (-not $value) { $value = $leaf }
   if ($value -notmatch '^[A-Za-z0-9._-]{4,}$') { throw 'DODID not valid: use the folder name under C:\Users (4 or more letters, digits, dot, dash or underscore).' }
   $secret = @(@($value, $leaf, $env:USERNAME) |
@@ -120,7 +120,7 @@ try {
   Set-Location -LiteralPath $dir
   Assert-TaskFile $dir $Briefs 'MISSING in T10 (the round saves them; or save them from the bookmark page): '
   $lines = New-Object System.Collections.Generic.List[string]
-  $lines.Add('TASK T10 brief check r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
+  $lines.Add('TASK T10 brief check r2, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
   Write-Host 'Opening PowerPoint (no window)...'
   $app = New-Object -ComObject PowerPoint.Application
   try { $app.DisplayAlerts = 1 } catch { $null = $_ }   # ppAlertsNone: no repair or save dialog can wait for a click

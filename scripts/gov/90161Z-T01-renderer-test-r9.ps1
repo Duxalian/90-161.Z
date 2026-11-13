@@ -1,19 +1,18 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 7 seal test runner, r3 (L-007, L-007a). Windows PowerShell 5.1.
+  90-161.Z Task 1 runner, r9: renderer test (docs/gov-test-plan.md). Windows PowerShell 5.1.
 .DESCRIPTION
-  Asks for the DODID (Enter = this computer's profile folder), goes to the Task 7 folder
-  C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T07, checks the 4 fake test seals in its
-  TestSeals subfolder and the renderer scripts in the T01 folder, runs 90161Z-T07-seal-prep-r2.ps1 on the test
-  seals, then renders the T01 sample twice (tall seal, round seal) as final .docx and PDF in the T07 folder.
-  Saves the output to 90161Z-T07-test-result-r3.txt. The DODID, profile folder name and user name are replaced
-  by <DODID> in all output.
+  Uses this computer's profile folder as the DODID (no question), goes to the Task 1 folder
+  C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T01, checks the 4 task files are there,
+  runs the validator, the draft render and the final render, and saves the output to
+  90161Z-T01-result-r9.txt in that folder after each step. The DODID, profile folder name and user name
+  are replaced by <DODID> in all output. Start it with right-click > Run with PowerShell (no -File path typed).
+  The window always waits for Enter before it closes, also after an unexpected error.
   Parameters (used by the paste bundle, scripts/gov/paste): -Id skips the DODID question, -NoPause skips the final Enter.
 #>
 param([string]$Id, [switch]$NoPause)
-$task = 'T07'
-$need = @('90161Z-T07-seal-prep-r2.ps1', 'TestSeals\90161Z-T07-testseal-round-r1.png', 'TestSeals\90161Z-T07-testseal-tall-r1.png', 'TestSeals\90161Z-T07-testseal-soft-r1.png', 'TestSeals\90161Z-T07-testseal-tiny-r1.png')
-$needT01 = @('Publication.Common.ps1', 'Test-Publication.ps1', 'New-Publication.ps1', 'publication.sample.json')   # Task 1 r5 files
+$task = 'T01'
+$need = @('Publication.Common.ps1', 'Test-Publication.ps1', 'New-Publication.ps1', 'publication.sample.json')
 
 # >>> task-common: generated from scripts/gov/src/task-common.ps1 by scripts/build_task_scripts.py (do not edit)
 function ConvertTo-Masked([string]$Text, [string[]]$Secret) {
@@ -26,7 +25,7 @@ function Get-TaskId([string]$Id) {
   $leaf = ''
   if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
   $value = ([string]$Id).Trim()
-  if (-not $value) { $value = ([string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')).Trim() }
+  # No DODID question (PFM 13 Nov 26): the Windows profile folder name is used when -Id is not given.
   if (-not $value) { $value = $leaf }
   if ($value -notmatch '^[A-Za-z0-9._-]{4,}$') { throw 'DODID not valid: use the folder name under C:\Users (4 or more letters, digits, dot, dash or underscore).' }
   $secret = @(@($value, $leaf, $env:USERNAME) |
@@ -85,42 +84,23 @@ try {
   $id = $who.Id
   $secret = $who.Secret
 
-  $dir = Get-TaskDir $id $task 'Task 7'
-  $t01 = Join-Path (Split-Path -Parent $dir) 'T01'
-  Assert-TaskFile $t01 $needT01 'MISSING in T01 folder (save the Task 1 files there first): '
+  $dir = Get-TaskDir $id $task 'Task 1'
   Set-Location -LiteralPath $dir
   Assert-TaskFile $dir $need ('MISSING in ' + $task + ' folder: ')
   Unblock-TaskScript $dir
 
-  $log = Join-Path $dir '90161Z-T07-test-result-r3.txt'
-  $testDir = Join-Path $dir 'TestSeals'
+  $log = Join-Path $dir ('90161Z-' + $task + '-result-r9.txt')
+  $sample = Join-Path $dir 'publication.sample.json'
+  $steps = @(
+    @{ Name = '1 validate'; File = 'Test-Publication.ps1'; Args = @('-Path', $sample) },
+    @{ Name = '2 draft'; File = 'New-Publication.ps1'; Args = @('-Path', $sample, '-Mode', 'draft') },
+    @{ Name = '3 final'; File = 'New-Publication.ps1'; Args = @('-Path', $sample, '-Mode', 'final', '-Pdf') }
+  )
   $lines = New-Object System.Collections.Generic.List[string]
-  $lines.Add('TASK ' + $task + ' seal test r3, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
-
-  # Step 1: seal prep on the fake test seals (no questions; it writes its own result file).
-  Write-Host 'STEP 1 seal prep running...'
-  $lines.Add('STEP 1 seal prep')
-  $prepResult = '90161Z-T07-testprep-result-r1.txt'
-  $ErrorActionPreference = 'Continue'
-  & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir '90161Z-T07-seal-prep-r2.ps1') -Id $id -SealDir $testDir -ResultName $prepResult -NoPause *> $null
-  $ErrorActionPreference = 'Stop'
-  $prepPath = Join-Path $dir $prepResult
-  if (Test-Path -LiteralPath $prepPath) { foreach ($l in Get-Content -LiteralPath $prepPath) { $lines.Add($l) } } else { $lines.Add('STEP 1 seal prep wrote no result file') }
-
-  # Steps 2-3: render the T01 sample with a prepared seal (tall, then round).
-  $sampleJson = Get-Content -LiteralPath (Join-Path $t01 'publication.sample.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-  $steps = @()
-  foreach ($kind in @('tall', 'round')) {
-    $sealPng = Join-Path (Join-Path $testDir 'Prepared') ('90161Z-T07-testseal-' + $kind + '-r1.png')
-    $sampleJson.meta.shieldImage = $sealPng
-    $sampleJson.meta.designator = 'SAMPLEWINGI99-101-' + $kind.ToUpperInvariant()
-    $jsonPath = Join-Path $dir ('90161Z-T07-sample-' + $kind + '-r1.json')
-    $sampleJson | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath $jsonPath -Encoding UTF8
-    $steps += @{ Name = ($(if ($kind -eq 'tall') { '2' } else { '3' }) + ' render ' + $kind + ' seal'); File = 'New-Publication.ps1'; Args = @('-Path', $jsonPath, '-Mode', 'final', '-Pdf', '-OutDir', $dir) }
-  }
-  foreach ($s in $steps) { Invoke-TaskStep $s $t01 $secret $lines $log }
+  $lines.Add('TASK ' + $task + ' renderer test r9, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
+  foreach ($s in $steps) { Invoke-TaskStep $s $dir $secret $lines $log }
   Write-Host ''
-  Write-Host ('Saved: ' + (Split-Path -Leaf $log) + ' in the ' + $task + ' folder. Send it with the two PDFs.')
+  Write-Host ('Saved: ' + (Split-Path -Leaf $log) + ' in the ' + $task + ' folder. Report the RENDER, VALIDATE and exit lines.')
 } catch {
   $msg = [string]$_
   if ($secret) { $msg = ConvertTo-Masked $msg $secret }

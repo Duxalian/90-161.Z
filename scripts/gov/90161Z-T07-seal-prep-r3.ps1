@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 7 seal prep, r2 (L-007, L-007a). Windows PowerShell 5.1, System.Drawing only (no modules).
+  90-161.Z Task 7 seal prep, r3 (L-007, L-007a). Windows PowerShell 5.1, System.Drawing only (no modules).
 .DESCRIPTION
-  Asks for the DODID (Enter = this computer's profile folder) and for the seal folder (Enter = search the
+  Uses this computer's profile folder as the DODID (no question) and for the seal folder (Enter = search the
   profile for a synced folder whose name ends in "PFM Seals"). For each image in that folder:
     1. Trim: cut plain white (R, G and B 245 or more) and clear (alpha under 16) margins down to the emblem.
     2. Fit: scale the emblem so its larger side fills the box, keeping its shape.
@@ -37,7 +37,7 @@ function Get-TaskId([string]$Id) {
   $leaf = ''
   if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
   $value = ([string]$Id).Trim()
-  if (-not $value) { $value = ([string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')).Trim() }
+  # No DODID question (PFM 13 Nov 26): the Windows profile folder name is used when -Id is not given.
   if (-not $value) { $value = $leaf }
   if ($value -notmatch '^[A-Za-z0-9._-]{4,}$') { throw 'DODID not valid: use the folder name under C:\Users (4 or more letters, digits, dot, dash or underscore).' }
   $secret = @(@($value, $leaf, $env:USERNAME) |
@@ -194,7 +194,7 @@ try {
   $keyFile = $keyFile + '.txt'
   $lines = New-Object System.Collections.Generic.List[string]
   $keys = New-Object System.Collections.Generic.List[string]
-  $lines.Add('TASK T07 seal prep r2, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', box ' + $BoxPx + ' px at ' + $BoxDpi + ' dpi')
+  $lines.Add('TASK T07 seal prep r3, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', box ' + $BoxPx + ' px at ' + $BoxDpi + ' dpi')
   $keys.Add('Key for 90161Z-T07-result-r1.txt. Keep this file on this computer; do not send it.')
   $n = 0; $pass = 0; $warn = 0; $fail = 0
   $outNames = @{}
