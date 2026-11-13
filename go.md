@@ -59,7 +59,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14
 2. Open the site. Click the gear (Settings), then Change the look, then Header.
 3. Under Site logo thumbnail, click Change and pick 90161Z-T14-site-logo-tile-r1.png (the logo on a blue square).
 4. Under Site logo, click Change and pick 90161Z-T14-site-logo-r1.png (clear background). Click Save.
-5. Look at the header. If the logo is hard to see (the header is white or light), do step 4 again with the tile file.
+5. Look at the header. If the logo is hard to see (the header is white or light), set Site logo to 90161Z-T14-site-logo-tile-r1.png as well, then Save.
 **Report:** reply "T14 done", or the step number and what the screen said. No screenshots: they show the site name.
 **If it fails:** if Change the look or Header is missing, I am not a site owner: stop and say so. If the upload is refused, send the message text.
 
