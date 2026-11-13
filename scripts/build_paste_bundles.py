@@ -161,10 +161,10 @@ function Save-RoundDraft([string]$Dir, [string[]]$Summary) {
     $ol = New-Object -ComObject Outlook.Application
     $m = $ol.CreateItem(0)
     $m.Subject = $Summary[0]
-    $m.Body = ((@($Summary | Select-Object -Skip 1) + @('', 'Window: OK   (or write what overlapped)')) -join "`r`n")
+    $m.Body = ((@($Summary | Select-Object -Skip 1) + @('', 'Window: ')) -join "`r`n")
     foreach ($f in @(Get-ChildItem -LiteralPath $Dir -File)) { [void]$m.Attachments.Add($f.FullName) }
+    $m.Display()   # first: if it fails, nothing is left in Drafts
     $m.Save()
-    $m.Display()
     return ''
   } catch { return (ConvertTo-Masked $_.Exception.Message) }
 }

@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R05, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = '5e41f4ae'
+$buildId = 'b2b1974a'
 $round = 'R05'
 $usersRoot = 'C:\Users'
 $files = @()
@@ -1505,10 +1505,10 @@ function Save-RoundDraft([string]$Dir, [string[]]$Summary) {
     $ol = New-Object -ComObject Outlook.Application
     $m = $ol.CreateItem(0)
     $m.Subject = $Summary[0]
-    $m.Body = ((@($Summary | Select-Object -Skip 1) + @('', 'Window: OK   (or write what overlapped)')) -join "`r`n")
+    $m.Body = ((@($Summary | Select-Object -Skip 1) + @('', 'Window: ')) -join "`r`n")
     foreach ($f in @(Get-ChildItem -LiteralPath $Dir -File)) { [void]$m.Attachments.Add($f.FullName) }
+    $m.Display()   # first: if it fails, nothing is left in Drafts
     $m.Save()
-    $m.Display()
     return ''
   } catch { return (ConvertTo-Masked $_.Exception.Message) }
 }
