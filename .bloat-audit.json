@@ -17,5 +17,10 @@
     "flow/provisioning-payload.json",
     "flow/packages/**",
     "tests/fixtures/*.publication.json"
-  ]
+  ],
+  "last_audit": {
+    "date": "2026-11-13",
+    "commit": "3a1a4a5",
+    "report": "docs/reviews/2026-11-13-bloat-audit.md"
+  }
 }
