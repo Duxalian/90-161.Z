@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R09, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = 'b5966137'
+$buildId = '8dd25997'
 $round = 'R09'
 $usersRoot = 'C:\Users'
 $files = @()
@@ -91,7 +91,7 @@ function ConvertTo-TwoSpaceSentence([string]$Text) {
     })
 }
 '@ }
-$files += @{ Dir = 'T01'; Name = 'Test-Publication.ps1'; Kind = 'text'; Sha = 'a18941006366'; Data = @'
+$files += @{ Dir = 'T01'; Name = 'Test-Publication.ps1'; Kind = 'text'; Sha = '4412325edb12'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z validator (layer L3). Checks a publication content file (JSON, schemas/publication.schema.json)
@@ -345,6 +345,7 @@ $needsGlossary = $typeNum -cmatch '\b(INSTRUCTION|MANUAL|POLICY DIRECTIVE)\b'
 if ($needsGlossary -and $null -eq $gloss) { Add-Finding 'FAIL' 'F-035' 'attachments' 'Attachment 1 (glossary) is required for policy directives, instructions and manuals (4.5.11.1)' }
 
 $abbr = @{}
+$abbrKind = @{}   # term -> 'abbreviations' or 'officeSymbols'
 if ($null -ne $gloss) {
   foreach ($r in @(Get-Prop $gloss 'references')) {
     if ($null -ne $r -and [string]$r -match '(https?://|www\.)') { Add-Finding 'FAIL' 'F-035' 'glossary.references' "references do not include URLs: '$r' (4.5.11.1)" }
@@ -354,19 +355,24 @@ if ($null -ne $gloss) {
     $names = @($items | ForEach-Object { [string](Get-Prop $_ 'term') })
     $sorted = @($names | Sort-Object)
     if (($names -join '|') -ne ($sorted -join '|')) { Add-Finding 'WARN' 'F-035' "glossary.$sec" 'list entries in alphabetical order (4.5.11.1)' }
-    if ($sec -ne 'terms') { foreach ($n in $names) { $abbr[$n] = $true } }
+    if ($sec -ne 'terms') { foreach ($n in $names) { $abbr[$n] = $true; $abbrKind[$n] = $sec } }
   }
 }
 
 # ---------- writing rules over all text ----------
 $joined = (Get-PlainText ($allText -join "`n"))
+# Cover values (OPR, Certified by, unit lines) use glossary entries too (T06 review 12 Nov 26): count them as use.
+$coverText = (@(foreach ($f in 'opr', 'certifiedBy', 'byOrderOfUnit', 'issuerLine', 'title', 'typeAndNumber') { [string](Get-Prop $meta $f) }) -join "`n")
+$skip = @('DAF', 'AFI', 'DAFI', 'DAFMAN', 'AFMAN', 'UCMJ', 'USC', 'DOD', 'NOTE', 'TABLE', 'A', 'I', 'II', 'III', 'IV')
 foreach ($k in @($abbr.Keys)) {
-  $c = ([regex]::Matches($joined, "(?<![A-Za-z0-9/-])$([regex]::Escape($k))(?![A-Za-z0-9-])")).Count
-  if ($c -eq 0) { Add-Finding 'WARN' 'F-032' 'glossary' "'$k' is listed but not used in the text" }
-  elseif ($c -le 4) { Add-Finding 'WARN' 'F-032' 'glossary' "'$k' is used $c time(s); acronyms used four times or less should generally be spelled out (4.5.9.7.2.5)" }
+  $pattern = "(?<![A-Za-z0-9/-])$([regex]::Escape($k))(?![A-Za-z0-9-])"
+  $c = ([regex]::Matches($joined, $pattern)).Count
+  $all = $c + ([regex]::Matches($coverText, $pattern)).Count
+  if ($all -eq 0) { Add-Finding 'WARN' 'F-032' 'glossary' "'$k' is listed but not used in the text" }
+  # The four-times rule is for acronyms only: not office symbols, not publication-type prefixes in references (AFI 33-322).
+  elseif ($c -le 4 -and $abbrKind[$k] -eq 'abbreviations' -and $k -notin $skip) { Add-Finding 'WARN' 'F-032' 'glossary' "'$k' is used $c time(s); acronyms used four times or less should generally be spelled out (4.5.9.7.2.5)" }
 }
 $caps = [regex]::Matches($joined, '\b[A-Z]{2,6}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique
-$skip = @('DAF', 'AFI', 'DAFI', 'DAFMAN', 'AFMAN', 'UCMJ', 'USC', 'DOD', 'NOTE', 'TABLE', 'A', 'I', 'II', 'III', 'IV')
 foreach ($w in $caps) {
   if (-not $abbr.ContainsKey($w) -and $w -notin $skip -and $joined -notmatch "\($w\)") {
     Add-Finding 'WARN' 'F-032' 'text' "'$w' is not defined at first use or listed in Attachment 1 (4.5.9.7.2)"
@@ -384,7 +390,9 @@ foreach ($t in $allText) {
     $wc = @($s -split '\s+' | Where-Object { $_ -match '\w' -and $_ -notmatch '^\(T-[0-3]\)$' }).Count
     if ($wc -gt 20 -and $t -ne $opening) { Add-Finding 'WARN' 'W-002' "text block $pi" "sentence has $wc words; use 20 or fewer: '$($s.Substring(0, [Math]::Min(60, $s.Length)))...'" }
     # PFM 2B (2026-11-12): wing or delta statements carry no tier unless the waiver authority is above the wing, so F-039 is off there.
-    if (-not $wingLevel -and $s -match '\b(will|must)\b' -and $s -notmatch '\(T-[0-3]\)' -and $t -ne $opening) {
+    # The fixed summary-of-changes sentence ("... revised and must be completely reviewed") is not a compliance statement (T06 review 12 Nov 26).
+    $fixedSoc = $s -match '^\s*This (document|publication) has been (substantially )?revised and (must|should) be completely reviewed'
+    if (-not $wingLevel -and -not $fixedSoc -and $s -match '\b(will|must)\b' -and $s -notmatch '\(T-[0-3]\)' -and $t -ne $opening) {
       Add-Finding 'WARN' 'F-039' "text block $pi" "possible compliance statement without a tier number: '$($s.Substring(0, [Math]::Min(60, $s.Length)))...' (4.6.5)"
     }
   }
