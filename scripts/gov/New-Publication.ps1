@@ -535,6 +535,77 @@ try {
   $doc.Bookmarks.Item('PagesCount').Range.Text = [string]$pages
   $doc.Fields.Update() | Out-Null
 
+  # ---------------- self-measure (Stage 1, PFM 1A): Word read-back against the DAFMAN values, PASS/FAIL per line ----------------
+  # Positions from Range.Information (5 = horizontal, 6 = vertical, points from the page edge). Values: L-007 seal top 1.47 in;
+  # L-012 TOC number 1.50 in, text 2.00 in, line pitch 0.272 in (docs/format-rules.md). Tolerance 0.03 in (0.01 in for pitch).
+  try {
+    try { $doc.ActiveWindow.View.Type = 3 } catch { Write-Output ('MEASURE-ERROR print layout view: ' + $_.Exception.Message) }   # wdPrintView: Information() needs layout
+    $measure = {
+      param([string]$What, [double]$GotPt, [double]$WantIn, [double]$TolIn)
+      if ($GotPt -lt 0) { return ('MEASURE-ERROR ' + $What + ' not laid out (Information returned ' + $GotPt + ')') }
+      $gotIn = [math]::Round($GotPt / 72, 3)
+      $verdict = 'FAIL'
+      if ([math]::Abs($gotIn - $WantIn) -le $TolIn) { $verdict = 'PASS' }
+      'MEASURE ' + $What + ' got=' + $gotIn + 'in want=' + $WantIn + 'in tol=' + $TolIn + ' ' + $verdict
+    }
+    if ($shield) {
+      if ($pic) { $sealAt = $pic.Range.Duplicate; $sealAt.Collapse(1); Write-Output (& $measure 'L-007 seal top' ([double]$sealAt.Information(6)) 1.47 0.03) }
+      else { Write-Output 'MEASURE-ERROR L-007 seal top not measured: no picture' }
+    }
+    if ($null -ne $tocRange -and $doc.TablesOfContents.Count -ge 1) {
+      $toc2 = @(); $tocAll = @()
+      foreach ($tp in $doc.TablesOfContents.Item(1).Range.Paragraphs) { $tocAll += $tp; if ($tp.Range.Text -match '^\s*\d') { $toc2 += $tp } }
+      if ($toc2.Count -ge 1) {
+        # R01 (13 Nov): Information(5) read 1.00 / 1.50 in where the PDF shows 1.50 / 2.00 in, so horizontal values are
+        # calibrated against the first TOC line (a Chapter entry), which the PDF shows at the 1.00 in margin (L-001, L-012).
+        $ref = $tocAll[0].Range.Duplicate; $ref.Collapse(1)
+        $refX = [double]$ref.Information(5)
+        $xShift = 72 - $refX
+        if ($refX -lt 0 -or $xShift -lt -72 -or $xShift -gt 72) { Write-Output ('MEASURE-ERROR calibration: first TOC line read at ' + $refX + ' pt; horizontal values not shifted'); $xShift = 0 }
+        Write-Output ('MEASURE calibration horizontal shift=' + [math]::Round($xShift / 72, 3) + 'in (first TOC line read at ' + [math]::Round(([double]$ref.Information(5)) / 72, 3) + 'in, true 1.00in)')
+        $first = $toc2[0].Range.Duplicate; $first.Collapse(1)
+        Write-Output (& $measure 'L-012 TOC number left' ([double]$first.Information(5) + $xShift) 1.50 0.03)
+        $tab = $toc2[0].Range.Duplicate
+        if ($tab.Find.Execute('^t')) { $tab.Collapse(0); Write-Output (& $measure 'L-012 TOC text left' ([double]$tab.Information(5) + $xShift) 2.00 0.03) }
+        else { Write-Output 'MEASURE-ERROR L-012 TOC text left: no tab in the first TOC 2 line' }
+      } else { Write-Output 'MEASURE-ERROR L-012 TOC not measured: no numbered TOC line found' }
+      $pitchDone = $false
+      # Pitch between entries: the first one-line entry and the entry after it (a wrapped entry adds 0.202 in per line).
+      for ($k = 0; $k -lt $tocAll.Count - 1; $k++) {
+        $s1 = $tocAll[$k].Range.Duplicate; $s1.Collapse(1)
+        $e1 = $tocAll[$k].Range.Duplicate; $e1.MoveEnd(1, -1) | Out-Null; $e1.Collapse(0)
+        if ([math]::Abs([double]$e1.Information(6) - [double]$s1.Information(6)) -lt 1) {
+          $s2 = $tocAll[$k + 1].Range.Duplicate; $s2.Collapse(1)
+          Write-Output (& $measure 'L-012 TOC pitch' ([double]$s2.Information(6) - [double]$s1.Information(6)) 0.272 0.01)
+          $pitchDone = $true; break
+        }
+      }
+      if (-not $pitchDone) { Write-Output 'MEASURE-ERROR L-012 TOC pitch not measured: no one-line entry followed by another' }
+    }
+  } catch { Write-Output ('MEASURE-ERROR ' + $_.Exception.Message) }
+
+  # ---------------- sensitivity label (PFM 13 Nov): apply the label captured once from a hand-labeled file ----------------
+  # Config\90161Z-label.json (written by 90161Z-T13-label-capture-r1.ps1, kept only on this computer) holds the label and
+  # tenant ids; they are never printed. Lowering a label needs a justification (Office VBA LabelInfo.Justification).
+  $labelCfg = Join-Path (Split-Path -Parent $PSScriptRoot) 'Config\90161Z-label.json'
+  if (Test-Path -LiteralPath $labelCfg -PathType Leaf) {
+    try {
+      try { $cfg = Get-Content -LiteralPath $labelCfg -Raw | ConvertFrom-Json }
+      catch { throw 'Config\90161Z-label.json cannot be read; run the label capture step again' }   # fixed text: never echo the file
+      $sl = $doc.SensitivityLabel
+      $li = $sl.CreateLabelInfo()
+      $li.LabelId = [string]$cfg.labelId; $li.SiteId = [string]$cfg.siteId; $li.LabelName = [string]$cfg.labelName
+      $li.AssignmentMethod = 1   # PRIVILEGED: chosen, as when a person picks it
+      $li.SetDate = Get-Date
+      $li.Justification = 'Generated by the 90-161.Z renderer from fake or approved content; label set to the captured default.'
+      $ctx = New-Object -ComObject Scripting.Dictionary
+      $sl.SetLabel($li, $ctx)
+      $got = $sl.GetLabel()
+      if ([string]$got.LabelId -eq [string]$cfg.labelId) { Write-Output ('LABEL applied name=' + $got.LabelName + ' PASS') }
+      else { Write-Output ('LABEL FAIL read back name=' + $got.LabelName + ' (want ' + $cfg.labelName + ')') }
+    } catch { Write-Output ('LABEL FAIL ' + $_.Exception.Message) }
+  } else { Write-Output 'LABEL not set: no Config\90161Z-label.json yet (run the label capture step once)' }
+
   # Join-Path returns a PSObject-wrapped string; Word COM rejects it by ref (gov run 2026-11-11). Pass plain typed values.
   [string]$saveName = [string]$outDocx
   [int]$saveFormat = $wdFormatDocx

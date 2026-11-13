@@ -201,21 +201,29 @@ got=$(pwsh -NoProfile -c '. ./scripts/gov/Publication.Common.ps1; $p = Get-Conte
 out=$(cd ref && sha256sum -c --quiet SHA256SUMS 2>&1) && ok "ref files match ref/SHA256SUMS" || { echo "$out"; bad "ref files match ref/SHA256SUMS"; }
 
 out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
-[ "$out" = "PASTE bundles=2 stale=0" ] && ok "paste bundles current ($out)" || bad "paste bundles: $out (run python3 scripts/build_paste_bundles.py)"
+[ "$out" = "PASTE bundles=1 stale=0" ] && ok "paste bundles current ($out)" || bad "paste bundles: $out (run python3 scripts/build_paste_bundles.py)"
 
-# Paste bundle end to end in pwsh (Linux): DODID and C:\Users swapped for a temp root; every written file must equal its
-# source (text: BOM and CR removed, same swaps applied). The runner then starts in-process with -Id and stops at Unblock-File (Windows only).
-tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pb=0; pf=0
+# Round bundle end to end in pwsh (Linux, text mode: no Windows Forms): DODID and C:\Users swapped for a temp root.
+# Every written file must equal its source (text: BOM and CR removed); each step must start as a child process (on Linux
+# the runner stops at Unblock-File, so its step reads CHECK); the results folder must hold the report (summary + full
+# log) with no DODID. The window path (Windows Forms) cannot run here: lint only.
+tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pf=0; pr=0
+swap() { sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
-  sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#'C:\\\\Users'#'$tp/u'#" "$b" > "$tp/b.ps1"
-  pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1; grep -q '^RUN ' "$tp/out.txt" && pb=$((pb+1))
+  swap "$b" > "$tp/b.ps1"; pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
+  n=$(python3 -c "import json;print(sum(len(b['steps']) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
+  r=$(python3 -c "import json;print([b['round'] for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'][0])")
+  base="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"
+  st=$(grep -c '^STEP .* running' "$tp/out.txt"); sm=$(grep -c ': \(OK\|CHECK\) (PASS' "$tp/out.txt")
+  [ "$st" -eq "$n" ] && [ "$sm" -eq "$n" ] && [ -f "$base/Rounds/$r/90161Z-$r-report-r1.txt" ] && grep -q "^RESULTS Rounds" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && grep -q "full log" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && pr=$((pr+1)) || { cat "$tp/out.txt" | tail -20; }
+  ! grep -rq "test1234" "$tp/out.txt" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
 done
 while IFS=$'\t' read -r dir src; do
   got="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z/${dir//\\//}/$(basename "$src")"
-  case "$src" in *.png) cmp -s "$got" "$src" || pf=$((pf+1));; *) cmp -s <(tail -c +4 "$got" | tr -d '\r') <(sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#'C:\\\\Users'#'$tp/u'#" "$src") || pf=$((pf+1));; esac
+  case "$src" in *.png) cmp -s "$got" "$src" || pf=$((pf+1));; *) cmp -s <(tail -c +4 "$got" | tr -d '\r') <(swap "$src") || pf=$((pf+1));; esac
 done < <(python3 -c "import json;[print(f['dir']+'\t'+f['src']) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] for f in b['files']]")
 rm -rf "$tp"
-[ $pb -eq 2 ] && [ $pf -eq 0 ] && ok "paste bundles write exact files and start the runner (bundles=$pb mismatches=$pf)" || bad "paste bundles run: started=$pb mismatches=$pf"
+[ $pr -eq 1 ] && [ $pf -eq 0 ] && ok "round bundle text mode: files exact, steps run, report in results folder, DODID masked (rounds=$pr mismatches=$pf)" || bad "round bundle: rounds ok=$pr mismatches=$pf"
 
 echo "TESTS pass=$pass fail=$fail"
 [ $fail -eq 0 ]
