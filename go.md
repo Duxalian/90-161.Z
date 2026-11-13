@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R04 r3, Task 14, label note, folder cleanup, installer brief r6). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R04 done, Task 14, label note, folder cleanup, installer brief r6). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -33,21 +33,6 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R04 r3, quicker finish and DAFMAN link style (open, 13 Nov 26)
-
-**For:** checks that a round now ends with the results folder open and the e-mail text on the clipboard (first line = subject), and that the ACCESSIBILITY link looks like the DAFMAN cover link (bold, blue, underlined).
-**Time:** about 5 minutes (estimate).
-**Changes:** writes into T01 (renderer files and a new sample render), T07 (seal prep r2, for Task 7 Part B) and Rounds\R04. Nothing on the SharePoint site.
-r3 replaces r2: same test; the runner scripts now share one block of code. If I already ran r2, I send those results and skip r3.
-Steps:
-1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build ac0d279b.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/cdb3d57c39aa35048c94622d5cac12be91c052b0/scripts/gov/paste/90161Z-R04-round-r3.ps1
-2. Type the DODID or leave the box empty, then press Enter (or Run).
-3. At DONE the results folder opens by itself and the e-mail text is on the clipboard.
-4. New e-mail: press Ctrl+V in the body, then cut the first line (90161Z R04) into the subject.
-5. Drag all files from the results folder into the e-mail. Add one line: "window OK" or what overlapped. Send.
-**If it fails:** send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL. If the folder does not open, press Open results folder; if the clipboard is empty, press Copy summary.
-
 ## Clean up the project folder (optional, 13 Nov 26)
 
 **For:** removes files from finished tasks. Each one is on the bookmark page again if a later task needs it.
@@ -56,7 +41,7 @@ Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z
 **Changes:** deletes only the folders and files in steps 1-3 (OneDrive keeps them in its recycle bin for a while). Nothing on the SharePoint site.
 Steps:
 1. Delete these folders if they exist: T02, T03, T04, T05, T06, T13.
-2. Open Rounds. Delete R01, R02 and R03 (their results are recorded). Keep R04 until I send it.
+2. Open Rounds. Delete R01, R02, R03 and R04 (their results are recorded).
 3. Open T07. Delete the old scripts 90161Z-T07-seal-test-r*.ps1 and 90161Z-T07-seal-prep-r1.ps1. Keep 90161Z-T07-key-r1.txt and anything else.
 4. Keep: Config, T01, T07, and the folders of open tasks (T09, T10, T11, T12, T14).
 **Report:** nothing to send.
@@ -162,11 +147,11 @@ Report: one e-mail, subject "90161Z T09 r1": the 3 files and the click path from
 
 ## Task 7: real seals, Part B, r1 (open, 11 Nov 26)
 
-**For:** prepares every unit's real shield for the publication covers. Decided: each unit's own shield (1C) in the project library (2A, 12 Nov 26), every seal prepared to the same 1.20 in box, centered. Part A (fake seals) now runs inside Fix first.
+**For:** prepares every unit's real shield for the publication covers. Decided: each unit's own shield (1C) in the project library (2A, 12 Nov 26), every seal prepared to the same 1.20 in box, centered. Part A (fake seals) passed in Round R01.
 **Time:** about 20 minutes (estimate), plus waiting for files from units.
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T07
 **Changes:** on the real site, creates the library 90-161.Z and its Seals folder if they do not exist (site permissions, nothing special) and adds the shield files. On my computer, syncs that library and writes the prepared seals into Seals\Prepared, plus two text files in T07.
-Do this after Fix first: Round R04 r3 writes the seal prep script (r2) into T07.
+Round R04 already saved the seal prep script (r2) into T07 (13 Nov 26).
 Steps:
 1. On the real site, if the library does not exist yet: New > Document library. Name: 90-161.Z. Create.
 2. In the library: New > Folder. Name: Seals.
@@ -179,6 +164,8 @@ Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 901
 
 ## Done
 
+- Round R04, quicker finish and DAFMAN link style (13 Nov 26): 4 of 4 pass; summary subject and clipboard worked; ACCESSIBILITY link now bold, blue, underlined like the DAFMAN cover link; seal prep r2 saved in T07. Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r04-results.md
 - Round R03, renderer fixes (12 Nov 26): 4 of 4 pass; TOC 1.50 / 2.00 in the PDF; label set; ACCESSIBILITY link works. Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r03-results.md
 - Round R02, automatic sensitivity label (12 Nov 26): label set by itself (PDF Uncontrolled/General); TOC positions right in the PDF (1.50 / 2.00 in), the Word read-back was wrong and is replaced by a PDF check. Details:

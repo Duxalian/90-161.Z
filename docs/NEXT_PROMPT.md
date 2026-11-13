@@ -21,8 +21,8 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 
 ## Waiting on the PFM (go.md)
 
-0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md and docs/reviews/2026-11-13-r01-results.md (R01 passed).
-1. Round R04 (summary line 1 = subject, auto copy/open, DAFMAN link style): r3 (commit cdb3d57, build ac0d279b; same test as r2, plus seal prep r2 into T07; r2 results also count). Then R05: Outlook draft step (PFM approved). R03 passed (docs/reviews/2026-11-13-r03-results.md). Results: run `python3 scripts/measure_pdf.py <pdf>`. T02 r10 adds PFMSettings rows PublicationsSiteName, PublicationsListUrl.
+0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
+1. Round R04 passed 13 Nov (docs/reviews/2026-11-13-r04-results.md; link style bold #0000FF). Next: build R05, Outlook draft step (PFM approved). Results: run `python3 scripts/measure_pdf.py <pdf>`. T02 r10 adds PFMSettings rows PublicationsSiteName, PublicationsListUrl.
 2. Task 6 prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
