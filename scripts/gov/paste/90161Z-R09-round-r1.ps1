@@ -6,7 +6,8 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R09, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = '8dd25997'
+$buildId = 'c79a3b5e'
+$goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R09'
 $usersRoot = 'C:\Users'
 $files = @()
@@ -2770,6 +2771,23 @@ function Add-RoundHistory([string]$Base, [string]$Step, [string]$Status, [int]$S
       Export-Csv -LiteralPath $p -Append -NoTypeInformation
   } catch { $null = $_ }   # history is a convenience: never stop a round for it
 }
+function Get-NewerRound {
+  # Reads go.md (the bookmark page's source; data, not code) and returns the highest round number listed in an open task
+  # heading when it is newer than this one, else ''. Short timeout; any failure is silent, so it never blocks a run.
+  try {
+    $rq = [System.Net.WebRequest]::Create($goUrl)
+    $rq.Timeout = 4000
+    try { $rq.UseDefaultCredentials = $true } catch { $null = $_ }   # https: Windows sign-in for the proxy (a file URL in tests has none)
+    if ($rq.Proxy) { $rq.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials }
+    $rs = $rq.GetResponse()
+    try { $text = (New-Object System.IO.StreamReader($rs.GetResponseStream())).ReadToEnd() } finally { $rs.Close() }
+    $mine = [int]($round -replace '\D', '')
+    $max = 0
+    foreach ($m in [regex]::Matches($text, '(?m)^## [^\r\n]*Round R(\d{2})[^\r\n]*\(open')) { $n = [int]$m.Groups[1].Value; if ($n -gt $max) { $max = $n } }
+    if ($max -gt $mine) { return ('R{0:00}' -f $max) }
+  } catch { $null = $_ }
+  return ''
+}
 function Get-LastRoundText($Hist) {
   $r = @($Hist | Where-Object { $_.Step -eq 'ROUND' })
   if (-not $r.Count) { return 'Last round: none recorded on this computer yet.' }
@@ -3112,6 +3130,8 @@ if ($gui) {
     $wrap = New-Object System.Drawing.Size(880, 0)
     $banner = New-Object System.Windows.Forms.Label
     $banner.AutoSize = $true; $banner.MaximumSize = $wrap; $banner.Text = Get-LastRoundText $hist0
+    $newer = Get-NewerRound
+    if ($newer) { $banner.Text = 'NEWER ROUND ' + $newer + ' is on the bookmark page: close this window and use ' + $newer + ' instead.   ' + $banner.Text; try { $banner.ForeColor = ('System.Drawing.Color' -as [type])::FromName('DarkRed') } catch { $null = $_ } }
     $where = New-Object System.Windows.Forms.Label
     $where.AutoSize = $true; $where.MaximumSize = $wrap; $where.Margin = New-Object System.Windows.Forms.Padding(3, 6, 3, 3)
     # Cosmetics never stop the window. R06 fell back to text mode: Font('Segoe UI', 10, 'Bold') fails at binding with
@@ -3256,6 +3276,8 @@ try {
   $say = { param($t) Add-RunLog $t; Write-Host $t }
   Write-Host ('90-161.Z Deployer - ' + $round + ' - build ' + $buildId)
   Write-Host (Get-LastRoundText (Read-RoundHistory (Get-BasePath)))
+  $newer = Get-NewerRound
+  if ($newer) { Write-Host ('NEWER ROUND ' + $newer + ' is on the bookmark page: press N to stop, then use ' + $newer + '.') }
   foreach ($l in (Get-RoundPlan).Lines) { Write-Host $l }
   if (Test-WordOpen) { Write-Host 'Word is open. Save your documents and close Word before you run (renders use Word).' }
   $to = Get-MailTo (Get-BasePath)
