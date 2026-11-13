@@ -4,6 +4,7 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-13 | Screen map (docs/app/screen-map.md): (26A) button, field, error and empty-state text in app code, checked by tests; instructions in PFM Guidance. (27A) One responsive app, checked at 375 px and 1440 px. (28A) Home = one My Work list across roles, soonest due first, role on each line. (29A) Action Status open to every member. No clickable previews (PFM, 13 Nov): replaces step 2 of 25A. | PFM (26A 27A 28A 29A; no previews) | 25A step 2 (previews) |
 | 2026-11-13 | Phase 4 (25A): start with a screen map (docs/app/screen-map.md: every screen, who sees it, what it does, its text source), then clickable previews at 375 px and 1440 px, light and dark. | PFM (25A) | Straight to previews |
 | 2026-11-13 | Periodic checks against bloat, drift and duplication in every repo, plus assumption checks (state key assumptions with source and confidence; ask on low confidence) and the clickable question tool for 1-4 open questions. Baseline rhope-ops/archimedes_lever 19fa356: AGENTS.md "Bloat, drift and assumptions", scripts/bloat_check.py (check-in), .claude/bloat-audit.md (full audit). Ported here by hand; full baseline sync open. | PFM | - |
 | 2026-11-13 | Rec: audit every 14 days or 30 commits to main; start-read budget 12,000 tokens; timing alarm +25%. | Agent | - |
