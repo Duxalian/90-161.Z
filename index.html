@@ -15,6 +15,8 @@ a{color:var(--acc)}
 .bar{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
 button{font:inherit;font-size:.875rem;min-height:36px;padding:6px 12px;border:1px solid var(--ctl);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
 button:hover{border-color:var(--acc)}
+button.primary{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:600}
+button:disabled{cursor:default;opacity:.85}
 .toc li{margin:0}
 .toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:0;list-style:none}
 .toc a{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);text-decoration:none;color:var(--fg);font-size:.875rem}
@@ -68,10 +70,27 @@ function copy(t,b){
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){fallback(t);ok()})}else{fallback(t);ok()}
 }
 function fallback(t){var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(a)}
+var SCRIPTS={}; // round scripts, loaded ahead so one click copies the whole text (PFM 13 Nov)
+function isRound(h){return /\/scripts\/gov\/paste\/[^\/]+\.ps1$/.test(h)}
 function fileCard(u){
   var h=u.indexOf('http')===0?u:'https://'+u, name=h.split('/').pop();
   return '<div class="file"><span class="fn"><a href="'+esc(h)+'">'+esc(name)+'</a><span class="fu">'+esc(h)+'</span></span>'+
+    (isRound(h)?'<button type="button" class="primary" data-script="'+esc(h)+'" aria-label="Copy the whole script '+esc(name)+'">Copy script</button>':'')+
     '<button type="button" data-copy="'+esc(h)+'" aria-label="Copy link to '+esc(name)+'">Copy link</button></div>';
+}
+function blocked(b){b.textContent='Copy blocked: open the link, Ctrl+A, Ctrl+C';b.disabled=true}
+function copyScript(b){
+  var h=b.getAttribute('data-script'),t=SCRIPTS[h];
+  if(typeof t!=='string'){blocked(b);return}
+  var ok=function(){b.textContent='Copied ('+t.split('\n').length.toLocaleString()+' lines). Now paste in ISE.';setTimeout(function(){b.textContent='Copy script'},4000)};
+  var viaArea=function(){var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();var r=false;try{r=document.execCommand('copy')}catch(e){}document.body.removeChild(a);return r};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){viaArea()?ok():blocked(b)})}else{viaArea()?ok():blocked(b)}
+}
+function preload(m){
+  Array.prototype.forEach.call(m.querySelectorAll('button[data-script]'),function(b){
+    var h=b.getAttribute('data-script');b.textContent='Copy script (loading)';
+    fetch(h,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(t){SCRIPTS[h]=t;b.textContent='Copy script'}).catch(function(){blocked(b)});
+  });
 }
 function folderBox(lbl,path){
   return '<div class="folder"><span class="lbl">'+esc(lbl)+'</span><code>'+esc(path)+'</code>'+
@@ -134,7 +153,8 @@ function render(md){
   o+='<details class="sec" data-name="__how"'+(how?' open':'')+'><summary><span class="st">How to use this page</span></summary><div class="body">'+renderBody(intro)+'</div></details>';
   o+=body+'<p class="mut foot">Source: <a href="'+SRC+'">go.md</a> in rhope-ops/90-161.Z. Open and closed sections are remembered in this browser.</p>';
   var m=document.getElementById('m');m.innerHTML=o;
-  m.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button[data-copy]');if(b){e.preventDefault();copy(b.getAttribute('data-copy'),b)}});
+  m.addEventListener('click',function(e){var s=e.target.closest&&e.target.closest('button[data-script]');if(s){e.preventDefault();copyScript(s);return}var b=e.target.closest&&e.target.closest('button[data-copy]');if(b){e.preventDefault();copy(b.getAttribute('data-copy'),b)}});
+  preload(m);
   var all=function(){return Array.prototype.slice.call(m.querySelectorAll('details.sec'))};
   all().forEach(function(d){d.addEventListener('toggle',function(){var s=load();s[d.getAttribute('data-name')]=d.open;save(s)})});
   document.getElementById('ex').onclick=function(){all().forEach(function(d){d.open=true})};
