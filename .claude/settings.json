@@ -38,5 +38,23 @@
         ]
       }
     ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "network": {
+      "allowedDomains": [
+        "github.com",
+        "api.github.com",
+        "codeload.github.com",
+        "objects.githubusercontent.com",
+        "pypi.org",
+        "files.pythonhosted.org",
+        "registry.npmjs.org"
+      ]
+    },
+    "excludedCommands": [
+      "scripts/session_checkin.sh",
+      "bash scripts/session_checkin.sh"
+    ]
   }
 }
