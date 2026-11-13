@@ -34,7 +34,7 @@ What it changes: writes into T01, T07, T07\TestSeals and Rounds\R01. The window 
 Do: paste and run this round (steps under "How a paste task works"):
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/a85fa43a38918d2566db215e0c5de3b0a60807be/scripts/gov/paste/90161Z-R01-round-r3.ps1
 The window title shows build 646c5ca9.
-Send: all files in Rounds\R01 (one report file and up to 3 PDFs) in one e-mail to my Gmail, subject "90161Z R01", the copied summary in the body. Send them also if a step says CHECK.
+Report: send all files in Rounds\R01 (one report file and up to 3 PDFs) in one e-mail to my Gmail, subject "90161Z R01", the copied summary in the body. Send them also if a step says CHECK.
 
 ## Task 12: color sources, r1 (open, 12 Nov 26, 1530 CT)
 
