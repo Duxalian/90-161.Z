@@ -2,6 +2,8 @@
 # Below: paths to skip (skip: ...) and exact strings that are allowed, one per line. Only the PFM adds entries.
 # Public DAF manual text: office mailboxes, phone numbers and .mil sites printed in DAFMAN 90-161 (PFM, 2026-11-11).
 skip: ref/dafman90-161.txt
+skip: docs/dafman-coverage/*
+skip: docs/coordination-table-a3-2.md
 # Public host names (PFM, 2026-11-11).
 GenAI.mil
 usaf.dps.mil
