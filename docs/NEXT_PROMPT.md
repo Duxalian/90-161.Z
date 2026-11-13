@@ -5,7 +5,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Open now
 
 - Bloat audit 2 done (docs/reviews/2026-11-13-bloat-audit-2.md); P1-P4 approved and made: tests 21 s -> 12.7 s, baseline bc233b9, task-common block (scripts/build_task_scripts.py), 3 short DECISIONS lines. Next audit by 27 Nov 26.
-- Owner rename to rhope-ops: repo files done; left: docs/brief/installer.json + installer brief r5 (5 old raw URLs, fixed at next brief rebuild per DECISIONS 2026-11-13); gh-pages now holds index.html only (67a27e0).
+- Owner rename to rhope-ops: done everywhere, installer brief rebuilt as r6 (13 Nov 26); the old name and "Air Force" were on the name denylist (PFM removed "Air Force" 13 Nov 26). gh-pages holds index.html only (67a27e0).
 - Kit baseline: final sync a150528 (archimedes_lever); projects no longer sync, so sync_baseline.py, drift.py and .baseline are gone (owner decision 2026-11-13, other session). Pre-push check gate on.
 - Waiting on the PFM: 3.5 legal answer; test site; CUI check for working files (gap review, docs/DECISIONS.md 2026-11-11); 5.1 after renderer round 2.
 

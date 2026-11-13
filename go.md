@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R04 r3, Task 14, label note, folder cleanup). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R04 r3, Task 14, label note, folder cleanup, installer brief r6). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -117,12 +117,13 @@ Report: reply "Task 8 done" and the step 4 result (Edit shown or not shown).
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T10
 **Changes:** saves 3 files into T10. Nothing else.
 - Command brief r5 (10 slides): 7 questions for my commanders, each answered Yes, No or Pending evaluation, with an answer sheet. Script delivery is gone (the ISSM approved it); question 7 is now the top two risks.
-- Installer brief r5 (22 slides): for a PFM installing it at their own wing. R02 says each wing's ISSM must approve paste and run; ours did.
+- Installer brief r6 (22 slides): for a PFM installing it at their own wing. R02 says each wing's ISSM must approve paste and run; ours did.
+  r6 (13 Nov 26) only replaces the old owner name in 5 links and updates the decision count; if I already checked r5, I save r6 and only check that it opens.
 - Adoption brief r2 (12 slides): the path to ANG-wide use. Use only after other wing PFMs show interest.
 Steps:
 1. Save the three files into the T10 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-command-brief-r5.pptx
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-installer-brief-r5.pptx
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-installer-brief-r6.pptx
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-adoption-brief-r2.pptx
 2. Open each in PowerPoint. Check that it opens without a repair message and that no text runs off a slide.
 Report: reply in the Claude chat: the changes I want, and whether each brief may go to its audience.
