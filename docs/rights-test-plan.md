@@ -25,6 +25,7 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 | S11 | Site time zone | Date-only columns | O can change | H | R08 (read) | Time zone row in PFM Settings |
 | S12 | Site is group-connected (M365 group) | M365 group option (P6) | depends on site | H | R03 | - |
 | S13 | Create a new site | A wing without a PFM site | Tenant setting | L | M18 | Request a site through the base process |
+| S15 | Download several library files at once as one zip | Publication package download (docs/roles-and-permissions.md 6.4; PFM 12 Nov) | U | M | M20 | Download files one at a time from the app |
 | S14 | Restore from the second-stage recycle bin | Recovery | A | H | Not tested (destructive) | Scheduled export (risk R17 in docs/brief/risks.json) |
 
 ## 2. Power Platform
@@ -47,6 +48,8 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 | P14 | Add a co-owner to a flow and to the app | Continuity (P5A) | K | H | M09 | Export and re-import by the successor |
 | P15 | Create another environment | Own environment option | Tenant setting | L | M10 (look only) | Default environment |
 | P16 | See own license and request limits | Capacity | K | M | M11 | - |
+| P18 | Largest file a Power Apps flow input accepts | "Attach all documentation" upload (6.5) | K | M | Pilot (phase 8): needs the app | Upload straight into the library Intake folder |
+| P19 | A co-owner re-binds a connection reference to their own connection | Continuity (5A) | K | M | Pilot (phase 8): needs the solution | Co-owner rebuilds the connections by hand |
 | P17 | Change the owner of a flow or app | Handover | Power Platform admin only | H | Not testable by a PFM | Runbook: co-owner rebuilds connections (P5A) |
 
 ## 3. E-mail (office mailbox)
@@ -97,6 +100,7 @@ Write down only what each check shows (allowed, blocked, error text without name
 | M16 | New automated flow: When a new email arrives in a shared mailbox (V2), office mailbox; save; send a test mail to the office box | Flow ran or error |
 | M17 | Outlook: New, Group (look only) | Offered or not |
 | M18 | SharePoint start page: Create site (look only) | Offered or not |
+| M20 | SharePoint: open any document library you can read, tick 2 or 3 files, press Download | One .zip downloaded, or each file separately, or Download not offered |
 | M19 | Clean up: delete the M03 and M16 flows, "90161Z TEST" and its solution | Done |
 
 ## Reading the result

@@ -53,5 +53,29 @@ const doc = new Document({
     margin: { top: IN, bottom: IN, left: IN, right: IN } } },
     children: [table, para(run(''), AlignmentType.LEFT, 120), note] }],
 });
+// Deterministic output: a rebuild from unchanged source is byte-identical, so tests/run.sh leaves git clean.
+// One fixed instant for docProps/core.xml created/modified and every zip entry date.
+// SOURCE_DATE_EPOCH (seconds, reproducible-builds.org) overrides the constant.
+const FIXED_DATE = process.env.SOURCE_DATE_EPOCH
+  ? new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000)
+  : new Date('2026-11-11T00:00:00Z');
+if (isNaN(FIXED_DATE)) { console.error(`SOURCE_DATE_EPOCH is not a number of seconds: ${process.env.SOURCE_DATE_EPOCH}`); process.exit(1); }
+const STAMP = FIXED_DATE.toISOString().replace(/\.\d{3}Z$/, 'Z');
+
+async function build() {
+  // Packer.compiler.compile returns the JSZip instance that Packer.toBuffer would generate (docx 9.x).
+  const zip = Packer.compiler.compile(doc);
+  const core = (await zip.file('docProps/core.xml').async('string'))
+    .replace(/(<dcterms:(created|modified)[^>]*>)[^<]*(<\/dcterms:\2>)/g, `$1${STAMP}$3`);
+  zip.file('docProps/core.xml', core);
+  for (const [name, entry] of Object.entries(zip.files)) {
+    if (entry.dir) { delete zip.files[name]; continue; }   // drop folder entry only; zip.remove() would drop its files too
+    entry.date = FIXED_DATE;
+  }
+  return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE', platform: 'DOS',
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+}
+
 const out = path.join(__dirname, 'CRM_A12-1.docx');
-Packer.toBuffer(doc).then(buf => { fs.writeFileSync(out, buf); console.log(`CRM written ${out} tableWidthDXA=${total} columns=${widths.length}`); });
+build().then(buf => { fs.writeFileSync(out, buf); console.log(`CRM written ${out} tableWidthDXA=${total} columns=${widths.length}`); })
+  .catch(err => { console.error(err); process.exit(1); });

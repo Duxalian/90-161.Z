@@ -182,9 +182,9 @@ PY
 out=$(pwsh -NoProfile -File scripts/gov/Provision-Lists.ps1 -PlanOnly -SchemaPath schemas/lists 2>&1 | tail -1)
 [ "$out" = "PLAN lists=9 fields=80 views=18" ] && ok "lists plan ($out)" || bad "lists plan: $out"
 
-cp templates/CRM_A12-1.docx /tmp/crm_before.docx
 node templates/build_crm_template.js >/tmp/crm.out 2>&1 && grep -q "tableWidthDXA=9331 columns=9" /tmp/crm.out && ok "CRM template builds ($(cat /tmp/crm.out | sed s,.*CRM_A12-1.docx,,))" || bad "CRM template build"
-zip -d templates/CRM_A12-1.docx '*/' >/dev/null 2>&1; true
+# Build is deterministic (fixed dates): a rebuild must match the committed file byte for byte.
+git diff --quiet HEAD -- templates/CRM_A12-1.docx && ok "CRM template rebuild matches committed file" || bad "CRM template rebuild differs from committed file (commit the rebuild if the source changed)"
 
 got=$(pwsh -NoProfile -c '. ./scripts/gov/Publication.Common.ps1; ConvertTo-TwoSpaceSentence "Do this. (T-3) Then Mr. A. B. Smith signs. Use e.g. Forms. Done? Yes."')
 want="Do this. (T-3)  Then Mr. A. B. Smith signs.  Use e.g. Forms.  Done?  Yes."
