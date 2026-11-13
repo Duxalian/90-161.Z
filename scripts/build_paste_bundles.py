@@ -10,8 +10,10 @@ bootstrapper for fast test rounds (PFM 1A, 6A: function over form):
   3. runs the steps one by one (each a runner file, as a child powershell.exe with -Id and -NoPause), with a live
      log, DODID masked, and PASS/FAIL counts per step;
   4. writes a results folder Rounds\\<round> with one report file (summary + full masked log) and copies of the
-     collect files (PDFs), ready to attach to one e-mail (no zip: zips do not cross the boundary, PFM 13 Nov), and
-     offers the summary for the clipboard and an Open results folder button.
+     collect files (PDFs), ready to attach to one e-mail (no zip: zips do not cross the boundary, PFM 13 Nov);
+  5. makes an Outlook draft (classic Outlook, COM): subject = summary line 1, body = the rest, every results file
+     attached, To empty, never sent (R05, PFM 13 Nov). If no draft can be made, it opens the results folder and puts
+     the summary on the clipboard instead (R04 behavior).
 It runs only the steps embedded in it and never fetches code (PFM 3A). If no window can open (no Windows Forms),
 it runs the same steps as text.
 Text files are embedded as readable single-quoted here-strings, so the PFM and the ISSM can read the code.
@@ -151,6 +153,21 @@ function Get-RoundPlan([string]$Typed) {
   $lines += 'Steps then write their own results and PDFs into these task folders.'
   return @{ Shown = $shown; Found = $found; Lines = $lines }
 }
+function Save-RoundDraft([string]$Dir, [string[]]$Summary) {
+  # R05 (PFM 13 Nov): one Outlook draft with subject, body and every results file. To stays empty. Never sent:
+  # this code has no Send call (tests/run.sh checks). Classic Outlook only (new Outlook has no COM): else fall back.
+  if ($env:OS -ne 'Windows_NT') { return 'not Windows' }
+  try {
+    $ol = New-Object -ComObject Outlook.Application
+    $m = $ol.CreateItem(0)
+    $m.Subject = $Summary[0]
+    $m.Body = ((@($Summary | Select-Object -Skip 1) + @('', 'Window: OK   (or write what overlapped)')) -join "`r`n")
+    foreach ($f in @(Get-ChildItem -LiteralPath $Dir -File)) { [void]$m.Attachments.Add($f.FullName) }
+    $m.Save()
+    $m.Display()
+    return ''
+  } catch { return (ConvertTo-Masked $_.Exception.Message) }
+}
 function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scriptblock]$Tick, [scriptblock]$OnStep) {
   $script:runLog = New-Object System.Collections.Generic.List[string]
   $base = Resolve-Base $Typed
@@ -183,13 +200,22 @@ function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scr
   if (@($summary | Where-Object { $_ -match ': CHECK \(' }).Count -gt 0 -or @($z.Missing).Count -gt 0) {
     & $Say 'NOTE: some steps say CHECK or files are missing (see RESULTS above). Send the results anyway; they show what went wrong.'
   }
-  # Both modes end the same way (PFM 13 Nov: fewest steps): the folder opens and the summary is on the clipboard.
-  & $Say ('DONE. The results folder Rounds\' + $round + ' opens now and the summary is on the clipboard.')
-  & $Say ('New e-mail: paste into the body, cut the first line (90161Z ' + $round + ') into the subject, attach all ' + $z.Count + ' files in the folder.')
+  # Both modes end the same way (PFM 13 Nov: fewest steps). R05: an Outlook draft with everything in it;
+  # if Outlook cannot make one, the folder opens and the summary is on the clipboard (R04 behavior).
+  $why = Save-RoundDraft $z.Dir $summary
+  $script:draftMade = (-not $why)
+  if ($script:draftMade) {
+    & $Say ('DONE. An Outlook draft is open: subject 90161Z ' + $round + ', the summary and all ' + $z.Count + ' files are in it. To is empty.')
+    & $Say 'In the draft: change the "Window:" line if anything overlapped, type the To address, then Send.'
+  } else {
+    & $Say ('Outlook draft not made (' + $why + ').')
+    & $Say ('DONE. The results folder Rounds\' + $round + ' opens now and the summary is on the clipboard.')
+    & $Say ('New e-mail: paste into the body, cut the first line (90161Z ' + $round + ') into the subject, attach all ' + $z.Count + ' files in the folder.')
+  }
   return ,$summary
 }
 
-$script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $script:textMode = $false; $stepMinutes = 30
+$script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $script:draftMade = $false; $script:textMode = $false; $stepMinutes = 30
 $gui = $true
 try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false }
 if ($gui) {
@@ -241,8 +267,9 @@ if ($gui) {
     $first = & $showPlan
     $howTo = @('HOW TO USE', '  1. Check the "Writes to" line above. Leave the DODID box empty unless that line says NOT found.',
       '  2. Press Enter or Run. Word steps take a few minutes; keep this window open until it says DONE.',
-      '  3. At DONE the results folder opens and the summary is on the clipboard: new e-mail, paste into the body,',
-      '     cut the first line into the subject, attach all files in the folder. The buttons copy and open again if needed.',
+      '  3. At DONE an Outlook draft opens with the subject, summary and all files. Fix the "Window:" line, add To, Send.',
+      '     If Outlook cannot make the draft: the results folder opens and the summary is on the clipboard (paste into a',
+      '     new e-mail body, cut the first line into the subject, attach all files). The buttons copy and open again.',
       '  Uncheck a step to skip it. Closing the window stops a running step.', '')
     $log.Text = (($howTo + $first.Lines) -join "`r`n") + "`r`n"
 
@@ -255,7 +282,7 @@ if ($gui) {
       $sel = @(); for ($k = 0; $k -lt $steps.Count; $k++) { $sel += $list.GetItemChecked($k) }
       try {
         $script:lastSummary = Invoke-Round $idBox.Text $sel $say $tick $onStep; $copy.Enabled = $true; $open.Enabled = $true
-        $copy.PerformClick(); $open.PerformClick(); $form.Activate(); $copy.Focus() | Out-Null
+        $copy.PerformClick(); if (-not $script:draftMade) { $open.PerformClick(); $form.Activate(); $copy.Focus() | Out-Null }
       }
       catch { & $say ('STOPPED: ' + (ConvertTo-Masked ([string]$_))) }
       $run.Enabled = $true
@@ -280,7 +307,7 @@ try {
   if ($go -match '^[Nn]') { Write-Host 'Stopped before anything was written.'; return }
   $sel = @(); foreach ($s in $steps) { $sel += $true }
   $sum = Invoke-Round $typed $sel $say { } { }
-  if ($script:resultsDir -and $env:OS -eq 'Windows_NT') { Start-Process -FilePath 'explorer.exe' -ArgumentList ('"' + $script:resultsDir + '"') }
+  if ($script:resultsDir -and $env:OS -eq 'Windows_NT' -and -not $script:draftMade) { Start-Process -FilePath 'explorer.exe' -ArgumentList ('"' + $script:resultsDir + '"') }
   if (Get-Command Set-Clipboard -ErrorAction SilentlyContinue) { try { Set-Clipboard -Value ($sum -join "`r`n"); Write-Host 'Summary copied to the clipboard.' } catch { Write-Host 'Clipboard not available.' } }
 } catch {
   Write-Host ''
@@ -314,7 +341,7 @@ def build(b):
             '  How to run: open Windows PowerShell ISE, File > New, paste all of this text into the script pane, press F5.\n'
             '  A window opens: DODID (empty = profile folder), Run. It writes the files below into the task folders under\n'
             '  C:\\Users\\<DODID>\\OneDrive - United States Air Force\\90-161.Z (replacing older copies), runs the steps,\n'
-            '  and saves its results in Rounds\\%s (attach all files to one e-mail). No download, no admin rights.\n'
+            '  and saves its results in Rounds\\%s, then opens an Outlook draft with them (never sent). No download, no admin rights.\n'
             '#>\n$buildId = \'%s\'\n' % (b['title'], b['round'], build_id))
     return head + body
 
