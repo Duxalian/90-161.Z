@@ -18,7 +18,7 @@ Steps:
 2. Start menu: type ISE and open Windows PowerShell ISE as myself (not "Run as administrator").
 3. File > New. Click in the white script pane. Press Ctrl+V, then F5.
 4. A window opens. Leave the DODID box empty. Check the "Writes to" line: it says NOT found if the folder is wrong.
-5. Press Run. Word steps take a few minutes each. Keep the window open until the log says DONE.
+5. Press Enter (or Run). Word steps take a few minutes each. Keep the window open until the log says DONE.
 6. At DONE the results folder opens and the e-mail text is on the clipboard (from R04 on). New e-mail: Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
 **If it fails:** send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
 With the DODID box empty, <profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
@@ -38,9 +38,9 @@ Steps:
 **Time:** about 5 minutes (estimate).
 **Changes:** writes into T01 (renderer files and a new sample render) and Rounds\R04. Nothing on the SharePoint site.
 Steps:
-1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build 90c3b8d7.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/a324ddfaae764047ada1366bfd13b90702d39e81/scripts/gov/paste/90161Z-R04-round-r1.ps1
-2. Press Run. Enter does nothing in this window.
+1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build c259f51f.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/0ff6f57f78e0ea3ad63da7a83e0af7d771e94537/scripts/gov/paste/90161Z-R04-round-r2.ps1
+2. Type the DODID or leave the box empty, then press Enter (or Run).
 3. At DONE the results folder opens by itself and the e-mail text is on the clipboard.
 4. New e-mail: press Ctrl+V in the body, then cut the first line (90161Z R04) into the subject.
 5. Drag all files from the results folder into the e-mail. Add one line: "window OK" or what overlapped. Send.
