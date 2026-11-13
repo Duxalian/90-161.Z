@@ -22,7 +22,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
-1. Round R08 r1 on go.md (replaces R07): window fix + T10 brief check, T12 downloads, T14 logo files, T07 seal prep (optional, folder picker). Claude watches Gmail for "90161Z R08". Deployer-first rule: AGENTS.md Project rules. Task scripts drop the DODID question at next revision.
+1. Round R08 live (build d1605b13); R09 r1 draft PR (inventory T15, T11 Part B form, T09 collector, task scripts without DODID question): merge only after the PFM reviews it. Flow solution package draft in the same PR. Claude watches Gmail for "90161Z R08"/"R09". No PnP steps (decision 1B: sign-in fails without an app registration).
 2. Task 6 prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
