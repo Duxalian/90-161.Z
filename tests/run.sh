@@ -231,10 +231,12 @@ tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; p
 ob="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"; mkdir -p "$ob/T02" "$ob/T13" "$ob/Rounds/R06" "$ob/T07" "$ob/T09"
 touch "$ob/T02/90161Z-T02-provision-lists-r9.zip" "$ob/T02/Provision-Lists.ps1" "$ob/T13/90161Z-T13-label-capture-r1.ps1" "$ob/T13/my-notes.docx" \
   "$ob/Rounds/R06/90161Z-R06-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r3.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
-swap() { sed -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
+echo "public sample" > "$tp/fx.bin"
+swap() { sed -e "s#Url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/#Url = 'file://$PWD/#" -e "s#Url = 'https://www\.[^']*'#Url = 'file://$tp/fx.bin'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
   swap "$b" > "$tp/b.ps1"; USERPROFILE="$tp/u/test1234" pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
-  n=$(python3 -c "import json;print(sum(len(b['steps']) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
+  # Text mode runs the default steps that need no folder (the optional seal step is skipped).
+  n=$(python3 -c "import json;print(sum(1 for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b' for s in b['steps'] if s.get('default', True) and 'ask' not in s))")
   r=$(python3 -c "import json;print([b['round'] for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'][0])")
   base="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"
   st=$(grep -c '^STEP .* running' "$tp/out.txt"); sm=$(grep -c ': \(OK\|CHECK\) (PASS' "$tp/out.txt")
@@ -244,6 +246,10 @@ for b in scripts/gov/paste/*.ps1; do
   grep -q "^WRITES TO $tp/u/test1234/" "$tp/out.txt" || { echo "real path not shown"; pf=$((pf+1)); }
   grep -q "^WHAT TO DO: Open Outlook" "$tp/out.txt" || { echo "no plain-words help after the draft fallback"; pf=$((pf+1)); }
   grep -q "^NOTE: no window, text mode: " "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "report does not name the no-window cause"; pf=$((pf+1)); }
+  # Downloads: repo files must match their SHA-256; public files land and are attached; the skipped step's file is not expected.
+  nf=$(python3 -c "import json;print(sum(len(b.get('fetch',[])) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
+  grep -q "^FETCH files=$nf failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "downloads: want FETCH files=$nf failed=0"; grep "^FETCH" "$base/Rounds/$r/90161Z-$r-report-r1.txt"; pf=$((pf+1)); }
+  ! grep -q "90161Z-T07-result-r1.txt" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "a skipped step's file was expected"; pf=$((pf+1)); }
   [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R06" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r3.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r1.ps1" ] \
     && [ -f "$ob/T07/90161Z-T07-key-r1.txt" ] && [ -f "$ob/T09/90161Z-T09-page-r1.htm" ] \
     && grep -q "^CLEANUP to Recycle Bin: files=5 folders=2 kept-other=1 failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" \
@@ -272,7 +278,7 @@ dq=0; for b in scripts/gov/paste/*.ps1; do sed -n '/round runner (generated/,$p'
 [ "$dq" -eq 0 ] && ok "rounds ask no DODID (bundles that ask: $dq)" || bad "rounds ask no DODID (bundles that ask: $dq)"
 # R06 lesson: New-Object with a string for an enum argument can match two overloads ("Multiple ambiguous overloads") and
 # drop the Deployer to text mode. Binding check in pwsh for every New-Object System.Drawing.Font call in the bundles.
-fa=$(grep -ohE "New-Object System\.Drawing\.Font\('[^']*', *[0-9]+, *'[A-Za-z]+'\)" scripts/gov/paste/*.ps1 scripts/build_paste_bundles.py | wc -l)
+fa=$(grep -ohE "(New-Object System\.Drawing\.Font|\[System\.Drawing\.Font\]::new)\([^)]*,[^)]*, *[\"'][A-Za-z]+[\"'] *\)" scripts/gov/paste/*.ps1 scripts/build_paste_bundles.py | wc -l)
 amb=$(pwsh -NoProfile -c 'Add-Type -AssemblyName System.Drawing.Common; try { $null = New-Object System.Drawing.Font("Segoe UI", 10, "Bold"); "bound" } catch { if ($_.Exception.Message -match "ambiguous") { "ambiguous" } else { "bound" } }' 2>&1 | tail -1)
 [ "$fa" -eq 0 ] && [ "$amb" = "ambiguous" ] && ok "Deployer fonts: no string enum in Font() (found: $fa; pwsh confirms the string form is $amb)" || bad "Deployer fonts: string enum in Font() found=$fa (pwsh: $amb)"
 # R05 (PFM 2026-11-13): every bundle makes an Outlook draft and never sends it; off Windows it falls back to folder + clipboard.

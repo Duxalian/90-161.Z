@@ -212,13 +212,42 @@ function Write-BundleFile([string]$Base, [scriptblock]$Say) {
     & $Say ('WROTE ' + $f.Dir + '\' + $f.Name + ' src-sha256=' + $f.Sha)
   }
 }
-function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]$Tick) {
+function Save-RoundDownload([string]$Base, [scriptblock]$Say) {
+  # Data files only (briefs, public color documents), never code (PFM 3A). WebClient uses the Windows proxy and sign-in.
+  # A repo file must match its SHA-256; a failed download leaves the link on the bookmark page as the fallback.
+  $ok = 0; $bad = 0
+  if (-not $fetch.Count) { return '' }
+  try { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072 } catch { $null = $_ }   # TLS 1.2 on PS 5.1
+  foreach ($f in $fetch) {
+    $dir = Join-Path $Base $f.Dir
+    if (-not (Test-Path -LiteralPath $dir -PathType Container)) { [void](New-Item -ItemType Directory -Path $dir -Force) }
+    $path = Join-Path $dir $f.Name
+    $wc = New-Object System.Net.WebClient
+    try {
+      $wc.UseDefaultCredentials = $true
+      if ($wc.Proxy) { $wc.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials }
+      $wc.DownloadFile($f.Url, $path)
+      if ($f.Sha) {
+        $got = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($got -ne $f.Sha) { Remove-Item -LiteralPath $path -Force; throw 'the file changed since this round was built' }
+      }
+      $ok++; & $Say ('FETCHED ' + $f.Dir + '\' + $f.Name + ' bytes=' + (Get-Item -LiteralPath $path).Length)
+    } catch {
+      $bad++; & $Say ('FETCH FAIL ' + $f.Dir + '\' + $f.Name + ': ' + (ConvertTo-Masked $_.Exception.Message) + ' (save it from the bookmark page instead)')
+    } finally { $wc.Dispose() }
+  }
+  $line = 'FETCH files=' + $ok + ' failed=' + $bad
+  & $Say $line
+  return $line
+}
+function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]$Tick, [string]$Answer) {
   $exe = 'powershell.exe'
   if (-not (Get-Command $exe -ErrorAction SilentlyContinue)) { $exe = 'pwsh' }
   $dir = Join-Path $Base $Step.Dir
   $psi = New-Object System.Diagnostics.ProcessStartInfo
   $psi.FileName = $exe
   $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $dir $Step.File) + '" -Id "' + $script:dodid + '" -NoPause'
+  if ($Step.AskParam -and $Answer) { $psi.Arguments += ' -' + $Step.AskParam + ' "' + $Answer.TrimEnd('\') + '"' }
   $psi.WorkingDirectory = $dir
   $psi.UseShellExecute = $false; $psi.CreateNoWindow = $true
   $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
@@ -237,6 +266,8 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
     $line = $lineTask.Result
     if ($null -eq $line) { break }
     $line = ConvertTo-Masked $line
+    # Lines that may name a unit or a file (for example seal details) never reach the report (data boundary).
+    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace ':.*$', ':') + ' (detail hidden: may name a unit; see the step''s own window)' }
     if ($line -match '(^|\s)PASS(\s|$)') { $r.Pass++ }
     if ($line -match '(^|\s)(FAIL|FORMAT-FAIL|RENDER-ERROR|MEASURE-ERROR|STOPPED:)(\s|$)') { $r.Fail++ }
     & $Say $line
@@ -260,6 +291,7 @@ function Export-RoundResult([string]$Base, [string[]]$Summary) {
   if (-not (Test-Path -LiteralPath $out -PathType Container)) { [void](New-Item -ItemType Directory -Path $out -Force) }
   $count = 1; $missing = @()
   foreach ($c in $collect) {
+    if ($c.Step -and -not ($script:ranSteps -contains $c.Step)) { continue }   # a skipped step has nothing to send
     $old = Join-Path $out $c.Name
     if (Test-Path -LiteralPath $old -PathType Leaf) { Remove-Item -LiteralPath $old -Force }   # an older copy of the same name must not be sent again
     $p = Join-Path (Join-Path $Base $c.Dir) $c.Name
@@ -278,6 +310,10 @@ function Get-RoundPlan {
   foreach ($f in $files) {
     $p = Join-Path (Join-Path $base $f.Dir) $f.Name
     $lines += ('  ' + $f.Dir + '\' + $f.Name + $(if (Test-Path -LiteralPath $p -PathType Leaf) { '   (replaces the file there)' } else { '   (new)' }))
+  }
+  foreach ($f in $fetch) {
+    $p = Join-Path (Join-Path $base $f.Dir) $f.Name
+    $lines += ('  ' + $f.Dir + '\' + $f.Name + '   (download from ' + ([uri]$f.Url).Host + $(if ($f.Sha) { ', checked' } else { '' }) + $(if (Test-Path -LiteralPath $p -PathType Leaf) { '; replaces the file there)' } else { ')' }))
   }
   $lines += ('  Rounds\' + $round + '\   (results folder: one report file + copies of the PDFs)')
   if ($cleanup.Count) {
@@ -305,7 +341,8 @@ function Save-RoundDraft([string]$Dir, [string[]]$Summary, [string]$To, [string]
     return ''
   } catch { return (ConvertTo-Masked $_.Exception.Message) }
 }
-function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock]$Say, [scriptblock]$Tick, [scriptblock]$OnStep, [scriptblock]$OnStatus, [scriptblock]$WindowLine) {
+function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock]$Say, [scriptblock]$Tick, [scriptblock]$OnStep, [scriptblock]$OnStatus, [scriptblock]$WindowLine, [string[]]$Answers) {
+  $script:ranSteps = @()
   $script:runLog = New-Object System.Collections.Generic.List[string]
   $script:helped = @{}
   $sayRaw = $Say
@@ -324,6 +361,8 @@ function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock
   if ($script:noWindowWhy) { & $speak ('NOTE: no window, text mode: ' + (ConvertTo-Masked $script:noWindowWhy)) }
   if (Test-WordOpen) { & $speak 'NOTE: Word is open. Renders use Word: save your documents and close Word if a step stops.' }
   Write-BundleFile $base $speak
+  $fl = Save-RoundDownload $base $speak
+  if ($fl) { $summary += $fl }
   # An empty box clears the saved address (review R06 #5).
   try { if ($To -or (Test-Path -LiteralPath (Get-ConfigFile $base '90161Z-mail-to.txt') -PathType Leaf)) { Save-MailTo $base $To } } catch { & $speak ('NOTE: could not save the e-mail address: ' + (ConvertTo-Masked $_.Exception.Message)) }
   if ($cleanup.Count) {
@@ -335,7 +374,9 @@ function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock
     $n++; & $OnStatus $n $units $steps[$k].Name (Get-StepEstimate $hist $steps[$k].Name)
     & $speak ('STEP ' + $steps[$k].Name + ' running (Word steps can take minutes)...')
     $t0 = Get-Date
-    $r = Invoke-RoundStep $base $steps[$k] $speak $Tick
+    $ans = ''; if ($Answers -and $Answers.Count -gt $k) { $ans = [string]$Answers[$k] }
+    $r = Invoke-RoundStep $base $steps[$k] $speak $Tick $ans
+    $script:ranSteps += $steps[$k].Name
     $secs = ((Get-Date) - $t0).TotalSeconds
     $line = (Get-StepLine $steps[$k] $r) + ' ' + (Format-Duration $secs)
     $summary += $line
@@ -355,7 +396,7 @@ function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock
   $z = Export-RoundResult $base $summary
   $summary += ('RESULTS Rounds\' + $round + ' files=' + $z.Count + ' missing=' + @($z.Missing).Count + $(if (@($z.Missing).Count) { ' (' + ($z.Missing -join ', ') + ')' } else { '' }))
   & $speak $summary[-1]
-  $bad = (@($summary | Where-Object { $_ -match ': CHECK \(|failed=[1-9]' }).Count -gt 0 -or @($z.Missing).Count -gt 0)
+  $bad = (@($summary | Where-Object { $_ -match ': CHECK \(|failed=[1-9]' }).Count -gt 0 -or @($z.Missing).Count -gt 0)   # failed= covers CLEANUP and FETCH
   $state = $(if ($bad) { 'CHECK' } else { 'OK' })
   $summary[0] = '90161Z ' + $round + ' ' + $state
   [void](Export-RoundResult $base $summary)   # rewrite so the report holds the RESULTS line and the subject
@@ -378,7 +419,7 @@ function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock
 }
 
 $script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $script:draftMade = $false; $script:textMode = $false; $script:helped = @{}; $stepMinutes = 30
-$script:statusBase = ''; $script:stepStart = $null; $script:stepEst = 0; $script:noWindowWhy = ''
+$script:statusBase = ''; $script:stepStart = $null; $script:stepEst = 0; $script:noWindowWhy = ''; $script:ranSteps = @()
 $gui = $true
 try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false; $script:noWindowWhy = 'Windows Forms not available: ' + $_.Exception.Message }
 if ($gui) {
@@ -414,7 +455,7 @@ if ($gui) {
     $list.Anchor = 'Left, Right'; $list.CheckOnClick = $true; $list.IntegralHeight = $false
     $off = 0
     if ($cleanup.Count) { [void]$list.Items.Add('Clean up finished files (to the Recycle Bin)', $true); $off = 1 }
-    foreach ($s in $steps) { [void]$list.Items.Add($s.Name, $true) }
+    foreach ($s in $steps) { [void]$list.Items.Add($s.Name + $(if ($s.AskParam) { '  (asks for a folder)' } else { '' }), [bool]$s.Default) }
     $list.Height = ($list.ItemHeight * [math]::Max(3, $list.Items.Count + 1)) + 6
     $bar = New-Object System.Windows.Forms.ProgressBar
     $bar.Dock = 'Fill'; $bar.Height = 18; $bar.Minimum = 0; $bar.Maximum = 1; $bar.Value = 0
@@ -494,8 +535,19 @@ if ($gui) {
       }
       $clean = ($off -eq 1 -and $list.GetItemChecked(0))
       $sel = @(); for ($k = 0; $k -lt $steps.Count; $k++) { $sel += $list.GetItemChecked($k + $off) }
+      # A checked step that needs a folder asks for it now; Cancel skips that step.
+      $answers = @(); for ($k = 0; $k -lt $steps.Count; $k++) {
+        $a = ''
+        if ($sel[$k] -and $steps[$k].AskParam) {
+          $pick = New-Object System.Windows.Forms.FolderBrowserDialog
+          $pick.Description = $steps[$k].AskPrompt; $pick.ShowNewFolderButton = $false
+          if ($pick.ShowDialog($form) -eq 'OK') { $a = $pick.SelectedPath } else { $sel[$k] = $false; & $say ($steps[$k].Name + ': skipped (no folder picked)') }
+          $pick.Dispose()
+        }
+        $answers += $a
+      }
       try {
-        $script:lastSummary = Invoke-Round $clean $sel $to $say $tick $onStep $onStatus $windowLine
+        $script:lastSummary = Invoke-Round $clean $sel $to $say $tick $onStep $onStatus $windowLine $answers
         $script:stepStart = $null; $bar.Value = $bar.Maximum
         $status.Text = 'DONE: ' + $script:lastSummary[0] + $(if ($script:draftMade) { '. Outlook draft is open.' } else { '. Folder open, summary copied.' })
         $copy.Enabled = $true; $open.Enabled = $true; $draft.Enabled = $true
@@ -525,7 +577,9 @@ if ($gui) {
   } catch {
     $gui = $false; $script:noWindowWhy = [string]$_.Exception.Message
     if ($_.InvocationInfo) { $script:noWindowWhy += ' (line ' + $_.InvocationInfo.ScriptLineNumber + ')' }
-    Write-Host ('No window (' + (ConvertTo-Masked (($script:noWindowWhy -replace [regex]::Escape([string]$env:USERPROFILE), 'C:\Users\<DODID>'))) + '); text mode.')
+    $shown = $script:noWindowWhy
+    if ($env:USERPROFILE) { $shown = $shown -replace [regex]::Escape([string]$env:USERPROFILE), 'C:\Users\<DODID>' }
+    Write-Host ('No window (' + (ConvertTo-Masked $shown) + '); text mode.')
   }
 }
 try {
@@ -539,9 +593,9 @@ try {
   # The plan above shows first; Enter starts the run (PFM 13 Nov), N stops before anything is written.
   $go = ([string](Read-Host 'Press Enter to run (N then Enter stops, nothing written)')).Trim()
   if ($go -match '^[Nn]') { Write-Host 'Stopped before anything was written.'; return }
-  $sel = @(); foreach ($s in $steps) { $sel += $true }
+  $sel = @(); foreach ($s in $steps) { $sel += ([bool]$s.Default -and -not $s.AskParam) }   # text mode: steps that need a folder are skipped
   $onStatusText = { param($i, $count, $name, $estimate) Write-Host ('Step ' + $i + ' of ' + $count + ': ' + $name + $(if ($estimate) { ' (last time ' + (Format-Duration $estimate) + ')' } else { '' })) }
-  $sum = Invoke-Round $true $sel $to $say { } { } $onStatusText { 'Window: text mode (no window opened)' }
+  $sum = Invoke-Round $true $sel $to $say { } { } $onStatusText { 'Window: text mode (no window opened)' } @()
   if ($script:resultsDir -and $env:OS -eq 'Windows_NT' -and -not $script:draftMade) { Start-Process -FilePath 'explorer.exe' -ArgumentList ('"' + $script:resultsDir + '"') }
   if (Get-Command Set-Clipboard -ErrorAction SilentlyContinue) { try { Set-Clipboard -Value ($sum -join "`r`n"); Write-Host 'Summary copied to the clipboard.' } catch { Write-Host 'Clipboard not available.' } }
 } catch {
@@ -566,15 +620,28 @@ def build(b):
             body, kind = "@'\n" + '\n'.join(textwrap.wrap(b64, 100)) + "\n'@", 'base64'
         parts.append("$files += @{ Dir = %s; Name = %s; Kind = '%s'; Sha = '%s'; Data = %s }"
                      % (q(f['dir']), q(src.name), kind, sha, body))
-    steps = ['$steps += @{ Name = %s; Dir = %s; File = %s }' % (q(s['name']), q(s['dir']), q(s['file'])) for s in b['steps']]
+    steps = ['$steps += @{ Name = %s; Dir = %s; File = %s; Default = $%s; AskParam = %s; AskPrompt = %s; ScreenOnly = %s }'
+             % (q(s['name']), q(s['dir']), q(s['file']), 'true' if s.get('default', True) else 'false',
+                q(s.get('ask', {}).get('param', '')), q(s.get('ask', {}).get('prompt', '')), q(s.get('screenOnly', '')))
+             for s in b['steps']]
+    # Data files the round downloads (not code, PFM 3A): repo files from raw main, checked by SHA-256; public pages as they are.
+    fetch = []
+    for f in b.get('fetch', []):
+        if 'src' in f:
+            data = (ROOT / f['src']).read_bytes()
+            url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/' + f['src']
+            fetch.append((f['dir'], Path(f['src']).name, url, hashlib.sha256(data).hexdigest()))
+        else:
+            fetch.append((f['dir'], f['name'], f['url'], ''))
+    fetchs = ['$fetch += @{ Dir = %s; Name = %s; Url = %s; Sha = %s }' % tuple(q(x) for x in t) for t in fetch]
     for s in b['steps']:
         assert any(f['dir'] == s['dir'] and Path(f['src']).name == s['file'] for f in b['files']), s
-    collect = ['$collect += @{ Dir = %s; Name = %s }' % (q(c['dir']), q(c['name'])) for c in b['collect']]
+    collect = ['$collect += @{ Dir = %s; Name = %s; Step = %s }' % (q(c['dir']), q(c['name']), q(c.get('step', ''))) for c in b['collect']]
     cleanup = ['$cleanup += @{ Path = %s; Kind = %s }' % (q(c['path']), q(c['kind'])) for c in b.get('cleanup', [])]
     # Support scripts that keep their names (they load each other) and samples: made by 90-161.Z, so cleanup may recycle them.
     known = sorted({f.name for f in (ROOT / 'scripts/gov').glob('*.ps1')} | {f.name for f in (ROOT / 'samples').glob('*')})
-    body = ('$round = %s\n$usersRoot = \'C:\\Users\'\n$files = @()\n%s\n$steps = @()\n%s\n$collect = @()\n%s\n$cleanup = @()\n%s\n$known = @(%s)\n%s'
-            % (q(b['round']), '\n'.join(parts), '\n'.join(steps), '\n'.join(collect), '\n'.join(cleanup), ', '.join(q(k) for k in known), ENGINE))
+    body = ('$round = %s\n$usersRoot = \'C:\\Users\'\n$files = @()\n%s\n$fetch = @()\n%s\n$steps = @()\n%s\n$collect = @()\n%s\n$cleanup = @()\n%s\n$known = @(%s)\n%s'
+            % (q(b['round']), '\n'.join(parts), '\n'.join(fetchs), '\n'.join(steps), '\n'.join(collect), '\n'.join(cleanup), ', '.join(q(k) for k in known), ENGINE))
     build_id = hashlib.sha256(body.encode('ascii')).hexdigest()[:8]
     head = ('<#\n  90-161.Z Deployer, round bundle: %s.\n'
             '  GENERATED by scripts/build_paste_bundles.py from scripts/paste_bundles.json; do not edit.\n'

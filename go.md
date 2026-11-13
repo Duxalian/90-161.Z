@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R07: Deployer window fix; R06 done. Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R08 replaces R07: window fix plus Tasks 10, 12, 14 and 7 through the Deployer). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -33,21 +33,23 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R07 r1, Deployer window fix (open, 13 Nov 26)
+## Fix first: Round R08 r1, Deployer window fix and open tasks (open, 13 Nov 26)
 
-**For:** R06 ran in the ISE text pane instead of the Deployer window. R07 fixes the window and writes any cause into the report.
-**Time:** about 4 minutes (estimate).
-**Changes:** writes into T01 (renderer files and a new sample render), Config and Rounds\R07. Moves Rounds\R06 to the Recycle Bin (its results are recorded). Saves one Outlook draft (never sent). Nothing on the SharePoint site.
+**For:** fixes the Deployer window (R06 ran as text in ISE) and does every open-task step a script can do: checks the 3 briefs in PowerPoint (Task 10), downloads the 3 color documents (Task 12), saves the logo files (Task 14) and, only if I check it, prepares the seals (Task 7). R08 replaces R07: skip R07.
+**Time:** about 8 minutes (estimate); add 2 minutes if seal prep runs.
+**Changes:** writes into T01, T07, T10, T12, T14, Config and Rounds\R08. Downloads 3 briefs from GitHub (checked) and 3 public documents from Air Force public websites. Opens PowerPoint without a window and closes it. Seal prep (if checked) writes prepared seals into the Seals folder I pick and 2 text files in T07. Moves Rounds\R06 and R07 to the Recycle Bin. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 481e6984.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/87c88f610ca37691cfa7e64e358b0bb7cdd37dff/scripts/gov/paste/90161Z-R07-round-r1.ps1
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build BUILDID.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/COMMIT/scripts/gov/paste/90161Z-R08-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
 3. The 90-161.Z Deployer window opens. In "Send results to", type the address you send results to (only this once), then Enter.
-4. If anything in the window overlaps or is cut off, uncheck "This window looked right".
-5. Press Enter (or Run). The progress bar and timer show the step; wait for DONE.
-6. The Outlook draft opens with the address, subject 90161Z R07 OK (or CHECK), the summary and 2 files. Send it.
-**Report:** the draft itself. Claude watches the inbox for the subject, so no chat message is needed.
-**If it fails:** if the window still does not open and the round runs as text in ISE, let it finish and send the draft: the report names the cause. Otherwise read the WHAT TO DO line in the window.
+4. Seal prep is unchecked. Check it only if the unit shields are already in the synced Seals folder (Task 7 steps 1-4); Run then asks for that folder.
+5. If anything in the window overlaps or is cut off, uncheck "This window looked right".
+6. Press Enter (or Run). The progress bar and timer show each step; wait for DONE.
+7. The Outlook draft opens with the address, subject 90161Z R08 OK (or CHECK), the summary and the files. Send it.
+8. Then do the by-hand parts: Task 14 steps 2-5 (the logo files are already in T14) and Task 10 (open each brief and judge it).
+**Report:** the draft itself; Claude watches the inbox for the subject. For Task 10, reply in the Claude chat with the changes I want.
+**If it fails:** if the window still does not open, let the text run finish and send the draft: the report names the cause. A line FETCH FAIL means a download was blocked: save that file from its task below instead. Otherwise read the WHAT TO DO line in the window.
 
 ## Task 14: site logo, r1 (open, 13 Nov 26)
 
@@ -56,7 +58,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/87c88f610ca37691cfa7e64e358
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T14
 **Changes:** saves 2 picture files into T14. On the site it changes only the logo and the logo thumbnail. Nothing runs on the computer. Needs site owner rights; without them, send the 2 files to a site owner.
 Steps:
-1. Save these 2 files into the T14 folder (steps in "How a download task works"):
+1. Round R08 saves these 2 files into the T14 folder. Without R08, save them (steps in "How a download task works"):
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14-site-logo-r1.png
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14-site-logo-tile-r1.png
 2. Open the site. Click the gear (Settings), then Change the look, then Header.
@@ -108,7 +110,7 @@ Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T10
   r6 (13 Nov 26) only replaces the old owner name in 5 links and updates the decision count; if I already checked r5, I save r6 and only check that it opens.
 - Adoption brief r2 (12 slides): the path to ANG-wide use. Use only after other wing PFMs show interest.
 Steps:
-1. Save the three files into the T10 folder:
+1. Round R08 saves the three files into the T10 folder and checks each in PowerPoint (90161Z-T10-check-r1.txt). Without R08, save them:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-command-brief-r5.pptx
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-installer-brief-r6.pptx
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-adoption-brief-r2.pptx
@@ -118,7 +120,7 @@ Report: reply in the Claude chat: the changes I want, and whether each brief may
 
 ## Task 12: color sources, r1 (open, 12 Nov 26)
 
-**For:** these 3 public documents set the official Air Force and ANG colors for the briefs and the app. Claude cannot open Air Force websites from the cloud.
+**For:** these 3 public documents set the official Air Force and ANG colors for the briefs and the app. Claude cannot open Air Force websites from the cloud. Round R08 downloads all 3 and attaches them to its e-mail: do this task only for a file R08 reports as FETCH FAIL.
 **Time:** about 5 minutes (estimate).
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T12
 **Changes:** saves 3 files into T12. Nothing else.
@@ -160,13 +162,13 @@ Steps:
 3. Upload each unit's shield into Seals. Any size or format (PNG, JPG, GIF, BMP, TIF); the larger and cleaner the better. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png).
 4. In the library, select Sync, so the files are also on my computer.
 5. In File Explorer, open the synced 90-161.Z library, then the Seals folder. Click the address bar, Ctrl+C.
-6. In the T07 folder, right-click 90161Z-T07-seal-prep-r2.ps1 > Run with PowerShell. Press Enter at the DODID question. When it asks for the seal folder, press Ctrl+V and Enter (do not leave it empty).
+6. Run the current round with "T07 seal prep" checked and pick the Seals folder when it asks (the round attaches only the result file). Without a round: in the T07 folder, right-click 90161Z-T07-seal-prep-r2.ps1 > Run with PowerShell, press Enter at the DODID question, then paste the folder path (Ctrl+V, Enter).
 Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
 **If it fails:** FAIL means under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger file. WARN means under 150 dpi: usable, may print soft. If the script stops, send its STOPPED line.
 
 ## Done
 
-- Round R06, Deployer and cleanup (13 Nov 26): 4 of 4 pass; Copy script worked; cleanup recycled 4 files and 1 folder; the draft opened; the window did not (text mode), fixed in R07. Details:
+- Round R06, Deployer and cleanup (13 Nov 26): 4 of 4 pass; Copy script worked; cleanup recycled 4 files and 1 folder; the draft opened; the window did not (text mode), fix in R08. Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r06-results.md
 - Round R05, Outlook draft (13 Nov 26): 4 of 4 pass; the draft opened with subject, summary and both files; the Window line came back empty (R06 uses a checkbox). Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r05-results.md
