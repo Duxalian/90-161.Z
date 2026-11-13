@@ -1,10 +1,12 @@
 # Decisions: 90-161.Z
 
 Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that PFM has not approved yet.
-Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters or fewer. A new decision gets a short line here and its full row in docs/decisions-archive.md "Full text of current rows". Read the full row before you act on a decision.
+One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one line per decision, 200 characters or fewer; detail lives in the linked doc. Rows from before 13 Nov 26 15:30 have full text in docs/decisions-archive.md "Full text of current rows"; read it before you act on them.
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-13 | Speed: (A) one docs commit and PR per round; (B) project log "Next row: N" line; (C) one decisions table. Bloat audit every 300 commits. | PFM | docs/reviews/2026-11-13-speed-analysis.md |
+| 2026-11-13 | R06: Deployer name; real path on screen; To box saved in Config; cleanup of finished files to the Recycle Bin; Window-OK box; OK/CHECK subject; progress, estimates, help lines; Copy script. | PFM | docs/reviews/2026-11-13-r05-results.md |
 | 2026-11-13 | Rounds ask no DODID: the runner uses the Windows profile folder (the empty-box default worked in R04). Enter or Run starts. Task scripts drop it at their next revision. | PFM | docs/reviews/2026-11-13-r04-results.md |
 | 2026-11-13 | Open items closed: (3.5A) JAG answers in the app; test site = the live site on its own URL, isolated until connected (replaces 5.7B); site approved for CUI. | PFM | archive |
 | 2026-11-13 | Delivery by pull request (A); details in AGENTS.md Delivery. | PFM | AGENTS.md |

@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R05: Outlook draft, no DODID box; Round R04 done, Task 14, label note, folder cleanup, installer brief r6). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R06: 90-161.Z Deployer with automatic cleanup; Copy script button; R05 done. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -11,17 +11,17 @@ Never send real publication content, names, site addresses or group names. Reply
 
 ## How a paste task (round) works
 
-**For:** a round is one block of text I paste into PowerShell ISE. It saves its own files, runs the tests in a window and puts everything to send back in one folder. The ISSM allows this for scripts that use no elevated credentials (13 Nov 26).
-**Changes:** it writes only into C:\Users\<profile folder>\OneDrive - United States Air Force\90-161.Z: the task folders it needs (for example T01, T07) and its results folder Rounds\<round>. It makes missing folders and replaces files of the same name. It changes, moves or deletes nothing else. Before Run, the window lists every file, marked (new) or (replaces the file there).
+**For:** a round is one block of text I paste into PowerShell ISE. It opens the 90-161.Z Deployer window, saves its own files, runs the tests and makes the results e-mail. The ISSM allows this for scripts that use no elevated credentials (13 Nov 26).
+**Changes:** it writes only into my own OneDrive folder 90-161.Z (the window shows the full path in bold): the task folders it needs (for example T01), Config and its results folder Rounds\<round>. It makes missing folders and replaces files of the same name. From R06 on it also moves finished files to the Recycle Bin (only files 90-161.Z made). Before Run, the window lists every file, marked (new), (replaces the file there) or RECYCLE.
 Steps:
-1. Open the round's link in its task below. Press Ctrl+A, then Ctrl+C.
+1. Press Copy script next to the round's link in its task below. If it says blocked: open the link, press Ctrl+A, then Ctrl+C.
 2. Start menu: type ISE and open Windows PowerShell ISE as myself (not "Run as administrator").
 3. File > New. Click in the white script pane. Press Ctrl+V, then F5.
-4. A window opens. There is no DODID box (from R05 on): it uses my Windows profile folder. Check the "Writes to" line: it says NOT found if the folder is wrong.
+4. The 90-161.Z Deployer window opens. Check the bold "Writes to" line: it shows my OneDrive 90-161.Z folder, or says NOT found. The first time, type the e-mail address the results go to in "Send results to" (it is remembered).
 5. Press Enter (or Run). Word steps take a few minutes each. Keep the window open until the log says DONE.
-6. At DONE an Outlook draft opens (from R05 on) with the subject, the summary and all result files. After "Window:" type OK or what overlapped, type the To address, Send. If no draft opens, the results folder opens and the e-mail text is on the clipboard: new e-mail, Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
-**If it fails:** send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
-<profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. An Outlook draft is only saved in Drafts, never sent by the script. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
+6. At DONE an Outlook draft opens with the address, the subject (OK or CHECK), the summary and all result files. Send it. If no draft opens, the results folder opens and the e-mail text is on the clipboard: new e-mail, Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
+**If it fails:** the window shows a line that starts with WHAT TO DO under the problem: do that. Otherwise send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
+The script never sends the e-mail; the draft waits in Outlook. Finished task folders are cleaned up by the rounds; a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt (rounds never touch it).
 Sensitivity label: every render gets the label from Config\90161Z-label.json. Never delete the Config folder: without it, renders print "LABEL not set" and have no label. The file I labeled by hand is no longer needed. If Config is lost, run a round, then capture again from its new render (it is already labeled); label a file by hand again only if renders say LABEL FAIL.
 
 ## How a download task works
@@ -33,33 +33,21 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R05 r1, Outlook draft and no DODID box (open, 13 Nov 26)
+## Fix first: Round R06 r1, the 90-161.Z Deployer and automatic cleanup (open, 13 Nov 26)
 
-**For:** checks that a round now ends with a ready Outlook draft (subject, summary, all result files), and that the window no longer asks for the DODID.
-**Time:** about 5 minutes (estimate).
-**Changes:** writes into T01 (renderer files and a new sample render) and Rounds\R05. Saves one draft in Outlook Drafts (To empty; the script never sends it). Nothing on the SharePoint site.
+**For:** tests the renamed 90-161.Z Deployer window (full folder path, e-mail box, checkbox, progress bar) and cleans up the project folder by itself.
+**Time:** about 6 minutes (estimate).
+**Changes:** writes into T01 (renderer files and a new sample render), Config (the e-mail address and a small history file) and Rounds\R06. Moves finished files to the Recycle Bin: folders T02, T03, T04, T05, T06, T13, Rounds\R01 to R05, and the old T07 scripts. Only files 90-161.Z made: any other file stays, with its folder. The window lists each one (RECYCLE) before Run; uncheck "Clean up finished files" to skip it. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build b2b1974a.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/fdfc7bcd5f3933ec8c2ce34b3b2dbed6d867b436/scripts/gov/paste/90161Z-R05-round-r1.ps1
-2. Check the "Writes to" line, then press Enter (or Run). No DODID box.
-3. At DONE an Outlook draft opens: subject 90161Z R05, the summary in the body, the report file and the PDF attached.
-4. In the draft, after "Window:" type OK, or what overlapped. Type the To address. Send.
-**Report:** the draft itself (subject 90161Z R05, 2 files attached). If Outlook asked anything (a label, a security prompt), add one line with what it asked.
-**If it fails:** if the window stops answering after the last step, Outlook may be asking to sign in: finish that dialog first. If no draft opens, the log says "Outlook draft not made (...)": the folder opens and the text is on the clipboard as in R04; send as before and add that line. If a step fails, send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL.
-
-## Clean up the project folder (optional, 13 Nov 26)
-
-**For:** removes files from finished tasks. Each one is on the bookmark page again if a later task needs it.
-**Time:** about 3 minutes (estimate).
-Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z
-**Changes:** deletes only the folders and files in steps 1-3 (OneDrive keeps them in its recycle bin for a while). Nothing on the SharePoint site.
-Steps:
-1. Delete these folders if they exist: T02, T03, T04, T05, T06, T13.
-2. Open Rounds. Delete R01, R02, R03 and R04 (their results are recorded).
-3. Open T07. Delete the old scripts 90161Z-T07-seal-test-r*.ps1 and 90161Z-T07-seal-prep-r1.ps1. Keep 90161Z-T07-key-r1.txt and anything else.
-4. Keep: Config, T01, T07, and the folders of open tasks (T09, T10, T11, T12, T14).
-**Report:** nothing to send.
-**If it fails:** if a file will not delete because it is open, close Word and PowerShell, then try again.
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 42f42d0e.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/b818d8a60fe291d1205612e0348d4bffc45a96d3/scripts/gov/paste/90161Z-R06-round-r1.ps1
+2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
+3. In the window, check the bold "Writes to" line. In "Send results to", type the address you send results to (only this once).
+4. If anything in the window overlaps or is cut off, uncheck "This window looked right".
+5. Press Enter (or Run). The progress bar and timer show the step; wait for DONE.
+6. The Outlook draft opens with the address, subject 90161Z R06 OK (or CHECK), the summary and 2 files. Send it.
+**Report:** the draft itself. Add one line if Copy script said blocked, or if Outlook asked anything.
+**If it fails:** read the WHAT TO DO line in the window and do that. If no draft opens, the folder opens and the text is on the clipboard: send as before. If a file did not go to the Recycle Bin, the summary says failed=; send anyway.
 
 ## Task 14: site logo, r1 (open, 13 Nov 26)
 
@@ -178,6 +166,8 @@ Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 901
 
 ## Done
 
+- Round R05, Outlook draft (13 Nov 26): 4 of 4 pass; the draft opened with subject, summary and both files; the Window line came back empty (R06 uses a checkbox). Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r05-results.md
 - Round R04, quicker finish and DAFMAN link style (13 Nov 26): 4 of 4 pass; summary subject and clipboard worked; ACCESSIBILITY link now bold, blue, underlined like the DAFMAN cover link; seal prep r2 saved in T07. Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r04-results.md
 - Round R03, renderer fixes (12 Nov 26): 4 of 4 pass; TOC 1.50 / 2.00 in the PDF; label set; ACCESSIBILITY link works. Details:

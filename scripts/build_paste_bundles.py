@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Build the round bundles in scripts/gov/paste from scripts/paste_bundles.json.
 
-A bundle is one PowerShell text (Windows PowerShell 5.1) that the PFM copies from its raw page, pastes into
+A bundle is one PowerShell text (the "90-161.Z Deployer", PFM 13 Nov; formerly "runner") (Windows PowerShell 5.1) that the PFM copies from its raw page, pastes into
 Windows PowerShell ISE and runs with F5 (ISSM approved paste and run in writing, PFM 2026-11-12). It is a
 bootstrapper for fast test rounds (PFM 1A, 6A: function over form):
-  1. uses the Windows profile folder as the DODID (no question: PFM 13 Nov, the empty-box default worked);
+  1. uses the Windows profile folder as the DODID (no question: PFM 13 Nov, the empty-box default worked) and shows
+     the real path on screen (reports and e-mails still mask it);
+  1b. recycles finished files (cleanup list in the JSON; only files 90-161.Z made; to the Recycle Bin) and reports
+     what it recycled and what is left (folder counts, no file names) in the summary (R06, PFM 13 Nov);
   2. makes each task folder under C:\\Users\\<DODID>\\OneDrive - United States Air Force\\90-161.Z if missing and
      writes every file (text: same content as UTF-8 with BOM and CRLF; binary: byte-exact from base64);
   3. runs the steps one by one (each a runner file, as a child powershell.exe with -Id and -NoPause), with a live
@@ -12,7 +15,7 @@ bootstrapper for fast test rounds (PFM 1A, 6A: function over form):
   4. writes a results folder Rounds\\<round> with one report file (summary + full masked log) and copies of the
      collect files (PDFs), ready to attach to one e-mail (no zip: zips do not cross the boundary, PFM 13 Nov);
   5. makes an Outlook draft (classic Outlook, COM): subject = summary line 1, body = the rest, every results file
-     attached, To empty, never sent (R05, PFM 13 Nov). If no draft can be made, it opens the results folder and puts
+     attached, never sent (R05); To from the window box, saved in Config\\90161Z-mail-to.txt (R06). If no draft can be made, it opens the results folder and puts
      the summary on the clipboard instead (R04 behavior).
 It runs only the steps embedded in it and never fetches code (PFM 3A). If no window can open (no Windows Forms),
 it runs the same steps as text.
@@ -44,7 +47,7 @@ def q(s):
 
 
 ENGINE = r'''
-# ---------------- round runner (generated; same engine in every round bundle) ----------------
+# ---------------- 90-161.Z Deployer (generated; same engine in every round bundle) ----------------
 function Get-Secret([string]$Id, [string]$Leaf) {
   @($Id, $Leaf, $env:USERNAME) | Where-Object { $_ -and $_.Length -ge 4 } | Sort-Object -Unique | Sort-Object Length -Descending
 }
@@ -52,17 +55,151 @@ function ConvertTo-Masked([string]$Text) {
   foreach ($x in $script:secret) { $Text = $Text -replace [regex]::Escape($x), '<DODID>' }
   return $Text
 }
-function Resolve-Base([string]$Typed) {
-  $leaf = ''
-  if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
-  $id = ([string]$Typed).Trim()
-  if (-not $id) { $id = $leaf }
-  $script:secret = Get-Secret $id $leaf
-  if ($id -notmatch '^[A-Za-z0-9._-]{4,}$') { throw 'DODID not valid: use the folder name under C:\Users (4 or more letters, digits, dot, dash or underscore).' }
-  $oneDrive = Join-Path (Join-Path $usersRoot $id) 'OneDrive - United States Air Force'
-  if (-not (Test-Path -LiteralPath $oneDrive -PathType Container)) { throw 'FOLDER not found: C:\Users\<profile folder>\OneDrive - United States Air Force. OneDrive is not set up in this Windows profile.' }
-  $script:dodid = $id
-  return (Join-Path $oneDrive '90-161.Z')
+function Get-ProfileLeaf { if ($env:USERPROFILE) { return (Split-Path -Leaf $env:USERPROFILE) }; return '' }
+function Get-BasePath {
+  # The real path (shown on screen, PFM 13 Nov: no placeholder). Reports and e-mails show <DODID> instead.
+  $leaf = Get-ProfileLeaf
+  if (-not $leaf) { $leaf = 'no-profile-folder' }
+  return (Join-Path (Join-Path (Join-Path $usersRoot $leaf) 'OneDrive - United States Air Force') '90-161.Z')
+}
+function Resolve-Base {
+  # No DODID question (PFM 13 Nov): the Windows profile folder name is the DODID.
+  $leaf = Get-ProfileLeaf
+  $script:secret = Get-Secret $leaf $leaf
+  if ($leaf -notmatch '^[A-Za-z0-9._-]{4,}$') { throw 'PROFILE folder name not usable (Windows profile not found). Sign in to Windows with your own account, then run again.' }
+  $base = Get-BasePath
+  $oneDrive = Split-Path -Parent $base
+  if (-not (Test-Path -LiteralPath $oneDrive -PathType Container)) { throw ('FOLDER not found: ' + $oneDrive + '. OneDrive is not set up in this Windows profile.') }
+  $script:dodid = $leaf
+  return $base
+}
+function Format-Duration([double]$Seconds) {
+  $s = [int][math]::Round($Seconds)
+  return ('{0}m {1:00}s' -f [math]::Floor($s / 60), ($s % 60))
+}
+function Test-WordOpen { return (@(Get-Process -Name WINWORD -ErrorAction SilentlyContinue).Count -gt 0) }
+function Test-MailTo([string]$To) {
+  $one = '[^@\s;,]+@[^@\s;,]+\.[^@\s;,]+'
+  return ($To -match ('^\s*' + $one + '(\s*;\s*' + $one + ')*\s*;?\s*$'))
+}
+function Get-ConfigFile([string]$Base, [string]$Name) { return (Join-Path (Join-Path $Base 'Config') $Name) }
+function Get-MailTo([string]$Base) {
+  # Config\90161Z-mail-to.txt: the address the results e-mail goes to (PFM 13 Nov). The window box saves it.
+  $p = Get-ConfigFile $Base '90161Z-mail-to.txt'
+  if (Test-Path -LiteralPath $p -PathType Leaf) { try { return ([string](Get-Content -LiteralPath $p -TotalCount 1)).Trim() } catch { return '' } }
+  return ''
+}
+function Save-MailTo([string]$Base, [string]$To) {
+  $p = Get-ConfigFile $Base '90161Z-mail-to.txt'
+  $dir = Split-Path -Parent $p
+  if (-not (Test-Path -LiteralPath $dir -PathType Container)) { [void](New-Item -ItemType Directory -Path $dir -Force) }
+  [System.IO.File]::WriteAllText($p, ($To.Trim() + "`r`n"), (New-Object System.Text.UTF8Encoding $true))
+}
+function Read-RoundHistory([string]$Base) {
+  # Config\90161Z-history.csv: round, step, finish time, status, seconds (no DODID). Feeds the banner and the estimates.
+  $p = Get-ConfigFile $Base '90161Z-history.csv'
+  if (Test-Path -LiteralPath $p -PathType Leaf) { try { return @(Import-Csv -LiteralPath $p) } catch { return @() } }
+  return @()
+}
+function Add-RoundHistory([string]$Base, [string]$Step, [string]$Status, [int]$Seconds) {
+  try {
+    $p = Get-ConfigFile $Base '90161Z-history.csv'
+    $dir = Split-Path -Parent $p
+    if (-not (Test-Path -LiteralPath $dir -PathType Container)) { [void](New-Item -ItemType Directory -Path $dir -Force) }
+    [pscustomobject]@{ Round = $round; Step = $Step; Finished = (Get-Date -Format 'yyyy-MM-dd HH:mm'); Status = $Status; Seconds = $Seconds } |
+      Export-Csv -LiteralPath $p -Append -NoTypeInformation
+  } catch { $null = $_ }   # history is a convenience: never stop a round for it
+}
+function Get-LastRoundText($Hist) {
+  $r = @($Hist | Where-Object { $_.Step -eq 'ROUND' })
+  if (-not $r.Count) { return 'Last round: none recorded on this computer yet.' }
+  $l = $r[-1]
+  return ('Last round: ' + $l.Round + ' ' + $l.Status + ', ' + $l.Finished + ' (took ' + (Format-Duration ([double]$l.Seconds)) + ').')
+}
+function Get-StepEstimate($Hist, [string]$Name) {
+  $r = @($Hist | Where-Object { $_.Step -eq $Name -and $_.Status -eq 'OK' -and $_.Seconds })   # last good run only
+  if ($r.Count) { return [int]$r[-1].Seconds }
+  return 0
+}
+$helpRules = @(
+  @{ Re = 'FOLDER not found|PROFILE folder'; Text = 'OneDrive is not set up in this Windows profile. Open OneDrive from the Start menu, sign in, wait until it says it is up to date, then run again.' },
+  @{ Re = 'being used by another process|cannot access the file'; Text = 'A file is open in another program. Close Word and any file from the 90-161.Z folder, then press Run again.' },
+  @{ Re = 'RPC_E_CALL_REJECTED|0x80010001|0x8001010A|server busy'; Text = 'Word was busy. Close every Word window, wait 10 seconds, then press Run again.' },
+  @{ Re = 'took more than'; Text = 'A step ran too long. Close Word (check the taskbar), then press Run again. If it happens twice, send the results as they are.' },
+  @{ Re = 'LABEL (FAIL|not set)'; Text = 'The sensitivity label was not set. Keep the Config folder; see "Sensitivity label" on the bookmark page.' },
+  @{ Re = 'denied|UnauthorizedAccess'; Text = 'Windows blocked a file. Check that the 90-161.Z folder is in your own OneDrive and not read-only, then run again.' },
+  @{ Re = 'Outlook draft not made'; Text = 'Open Outlook (classic), then press Make e-mail draft. Or send by hand: the results folder is open and the summary is on the clipboard.' },
+  @{ Re = 'FORMAT-FAIL'; Text = 'The renderer found a format problem. Send the results as they are; Claude fixes it.' },
+  @{ Re = 'CLEANUP could not'; Text = 'A file could not go to the Recycle Bin (it may be open). Close it; the next round tries again.' },
+  @{ Re = 'e-mail address does not look right'; Text = 'Type one address like name@example.com (several: separate with ;), or leave the box empty.' }
+)
+function Get-WhatToDo([string]$Line) {
+  foreach ($h in $helpRules) {
+    if ($Line -match $h.Re -and -not $script:helped.ContainsKey($h.Re)) { $script:helped[$h.Re] = $true; return ('WHAT TO DO: ' + $h.Text) }
+  }
+  return ''
+}
+function Test-OurFile([string]$Name) {
+  # Files 90-161.Z made: 90161Z-* names, sample renders, and the support scripts that keep their names.
+  if ($Name -like '90161Z-*' -or $Name -like 'SAMPLEWING*') { return $true }
+  return ($known -contains $Name)
+}
+function Get-CleanupPlan([string]$Base) {
+  # Finished items only (PFM 13 Nov). A file not made by 90-161.Z is never touched; its folder stays.
+  $res = @{ Files = @(); Dirs = @(); Kept = 0; Lines = @() }
+  foreach ($c in $cleanup) {
+    if ($c.Kind -eq 'dir') {
+      $p = Join-Path $Base $c.Path
+      if (-not (Test-Path -LiteralPath $p -PathType Container)) { continue }
+      $all = @(Get-ChildItem -LiteralPath $p -Recurse -File -Force -ErrorAction SilentlyContinue)
+      $ours = @($all | Where-Object { Test-OurFile $_.Name })
+      $other = $all.Count - $ours.Count
+      $res.Files += @($ours | ForEach-Object { $_.FullName }); $res.Dirs += $p; $res.Kept += $other
+      $res.Lines += ('  RECYCLE ' + $c.Path + '\   (' + $ours.Count + ' files' + $(if ($other) { '; keeps ' + $other + ' file(s) not made by 90-161.Z, and the folder' } else { '' }) + ')')
+    } else {
+      $dir = Join-Path $Base (Split-Path -Parent $c.Path)
+      if (-not (Test-Path -LiteralPath $dir -PathType Container)) { continue }
+      foreach ($f in @(Get-ChildItem -LiteralPath $dir -Filter (Split-Path -Leaf $c.Path) -File -Force -ErrorAction SilentlyContinue)) {
+        if (Test-OurFile $f.Name) { $res.Files += $f.FullName; $res.Lines += ('  RECYCLE ' + (Split-Path -Parent $c.Path) + '\' + $f.Name) }
+      }
+    }
+  }
+  return $res
+}
+function Move-ToRecycleBin([string]$Path, [switch]$Folder) {
+  # Windows: to the Recycle Bin (restore from there). Elsewhere (tests only): plain delete.
+  if ($env:OS -eq 'Windows_NT') {
+    Add-Type -AssemblyName Microsoft.VisualBasic
+    if ($Folder) { [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteDirectory($Path, 'OnlyErrorDialogs', 'SendToRecycleBin') }
+    else { [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($Path, 'OnlyErrorDialogs', 'SendToRecycleBin') }
+  } else { Remove-Item -LiteralPath $Path -Force -Recurse:$Folder }
+}
+function Invoke-Cleanup([string]$Base, [scriptblock]$Say) {
+  $plan = Get-CleanupPlan $Base
+  $done = 0; $gone = 0; $failed = 0
+  foreach ($f in $plan.Files) {
+    try { Move-ToRecycleBin $f; $done++ } catch { $failed++; & $Say ('CLEANUP could not recycle ' + (ConvertTo-Masked $f) + ': ' + (ConvertTo-Masked $_.Exception.Message)) }
+  }
+  foreach ($d in @($plan.Dirs | Sort-Object Length -Descending)) {
+    # The folder goes only when nothing is left in it.
+    if ((Test-Path -LiteralPath $d -PathType Container) -and @(Get-ChildItem -LiteralPath $d -Recurse -File -Force -ErrorAction SilentlyContinue).Count -eq 0) {
+      try { Move-ToRecycleBin $d -Folder; $gone++ } catch { $failed++; & $Say ('CLEANUP could not recycle ' + (ConvertTo-Masked $d) + ': ' + (ConvertTo-Masked $_.Exception.Message)) }
+    }
+  }
+  $line = 'CLEANUP to Recycle Bin: files=' + $done + ' folders=' + $gone + ' kept-other=' + $plan.Kept + ' failed=' + $failed
+  & $Say $line
+  return $line
+}
+function Get-FolderInventory([string]$Base) {
+  # What is left, for Claude to update the next round's steps: task folders by name, counts only (no file names).
+  $parts = @(); $odd = 0
+  foreach ($d in @(Get-ChildItem -LiteralPath $Base -Directory -Force -ErrorAction SilentlyContinue | Sort-Object Name)) {
+    if ($d.Name -notmatch '^(T\d\d|Rounds|Config)$') { $odd++; continue }
+    $all = @(Get-ChildItem -LiteralPath $d.FullName -Recurse -File -Force -ErrorAction SilentlyContinue)
+    $other = @($all | Where-Object { -not (Test-OurFile $_.Name) }).Count
+    $parts += ($d.Name + '(' + $all.Count + $(if ($other) { ', ' + $other + ' other' } else { '' }) + ')')
+  }
+  return ('LEFT ' + ($parts -join ' ') + $(if ($odd) { ' other-folders=' + $odd } else { '' }))
 }
 function Write-BundleFile([string]$Base, [scriptblock]$Say) {
   $utf8Bom = New-Object System.Text.UTF8Encoding $true
@@ -133,89 +270,114 @@ function Export-RoundResult([string]$Base, [string[]]$Summary) {
   [System.IO.File]::WriteAllText($report, (($body -join "`r`n") + "`r`n"), (New-Object System.Text.UTF8Encoding $true))
   return @{ Dir = $out; Count = $count; Missing = $missing }
 }
-function Get-RoundPlan([string]$Typed) {
-  # What this round writes, before it runs (PFM 13 Nov: show the impact). Shows <DODID>, never the number.
-  $leaf = ''
-  if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
-  $id = ([string]$Typed).Trim(); $who = '<DODID you typed>'
-  if (-not $id) { $id = $leaf; $who = '<your profile folder>' }
-  if (-not $id) { $id = 'no-profile-folder' }   # USERPROFILE unset: the plan says NOT found instead of failing
-  $base = Join-Path (Join-Path (Join-Path $usersRoot $id) 'OneDrive - United States Air Force') '90-161.Z'
-  $shown = $usersRoot + '\' + $who + '\OneDrive - United States Air Force\90-161.Z'
+function Get-RoundPlan {
+  # What this round writes and recycles, before it runs (PFM 13 Nov: show the impact; show the real path).
+  $base = Get-BasePath
   $found = Test-Path -LiteralPath (Split-Path -Parent $base) -PathType Container
-  $lines = @('WRITES TO ' + $shown + $(if ($found) { '' } else { '   (OneDrive folder NOT found in this Windows profile)' }))
+  $lines = @('WRITES TO ' + $base + $(if ($found) { '' } else { '   (NOT found: OneDrive is not set up in this Windows profile)' }))
   foreach ($f in $files) {
     $p = Join-Path (Join-Path $base $f.Dir) $f.Name
     $lines += ('  ' + $f.Dir + '\' + $f.Name + $(if (Test-Path -LiteralPath $p -PathType Leaf) { '   (replaces the file there)' } else { '   (new)' }))
   }
-  $lines += ('  Rounds\' + $round + '\   (results folder: one report file + copies of the PDFs, to attach to one e-mail)')
+  $lines += ('  Rounds\' + $round + '\   (results folder: one report file + copies of the PDFs)')
+  if ($cleanup.Count) {
+    $cp = @{ Lines = @(); Kept = 0 }
+    if (Test-Path -LiteralPath $base -PathType Container) { $cp = Get-CleanupPlan $base }
+    if ($cp.Lines.Count) { $lines += 'CLEAN UP (first step; to the Recycle Bin; uncheck it to skip):'; $lines += $cp.Lines }
+    else { $lines += 'CLEAN UP: nothing to recycle.' }
+  }
   $lines += 'Folders are made when missing. Files of the same name are replaced. Nothing else is changed, moved or deleted.'
-  $lines += 'Steps then write their own results and PDFs into these task folders.'
-  return @{ Shown = $shown; Found = $found; Lines = $lines }
+  return @{ Shown = $base; Found = $found; Lines = $lines }
 }
-function Save-RoundDraft([string]$Dir, [string[]]$Summary) {
-  # R05 (PFM 13 Nov): one Outlook draft with subject, body and every results file. To stays empty. Never sent:
-  # this code has no Send call (tests/run.sh checks). Classic Outlook only (new Outlook has no COM): else fall back.
+function Save-RoundDraft([string]$Dir, [string[]]$Summary, [string]$To, [string]$WindowLine) {
+  # One Outlook draft with subject, body and every results file (R05, PFM 13 Nov); To from the window box (R06).
+  # Never sent: this code has no Send call (tests/run.sh checks). Classic Outlook only (new Outlook has no COM): else fall back.
   if ($env:OS -ne 'Windows_NT') { return 'not Windows' }
   try {
     $ol = New-Object -ComObject Outlook.Application
     $m = $ol.CreateItem(0)
     $m.Subject = $Summary[0]
-    $m.Body = ((@($Summary | Select-Object -Skip 1) + @('', 'Window: ')) -join "`r`n")
+    if ($To) { $m.To = $To }
+    $m.Body = ((@($Summary | Select-Object -Skip 1) + @('', $WindowLine)) -join "`r`n")
     foreach ($f in @(Get-ChildItem -LiteralPath $Dir -File)) { [void]$m.Attachments.Add($f.FullName) }
     $m.Display()   # first: if it fails, nothing is left in Drafts
     $m.Save()
     return ''
   } catch { return (ConvertTo-Masked $_.Exception.Message) }
 }
-function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scriptblock]$Tick, [scriptblock]$OnStep) {
+function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock]$Say, [scriptblock]$Tick, [scriptblock]$OnStep, [scriptblock]$OnStatus, [scriptblock]$WindowLine) {
   $script:runLog = New-Object System.Collections.Generic.List[string]
-  $base = Resolve-Base $Typed
-  # Line 1 is the e-mail subject (PFM 13 Nov): paste the summary into the body, then cut line 1 into the subject.
+  $script:helped = @{}
+  $sayRaw = $Say
+  $speak = { param($t) & $sayRaw $t; $w = Get-WhatToDo $t; if ($w) { & $sayRaw $w } }
+  $base = Resolve-Base
+  $hist = Read-RoundHistory $base
+  $started = Get-Date
+  # Line 1 is the e-mail subject (PFM 13 Nov); OK or CHECK is added at the end (R06).
   $summary = @(('90161Z ' + $round), ('ROUND ' + $round + ' build ' + $buildId + ' ' + (Get-Date -Format 'yyyy-MM-dd HH:mm')))
+  $units = 0
+  if ($Clean -and $cleanup.Count) { $units++ }
+  foreach ($x in $Selected) { if ($x) { $units++ } }
+  $n = 0
   try {
-  & $Say ('ROUND ' + $round + ' build ' + $buildId + ' -> ' + (ConvertTo-Masked $base))
-  Write-BundleFile $base $Say
+  & $speak ('ROUND ' + $round + ' build ' + $buildId + ' -> ' + (ConvertTo-Masked $base))
+  if (Test-WordOpen) { & $speak 'NOTE: Word is open. Renders use Word: save your documents and close Word if a step stops.' }
+  Write-BundleFile $base $speak
+  # An empty box clears the saved address (review R06 #5).
+  try { if ($To -or (Test-Path -LiteralPath (Get-ConfigFile $base '90161Z-mail-to.txt') -PathType Leaf)) { Save-MailTo $base $To } } catch { & $speak ('NOTE: could not save the e-mail address: ' + (ConvertTo-Masked $_.Exception.Message)) }
+  if ($cleanup.Count) {
+    if ($Clean) { $n++; & $OnStatus $n $units 'Clean up finished files' 0; $summary += (Invoke-Cleanup $base $speak) }
+    else { $summary += 'CLEANUP skipped' }
+  }
   for ($k = 0; $k -lt $steps.Count; $k++) {
     if (-not $Selected[$k]) { $summary += ($steps[$k].Name + ': skipped'); continue }
-    & $Say ('STEP ' + $steps[$k].Name + ' running (Word steps can take minutes)...')
-    $r = Invoke-RoundStep $base $steps[$k] $Say $Tick
-    $line = Get-StepLine $steps[$k] $r
+    $n++; & $OnStatus $n $units $steps[$k].Name (Get-StepEstimate $hist $steps[$k].Name)
+    & $speak ('STEP ' + $steps[$k].Name + ' running (Word steps can take minutes)...')
+    $t0 = Get-Date
+    $r = Invoke-RoundStep $base $steps[$k] $speak $Tick
+    $secs = ((Get-Date) - $t0).TotalSeconds
+    $line = (Get-StepLine $steps[$k] $r) + ' ' + (Format-Duration $secs)
     $summary += $line
-    & $Say $line
+    & $speak $line
     & $OnStep $k $line
+    Add-RoundHistory $base $steps[$k].Name $(if ($line -match ': OK \(') { 'OK' } else { 'CHECK' }) ([int]$secs)
   }
+  $summary += (Get-FolderInventory $base)
   } catch {
     # A run that stops midway still leaves a report to send (summary so far + the log up to the stop).
+    $summary[0] = '90161Z ' + $round + ' STOPPED'
     $summary += ('STOPPED: ' + (ConvertTo-Masked ([string]$_)))
     [void](Export-RoundResult $base $summary)
+    Add-RoundHistory $base 'ROUND' 'STOPPED' ([int]((Get-Date) - $started).TotalSeconds)
     throw
   }
   $z = Export-RoundResult $base $summary
   $summary += ('RESULTS Rounds\' + $round + ' files=' + $z.Count + ' missing=' + @($z.Missing).Count + $(if (@($z.Missing).Count) { ' (' + ($z.Missing -join ', ') + ')' } else { '' }))
-  & $Say $summary[-1]
-  [void](Export-RoundResult $base $summary)   # rewrite so the report holds the RESULTS line
+  & $speak $summary[-1]
+  $bad = (@($summary | Where-Object { $_ -match ': CHECK \(|failed=[1-9]' }).Count -gt 0 -or @($z.Missing).Count -gt 0)
+  $state = $(if ($bad) { 'CHECK' } else { 'OK' })
+  $summary[0] = '90161Z ' + $round + ' ' + $state
+  [void](Export-RoundResult $base $summary)   # rewrite so the report holds the RESULTS line and the subject
+  Add-RoundHistory $base 'ROUND' $state ([int]((Get-Date) - $started).TotalSeconds)
   $script:resultsDir = $z.Dir
-  & $Say ''
-  if (@($summary | Where-Object { $_ -match ': CHECK \(' }).Count -gt 0 -or @($z.Missing).Count -gt 0) {
-    & $Say 'NOTE: some steps say CHECK or files are missing (see RESULTS above). Send the results anyway; they show what went wrong.'
-  }
-  # Both modes end the same way (PFM 13 Nov: fewest steps). R05: an Outlook draft with everything in it;
-  # if Outlook cannot make one, the folder opens and the summary is on the clipboard (R04 behavior).
-  $why = Save-RoundDraft $z.Dir $summary
+  & $speak ''
+  if ($bad) { & $speak 'NOTE: some steps say CHECK or files are missing (see above). Send the results anyway; they show what went wrong.' }
+  # R05: an Outlook draft with everything in it; if Outlook cannot make one, the folder opens and the summary is on the clipboard.
+  $why = Save-RoundDraft $z.Dir $summary $To (& $WindowLine)
   $script:draftMade = (-not $why)
   if ($script:draftMade) {
-    & $Say ('DONE. An Outlook draft is open: subject 90161Z ' + $round + ', the summary and all ' + $z.Count + ' files are in it. To is empty.')
-    & $Say 'In the draft: change the "Window:" line if anything overlapped, type the To address, then Send.'
+    & $speak ('DONE in ' + (Format-Duration ((Get-Date) - $started).TotalSeconds) + '. An Outlook draft is open: subject ' + $summary[0] + ', the summary and all ' + $z.Count + ' files.')
+    & $speak $(if ($To) { 'Check the draft, then Send.' } else { 'Type the To address in the draft (or in the box here for next time), then Send.' })
   } else {
-    & $Say ('Outlook draft not made (' + $why + ').')
-    & $Say ('DONE. The results folder Rounds\' + $round + ' opens now and the summary is on the clipboard.')
-    & $Say ('New e-mail: paste into the body, cut the first line (90161Z ' + $round + ') into the subject, attach all ' + $z.Count + ' files in the folder.')
+    & $speak ('Outlook draft not made (' + $why + ').')
+    & $speak ('DONE. The results folder Rounds\' + $round + ' opens now and the summary is on the clipboard.')
+    & $speak ('New e-mail: paste into the body, cut the first line (' + $summary[0] + ') into the subject, attach all ' + $z.Count + ' files in the folder.')
   }
   return ,$summary
 }
 
-$script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $script:draftMade = $false; $script:textMode = $false; $stepMinutes = 30
+$script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $script:draftMade = $false; $script:textMode = $false; $script:helped = @{}; $stepMinutes = 30
+$script:statusBase = ''; $script:stepStart = $null; $script:stepEst = 0
 $gui = $true
 try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false }
 if ($gui) {
@@ -223,64 +385,130 @@ if ($gui) {
     # Layout follows the font and screen scaling (R02: in ISE, which is DPI-aware, fixed pixel positions overlapped):
     # one column of rows, each control on its own row; the log takes the spare height.
     [System.Windows.Forms.Application]::EnableVisualStyles()
+    $basePath = Get-BasePath
+    $hist0 = Read-RoundHistory $basePath
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = '90-161.Z runner - ' + $round + ' - build ' + $buildId
+    $form.Text = '90-161.Z Deployer - ' + $round + ' - build ' + $buildId
     $form.SuspendLayout()
     $form.AutoScaleDimensions = New-Object System.Drawing.SizeF(96, 96); $form.AutoScaleMode = 'Dpi'   # sizes below are at 100 % scaling
-    $form.Font = New-Object System.Drawing.Font('Segoe UI', 9)
-    $form.ClientSize = New-Object System.Drawing.Size(900, 640); $form.MinimumSize = New-Object System.Drawing.Size(640, 480)
+    $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+    $form.ClientSize = New-Object System.Drawing.Size(940, 720); $form.MinimumSize = New-Object System.Drawing.Size(680, 520)
     $form.StartPosition = 'CenterScreen'
     $grid = New-Object System.Windows.Forms.TableLayoutPanel
-    $grid.Dock = 'Fill'; $grid.Padding = New-Object System.Windows.Forms.Padding(10); $grid.ColumnCount = 1; $grid.RowCount = 4
+    $grid.Dock = 'Fill'; $grid.Padding = New-Object System.Windows.Forms.Padding(10); $grid.ColumnCount = 1; $grid.RowCount = 10
     [void]$grid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle('Percent', 100)))
-    foreach ($h in 'AutoSize', 'AutoSize', 'Percent', 'AutoSize') { [void]$grid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle($h, 100))) }
+    foreach ($h in 'AutoSize', 'AutoSize', 'AutoSize', 'AutoSize', 'AutoSize', 'AutoSize', 'Percent', 'AutoSize', 'AutoSize', 'AutoSize') { [void]$grid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle($h, 100))) }
+    $wrap = New-Object System.Drawing.Size(880, 0)
+    $banner = New-Object System.Windows.Forms.Label
+    $banner.AutoSize = $true; $banner.MaximumSize = $wrap; $banner.Text = Get-LastRoundText $hist0
     $where = New-Object System.Windows.Forms.Label
-    $where.AutoSize = $false; $where.Dock = 'Fill'; $where.AutoEllipsis = $true; $where.Height = ($where.Font.Height * 2) + 4; $where.Margin = New-Object System.Windows.Forms.Padding(3, 6, 3, 6)
+    $where.AutoSize = $true; $where.MaximumSize = $wrap; $where.Margin = New-Object System.Windows.Forms.Padding(3, 6, 3, 3)
+    $where.Font = New-Object System.Drawing.Font('Segoe UI', 10, 'Bold')
+    $warn = New-Object System.Windows.Forms.Label
+    $warn.AutoSize = $true; $warn.MaximumSize = $wrap; $warn.ForeColor = 'DarkRed'
     $list = New-Object System.Windows.Forms.CheckedListBox
     $list.Anchor = 'Left, Right'; $list.CheckOnClick = $true; $list.IntegralHeight = $false
+    $off = 0
+    if ($cleanup.Count) { [void]$list.Items.Add('Clean up finished files (to the Recycle Bin)', $true); $off = 1 }
     foreach ($s in $steps) { [void]$list.Items.Add($s.Name, $true) }
-    $list.Height = ($list.ItemHeight * [math]::Max(3, $steps.Count + 1)) + 6
+    $list.Height = ($list.ItemHeight * [math]::Max(3, $list.Items.Count + 1)) + 6
+    $bar = New-Object System.Windows.Forms.ProgressBar
+    $bar.Dock = 'Fill'; $bar.Height = 18; $bar.Minimum = 0; $bar.Maximum = 1; $bar.Value = 0
+    $status = New-Object System.Windows.Forms.Label
+    $status.AutoSize = $true; $status.MaximumSize = $wrap
     $log = New-Object System.Windows.Forms.TextBox
     $log.Dock = 'Fill'; $log.Multiline = $true; $log.ScrollBars = 'Both'; $log.WordWrap = $false; $log.ReadOnly = $true
     $log.Font = New-Object System.Drawing.Font('Consolas', 9)
+    $toPanel = New-Object System.Windows.Forms.FlowLayoutPanel
+    $toPanel.AutoSize = $true; $toPanel.WrapContents = $true; $toPanel.Dock = 'Fill'
+    $toLabel = New-Object System.Windows.Forms.Label
+    $toLabel.Text = 'Send results to (e-mail):'; $toLabel.AutoSize = $true; $toLabel.Margin = New-Object System.Windows.Forms.Padding(3, 7, 3, 3)
+    $toBox = New-Object System.Windows.Forms.TextBox
+    $toBox.Width = 360; $toBox.Text = Get-MailTo $basePath
+    $toPanel.Controls.AddRange(@($toLabel, $toBox))
+    $okBox = New-Object System.Windows.Forms.CheckBox
+    $okBox.AutoSize = $true; $okBox.Checked = $true; $okBox.MaximumSize = $wrap
+    $okBox.Text = 'This window looked right (nothing overlapped or cut off). Uncheck if not; the e-mail says so.'
     $buttons = New-Object System.Windows.Forms.FlowLayoutPanel
     $buttons.AutoSize = $true; $buttons.WrapContents = $true; $buttons.Dock = 'Fill'
     $run = New-Object System.Windows.Forms.Button
-    $run.Text = 'Run'; $run.AutoSize = $true; $run.MinimumSize = New-Object System.Drawing.Size(110, 0)
+    $run.Text = 'Run'; $run.AutoSize = $true; $run.MinimumSize = New-Object System.Drawing.Size(110, 32)
+    $draft = New-Object System.Windows.Forms.Button
+    $draft.Text = 'Make e-mail draft'; $draft.AutoSize = $true; $draft.MinimumSize = New-Object System.Drawing.Size(110, 32); $draft.Enabled = $false
     $copy = New-Object System.Windows.Forms.Button
-    $copy.Text = 'Copy summary'; $copy.AutoSize = $true; $copy.MinimumSize = New-Object System.Drawing.Size(110, 0); $copy.Enabled = $false
+    $copy.Text = 'Copy summary'; $copy.AutoSize = $true; $copy.MinimumSize = New-Object System.Drawing.Size(110, 32); $copy.Enabled = $false
     $open = New-Object System.Windows.Forms.Button
-    $open.Text = 'Open results folder'; $open.AutoSize = $true; $open.MinimumSize = New-Object System.Drawing.Size(110, 0); $open.Enabled = $false
-    $buttons.Controls.AddRange(@($run, $copy, $open))
-    $row = 0; foreach ($c in @($where, $list, $log, $buttons)) { $grid.Controls.Add($c, 0, $row); $row++ }
+    $open.Text = 'Open results folder'; $open.AutoSize = $true; $open.MinimumSize = New-Object System.Drawing.Size(110, 32); $open.Enabled = $false
+    $buttons.Controls.AddRange(@($run, $draft, $copy, $open))
+    $row = 0; foreach ($c in @($banner, $where, $warn, $list, $bar, $status, $log, $toPanel, $okBox, $buttons)) { $grid.Controls.Add($c, 0, $row); $row++ }
     $form.Controls.Add($grid)
     $form.ResumeLayout($false); $form.PerformLayout()
-    # Enter starts the run (PFM 13 Nov). No DODID box: the profile folder is used (PFM 13 Nov). Focus starts on Run.
+    # Enter starts the run (PFM 13 Nov). Focus: the address box when it is empty, else Run.
     $form.AcceptButton = $run
-    $form.Add_Shown({ $run.Focus() | Out-Null })
-    $first = Get-RoundPlan ''
-    $where.Text = 'Writes to: ' + $first.Shown + $(if ($first.Found) { '' } else { '   (NOT found: OneDrive is not set up in this Windows profile)' })
-    $howTo = @('HOW TO USE', '  1. Check the "Writes to" line above. If it says NOT found, stop and send that line.',
-      '  2. Press Enter or Run. Word steps take a few minutes; keep this window open until it says DONE.',
-      '  3. At DONE an Outlook draft opens with the subject, summary and all files. Fix the "Window:" line, add To, Send.',
-      '     If Outlook cannot make the draft: the results folder opens and the summary is on the clipboard (paste into a',
-      '     new e-mail body, cut the first line into the subject, attach all files). The buttons copy and open again.',
-      '  Uncheck a step to skip it. Closing the window stops a running step.', '')
+    # Enter in the address box moves to Run instead of starting the round (review R06 #3: a stray Enter must not start a cleanup).
+    $toBox.Add_Enter({ $form.AcceptButton = $null })
+    $toBox.Add_Leave({ $form.AcceptButton = $run })
+    $toBox.Add_KeyDown({ if ($_.KeyCode -eq 'Return') { $_.SuppressKeyPress = $true; $run.Focus() | Out-Null } })
+    $form.Add_Shown({ if ($toBox.Text) { $run.Focus() | Out-Null } else { $toBox.Focus() | Out-Null } })
+    $first = Get-RoundPlan
+    $where.Text = 'Writes to: ' + $first.Shown + $(if ($first.Found) { '' } else { '   (NOT found)' })
+    $warnings = @()
+    if (-not $first.Found) { $warnings += 'OneDrive folder NOT found in this Windows profile: open OneDrive from the Start menu and sign in, then paste and run again.' }
+    if (Test-WordOpen) { $warnings += 'Word is open. Save your documents and close Word before Run (renders use Word).' }
+    $warn.Text = ($warnings -join "`r`n"); $warn.Visible = [bool]$warnings.Count
+    $est = 0; foreach ($s in $steps) { $est += Get-StepEstimate $hist0 $s.Name }
+    $status.Text = 'Ready. Press Enter or Run.' + $(if ($est) { ' About ' + (Format-Duration $est) + ' (your last run).' } else { ' Word steps take a few minutes each.' })
+    $howTo = @('HOW TO USE', '  1. Check the "Writes to" line above (your own OneDrive folder). Type the e-mail address the results go to (saved for next time), then Enter.',
+      '  2. Press Enter or Run. Keep this window open until it says DONE. Uncheck a step to skip it.',
+      '  3. At DONE an Outlook draft opens with the subject, summary and all files. Check it, then Send.',
+      '     If no draft opens: the results folder opens and the summary is on the clipboard (paste into a new e-mail body,',
+      '     cut the first line into the subject, attach all files). Make e-mail draft tries Outlook again.',
+      '  Closing the window stops a running step.', '')
     $log.Text = (($howTo + $first.Lines) -join "`r`n") + "`r`n"
 
     $script:lastSummary = @()
     $say = { param($t) Add-RunLog $t; try { $log.AppendText($t + "`r`n"); [System.Windows.Forms.Application]::DoEvents() } catch { Write-Host $t } }
-    $tick = { [System.Windows.Forms.Application]::DoEvents() }
-    $onStep = { param($k, $line) $list.Items[$k] = $line; $list.SetItemChecked($k, $true) }
-    $run.Add_Click({
-      $run.Enabled = $false; $copy.Enabled = $false; $open.Enabled = $false
-      $sel = @(); for ($k = 0; $k -lt $steps.Count; $k++) { $sel += $list.GetItemChecked($k) }
-      try {
-        $script:lastSummary = Invoke-Round '' $sel $say $tick $onStep; $copy.Enabled = $true; $open.Enabled = $true
-        $copy.PerformClick(); if (-not $script:draftMade) { $open.PerformClick(); $form.Activate(); $copy.Focus() | Out-Null }
+    $tick = {
+      if ($script:stepStart) {
+        $status.Text = $script:statusBase + '   ' + (Format-Duration ((Get-Date) - $script:stepStart).TotalSeconds) + $(if ($script:stepEst) { '   (last time ' + (Format-Duration $script:stepEst) + ')' } else { '' })
       }
-      catch { & $say ('STOPPED: ' + (ConvertTo-Masked ([string]$_))) }
+      [System.Windows.Forms.Application]::DoEvents()
+    }
+    $onStep = { param($k, $line) $list.Items[$k + $off] = $line; $list.SetItemChecked($k + $off, $true); $bar.Value = [math]::Min($bar.Value + 1, $bar.Maximum) }
+    $onStatus = { param($i, $count, $name, $estimate)
+      $bar.Maximum = [math]::Max(1, $count); $bar.Value = [math]::Min([math]::Max(0, $i - 1), $bar.Maximum)
+      $script:statusBase = 'Step ' + $i + ' of ' + $count + ': ' + $name; $script:stepStart = Get-Date; $script:stepEst = $estimate
+      $status.Text = $script:statusBase; [System.Windows.Forms.Application]::DoEvents() }
+    $windowLine = { if ($okBox.Checked) { 'Window: OK' } else { 'Window: NOT OK - write here what overlapped or was cut off' } }
+    $toFront = { $form.TopMost = $true; $form.Activate(); $form.TopMost = $false }
+    $run.Add_Click({
+      $run.Enabled = $false; $draft.Enabled = $false; $copy.Enabled = $false; $open.Enabled = $false
+      $to = $toBox.Text.Trim()
+      if ($to -and -not (Test-MailTo $to)) {
+        $script:helped = @{}; & $say 'The e-mail address does not look right.'; & $say (Get-WhatToDo 'e-mail address does not look right')
+        $run.Enabled = $true; $toBox.Focus() | Out-Null; return
+      }
+      $clean = ($off -eq 1 -and $list.GetItemChecked(0))
+      $sel = @(); for ($k = 0; $k -lt $steps.Count; $k++) { $sel += $list.GetItemChecked($k + $off) }
+      try {
+        $script:lastSummary = Invoke-Round $clean $sel $to $say $tick $onStep $onStatus $windowLine
+        $script:stepStart = $null; $bar.Value = $bar.Maximum
+        $status.Text = 'DONE: ' + $script:lastSummary[0] + $(if ($script:draftMade) { '. Outlook draft is open.' } else { '. Folder open, summary copied.' })
+        $copy.Enabled = $true; $open.Enabled = $true; $draft.Enabled = $true
+        $copy.PerformClick()
+        if (-not $script:draftMade) { $open.PerformClick(); & $toFront; $copy.Focus() | Out-Null }
+      }
+      catch {
+        $script:stepStart = $null
+        $msg = 'STOPPED: ' + (ConvertTo-Masked ([string]$_)); & $say $msg
+        $w = Get-WhatToDo $msg; if ($w) { & $say $w }
+        $status.Text = 'STOPPED. See the last lines of the log.'; & $toFront
+      }
       $run.Enabled = $true
+    })
+    $draft.Add_Click({
+      $why = Save-RoundDraft $script:resultsDir $script:lastSummary $toBox.Text.Trim() (& $windowLine)
+      if ($why) { $script:helped = @{}; $m = 'Outlook draft not made (' + $why + ').'; & $say $m; & $say (Get-WhatToDo $m) } else { & $say 'Outlook draft is open.' }
     })
     $copy.Add_Click({
       try { [System.Windows.Forms.Clipboard]::SetText(($script:lastSummary -join "`r`n")); & $say 'Summary copied. Paste it into the e-mail body; its first line is the subject.' }
@@ -295,18 +523,24 @@ if ($gui) {
 try {
   $script:textMode = $true
   $say = { param($t) Add-RunLog $t; Write-Host $t }
-  $typed = ''   # no DODID question: the profile folder is used (PFM 13 Nov)
-  foreach ($l in (Get-RoundPlan $typed).Lines) { Write-Host $l }
+  Write-Host ('90-161.Z Deployer - ' + $round + ' - build ' + $buildId)
+  Write-Host (Get-LastRoundText (Read-RoundHistory (Get-BasePath)))
+  foreach ($l in (Get-RoundPlan).Lines) { Write-Host $l }
+  if (Test-WordOpen) { Write-Host 'Word is open. Save your documents and close Word before you run (renders use Word).' }
+  $to = Get-MailTo (Get-BasePath)
   # The plan above shows first; Enter starts the run (PFM 13 Nov), N stops before anything is written.
   $go = ([string](Read-Host 'Press Enter to run (N then Enter stops, nothing written)')).Trim()
   if ($go -match '^[Nn]') { Write-Host 'Stopped before anything was written.'; return }
   $sel = @(); foreach ($s in $steps) { $sel += $true }
-  $sum = Invoke-Round $typed $sel $say { } { }
+  $onStatusText = { param($i, $count, $name, $estimate) Write-Host ('Step ' + $i + ' of ' + $count + ': ' + $name + $(if ($estimate) { ' (last time ' + (Format-Duration $estimate) + ')' } else { '' })) }
+  $sum = Invoke-Round $true $sel $to $say { } { } $onStatusText { 'Window: text mode (no window opened)' }
   if ($script:resultsDir -and $env:OS -eq 'Windows_NT' -and -not $script:draftMade) { Start-Process -FilePath 'explorer.exe' -ArgumentList ('"' + $script:resultsDir + '"') }
   if (Get-Command Set-Clipboard -ErrorAction SilentlyContinue) { try { Set-Clipboard -Value ($sum -join "`r`n"); Write-Host 'Summary copied to the clipboard.' } catch { Write-Host 'Clipboard not available.' } }
 } catch {
   Write-Host ''
-  Write-Host ('STOPPED: ' + (ConvertTo-Masked ([string]$_)))
+  $m = 'STOPPED: ' + (ConvertTo-Masked ([string]$_))
+  Write-Host $m
+  $w = Get-WhatToDo $m; if ($w) { Write-Host $w }
 }
 '''
 
@@ -328,13 +562,16 @@ def build(b):
     for s in b['steps']:
         assert any(f['dir'] == s['dir'] and Path(f['src']).name == s['file'] for f in b['files']), s
     collect = ['$collect += @{ Dir = %s; Name = %s }' % (q(c['dir']), q(c['name'])) for c in b['collect']]
-    body = ('$round = %s\n$usersRoot = \'C:\\Users\'\n$files = @()\n%s\n$steps = @()\n%s\n$collect = @()\n%s\n%s'
-            % (q(b['round']), '\n'.join(parts), '\n'.join(steps), '\n'.join(collect), ENGINE))
+    cleanup = ['$cleanup += @{ Path = %s; Kind = %s }' % (q(c['path']), q(c['kind'])) for c in b.get('cleanup', [])]
+    # Support scripts that keep their names (they load each other) and samples: made by 90-161.Z, so cleanup may recycle them.
+    known = sorted({f.name for f in (ROOT / 'scripts/gov').glob('*.ps1')} | {f.name for f in (ROOT / 'samples').glob('*')})
+    body = ('$round = %s\n$usersRoot = \'C:\\Users\'\n$files = @()\n%s\n$steps = @()\n%s\n$collect = @()\n%s\n$cleanup = @()\n%s\n$known = @(%s)\n%s'
+            % (q(b['round']), '\n'.join(parts), '\n'.join(steps), '\n'.join(collect), '\n'.join(cleanup), ', '.join(q(k) for k in known), ENGINE))
     build_id = hashlib.sha256(body.encode('ascii')).hexdigest()[:8]
-    head = ('<#\n  90-161.Z round bundle: %s.\n'
+    head = ('<#\n  90-161.Z Deployer, round bundle: %s.\n'
             '  GENERATED by scripts/build_paste_bundles.py from scripts/paste_bundles.json; do not edit.\n'
             '  How to run: open Windows PowerShell ISE, File > New, paste all of this text into the script pane, press F5.\n'
-            '  A window opens: press Enter (or Run); it uses your Windows profile folder. It writes the files below into the task folders under\n'
+            '  The 90-161.Z Deployer window opens: press Enter (or Run); it uses your Windows profile folder. It writes the files below into the task folders under\n'
             '  C:\\Users\\<DODID>\\OneDrive - United States Air Force\\90-161.Z (replacing older copies), runs the steps,\n'
             '  and saves its results in Rounds\\%s, then opens an Outlook draft with them (never sent). No download, no admin rights.\n'
             '#>\n$buildId = \'%s\'\n' % (b['title'], b['round'], build_id))
