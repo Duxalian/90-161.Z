@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R08, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = 'd9359153'
+$buildId = '37e5f448'
 $round = 'R08'
 $usersRoot = 'C:\Users'
 $files = @()
@@ -1641,7 +1641,7 @@ try {
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }
 '@ }
-$files += @{ Dir = 'T10'; Name = '90161Z-T10-brief-check-r1.ps1'; Kind = 'text'; Sha = 'e7c3201ec652'; Data = @'
+$files += @{ Dir = 'T10'; Name = '90161Z-T10-brief-check-r1.ps1'; Kind = 'text'; Sha = '422c1df47a88'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 10 brief check, r1. Windows PowerShell 5.1, PowerPoint 16 COM only (no modules).
@@ -1767,6 +1767,7 @@ try {
   $lines.Add('TASK T10 brief check r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
   Write-Host 'Opening PowerPoint (no window)...'
   $app = New-Object -ComObject PowerPoint.Application
+  try { $app.DisplayAlerts = 1 } catch { $null = $_ }   # ppAlertsNone: no repair or save dialog can wait for a click
   $pass = 0
   foreach ($b in $Briefs) {
     Write-Host ($b + ' checking...')
@@ -2268,7 +2269,9 @@ function Save-RoundDownload([string]$Base, [scriptblock]$Say) {
       }
       $ok++; & $Say ('FETCHED ' + $f.Dir + '\' + $f.Name + ' bytes=' + (Get-Item -LiteralPath $path).Length)
     } catch {
-      $bad++; & $Say ('FETCH FAIL ' + $f.Dir + '\' + $f.Name + ': ' + (ConvertTo-Masked $_.Exception.Message) + ' (save it from the bookmark page instead)')
+      $bad++
+      if (Test-Path -LiteralPath $path -PathType Leaf) { try { Remove-Item -LiteralPath $path -Force } catch { $null = $_ } }   # no partial file left behind
+      & $Say ('FETCH FAIL ' + $f.Dir + '\' + $f.Name + ': ' + (ConvertTo-Masked $_.Exception.Message) + ' (save it from the bookmark page instead)')
     } finally { $wc.Dispose() }
   }
   $line = 'FETCH files=' + $ok + ' failed=' + $bad
@@ -2282,7 +2285,10 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
   $psi = New-Object System.Diagnostics.ProcessStartInfo
   $psi.FileName = $exe
   $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $dir $Step.File) + '" -Id "' + $script:dodid + '" -NoPause'
-  if ($Step.AskParam -and $Answer) { $psi.Arguments += ' -' + $Step.AskParam + ' "' + $Answer.TrimEnd('\') + '"' }
+  if ($Step.AskParam -and $Answer) {
+    $a = $Answer; if ($a.Length -gt 3) { $a = $a.TrimEnd('\') }   # keep D:\ whole; a trailing \ before the closing quote would escape it
+    $psi.Arguments += ' -' + $Step.AskParam + ' "' + $a + '"'
+  }
   $psi.WorkingDirectory = $dir
   $psi.UseShellExecute = $false; $psi.CreateNoWindow = $true
   $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
@@ -2302,7 +2308,7 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
     if ($null -eq $line) { break }
     $line = ConvertTo-Masked $line
     # Lines that may name a unit or a file (for example seal details) never reach the report (data boundary).
-    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace ':.*$', ':') + ' (detail hidden: may name a unit; see the step''s own window)' }
+    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace ':.*$', ':') + ' (detail hidden: it may name a unit; run the step script by hand to see it)' }
     if ($line -match '(^|\s)PASS(\s|$)') { $r.Pass++ }
     if ($line -match '(^|\s)(FAIL|FORMAT-FAIL|RENDER-ERROR|MEASURE-ERROR|STOPPED:)(\s|$)') { $r.Fail++ }
     & $Say $line

@@ -233,7 +233,9 @@ function Save-RoundDownload([string]$Base, [scriptblock]$Say) {
       }
       $ok++; & $Say ('FETCHED ' + $f.Dir + '\' + $f.Name + ' bytes=' + (Get-Item -LiteralPath $path).Length)
     } catch {
-      $bad++; & $Say ('FETCH FAIL ' + $f.Dir + '\' + $f.Name + ': ' + (ConvertTo-Masked $_.Exception.Message) + ' (save it from the bookmark page instead)')
+      $bad++
+      if (Test-Path -LiteralPath $path -PathType Leaf) { try { Remove-Item -LiteralPath $path -Force } catch { $null = $_ } }   # no partial file left behind
+      & $Say ('FETCH FAIL ' + $f.Dir + '\' + $f.Name + ': ' + (ConvertTo-Masked $_.Exception.Message) + ' (save it from the bookmark page instead)')
     } finally { $wc.Dispose() }
   }
   $line = 'FETCH files=' + $ok + ' failed=' + $bad
@@ -247,7 +249,10 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
   $psi = New-Object System.Diagnostics.ProcessStartInfo
   $psi.FileName = $exe
   $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $dir $Step.File) + '" -Id "' + $script:dodid + '" -NoPause'
-  if ($Step.AskParam -and $Answer) { $psi.Arguments += ' -' + $Step.AskParam + ' "' + $Answer.TrimEnd('\') + '"' }
+  if ($Step.AskParam -and $Answer) {
+    $a = $Answer; if ($a.Length -gt 3) { $a = $a.TrimEnd('\') }   # keep D:\ whole; a trailing \ before the closing quote would escape it
+    $psi.Arguments += ' -' + $Step.AskParam + ' "' + $a + '"'
+  }
   $psi.WorkingDirectory = $dir
   $psi.UseShellExecute = $false; $psi.CreateNoWindow = $true
   $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
@@ -267,7 +272,7 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
     if ($null -eq $line) { break }
     $line = ConvertTo-Masked $line
     # Lines that may name a unit or a file (for example seal details) never reach the report (data boundary).
-    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace ':.*$', ':') + ' (detail hidden: may name a unit; see the step''s own window)' }
+    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace ':.*$', ':') + ' (detail hidden: it may name a unit; run the step script by hand to see it)' }
     if ($line -match '(^|\s)PASS(\s|$)') { $r.Pass++ }
     if ($line -match '(^|\s)(FAIL|FORMAT-FAIL|RENDER-ERROR|MEASURE-ERROR|STOPPED:)(\s|$)') { $r.Fail++ }
     & $Say $line

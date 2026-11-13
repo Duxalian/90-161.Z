@@ -123,6 +123,7 @@ try {
   $lines.Add('TASK T10 brief check r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
   Write-Host 'Opening PowerPoint (no window)...'
   $app = New-Object -ComObject PowerPoint.Application
+  try { $app.DisplayAlerts = 1 } catch { $null = $_ }   # ppAlertsNone: no repair or save dialog can wait for a click
   $pass = 0
   foreach ($b in $Briefs) {
     Write-Host ($b + ' checking...')
