@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves Rounds\90161Z-R01-results-r1.zip. No download, no admin rights, nothing outside that folder.
 #>
-$buildId = '3403f8bd'
+$buildId = 'fc3825fc'
 $round = 'R01'
 $usersRoot = 'C:\Users'
 $files = @()
@@ -1895,6 +1895,7 @@ function Get-RoundPlan([string]$Typed) {
   if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
   $id = ([string]$Typed).Trim(); $who = '<DODID you typed>'
   if (-not $id) { $id = $leaf; $who = '<your profile folder>' }
+  if (-not $id) { $id = 'no-profile-folder' }   # USERPROFILE unset: the plan says NOT found instead of failing
   $base = Join-Path (Join-Path (Join-Path $usersRoot $id) 'OneDrive - United States Air Force') '90-161.Z'
   $shown = $usersRoot + '\' + $who + '\OneDrive - United States Air Force\90-161.Z'
   $found = Test-Path -LiteralPath (Split-Path -Parent $base) -PathType Container

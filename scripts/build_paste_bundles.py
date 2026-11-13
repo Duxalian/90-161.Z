@@ -135,6 +135,7 @@ function Get-RoundPlan([string]$Typed) {
   if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
   $id = ([string]$Typed).Trim(); $who = '<DODID you typed>'
   if (-not $id) { $id = $leaf; $who = '<your profile folder>' }
+  if (-not $id) { $id = 'no-profile-folder' }   # USERPROFILE unset: the plan says NOT found instead of failing
   $base = Join-Path (Join-Path (Join-Path $usersRoot $id) 'OneDrive - United States Air Force') '90-161.Z'
   $shown = $usersRoot + '\' + $who + '\OneDrive - United States Air Force\90-161.Z'
   $found = Test-Path -LiteralPath (Split-Path -Parent $base) -PathType Container
