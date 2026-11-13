@@ -1,6 +1,6 @@
 # Next prompt: 90-161.Z
 
-Updated: 2026-11-12 by Claude (all batches answered; 5.1 on hold until renderer round 2; open: 3.5 legal, test site). Keep this file at 40 lines or fewer. The current request overrides it.
+Updated: 2026-11-13 by Claude. First: bloat audit due (never run; .claude/bloat-audit.md). Open: 3.5 legal, test site, 5.1 after renderer round 2. Keep this file at 40 lines or fewer. The current request overrides it.
 
 ## State (main)
 
