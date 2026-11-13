@@ -39,8 +39,8 @@ Steps:
 **Time:** about 4 minutes (estimate).
 **Changes:** writes into T01 (renderer files and a new sample render), Config and Rounds\R07. Moves Rounds\R06 to the Recycle Bin (its results are recorded). Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build efdee01e.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/593bf8c2d97e09663bf8b5c4163dc98282f52322/scripts/gov/paste/90161Z-R07-round-r1.ps1
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 481e6984.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/87c88f610ca37691cfa7e64e358b0bb7cdd37dff/scripts/gov/paste/90161Z-R07-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
 3. The 90-161.Z Deployer window opens. In "Send results to", type the address you send results to (only this once), then Enter.
 4. If anything in the window overlaps or is cut off, uncheck "This window looked right".
