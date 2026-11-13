@@ -404,8 +404,8 @@ if ($gui) {
     $banner.AutoSize = $true; $banner.MaximumSize = $wrap; $banner.Text = Get-LastRoundText $hist0
     $where = New-Object System.Windows.Forms.Label
     $where.AutoSize = $true; $where.MaximumSize = $wrap; $where.Margin = New-Object System.Windows.Forms.Padding(3, 6, 3, 3)
-    # Cosmetics never stop the window (R06 fell back to text mode, most likely on the ambiguous Font(name, size, 'Bold')
-    # call): typed enum and color from names at run time, each in its own try.
+    # Cosmetics never stop the window. R06 fell back to text mode: Font('Segoe UI', 10, 'Bold') fails at binding with
+    # "Multiple ambiguous overloads" (string 'Bold' fits FontStyle and GraphicsUnit). Typed enum here; each in its own try.
     try { $where.Font = New-Object System.Drawing.Font($form.Font.FontFamily, [single]10, [Enum]::Parse(('System.Drawing.FontStyle' -as [type]), 'Bold')) } catch { $null = $_ }
     $warn = New-Object System.Windows.Forms.Label
     $warn.AutoSize = $true; $warn.MaximumSize = $wrap
@@ -525,7 +525,7 @@ if ($gui) {
   } catch {
     $gui = $false; $script:noWindowWhy = [string]$_.Exception.Message
     if ($_.InvocationInfo) { $script:noWindowWhy += ' (line ' + $_.InvocationInfo.ScriptLineNumber + ')' }
-    Write-Host ('No window (' + $script:noWindowWhy + '); text mode.')
+    Write-Host ('No window (' + (ConvertTo-Masked (($script:noWindowWhy -replace [regex]::Escape([string]$env:USERPROFILE), 'C:\Users\<DODID>'))) + '); text mode.')
   }
 }
 try {
