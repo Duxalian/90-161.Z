@@ -39,7 +39,7 @@ Steps:
 **Changes:** writes into T01 (renderer files and a new sample render) and Rounds\R04. Nothing on the SharePoint site.
 Steps:
 1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build 90c3b8d7.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/96ee38b8ec2fc6c7a0b2bf7fd6cfd879d29d4049/scripts/gov/paste/90161Z-R04-round-r1.ps1
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/a324ddfaae764047ada1366bfd13b90702d39e81/scripts/gov/paste/90161Z-R04-round-r1.ps1
 2. Press Run. Enter does nothing in this window.
 3. At DONE the results folder opens by itself and the e-mail text is on the clipboard.
 4. New e-mail: press Ctrl+V in the body, then cut the first line (90161Z R04) into the subject.
