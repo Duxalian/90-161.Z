@@ -49,3 +49,7 @@ Scale (REC, no question): PFM Activity Log reaches the 5,000-item view threshold
 | Q19 | E-mail volume | A: one daily digest per person (weekdays) of what waits on them; immediate e-mail only for a new task and a due date reached. B: one e-mail per event | A: an AO with 10 coordinators would get 20+ e-mails per round with B |
 | Q20 | Backup of list data | A: a weekly flow exports every PFM list to CSV in Record Sets/Backups, keeps 8 weeks. B: rely on the recycle bin and version history only | A: covers a wrong bulk edit or a deleted list after 93 days (risk R17) |
 | Q21 | People who leave (AO, coordinator, approver) | A: a weekly flow checks the accounts named on open actions (Office 365 Users) and lists disabled or missing ones on the PFM screen. B: found by hand when an action stalls | A, if Office 365 Users passes the data-policy test (rights test D1/M03) |
+
+## Phase 4 (13 Nov)
+
+Step 1 screen map: docs/app/screen-map.md r1 (25 built screens; Q26-Q29 open). Step 2: clickable previews after the map is approved.

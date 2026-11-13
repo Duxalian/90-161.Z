@@ -1,165 +1,145 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (rounds: results folder, no zip). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 
-Reload to see new tasks (GitHub can serve a copy up to 5 minutes old). Paste links name an exact version, so they never need a reload.
+Every task below has the same parts: **For** (why), **Time** (an estimate), **Changes** (what it writes or changes, before I start), **Steps**, **Report** (what to send back) and **If it fails**.
+Reload this page to see new tasks (GitHub can serve a copy up to 5 minutes old).
+Never send real publication content, names, site addresses or group names. Reply in the Claude chat or by e-mail to my Gmail.
 
 ## How a paste task (round) works
 
-A round is one block of text that I paste into PowerShell ISE. It saves its own files, runs the tests in a window, and puts everything to send back in one folder. Allowed by the ISSM (13 Nov 26): scripts that use no elevated credentials may be pasted and run.
-
-1. Open the round's link (in its task below). Press Ctrl+A, then Ctrl+C.
+**For:** a round is one block of text I paste into PowerShell ISE. It saves its own files, runs the tests in a window and puts everything to send back in one folder. The ISSM allows this for scripts that use no elevated credentials (13 Nov 26).
+**Changes:** it writes only into C:\Users\<profile folder>\OneDrive - United States Air Force\90-161.Z: the task folders it needs (for example T01, T07) and its results folder Rounds\<round>. It makes missing folders and replaces files of the same name. It changes, moves or deletes nothing else. Before Run, the window lists every file, marked (new) or (replaces the file there).
+Steps:
+1. Open the round's link in its task below. Press Ctrl+A, then Ctrl+C.
 2. Start menu: type ISE and open Windows PowerShell ISE as myself (not "Run as administrator").
 3. File > New. Click in the white script pane. Press Ctrl+V, then F5.
 4. A window opens. Leave the DODID box empty. Check the "Writes to" line: it says NOT found if the folder is wrong.
 5. Press Run. Word steps take a few minutes each. Keep the window open until the log says DONE.
-6. Press Open results folder. Attach all files in it to one e-mail to my Gmail, subject as the log says (for example "90161Z R01"). Press Copy summary and paste it into the e-mail body. No zip: zips do not cross the boundary.
-
-What a round changes: it writes only into C:\Users\<profile folder>\OneDrive - United States Air Force\90-161.Z: the task folders it needs (for example T01, T07) and its results folder Rounds\<round>. It makes missing folders and replaces files of the same name; it changes, moves or deletes nothing else. Before Run, the window lists every file, marked (new) or (replaces the file there). With the DODID box empty, <profile folder> is the folder under C:\Users that my Windows profile uses, which is what the path needs.
-If it fails: send the line that starts with STOPPED (the report file in Rounds\<round> also holds it). Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
-Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
+6. Press Open results folder. Attach all files in it to one e-mail to my Gmail with the subject the log names. Press Copy summary and paste it into the e-mail body. No zip: zips do not cross the boundary.
+**If it fails:** send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
+With the DODID box empty, <profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
 
 ## How a download task works
 
-Copy each URL into the address bar and save the file with Ctrl+S into the folder the task names: C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<task>. Files are named 90161Z-T<task>-<name>-r<revision> so they sort by task; use the highest r number.
-Reply with results in the Claude chat or by e-mail to my Gmail. Never send real publication content.
+**For:** some tasks need files saved from a link, or steps on the SharePoint site.
+Steps:
+1. Copy each link into the address bar (the Copy link button copies it).
+2. Save the file with Ctrl+S into the task's folder. The folder box in each task has a Copy button: paste its path into the Save dialog's address bar (%USERPROFILE% becomes my profile folder).
+3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
+**If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
 ## Fix first: Round R01, renderer round 2 (open, 13 Nov 26)
 
-What it is for: one paste tests the last two renderer fixes (table of contents indents; seal sits 0.09 in too high) and the seal test. The renderer now measures itself: MEASURE lines say PASS or FAIL. About 10 to 15 minutes (estimate).
-What it changes: writes into T01, T07, T07\TestSeals and Rounds\R01. The window lists every file before Run.
-Do: paste and run this round (steps under "How a paste task works"):
+**For:** tests the last two renderer fixes (table of contents indents; seal 0.09 in too high) and the fake-seal test (Task 7 Part A). The renderer now measures itself: its MEASURE lines say PASS or FAIL.
+**Time:** about 10 to 15 minutes (estimate), mostly Word working.
+**Changes:** writes into T01, T07, T07\TestSeals and Rounds\R01 on my computer. Nothing on the SharePoint site.
+Steps:
+1. Paste and run this round (steps in "How a paste task works"). The window title shows build 646c5ca9.
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/a85fa43a38918d2566db215e0c5de3b0a60807be/scripts/gov/paste/90161Z-R01-round-r3.ps1
-The window title shows build 646c5ca9.
-Report: send all files in Rounds\R01 (one report file and up to 3 PDFs) in one e-mail to my Gmail, subject "90161Z R01", the copied summary in the body. Send them also if a step says CHECK.
+2. When the log says DONE, press Open results folder.
+Report: one e-mail to my Gmail, subject "90161Z R01": all files in Rounds\R01 (one report file and up to 3 PDFs), the copied summary in the body. Send it also if a step says CHECK.
+**If it fails:** send the STOPPED line, and say whether a window opened.
 
-## Task 12: color sources, r1 (open, 12 Nov 26, 1530 CT)
+## Task 11: rights test, r1 (open, 12 Nov 26)
 
-Folder: ...\90-161.Z\T12
-
-Claude cannot open Air Force websites from the cloud. These 3 public documents set the official Air Force and ANG colors for our briefs and the app. About 5 minutes.
-
-1. Save this PDF into the T12 folder:
-https://www.ang.af.mil/Portals/77/documents/ANG%20Graphics%20Standard.pdf
-2. Save this PDF into the T12 folder:
-https://www.dafhistory.af.mil/Portals/16/documents/Organizational-Records/GuideAirForceHeraldryJune2022.pdf
-3. Open this page, press Ctrl+S, Save as type Webpage, Single File (*.mhtml), into the T12 folder:
-https://www.trademark.af.mil/Branding/Air-Force-Symbol/
-If a link is dead, search for the title ("ANG Graphics Standard", "Guide to Air Force Heraldry", "Air Force Symbol").
-
-Report: e-mail the 3 files to my Gmail, subject "90161Z T12 r1". They are public documents.
-
-## Task 11: rights test, r1 (open, 12 Nov 26, 1400 CT)
-
-Folder: ...\90-161.Z\T11
-
-Tests what I can and cannot do as a regular user, as site owner and as site collection admin, plus the office mailbox and Power Platform. Every later design step depends on these answers. About 45 minutes.
-
-Part A, the probe flow (about 10 minutes):
+**For:** finds what I can and cannot do as a regular user, as site owner and as site collection admin, plus the office mailbox and Power Platform. Every later design step depends on these answers.
+**Time:** about 45 minutes (estimate): Part A 10, Part B 35.
+Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T11
+**Changes:** imports one flow into my Power Automate. The flow creates test lists and a test group named "PFM Rights Probe ..." on the site and deletes them at the end; the deleted lists stay in the site recycle bin, where I may empty them. It adds one result file to the site's Documents library.
+Part A, the probe flow:
 1. Save this file into the T11 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T11-rights-probe-r1.zip
-2. Power Automate, My flows, Import, Import Package (Legacy), pick the zip. For the SharePoint connection pick my existing one. Import.
-3. Run "90161Z T11 Rights Probe r1". Site address: the site where the PFM lists are. Coworker e-mail: one regular member of that site (not an owner). Wing group e-mail: the group that gives wing members access, if it has an e-mail address.
-4. The flow creates test lists and a test group named "PFM Rights Probe ..." and deletes them at the end. If the run stops early, delete anything named that way by hand. The deleted test lists also sit in the site recycle bin; I may empty them there.
-5. Open the site's Documents library and download 90161Z-T11-rights-result-r1.json.
-
-Part B, manual checks (about 35 minutes): follow section 6 of this page and write down what each row asks for:
+2. Power Automate: My flows > Import > Import Package (Legacy). Pick the file. For the SharePoint connection, pick my existing one. Import.
+3. Run "90161Z T11 Rights Probe r1". Site address: the site with the PFM lists. Coworker e-mail: one regular member of that site (not an owner). Wing group e-mail: the group that gives wing members access, if it has an e-mail address.
+4. When the run ends, open the site's Documents library and download 90161Z-T11-rights-result-r1.json.
+Part B, manual checks:
+5. Open this page, go to section 6 and write down what each row asks for:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/rights-test-plan.md
+Report: one e-mail to my Gmail, subject "90161Z T11 r1": the result file and my Part B notes. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
+**If it fails:** if the run stops early, delete anything named "PFM Rights Probe ..." by hand and send the name of the step that failed and its error text (no names).
 
-Report: e-mail the result file and my Part B notes to my Gmail, subject "90161Z T11 r1". No names, no site address, no group names in the notes: write "my AD group", "the office mailbox".
+## Task 8: edit own rows only, r1 (open, 11 Nov 26)
+
+**For:** sets the decided rule (10A): everyone reads all rows; on two lists, people edit only the rows they created.
+**Time:** about 10 minutes (estimate).
+**Changes:** changes one setting on two lists on the real site: PFM Publications and PFM Endorsements. To undo, set it back to "Create and edit all items".
+Steps:
+1. On the real site, open PFM Publications. Settings (gear) > List settings > Advanced settings.
+2. Item-level Permissions. Read access: Read all items. Create and Edit access: Create items and edit items that were created by the user. Select OK.
+3. Do the same for PFM Endorsements. Leave the other seven lists as they are.
+4. Check: as a site member who is not an owner (or ask one), open PFM Publications. A row that person did not create shows no Edit.
+Report: reply "Task 8 done" and the step 4 result (Edit shown or not shown).
+**If it fails:** if Advanced settings has no Item-level Permissions, reply with what the page shows instead.
 
 ## Task 10: decision briefs, r5 (open, 12 Nov 26)
 
-Folder: ...\90-161.Z\T10
-
-Three drafts (older revisions are gone):
-- Command brief r5 (10 slides): 7 questions for my commanders, each answered Yes, No or Pending evaluation, with an answer sheet. Script delivery is gone (ISSM approved it); question 7 is now the top two risks.
-- Installer brief r5 (22 slides): for a PFM installing it at their own wing. R02 now says each wing's ISSM must approve paste and run; ours did.
-- Adoption brief r2 (12 slides): the path to ANG-wide use. R02 added to the risks across wings. Use only after other wing PFMs show interest.
-
+**For:** a last check of the three briefs before they go to their audiences.
+**Time:** about 15 minutes (estimate).
+Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T10
+**Changes:** saves 3 files into T10. Nothing else.
+- Command brief r5 (10 slides): 7 questions for my commanders, each answered Yes, No or Pending evaluation, with an answer sheet. Script delivery is gone (the ISSM approved it); question 7 is now the top two risks.
+- Installer brief r5 (22 slides): for a PFM installing it at their own wing. R02 says each wing's ISSM must approve paste and run; ours did.
+- Adoption brief r2 (12 slides): the path to ANG-wide use. Use only after other wing PFMs show interest.
+Steps:
 1. Save the three files into the T10 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-command-brief-r5.pptx
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-installer-brief-r5.pptx
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-adoption-brief-r2.pptx
 2. Open each in PowerPoint. Check that it opens without a repair message and that no text runs off a slide.
-3. Reply in the Claude chat: changes I want, and whether each may go to its audience.
+Report: reply in the Claude chat: the changes I want, and whether each brief may go to its audience.
+**If it fails:** if a file shows a repair message, name the brief.
 
-## Task 1: renderer test, r6 (open, 12 Nov 26)
+## Task 12: color sources, r1 (open, 12 Nov 26)
 
-Folder: ...\90-161.Z\T01
+**For:** these 3 public documents set the official Air Force and ANG colors for the briefs and the app. Claude cannot open Air Force websites from the cloud.
+**Time:** about 5 minutes (estimate).
+Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T12
+**Changes:** saves 3 files into T12. Nothing else.
+Steps:
+1. Save this PDF into the T12 folder:
+https://www.ang.af.mil/Portals/77/documents/ANG%20Graphics%20Standard.pdf
+2. Save this PDF into the T12 folder:
+https://www.dafhistory.af.mil/Portals/16/documents/Organizational-Records/GuideAirForceHeraldryJune2022.pdf
+3. Open this page, press Ctrl+S, Save as type: Webpage, Single File (*.mhtml), into the T12 folder:
+https://www.trademark.af.mil/Branding/Air-Force-Symbol/
+Report: one e-mail to my Gmail, subject "90161Z T12 r1": the 3 files. They are public documents.
+**If it fails:** if a link is dead, search for its title ("ANG Graphics Standard", "Guide to Air Force Heraldry", "Air Force Symbol") and save what that finds.
 
-r6 = r5 run by paste and run, with the renderer fixes from Fix first. It runs inside Round R01 (Fix first); this section is the reference. Old r3, r4 and r5 runners in T01 can be deleted.
+## Task 9: e-Publishing pages for the numbering index, r1 (open, 11 Nov 26)
 
-Steps and pass checks:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/gov-test-plan.md
+**For:** Claude needs 3 saved e-Publishing pages to write the script that reads publication titles and numbers. Claude cannot open e-Publishing from the cloud. Decided 1A 2A: departmental, Air National Guard and my gaining MAJCOM publications.
+**Time:** about 20 minutes (estimate).
+Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T09
+**Changes:** saves 3 files into T09. Nothing else.
+Steps:
+1. Open e-Publishing (the Air Force publications website). Go to the product index for departmental publications and open one series with many publications (for example 33). Wait until the list shows. If the list has a "Show entries" or page-size box, set it to the largest number (or All) first.
+2. Press Ctrl+S. Save as type: Webpage, Single File (*.mhtml). Save it in the T09 folder as 90161Z-T09-epubs-departmental-r1.mhtml.
+3. Do the same for Air National Guard publications, one series. Save as 90161Z-T09-epubs-ang-r1.mhtml.
+4. Do the same for my gaining MAJCOM's publications, one series. Save as 90161Z-T09-epubs-majcom-r1.mhtml.
+5. Write down what I clicked to get to each list (menu names only).
+Report: one e-mail to my Gmail, subject "90161Z T09 r1": the 3 files and the click path from step 5. Do not type the MAJCOM's name in the e-mail text. Claude keeps these pages, and anything made from them, out of the repository.
+**If it fails:** if a page saves without the list, save what shows and say which page.
 
-Paste and run (Round R01):
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/a85fa43a38918d2566db215e0c5de3b0a60807be/scripts/gov/paste/90161Z-R01-round-r3.ps1
+## Task 7: real seals, Part B, r1 (open, 11 Nov 26)
 
-It saves 90161Z-T01-result-r6.txt in the T01 folder.
-
-Report: e-mail the result file, SAMPLEWINGI99-101.docx and SAMPLEWINGI99-101.pdf to my Gmail. Claude measures the cover and the table of contents from the PDF.
-
-## Task 8: edit own rows only, r1 (open, 11 Nov 26, 2100 CT)
-
-No files. Decided 10A: everyone reads all rows; people edit only rows they created, on two lists.
-
-1. On the real site, open PFM Publications. Settings (gear) > List settings > Advanced settings.
-2. Item-level Permissions. Read access: Read all items. Create and Edit access: Create items and edit items that were created by the user. Select OK.
-3. Do the same for PFM Endorsements. Leave the other seven lists as they are.
-4. Check: as a site member who is not an owner (or ask one), open PFM Publications. A row that person did not create shows no Edit.
-
-Report: reply "Task 8 done" and the step 4 result (Edit shown or not shown).
-
-## Task 7: seals, r1 (open, 11 Nov 26, 1905 CT)
-
-Folder: ...\90-161.Z\T07. Decided: each unit's own shield (1C), in a SharePoint library (2A); every seal is prepared to the same 1.20 in box, centered (1A 2A).
-
-Part A, test with fake seals (do this first):
-Status 12 Nov 26: seal prep passed; seal size passed; seal 0.09 in too high. Now Part A runs inside Round R01 (Fix first), which does steps 1 to 4 below:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/a85fa43a38918d2566db215e0c5de3b0a60807be/scripts/gov/paste/90161Z-R01-round-r3.ps1
-Reference only, the old download steps:
-1. Save this file into the T01 folder (it replaces the file of the same name there). New-Publication.ps1 comes from Fix first:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/Test-Publication.ps1
-2. Save these two files into the T07 folder:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-prep-r1.ps1
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/90161Z-T07-seal-test-r2.ps1
-3. Make a folder TestSeals inside the T07 folder. Save these four fake seals into it:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-round-r1.png
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-tall-r1.png
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-soft-r1.png
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/samples/90161Z-T07-testseal-tiny-r1.png
-4. In File Explorer, right-click 90161Z-T07-seal-test-r2.ps1 > Run with PowerShell. Type my DODID, or press Enter.
-5. E-mail to my Gmail: 90161Z-T07-test-result-r2.txt and the two PDFs it made (SAMPLEWINGI99-101-TALL.pdf, SAMPLEWINGI99-101-ROUND.pdf).
-
-Part B, real seals:
-Seals go in a Seals folder in the project library 90-161.Z (decided 12 Nov 26). Shields almost never change, so they stay there.
-1. On the real site, if the library does not exist yet: New > Document library. Name: 90-161.Z. Create. Keep the site's permissions (no special permissions on the library or the folder).
+**For:** prepares every unit's real shield for the publication covers. Decided: each unit's own shield (1C) in the project library (2A, 12 Nov 26), every seal prepared to the same 1.20 in box, centered. Part A (fake seals) now runs inside Fix first.
+**Time:** about 20 minutes (estimate), plus waiting for files from units.
+Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T07
+**Changes:** on the real site, creates the library 90-161.Z and its Seals folder if they do not exist (site permissions, nothing special) and adds the shield files. On my computer, syncs that library and writes the prepared seals into Seals\Prepared, plus two text files in T07.
+Do this after Fix first: Round R01 writes the seal prep script into T07.
+Steps:
+1. On the real site, if the library does not exist yet: New > Document library. Name: 90-161.Z. Create.
 2. In the library: New > Folder. Name: Seals.
 3. Upload each unit's shield into Seals. Any size or format (PNG, JPG, GIF, BMP, TIF); the larger and cleaner the better. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png).
 4. In the library, select Sync, so the files are also on my computer.
 5. In File Explorer, open the synced 90-161.Z library, then the Seals folder. Click the address bar, Ctrl+C.
-6. Right-click 90161Z-T07-seal-prep-r1.ps1 > Run with PowerShell. Type my DODID, or press Enter. When it asks for the seal folder, paste the address (Ctrl+V) and press Enter. Do not just press Enter: r1 only finds a library named PFM Seals. It writes the prepared seals into Seals\Prepared.
-7. Send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
-
-FAIL = under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger file. WARN = under 150 dpi: usable, may print soft.
-
-## Task 9: e-Publishing pages for the numbering index, r1 (open, 11 Nov 26, 2202 CT)
-
-Folder: ...\90-161.Z\T09
-
-No files to download. Claude cannot open e-Publishing from the cloud; my computer can. Claude needs 3 saved pages to write the script that reads publication titles and numbers. Decided 1A 2A: departmental, Air National Guard and my gaining MAJCOM publications.
-
-1. On my work computer, open e-Publishing (the Air Force publications website). Go to the product index for departmental publications and open one series with many publications (for example 33). Wait until the list of publications shows. If the list has a "Show entries" or page-size box, set it to the largest number (or All) first, so the saved page holds the whole series.
-2. Press Ctrl+S. Save as type: Webpage, Single File (*.mhtml). Save it in the T09 folder as 90161Z-T09-epubs-departmental-r1.mhtml.
-3. Do the same for Air National Guard publications, one series. Save as 90161Z-T09-epubs-ang-r1.mhtml.
-4. Do the same for my gaining MAJCOM's publications, one series. Save as 90161Z-T09-epubs-majcom-r1.mhtml. Do not type the MAJCOM's name in the e-mail text.
-5. Write down what I clicked to get to each list (menu names only).
-
-Report: e-mail the 3 files and the click path from step 5 to my Gmail, subject "90161Z T09 r1". These pages are public; they hold no wing data. The MAJCOM page shows my gaining MAJCOM, so Claude keeps all 3 pages, and any CSV or test file made from them, out of the repository.
+6. In the T07 folder, right-click 90161Z-T07-seal-prep-r1.ps1 > Run with PowerShell. Press Enter at the DODID question. When it asks for the seal folder, press Ctrl+V and Enter (do not leave it empty).
+Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
+**If it fails:** FAIL means under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger file. WARN means under 150 dpi: usable, may print soft. If the script stops, send its STOPPED line.
 
 ## Done
 
