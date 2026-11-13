@@ -135,7 +135,7 @@ try {
   foreach ($r in $rows) {
     $res = ''; $note = ''
     if ($old.ContainsKey($r.id)) { $res = $old[$r.id][0]; $note = $old[$r.id][1] }
-    if ($Choices -notcontains $res) { $res = '' }
+    $res = [string](@($Choices | Where-Object { $_ -eq $res }) | Select-Object -First 1)   # the list item itself (exact case), or ''
     [void]$dg.Rows.Add($r.id, $r.do, $r.note, $res, $note)
   }
   $status = New-Object System.Windows.Forms.FlowLayoutPanel
@@ -156,11 +156,14 @@ try {
       $out.Add([string]$row.Cells[0].Value + ' | ' + $res + ' | ' + $note.Trim())
     }
     $out.Add('PARTB answered=' + $n + ' of ' + $dg.Rows.Count)
-    Set-Content -LiteralPath $resultPath -Value @($out | ForEach-Object { ConvertTo-Masked $_ $secret }) -Encoding UTF8
-    $count.Text = 'Answered ' + $n + ' of ' + $dg.Rows.Count + ' - saved ' + (Get-Date -Format 'HH:mm:ss')
+    try {
+      Set-Content -LiteralPath $resultPath -Value @($out | ForEach-Object { ConvertTo-Masked $_ $secret }) -Encoding UTF8
+      $count.Text = 'Answered ' + $n + ' of ' + $dg.Rows.Count + ' - saved ' + (Get-Date -Format 'HH:mm:ss')
+    } catch { $count.Text = 'NOT SAVED (the file is open or OneDrive is busy): close it; the next change saves again.' }
     $script:answered = $n
   }
-  $dg.Add_CurrentCellDirtyStateChanged({ if ($dg.IsCurrentCellDirty) { $dg.CommitEdit('CurrentCellChange') } })
+  $dg.Add_CurrentCellDirtyStateChanged({ if ($dg.IsCurrentCellDirty -and $dg.CurrentCell.ColumnIndex -eq 3) { $dg.CommitEdit('CurrentCellChange') } })   # the result list saves at once; a note saves when you leave the cell
+  $dg.Add_DataError({ $_.ThrowException = $false })   # a value the list does not hold shows as empty, never as an error box
   $dg.Add_CellValueChanged({ & $save })
   $done.Add_Click({ & $save; $form.Close() })
   $form.Add_Shown({ $form.TopMost = $true; $form.Activate(); $form.TopMost = $false })
