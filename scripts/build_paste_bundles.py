@@ -250,7 +250,10 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
   $psi.FileName = $exe
   $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $dir $Step.File) + '" -Id "' + $script:dodid + '" -NoPause'
   if ($Step.AskParam -and $Answer) {
-    $a = $Answer; if ($a.Length -gt 3) { $a = $a.TrimEnd('\') }   # keep D:\ whole; a trailing \ before the closing quote would escape it
+    # A trailing \ before the closing quote would escape it (command-line rules): trim it, but a drive root keeps its \,
+    # doubled so "D:\\" reads back as D:\ (review R08).
+    $a = $Answer; if ($a.Length -gt 3) { $a = $a.TrimEnd('\') }
+    if ($a.EndsWith('\')) { $a += '\' }
     $psi.Arguments += ' -' + $Step.AskParam + ' "' + $a + '"'
   }
   $psi.WorkingDirectory = $dir
