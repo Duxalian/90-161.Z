@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Build the 90-161.Z logo (assets/logo/*.svg): a still frame of the ICF Companion
-square-in-a-square mark with a Greek rho in the center. A square frame and a square turned 45 degrees weave over and
+"""Build the 90-161.Z logo (assets/logo/*.svg): a still frame of the owner's
+square-in-a-square theme mark with a Greek rho in the center. A square frame and a square turned 45 degrees weave over and
 under each other at the 8 crossings. White and light blue strokes, made for blue
 backgrounds. Run: python3 scripts/build_logo.py then node scripts/render_logo.js for the PNGs."""
 import math, pathlib
