@@ -4,7 +4,7 @@ The agent runs this once, in a new repo made from the template, before any other
 
 ## 1. Ask the questions
 
-Ask all questions of a round together. In Claude Code, use the clickable question dialog (4 questions at most per dialog). On other hosts, write them as a numbered list with lettered options. Mark your recommendation. A free-text answer comes through "Other".
+Ask all questions of a round together. Use the clickable question dialog (4 questions at most per dialog); without it, a numbered list with lettered options. Mark your recommendation. A free-text answer comes through "Other".
 
 Round 1: the project
 
@@ -21,7 +21,6 @@ Round 2: personal data and tools
 |---|---|---|
 | 5 | Turn on the personal-data guard? It blocks emails, phone numbers, .mil addresses, ID numbers and your listed names before a push. | A on (rec) · B off |
 | 6 | Where will you push from? | A Claude cloud sessions · B your own computer · C both |
-| 7 | Which other agents will you use? (several allowed) | A none · B ChatGPT or Codex · C Gemini · D another tool |
 
 Rules for the asking agent:
 - A public repo never uses a real name (question 4, option C is refused).
@@ -49,4 +48,4 @@ The owner adds the names, comma or newline separated, in each place the answers 
 
 Run `python3 scripts/pii_guard.py --status` in each place you can reach. It prints `denylist: N entries from <source>`, never the names. Then `python3 scripts/pii_guard.py --all` must print `PII GUARD PASS`. Report both lines. A cloud environment edited during this session is verified in the next session: the SessionStart check says so if it is still missing.
 
-Answer 7: paste the matching texts from docs/host-prompts.md for the owner, under Copy.
+Give the owner the claude.ai Project text from docs/host-prompts.md under Copy.

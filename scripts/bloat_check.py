@@ -11,7 +11,7 @@ Usage:
 
 It measures:
     start read    lines, bytes and ~tokens (bytes / 4) of the files every session reads first
-                  (AGENTS.md, CLAUDE.md, GEMINI.md, docs/NEXT_PROMPT.md, docs/DECISIONS.md, plus "start_read" in the config)
+                  (AGENTS.md, CLAUDE.md, docs/NEXT_PROMPT.md, plus "start_read" in the config)
     handoff       docs/NEXT_PROMPT.md lines
     duplicates    normalized text lines of 80+ characters found in 2 or more tracked files
     big files     tracked files over the size budget
@@ -44,7 +44,7 @@ import time
 from pathlib import Path
 
 CONFIG = ".bloat-audit.json"
-START_READ = ["AGENTS.md", "CLAUDE.md", "GEMINI.md", "docs/NEXT_PROMPT.md", "docs/DECISIONS.md"]
+START_READ = ["AGENTS.md", "CLAUDE.md", "docs/NEXT_PROMPT.md"]  # docs/DECISIONS.md is searched per area, not read at start (the PFM, 2026-11-13)
 DEFAULTS = {"every_days": 14, "every_commits": 30,
             "budgets": {"start_read_tokens": 12000, "start_read_warn_tokens": 6000, "handoff_lines": 40, "file_kb": 500, "duplicate_lines": 20}}
 TEXT_EXT = {".md", ".txt", ".py", ".sh", ".ps1", ".psm1", ".js", ".ts", ".json", ".yml", ".yaml", ".html", ".css",
@@ -202,7 +202,7 @@ def report(root, args, today=None):
         data["timings"] = cfg.get("timings", {})
         (root / CONFIG).write_text(json.dumps(data, indent=2) + "\n")
 
-    tail = f"AUDIT DUE ({due}): follow .claude/bloat-audit.md" if due else "audit not due"
+    tail = f"AUDIT DUE ({due}): ask the owner whether to run .claude/bloat-audit.md" if due else "audit not due"
     if args.brief:
         print(f"bloat:       start read ~{s_tok:,} tokens (budget {b['start_read_tokens']:,}) · duplicate lines "
               f"{len(dups)} · big files {len(big)} · over: {', '.join(over) or 'none'}{' · ' + warn if warn else ''} · {tail}")
