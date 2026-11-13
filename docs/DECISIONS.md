@@ -5,6 +5,7 @@ Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-13 | gh-pages holds index.html only: the 64 stale copies (old owner name) were removed (PFM). | PFM | archive |
 | 2026-11-13 | GitHub account renamed rhope-ops -> rhope-ops. All repos now say rhope-ops, history included (PFM); briefs wait for their rebuild. Bookmark rhope-ops.github.io/90-161.Z. | PFM | archive |
 | 2026-11-13 | Bloat audit: no removal, shortening or rewording without PFM approval; only audit-made, rebuilt generated and unreferenced scratch files go without it (.claude/bloat-audit.md). | PFM | archive |
 | 2026-11-13 | Wing PowerPoint master: Original v2 template made (title + blank slides, no text except the footer; 8 layouts: Title Band, Title and Content, Section Header, Two Content, Comparison, Title Only, Picture with Caption, Blank) and e-mailed to the PFM's work address on the PFM's request (overrides the no-e-mail rule for that send only). Versions I-IV made in the same shape. Design record kept privately (project log section "Wing PowerPoint modernization: design record" and the PFM's own Drive), never in this repo. Still open: pick a version. | PFM | archive |
