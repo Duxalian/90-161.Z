@@ -42,7 +42,7 @@ Status: the PFM's phase order (12 Nov, in chat) plus agent recommendations marke
 
 Scale (REC, no question): PFM Activity Log reaches the 5,000-item view threshold in about 2.5 years at an estimated 2,000 rows a year (50 actions x 40 events; estimate, not measured). Index Created and Action ID at provisioning; views filter on indexed columns; a yearly archive flow.
 
-## Phase 2 use and scale, round 4 (12 Nov): open questions Q19-Q21
+## Phase 2 use and scale, round 4 (12 Nov): answered 19A weekly (Wed 0700), 20A plus chapters (docs/backup-and-restore.md), 21A
 
 | Q | Question | Options | REC |
 |---|---|---|---|
