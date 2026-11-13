@@ -6,7 +6,7 @@ Status: the PFM's phase order (12 Nov, in chat) plus agent recommendations marke
 
 | # | Phase | State now |
 |---|---|---|
-| 1 | Build and test the PowerShell ISE deployment engine UI | Built: Stage 1 runner (WinForms window in the paste, branch ccr-2cb71415-mt9o5x, commit 533f43b, build b60abd8b). Cloud checks on that branch: tests 50 pass / 0 fail, lint 0 findings. Not tested on the gov device: waits for Round R01 (go.md Fix first). |
+| 1 | Build and test the PowerShell ISE deployment engine UI | Built: Stage 1 runner (WinForms window in the paste, branch ccr-2cb71415-mt9o5x, commit 4aa462b, build b60abd8b). Cloud checks on that branch: tests 50 pass / 0 fail, lint 0 findings. Not tested on the gov device: waits for Round R01 (go.md Fix first). |
 | 2 | Outstanding items: function, use, scale, flexibility (for example the PFM away on deployment, roles easy to re-assign) | Partial: continuity (co-owners, how-to last), P4A sender switch, P5A handover runbook, 1.1C AO change. No role model for an acting PFM yet. |
 | 3 | Lists, libraries, security settings; use existing groups; setup takes in as much existing data as possible | Partial: list design approved (14A), access group by type (P6, docs/setup-and-updates.md 4a), CSV import of products (3A), Series and Table A3.2 seeds. Rights not tested (go.md Task 11). |
 | 4 | The app: UX/UI in full, all text | Inputs exist: docs/style-standard.md, customer guidance r3 (75 screens), PFM Guidance list (12A), palette (values wait for go.md Task 12). No screen map yet. |

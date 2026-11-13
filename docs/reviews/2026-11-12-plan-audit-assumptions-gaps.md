@@ -1,6 +1,6 @@
 # Plan audit: assumptions not agreed and engineering gaps (12 Nov 26)
 
-Reviewers: two fresh read-only agents, each with the repo and a narrow brief only (independent review, not self-review). Base: main aa7ab20.
+Reviewers: two fresh read-only agents, each with the repo and a narrow brief only (independent review, not self-review). Base: main 3335c04.
 The PFM's review doc (decisions go there first): https://claude.ai/artifact/Wdvg7PB2321twKVubQbp2i
 Spot-check by the orchestrating agent: 9 of 51 rows checked against the repo (A1, A2, A5, A7, A12, G1, G2, G5, G8); 9 hold. G5 is a risk for r10 and later; r9 works as designed.
 Every "Rec" below is an agent recommendation, not a PFM decision.

@@ -41,7 +41,7 @@ Steps:
 r3 replaces r2: same test; the runner scripts now share one block of code. If I already ran r2, I send those results and skip r3.
 Steps:
 1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build ac0d279b.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/a7277515a85e8a7ea9a89ab3ee77815d5431d70a/scripts/gov/paste/90161Z-R04-round-r3.ps1
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/cdb3d57c39aa35048c94622d5cac12be91c052b0/scripts/gov/paste/90161Z-R04-round-r3.ps1
 2. Type the DODID or leave the box empty, then press Enter (or Run).
 3. At DONE the results folder opens by itself and the e-mail text is on the clipboard.
 4. New e-mail: press Ctrl+V in the body, then cut the first line (90161Z R04) into the subject.

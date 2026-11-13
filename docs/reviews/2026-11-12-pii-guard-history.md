@@ -4,9 +4,9 @@ Found when main was pushed to gh-pages (range origin/gh-pages..main, 87 commits)
 
 | # | Commit | Where | Finding | Real or false |
 |---|---|---|---|---|
-| 1-3 | ee04ab4 (2026-11-11) | scripts/sync_baseline.py, 3 added lines | The owner's first name as the baseline default | Real (first name only). Replaced in a later commit by the role word "the owner". |
-| 4 | 6c956a6 (2026-11-11) | commit message, line 5 | The same first name, in the sentence that explains its removal | Real (first name only) |
-| 5 | f846ec7 (2026-11-11) | AGENTS.md | the guard's military-domain pattern on a phrase about the mail filter | False: no address, no person |
+| 1-3 | 4a1f296 (2026-11-11) | scripts/sync_baseline.py, 3 added lines | The owner's first name as the baseline default | Real (first name only). Replaced in a later commit by the role word "the owner". |
+| 4 | 58b01d0 (2026-11-11) | commit message, line 5 | The same first name, in the sentence that explains its removal | Real (first name only) |
+| 5 | 85a42ac (2026-11-11) | AGENTS.md | the guard's military-domain pattern on a phrase about the mail filter | False: no address, no person |
 
 Removing 1-4 needs a history rewrite and force-push, which AGENTS.md "Git safety" forbids and the pre-push hook blocks. Branches cc/columns-r5, cc/naming, cc/r6 and any clone or fork also hold the commits.
 

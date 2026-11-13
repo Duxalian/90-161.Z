@@ -13,7 +13,7 @@ Every paragraph, subparagraph, table item, note and rule-setting glossary term o
 | [part-5.md](part-5.md) | 4774-6714 | Glossary terms, Att 2 series, Att 3 coordinators, Att 4 citations | 114 |
 | [part-6.md](part-6.md) | 6715-8146 | Att 5 processing guides (Table A5.1 matrix), Att 6 DAF Form 847, Att 7 form design, Att 10 tiers, Att 11 publication types, Att 12 CRM, Att 13 accounts | 177 |
 
-Columns in each part: Para | Line | Requirement | Tier | Actor | Applies to ANG wing | Covered by | Status. Each part ends with a "Gaps" section (severity and suggested fix). Plan line numbers in "Covered by" refer to commit 0c27bc6; later edits move some lines.
+Columns in each part: Para | Line | Requirement | Tier | Actor | Applies to ANG wing | Covered by | Status. Each part ends with a "Gaps" section (severity and suggested fix). Plan line numbers in "Covered by" refer to commit 5dd9acd; later edits move some lines.
 
 ## Counts (1,408 rows)
 
@@ -33,7 +33,7 @@ Recounted 12 Nov 26 after the second independent review: 7.2.3.7 Covered to Part
 - 6 agents (standard tier) each read one line range in full and the plan documents. Agent findings are not verified until the checks below.
 - Mechanical check (all 1,408 rows): every row with a paragraph number was matched to its cited DAFMAN line. 36 rows cite a later sentence inside the paragraph; none cites a wrong paragraph. 50 numbered items are not rows of their own: section headings, the sample text inside Figure 7.1, and the online-ordering steps of Attachments 8-9 (grouped, N/A).
 - Claude read the DAFMAN text for every high and medium gap named in the summary below, and a random sample of 70 Covered and N/A rows (seed 7): 69 hold, 1 is doubtful (3.4.1.3: "the ANG publication governs" during a conflict; written for NGB-level ANG publications, but a wing could read it as its own).
-- The 4 errors found in the Table A3.2 seed are fixed (commit 8f5c9d5). PFM Series matches Table A2.1 (39 of 39).
+- The 4 errors found in the Table A3.2 seed are fixed (commit 6570315). PFM Series matches Table A2.1 (39 of 39).
 - Second independent review (12 Nov 26, https://claude.ai/artifact/VNBoH8i4SNy7do6py58YNM): 54 rows sampled (Python random seed 11, 9 per part: 24 N/A, 24 Covered, 6 Partial or Info): 53 hold; 7.2.3.7 changed to Partial. Row and status counts matched the table above.
 
 ## Gaps by theme (high and medium; low ones are in each part's Gaps section)

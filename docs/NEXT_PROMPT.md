@@ -6,7 +6,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 
 - Bloat audit 2 done (docs/reviews/2026-11-13-bloat-audit-2.md); P1-P4 approved and made: tests 21 s -> 12.7 s, baseline bc233b9, task-common block (scripts/build_task_scripts.py), 3 short DECISIONS lines. Next audit by 27 Nov 26.
 - Owner rename to rhope-ops: done everywhere, installer brief rebuilt as r6 (13 Nov 26); the old name and "Air Force" were on the name denylist (PFM removed "Air Force" 13 Nov 26). gh-pages holds index.html only (67a27e0).
-- Kit baseline: final sync a150528 (archimedes_lever); projects no longer sync, so sync_baseline.py, drift.py and .baseline are gone (owner decision 2026-11-13, other session). Pre-push check gate on.
+- Kit baseline: final sync 7f2965c (archimedes_lever); projects no longer sync, so sync_baseline.py, drift.py and .baseline are gone (owner decision 2026-11-13, other session). Pre-push check gate on.
 - Waiting on the PFM: 3.5 legal answer; test site; CUI check for working files (gap review, docs/DECISIONS.md 2026-11-11); 5.1 after renderer round 2.
 
 ## State (main)
@@ -22,7 +22,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md and docs/reviews/2026-11-13-r01-results.md (R01 passed).
-1. Round R04 (summary line 1 = subject, auto copy/open, DAFMAN link style): r3 (commit a727751, build ac0d279b; same test as r2, plus seal prep r2 into T07; r2 results also count). Then R05: Outlook draft step (PFM approved). R03 passed (docs/reviews/2026-11-13-r03-results.md). Results: run `python3 scripts/measure_pdf.py <pdf>`. T02 r10 adds PFMSettings rows PublicationsSiteName, PublicationsListUrl.
+1. Round R04 (summary line 1 = subject, auto copy/open, DAFMAN link style): r3 (commit cdb3d57, build ac0d279b; same test as r2, plus seal prep r2 into T07; r2 results also count). Then R05: Outlook draft step (PFM approved). R03 passed (docs/reviews/2026-11-13-r03-results.md). Results: run `python3 scripts/measure_pdf.py <pdf>`. T02 r10 adds PFMSettings rows PublicationsSiteName, PublicationsListUrl.
 2. Task 6 prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
