@@ -8,7 +8,7 @@ Paste and run (PFM 2026-11-12; ISSM written approval): the bundle `scripts/gov/p
 
 Task folder (PFM, 2026-11-11): `C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T01`. Files the bundle writes (or, without the bundle, save from go.md raw links):
 
-- `scripts/gov/90161Z-T01-renderer-test-r6.ps1` (runner; `-Id` and `-NoPause` for the bundle)
+- `scripts/gov/90161Z-T01-renderer-test-r7.ps1` (runner; `-Id` and `-NoPause` for the bundle)
 - `scripts/gov/Publication.Common.ps1` (shared; must sit in the same folder)
 - `scripts/gov/Test-Publication.ps1`
 - `scripts/gov/New-Publication.ps1`
@@ -16,11 +16,11 @@ Task folder (PFM, 2026-11-11): `C:\Users\<DODID>\OneDrive - United States Air Fo
 
 ## Run
 
-Without the bundle: in File Explorer, right-click `90161Z-T01-renderer-test-r6.ps1` > **Run with PowerShell**. No path is typed, so the "-File ... does not exist" error cannot occur.
+Without the bundle: in File Explorer, right-click `90161Z-T01-renderer-test-r7.ps1` > **Run with PowerShell**. No path is typed, so the "-File ... does not exist" error cannot occur.
 
 1. It asks for the DODID. Type it, or press Enter to use this computer's profile folder (`C:\Users\<that folder>`).
 2. It goes to the T01 folder, checks the 4 other files are there, unblocks the scripts, and runs: validator, draft render, final render with PDF.
-3. It shows the output, saves it as `90161Z-T01-result-r6.txt` in the T01 folder (DODID replaced by `<DODID>`), and waits for Enter.
+3. It shows the output, saves it as `90161Z-T01-result-r7.txt` in the T01 folder (DODID replaced by `<DODID>`), and waits for Enter.
 
 Messages: `FOLDER not found` = the T01 folder is missing or the DODID is wrong; `MISSING in T01 folder: <names>` = save those files.
 

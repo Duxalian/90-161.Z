@@ -12,7 +12,11 @@
     "dateLines": [],
     "seriesTitle": "Test and Evaluation",
     "title": "SAMPLE PUBLICATION ROUTING PROCEDURES",
-    "accessibility": "This publication is only available directly from the OPR.",
+    "accessibility": "This publication is available for download on the XXX-XXX SharePoint.",
+    "accessibilityLink": {
+      "text": "XXX-XXX SharePoint",
+      "url": "https://example.sharepoint.com/sites/SAMPLEWING/Lists/Publications"
+    },
     "releasability": "There are no releasability restrictions on this publication",
     "opr": "OPR-A",
     "certifiedBy": "OPR-B",

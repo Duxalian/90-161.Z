@@ -197,30 +197,45 @@ $gui = $true
 try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false }
 if ($gui) {
   try {
+    # Layout follows the font and screen scaling (R02: in ISE, which is DPI-aware, fixed pixel positions overlapped):
+    # one column of rows, each control on its own row; the log takes the spare height.
+    [System.Windows.Forms.Application]::EnableVisualStyles()
     $form = New-Object System.Windows.Forms.Form
     $form.Text = '90-161.Z runner - ' + $round + ' - build ' + $buildId
-    $form.Size = New-Object System.Drawing.Size(860, 640)
+    $form.SuspendLayout()
+    $form.AutoScaleDimensions = New-Object System.Drawing.SizeF(96, 96); $form.AutoScaleMode = 'Dpi'   # sizes below are at 100 % scaling
+    $form.Font = New-Object System.Drawing.Font('Segoe UI', 9)
+    $form.ClientSize = New-Object System.Drawing.Size(900, 640); $form.MinimumSize = New-Object System.Drawing.Size(640, 480)
     $form.StartPosition = 'CenterScreen'
+    $grid = New-Object System.Windows.Forms.TableLayoutPanel
+    $grid.Dock = 'Fill'; $grid.Padding = New-Object System.Windows.Forms.Padding(10); $grid.ColumnCount = 1; $grid.RowCount = 6
+    [void]$grid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle('Percent', 100)))
+    foreach ($h in 'AutoSize', 'AutoSize', 'AutoSize', 'AutoSize', 'Percent', 'AutoSize') { [void]$grid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle($h, 100))) }
     $lbl = New-Object System.Windows.Forms.Label
-    $lbl.Text = 'DODID (leave empty to use your Windows profile folder):'; $lbl.Location = New-Object System.Drawing.Point(10, 14); $lbl.AutoSize = $true
+    $lbl.Text = 'DODID (leave empty to use your Windows profile folder):'; $lbl.AutoSize = $true; $lbl.Margin = New-Object System.Windows.Forms.Padding(3, 3, 3, 0)
     $idBox = New-Object System.Windows.Forms.TextBox
-    $idBox.Location = New-Object System.Drawing.Point(400, 10); $idBox.Width = 200; $idBox.UseSystemPasswordChar = $true
+    $idBox.Width = 260; $idBox.UseSystemPasswordChar = $true; $idBox.Anchor = 'Left'
     $where = New-Object System.Windows.Forms.Label
-    $where.Location = New-Object System.Drawing.Point(10, 42); $where.Size = New-Object System.Drawing.Size(820, 20)
+    $where.AutoSize = $false; $where.Dock = 'Fill'; $where.AutoEllipsis = $true; $where.Height = ($where.Font.Height * 2) + 4; $where.Margin = New-Object System.Windows.Forms.Padding(3, 6, 3, 6)
     $list = New-Object System.Windows.Forms.CheckedListBox
-    $list.Location = New-Object System.Drawing.Point(10, 68); $list.Size = New-Object System.Drawing.Size(820, 90); $list.CheckOnClick = $true
+    $list.Anchor = 'Left, Right'; $list.CheckOnClick = $true; $list.IntegralHeight = $false
     foreach ($s in $steps) { [void]$list.Items.Add($s.Name, $true) }
+    $list.Height = ($list.ItemHeight * [math]::Max(3, $steps.Count + 1)) + 6
     $log = New-Object System.Windows.Forms.TextBox
-    $log.Location = New-Object System.Drawing.Point(10, 168); $log.Size = New-Object System.Drawing.Size(820, 376)
-    $log.Multiline = $true; $log.ScrollBars = 'Both'; $log.WordWrap = $false; $log.ReadOnly = $true
+    $log.Dock = 'Fill'; $log.Multiline = $true; $log.ScrollBars = 'Both'; $log.WordWrap = $false; $log.ReadOnly = $true
     $log.Font = New-Object System.Drawing.Font('Consolas', 9)
+    $buttons = New-Object System.Windows.Forms.FlowLayoutPanel
+    $buttons.AutoSize = $true; $buttons.WrapContents = $true; $buttons.Dock = 'Fill'
     $run = New-Object System.Windows.Forms.Button
-    $run.Text = 'Run'; $run.Location = New-Object System.Drawing.Point(10, 556); $run.Width = 120
+    $run.Text = 'Run'; $run.AutoSize = $true; $run.MinimumSize = New-Object System.Drawing.Size(110, 0)
     $copy = New-Object System.Windows.Forms.Button
-    $copy.Text = 'Copy summary'; $copy.Location = New-Object System.Drawing.Point(140, 556); $copy.Width = 120; $copy.Enabled = $false
+    $copy.Text = 'Copy summary'; $copy.AutoSize = $true; $copy.MinimumSize = New-Object System.Drawing.Size(110, 0); $copy.Enabled = $false
     $open = New-Object System.Windows.Forms.Button
-    $open.Text = 'Open results folder'; $open.Location = New-Object System.Drawing.Point(270, 556); $open.Width = 150; $open.Enabled = $false
-    $form.Controls.AddRange(@($lbl, $idBox, $where, $list, $log, $run, $copy, $open))
+    $open.Text = 'Open results folder'; $open.AutoSize = $true; $open.MinimumSize = New-Object System.Drawing.Size(110, 0); $open.Enabled = $false
+    $buttons.Controls.AddRange(@($run, $copy, $open))
+    $row = 0; foreach ($c in @($lbl, $idBox, $where, $list, $log, $buttons)) { $grid.Controls.Add($c, 0, $row); $row++ }
+    $form.Controls.Add($grid)
+    $form.ResumeLayout($false); $form.PerformLayout()
     $showPlan = { $plan = Get-RoundPlan $idBox.Text; $where.Text = 'Writes to: ' + $plan.Shown + $(if ($plan.Found) { '' } else { '   (NOT found: check the DODID)' }); $plan }
     $idBox.Add_TextChanged({ [void](& $showPlan) })
     $first = & $showPlan

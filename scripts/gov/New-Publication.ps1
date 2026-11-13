@@ -284,7 +284,22 @@ try {
 
   Format-Para $wdAlignLeft $LabelTab (-$LabelTab) $SpaceAfter
   $sel.ParagraphFormat.TabStops.Add($LabelTab) | Out-Null
-  Write-Rich 'ACCESSIBILITY:' $true; $sel.TypeText("`t"); Write-Rich ([string](Get-Prop $meta 'accessibility')); Complete-Para   # F-020
+  Write-Rich 'ACCESSIBILITY:' $true; $sel.TypeText("`t")
+  $accText = [string](Get-Prop $meta 'accessibility'); $accLink = Get-Prop $meta 'accessibilityLink'   # F-020
+  $accStart = $sel.Range.Start
+  Write-Rich $accText
+  if ($null -ne $accLink) {
+    # PFM 13 Nov: the wing site name in the statement links to the site's publications list (the PDF keeps the link).
+    # The whole statement is typed first; the link text is then found in it and linked in place, so no text follows a link run.
+    $linkText = [string](Get-Prop $accLink 'text')
+    $find = $doc.Range($accStart, $sel.Range.Start)
+    $find.Find.ClearFormatting(); $find.Find.MatchWildcards = $false
+    if ($linkText -and $find.Find.Execute($linkText)) {
+      [void]$doc.Hyperlinks.Add($find, [string](Get-Prop $accLink 'url'), '', '', $linkText)
+      $sel.EndKey($wdStory) | Out-Null; $sel.Font.Reset()   # no Hyperlink style on the text that follows
+    } else { $script:formatFails++; Write-Output 'FORMAT-FAIL F-020 accessibility link text not found in the statement' }
+  }
+  Complete-Para
   Format-Para $wdAlignLeft $LabelTab (-$LabelTab) $ReleaseAfter
   $sel.ParagraphFormat.TabStops.Add($LabelTab) | Out-Null
   Write-Rich 'RELEASABILITY:' $true; $sel.TypeText("`t"); Write-Rich ([string](Get-Prop $meta 'releasability')); Complete-Para; Add-BottomRule $ReleaseRuleDist
@@ -536,8 +551,8 @@ try {
   $doc.Fields.Update() | Out-Null
 
   # ---------------- self-measure (Stage 1, PFM 1A): Word read-back against the DAFMAN values, PASS/FAIL per line ----------------
-  # Positions from Range.Information (5 = horizontal, 6 = vertical, points from the page edge). Values: L-007 seal top 1.47 in;
-  # L-012 TOC number 1.50 in, text 2.00 in, line pitch 0.272 in (docs/format-rules.md). Tolerance 0.03 in (0.01 in for pitch).
+  # Vertical positions from Range.Information(6) (points from the page top). Values: L-007 seal top 1.47 in;
+  # L-012 TOC line pitch 0.272 in (docs/format-rules.md). Tolerance 0.03 in (0.01 in for pitch).
   try {
     try { $doc.ActiveWindow.View.Type = 3 } catch { Write-Output ('MEASURE-ERROR print layout view: ' + $_.Exception.Message) }   # wdPrintView: Information() needs layout
     $measure = {
@@ -553,22 +568,9 @@ try {
       else { Write-Output 'MEASURE-ERROR L-007 seal top not measured: no picture' }
     }
     if ($null -ne $tocRange -and $doc.TablesOfContents.Count -ge 1) {
-      $toc2 = @(); $tocAll = @()
-      foreach ($tp in $doc.TablesOfContents.Item(1).Range.Paragraphs) { $tocAll += $tp; if ($tp.Range.Text -match '^\s*\d') { $toc2 += $tp } }
-      if ($toc2.Count -ge 1) {
-        # R01 (13 Nov): Information(5) read 1.00 / 1.50 in where the PDF shows 1.50 / 2.00 in, so horizontal values are
-        # calibrated against the first TOC line (a Chapter entry), which the PDF shows at the 1.00 in margin (L-001, L-012).
-        $ref = $tocAll[0].Range.Duplicate; $ref.Collapse(1)
-        $refX = [double]$ref.Information(5)
-        $xShift = 72 - $refX
-        if ($refX -lt 0 -or $xShift -lt -72 -or $xShift -gt 72) { Write-Output ('MEASURE-ERROR calibration: first TOC line read at ' + $refX + ' pt; horizontal values not shifted'); $xShift = 0 }
-        Write-Output ('MEASURE calibration horizontal shift=' + [math]::Round($xShift / 72, 3) + 'in (first TOC line read at ' + [math]::Round(([double]$ref.Information(5)) / 72, 3) + 'in, true 1.00in)')
-        $first = $toc2[0].Range.Duplicate; $first.Collapse(1)
-        Write-Output (& $measure 'L-012 TOC number left' ([double]$first.Information(5) + $xShift) 1.50 0.03)
-        $tab = $toc2[0].Range.Duplicate
-        if ($tab.Find.Execute('^t')) { $tab.Collapse(0); Write-Output (& $measure 'L-012 TOC text left' ([double]$tab.Information(5) + $xShift) 2.00 0.03) }
-        else { Write-Output 'MEASURE-ERROR L-012 TOC text left: no tab in the first TOC 2 line' }
-      } else { Write-Output 'MEASURE-ERROR L-012 TOC not measured: no numbered TOC line found' }
+      $tocAll = @(); foreach ($tp in $doc.TablesOfContents.Item(1).Range.Paragraphs) { $tocAll += $tp }
+      # L-012 horizontal positions (number 1.50 in, text 2.00 in) are measured on the returned PDF (scripts/measure_pdf.py):
+      # R01 and R02 showed Range.Information(5) reads TOC 2 lines 0.50 in short while the PDF is right (docs/reviews/2026-11-13-r02-results.md).
       $pitchDone = $false
       # Pitch between entries: the first one-line entry and the entry after it (a wrapped entry adds 0.202 in per line).
       for ($k = 0; $k -lt $tocAll.Count - 1; $k++) {
@@ -601,7 +603,8 @@ try {
       $ctx = New-Object -ComObject Scripting.Dictionary
       $sl.SetLabel($li, $ctx)
       $got = $sl.GetLabel()
-      if ([string]$got.LabelId -eq [string]$cfg.labelId) { Write-Output ('LABEL applied name=' + $got.LabelName + ' PASS') }
+      # Word often reads LabelName back empty (R02); the id match is the check.
+      if ([string]$got.LabelId -eq [string]$cfg.labelId) { Write-Output 'LABEL applied (label id matches the captured label) PASS' }
       else { Write-Output ('LABEL FAIL read back name=' + $got.LabelName + ' (want ' + $cfg.labelName + ')') }
     } catch { Write-Output ('LABEL FAIL ' + $_.Exception.Message) }
   } else { Write-Output 'LABEL not set: no Config\90161Z-label.json yet (run the label capture step once)' }

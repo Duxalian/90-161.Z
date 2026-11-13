@@ -5,6 +5,7 @@ Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-13 | Wing accessibility statement: "This publication is available for download on the XXX-XXX SharePoint."; "XXX-XXX SharePoint" links to the site's publications list, not the app. | PFM | docs/reviews/2026-11-13-r02-results.md |
 | 2026-11-13 | B2 short index approved (1B: with the PFM's edits in the review doc; the doc had none). | PFM | https://claude.ai/artifact/AtxHGVwB8hWc8utEF9KWc2 |
 | 2026-11-13 | B1A "e-mail" spelling. B2A short index. B3A one gov task-script source. B4A, B5A check-in fix, PII-guard PR Action. | PFM | docs/reviews/2026-11-13-bloat-audit.md |
 | 2026-11-13 | Cover gaps stay as DAFMAN page 1. The "ppt master" e-mail is this project's; leave it untouched. | PFM | docs/reviews/2026-11-13-r01-results.md |

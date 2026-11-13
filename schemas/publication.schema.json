@@ -99,6 +99,16 @@
           "type": "string",
           "description": "statement text without the label (Table 4.2)"
         },
+        "accessibilityLink": {
+          "type": "object",
+          "description": "optional hyperlink inside the accessibility statement (PFM 13 Nov: the wing site's publications list); text must appear in meta.accessibility",
+          "additionalProperties": false,
+          "required": ["text", "url"],
+          "properties": {
+            "text": { "type": "string" },
+            "url": { "type": "string", "pattern": "^https://" }
+          }
+        },
         "releasability": {
           "type": "string",
           "description": "statement text without the label (Table 4.3)"

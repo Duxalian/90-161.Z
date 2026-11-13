@@ -48,6 +48,11 @@ for f in samples/publication.sample.json tests/fixtures/bad.publication.json sch
   python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" && ok "json $f" || bad "json $f"
 done
 
+# F-020 accessibility link: the link text must be in the statement and the address must be https (PFM 13 Nov).
+t20=$(mktemp)
+python3 -c "import json,sys; d=json.load(open('samples/publication.sample.json')); d['meta']['accessibilityLink']['text']='NOT IN TEXT'; d['meta']['accessibilityLink']['url']='http://x'; json.dump(d,open(sys.argv[1],'w'))" "$t20"
+n20=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path "$t20" | grep -c "^FAIL F-020 meta.accessibilityLink"); rm -f "$t20"
+[ "$n20" -eq 2 ] && ok "F-020 accessibility link checks (bad text and bad url: $n20 FAIL)" || bad "F-020 accessibility link checks ($n20 FAIL, want 2)"
 python3 - <<'PY' && ok "sample matches JSON schema" || bad "sample matches JSON schema"
 import json, sys
 try:

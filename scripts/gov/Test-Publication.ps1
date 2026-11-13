@@ -104,6 +104,12 @@ foreach ($f in 'accessibility', 'releasability') {
   $v = [string](Get-Prop $meta $f)
   if ($v -match '^(ACCESSIBILITY|RELEASABILITY):') { Add-Finding 'FAIL' 'F-020' "meta.$f" 'give only the statement text; the renderer adds the bold label' }
 }
+$link = Get-Prop $meta 'accessibilityLink'
+if ($null -ne $link) {
+  $lt = [string](Get-Prop $link 'text'); $lu = [string](Get-Prop $link 'url')
+  if (-not $lt -or -not ([string](Get-Prop $meta 'accessibility')).Contains($lt)) { Add-Finding 'FAIL' 'F-020' 'meta.accessibilityLink.text' 'the link text must appear word for word in meta.accessibility' }
+  if ($lu -notmatch '^https://') { Add-Finding 'FAIL' 'F-020' 'meta.accessibilityLink.url' 'give the full https:// address of the wing site page' }
+}
 
 # F-021 OPR / Certified By: office symbols only, no names (4.5.4.10-11)
 foreach ($f in 'opr', 'certifiedBy') {

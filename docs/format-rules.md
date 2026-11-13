@@ -42,7 +42,7 @@ Severity: `hard` = blocks output; `warn` = reported only.
 | F-017 | AFSC series title in italics | 4.5.4.5 | render | hard | 2026-11-10 |
 | F-018 | Title all caps; no "policy, instruction, guidance, handbook, pamphlet, catalog, guide, book"; no "Department of the Air Force", "Air Force", "Space Force" | 4.5.4.6 | lint | hard | 2026-11-10 |
 | F-019 | "COMPLIANCE WITH THIS PUBLICATION IS MANDATORY" for directive publications only | 4.5.4.7 | schema | hard | 2026-11-10 |
-| F-020 | ACCESSIBILITY and RELEASABILITY statements from Tables 4.2 / 4.3 | 4.5.4.8–9 | schema | hard | 2026-11-10 |
+| F-020 | ACCESSIBILITY and RELEASABILITY statements from Tables 4.2 / 4.3; optional meta.accessibilityLink makes the wing site name a hyperlink (PFM 2026-11-13) | 4.5.4.8–9 | schema | hard | 2026-11-13 |
 | F-021 | "OPR:" and "Certified By:" show office symbols, no names | 4.5.4.10–11 | lint | hard | 2026-11-10 |
 | F-022 | "Supersedes:" month spelled out, entries separated by semicolons; line omitted if none | 4.5.4.12 | render | hard | 2026-11-10 |
 | F-023 | "Pages:" with page count | 4.5.4.13 | render | hard | 2026-11-10 |

@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 1 runner, r6: renderer test (docs/gov-test-plan.md). Windows PowerShell 5.1.
+  90-161.Z Task 1 runner, r7: renderer test (docs/gov-test-plan.md). Windows PowerShell 5.1.
 .DESCRIPTION
   Asks for the DODID (Enter = this computer's profile folder), goes to the Task 1 folder
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T01, checks the 4 task files are there,
   runs the validator, the draft render and the final render, and saves the output to
-  90161Z-T01-result-r6.txt in that folder after each step. The DODID, profile folder name and user name
+  90161Z-T01-result-r7.txt in that folder after each step. The DODID, profile folder name and user name
   are replaced by <DODID> in all output. Start it with right-click > Run with PowerShell (no -File path typed).
   The window always waits for Enter before it closes, also after an unexpected error.
   Parameters (used by the paste bundle, scripts/gov/paste): -Id skips the DODID question, -NoPause skips the final Enter.
@@ -42,7 +42,7 @@ try {
   # Files pasted into Notepad and saved locally need no unblock; a failed unblock is not an error here.
   Get-ChildItem -LiteralPath $dir -Filter *.ps1 | ForEach-Object { Unblock-File -LiteralPath $_.FullName -ErrorAction SilentlyContinue }
 
-  $log = Join-Path $dir ('90161Z-' + $task + '-result-r6.txt')
+  $log = Join-Path $dir ('90161Z-' + $task + '-result-r7.txt')
   $sample = Join-Path $dir 'publication.sample.json'
   $steps = @(
     @{ Name = '1 validate'; File = 'Test-Publication.ps1'; Args = @('-Path', $sample) },
@@ -50,7 +50,7 @@ try {
     @{ Name = '3 final'; File = 'New-Publication.ps1'; Args = @('-Path', $sample, '-Mode', 'final', '-Pdf') }
   )
   $lines = New-Object System.Collections.Generic.List[string]
-  $lines.Add('TASK ' + $task + ' renderer test r6, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
+  $lines.Add('TASK ' + $task + ' renderer test r7, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
   foreach ($s in $steps) {
     Write-Host ('STEP ' + $s.Name + ' running (Word steps can take a few minutes; do not close this window)...')
     $lines.Add('STEP ' + $s.Name)
