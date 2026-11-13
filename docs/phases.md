@@ -52,4 +52,4 @@ Scale (REC, no question): PFM Activity Log reaches the 5,000-item view threshold
 
 ## Phase 4 (13 Nov)
 
-Step 1 screen map: docs/app/screen-map.md r1 (25 built screens; Q26-Q29 open). Step 2: clickable previews after the map is approved.
+Step 1 screen map: docs/app/screen-map.md r1 (25 built screens). Map approved (26A-29A). Step 2 (clickable previews) cancelled by the PFM, 13 Nov.
