@@ -213,7 +213,7 @@ out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
 # the runner stops at Unblock-File, so its step reads CHECK); the results folder must hold the report (summary + full
 # log) with no DODID. The window path (Windows Forms) cannot run here: lint only.
 tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pf=0; pr=0
-swap() { sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#Read-Host 'Type RUN and press Enter to start (Enter alone stops, nothing written)'#'RUN'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
+swap() { sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
   swap "$b" > "$tp/b.ps1"; pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
   n=$(python3 -c "import json;print(sum(len(b['steps']) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
@@ -230,14 +230,14 @@ done < <(python3 -c "import json;[print(f['dir']+'\t'+f['src']) for b in json.lo
 rm -rf "$tp"
 [ $pr -eq 1 ] && [ $pf -eq 0 ] && ok "round bundle text mode: files exact, steps run, report in results folder, DODID masked (rounds=$pr mismatches=$pf)" || bad "round bundle: rounds ok=$pr mismatches=$pf"
 
-# Enter never starts a run (PFM 2026-11-13): no AcceptButton in any round window; text mode asks for RUN typed on purpose.
-ab=$(cat scripts/gov/paste/*.ps1 | grep -c 'AcceptButton'); rq=$(grep -L "Type RUN and press Enter" scripts/gov/paste/*.ps1 | wc -l)
+# Enter starts the run (PFM 2026-11-13): the window's AcceptButton is Run; text mode shows the plan, Enter runs, N stops with nothing written.
+ab=$(grep -L 'AcceptButton = \$run' scripts/gov/paste/*.ps1 | wc -l)
 te=$(mktemp -d); mkdir -p "$te/u/test1234/OneDrive - United States Air Force"; tw=0
 for b in scripts/gov/paste/*.ps1; do
-  sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#Read-Host 'Type RUN and press Enter to start (Enter alone stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$te/u'#" "$b" > "$te/b.ps1"
+  sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#'N'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$te/u'#" "$b" > "$te/b.ps1"
   pwsh -NoProfile -File "$te/b.ps1" > /dev/null 2>&1; [ -e "$te/u/test1234/OneDrive - United States Air Force/90-161.Z" ] && tw=$((tw+1))
 done; rm -rf "$te"
-[ "$ab" -eq 0 ] && [ "$rq" -eq 0 ] && [ "$tw" -eq 0 ] && ok "Enter never starts a run (AcceptButton=$ab, bundles without RUN prompt=$rq, writes after Enter alone=$tw)" || bad "Enter starts a run (AcceptButton=$ab, no RUN prompt=$rq, writes after Enter alone=$tw)"
+[ "$ab" -eq 0 ] && [ "$tw" -eq 0 ] && ok "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw; Enter path = round bundle test)" || bad "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw)"
 
 echo "TESTS pass=$pass fail=$fail"
 [ $fail -eq 0 ]

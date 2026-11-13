@@ -233,11 +233,14 @@ if ($gui) {
     $row = 0; foreach ($c in @($lbl, $idBox, $where, $list, $log, $buttons)) { $grid.Controls.Add($c, 0, $row); $row++ }
     $form.Controls.Add($grid)
     $form.ResumeLayout($false); $form.PerformLayout()
+    # Enter starts the run (PFM 13 Nov: type the DODID or leave it empty, press Enter). Focus starts in the DODID box.
+    $form.AcceptButton = $run
+    $form.Add_Shown({ $idBox.Focus() | Out-Null })
     $showPlan = { $plan = Get-RoundPlan $idBox.Text; $where.Text = 'Writes to: ' + $plan.Shown + $(if ($plan.Found) { '' } else { '   (NOT found: check the DODID)' }); $plan }
     $idBox.Add_TextChanged({ [void](& $showPlan) })
     $first = & $showPlan
     $howTo = @('HOW TO USE', '  1. Check the "Writes to" line above. Leave the DODID box empty unless that line says NOT found.',
-      '  2. Press Run. Word steps take a few minutes; keep this window open until it says DONE.',
+      '  2. Press Enter or Run. Word steps take a few minutes; keep this window open until it says DONE.',
       '  3. At DONE the results folder opens and the summary is on the clipboard: new e-mail, paste into the body,',
       '     cut the first line into the subject, attach all files in the folder. The buttons copy and open again if needed.',
       '  Uncheck a step to skip it. Closing the window stops a running step.', '')
@@ -272,9 +275,9 @@ try {
   $say = { param($t) Add-RunLog $t; Write-Host $t }
   $typed = [string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')
   foreach ($l in (Get-RoundPlan $typed).Lines) { Write-Host $l }
-  # Enter never starts a run (PFM 13 Nov): the plan above is read first, then RUN is typed on purpose.
-  $go = ([string](Read-Host 'Type RUN and press Enter to start (Enter alone stops, nothing written)')).Trim()
-  if ($go -ne 'RUN') { Write-Host 'Stopped before anything was written.'; return }
+  # The plan above shows first; Enter starts the run (PFM 13 Nov), N stops before anything is written.
+  $go = ([string](Read-Host 'Press Enter to run (N then Enter stops, nothing written)')).Trim()
+  if ($go -match '^[Nn]') { Write-Host 'Stopped before anything was written.'; return }
   $sel = @(); foreach ($s in $steps) { $sel += $true }
   $sum = Invoke-Round $typed $sel $say { } { }
   if ($script:resultsDir -and $env:OS -eq 'Windows_NT') { Start-Process -FilePath 'explorer.exe' -ArgumentList ('"' + $script:resultsDir + '"') }
