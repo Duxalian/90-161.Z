@@ -138,6 +138,7 @@ The project log records how the project got there (milestones, breakthroughs, mi
 - Work the PFM expects done while away needs a running owner before the turn ends: a started agent or a one-time scheduled task.
 - A scheduled task needs a prompt that stands alone and permission to commit, open and merge a pull request and republish without a person.
 - Background work stops at the usage limit. Say when that can interrupt it.
+- Round results (the PFM, 2026-11-13): after a round goes live, arm a check-in (send_later) every 10 minutes for up to 2 hours that searches Gmail for the round's subject ("90161Z R<NN>"); on arrival, process it as if the PFM said "email received"; stop when found or at 2 hours.
 
 ## Boundaries
 

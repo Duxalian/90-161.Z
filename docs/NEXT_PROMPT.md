@@ -22,7 +22,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
-1. Round R06 r1 on go.md: 90-161.Z Deployer (real path, To box in Config, cleanup to Recycle Bin, checkbox, OK/CHECK subject, help lines) + Copy script on the bookmark page. R05 passed (docs/reviews/2026-11-13-r05-results.md). Task scripts drop the DODID question at their next revision. Speed rules: docs/reviews/2026-11-13-speed-analysis.md.
+1. Round R07 r1 on go.md: Deployer window fix (R06 ran in text mode; docs/reviews/2026-11-13-r06-results.md). If still no window, the report names the line. Claude watches Gmail for "90161Z R07". Task scripts drop the DODID question at next revision.
 2. Task 6 prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).

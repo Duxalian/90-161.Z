@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R06: 90-161.Z Deployer with automatic cleanup; Copy script button; R05 done. Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R07: Deployer window fix; R06 done. Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -33,21 +33,21 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R06 r1, the 90-161.Z Deployer and automatic cleanup (open, 13 Nov 26)
+## Fix first: Round R07 r1, Deployer window fix (open, 13 Nov 26)
 
-**For:** tests the renamed 90-161.Z Deployer window (full folder path, e-mail box, checkbox, progress bar) and cleans up the project folder by itself.
-**Time:** about 6 minutes (estimate).
-**Changes:** writes into T01 (renderer files and a new sample render), Config (the e-mail address and a small history file) and Rounds\R06. Moves finished files to the Recycle Bin: folders T02, T03, T04, T05, T06, T13, Rounds\R01 to R05, and the old T07 scripts. Only files 90-161.Z made: any other file stays, with its folder. The window lists each one (RECYCLE) before Run; uncheck "Clean up finished files" to skip it. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
+**For:** R06 ran in the ISE text pane instead of the Deployer window. R07 fixes the window and writes any cause into the report.
+**Time:** about 4 minutes (estimate).
+**Changes:** writes into T01 (renderer files and a new sample render), Config and Rounds\R07. Moves Rounds\R06 to the Recycle Bin (its results are recorded). Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 42f42d0e.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/b818d8a60fe291d1205612e0348d4bffc45a96d3/scripts/gov/paste/90161Z-R06-round-r1.ps1
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build BUILDID.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/COMMIT/scripts/gov/paste/90161Z-R07-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-3. In the window, check the bold "Writes to" line. In "Send results to", type the address you send results to (only this once).
+3. The 90-161.Z Deployer window opens. In "Send results to", type the address you send results to (only this once), then Enter.
 4. If anything in the window overlaps or is cut off, uncheck "This window looked right".
 5. Press Enter (or Run). The progress bar and timer show the step; wait for DONE.
-6. The Outlook draft opens with the address, subject 90161Z R06 OK (or CHECK), the summary and 2 files. Send it.
-**Report:** the draft itself. Add one line if Copy script said blocked, or if Outlook asked anything.
-**If it fails:** read the WHAT TO DO line in the window and do that. If no draft opens, the folder opens and the text is on the clipboard: send as before. If a file did not go to the Recycle Bin, the summary says failed=; send anyway.
+6. The Outlook draft opens with the address, subject 90161Z R07 OK (or CHECK), the summary and 2 files. Send it.
+**Report:** the draft itself. Claude watches the inbox for the subject, so no chat message is needed.
+**If it fails:** if the window still does not open and the round runs as text in ISE, let it finish and send the draft: the report names the cause. Otherwise read the WHAT TO DO line in the window.
 
 ## Task 14: site logo, r1 (open, 13 Nov 26)
 
@@ -166,6 +166,8 @@ Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 901
 
 ## Done
 
+- Round R06, Deployer and cleanup (13 Nov 26): 4 of 4 pass; Copy script worked; cleanup recycled 4 files and 1 folder; the draft opened; the window did not (text mode), fixed in R07. Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r06-results.md
 - Round R05, Outlook draft (13 Nov 26): 4 of 4 pass; the draft opened with subject, summary and both files; the Window line came back empty (R06 uses a checkbox). Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r05-results.md
 - Round R04, quicker finish and DAFMAN link style (13 Nov 26): 4 of 4 pass; summary subject and clipboard worked; ACCESSIBILITY link now bold, blue, underlined like the DAFMAN cover link; seal prep r2 saved in T07. Details:

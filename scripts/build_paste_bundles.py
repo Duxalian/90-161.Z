@@ -321,6 +321,7 @@ function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock
   $n = 0
   try {
   & $speak ('ROUND ' + $round + ' build ' + $buildId + ' -> ' + (ConvertTo-Masked $base))
+  if ($script:noWindowWhy) { & $speak ('NOTE: no window, text mode: ' + (ConvertTo-Masked $script:noWindowWhy)) }
   if (Test-WordOpen) { & $speak 'NOTE: Word is open. Renders use Word: save your documents and close Word if a step stops.' }
   Write-BundleFile $base $speak
   # An empty box clears the saved address (review R06 #5).
@@ -377,9 +378,9 @@ function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock
 }
 
 $script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $script:draftMade = $false; $script:textMode = $false; $script:helped = @{}; $stepMinutes = 30
-$script:statusBase = ''; $script:stepStart = $null; $script:stepEst = 0
+$script:statusBase = ''; $script:stepStart = $null; $script:stepEst = 0; $script:noWindowWhy = ''
 $gui = $true
-try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false }
+try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false; $script:noWindowWhy = 'Windows Forms not available: ' + $_.Exception.Message }
 if ($gui) {
   try {
     # Layout follows the font and screen scaling (R02: in ISE, which is DPI-aware, fixed pixel positions overlapped):
@@ -403,9 +404,12 @@ if ($gui) {
     $banner.AutoSize = $true; $banner.MaximumSize = $wrap; $banner.Text = Get-LastRoundText $hist0
     $where = New-Object System.Windows.Forms.Label
     $where.AutoSize = $true; $where.MaximumSize = $wrap; $where.Margin = New-Object System.Windows.Forms.Padding(3, 6, 3, 3)
-    $where.Font = New-Object System.Drawing.Font('Segoe UI', 10, 'Bold')
+    # Cosmetics never stop the window (R06 fell back to text mode, most likely on the ambiguous Font(name, size, 'Bold')
+    # call): typed enum and color from names at run time, each in its own try.
+    try { $where.Font = New-Object System.Drawing.Font($form.Font.FontFamily, [single]10, [Enum]::Parse(('System.Drawing.FontStyle' -as [type]), 'Bold')) } catch { $null = $_ }
     $warn = New-Object System.Windows.Forms.Label
-    $warn.AutoSize = $true; $warn.MaximumSize = $wrap; $warn.ForeColor = 'DarkRed'
+    $warn.AutoSize = $true; $warn.MaximumSize = $wrap
+    try { $warn.ForeColor = ('System.Drawing.Color' -as [type])::FromName('DarkRed') } catch { $null = $_ }
     $list = New-Object System.Windows.Forms.CheckedListBox
     $list.Anchor = 'Left, Right'; $list.CheckOnClick = $true; $list.IntegralHeight = $false
     $off = 0
@@ -518,7 +522,11 @@ if ($gui) {
     $form.Add_FormClosing({ if ($script:child -and -not $script:child.HasExited) { try { $script:child.Kill() } catch { $null = $_ } } })
     [void]$form.ShowDialog()
     return
-  } catch { $gui = $false; Write-Host ('No window (' + $_.Exception.Message + '); text mode.') }
+  } catch {
+    $gui = $false; $script:noWindowWhy = [string]$_.Exception.Message
+    if ($_.InvocationInfo) { $script:noWindowWhy += ' (line ' + $_.InvocationInfo.ScriptLineNumber + ')' }
+    Write-Host ('No window (' + $script:noWindowWhy + '); text mode.')
+  }
 }
 try {
   $script:textMode = $true
