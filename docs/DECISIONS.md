@@ -1,6 +1,7 @@
 # Decisions: 90-161.Z
 
 Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that PFM has not approved yet.
+Rows a later row replaces in full move, word for word, to docs/decisions-archive.md (bloat audit 2026-11-13).
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
@@ -92,7 +93,6 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 | 2026-11-11 | Only directive publications are tracked: Publication Category is removed and Publication Type lists only the directive types of Table A11.1 an installation may issue (Instruction, Manual, Supplement, Operating Instruction, Guidance Memorandum, Instructional Checklist). Product Type stays Publication or Form. Prescribed forms: each form row in PFM Product Index links to its Prescribing Publication (DAFMAN 4.5.11.1.2), so a publication and its forms are reviewed together (7.4.2); the view "PFM - Prescribed Forms by Publication" groups them. | PFM (directive only, bundling); Agent (one link stored on the form) | Publication Category; non-directive types |
 | 2026-11-11 | Columns (PFM 1A 2A 3A): Publication Type (DAFMAN 1.1.2; values and the removal of Publication Category: see the directive-only entry above); Action Type drops Supplement and OI; PFM Series list seeded with the 39 series of Table A2.1 and a Series lookup; OPR is a lookup to PFM Offices (office symbol). Product Status adds Inactive = past the four-year periodic review without certify as current (DAFMAN 7.4.2, the PFM's practice), with Effective Date, Last Certified Current Date and Next Review Due. Title stays the built-in Title column. | PFM | Free-text OPR, yes/no directive, Supplement/OI as action types |
 | 2026-11-11 | Records rule for the PFM's publication records: AFRIMS RDS T 33-38 R 07, destroy when superseded or rescinded. PFM Product Index carries Product Status (Active, Inactive, Superseded, Rescinded; Inactive added later the same day) and Status Change Date as the trigger; the view "PFM - Not Active" lists them. Destruction stays a manual records-manager action; flows only remind. R 07 covers the record set (DAF Forms 673 and 399 and accompanying documentation), not the publication: superseded and rescinded publications stay browsable. It does not cover working files (drafts, CRMs); their rule is open until the PFM Working Files library is built. | PFM (rule, scope); Agent (columns) | Fixed disposition date |
-| 2026-11-11 | **Rec:** ANGMAN 90-161 (15 Jun 2023, ref/angman90-161.pdf, from the PFM) covers ANG tier waivers on DAF Form 679 only, may not be supplemented at wing level, and implements DAFI 90-160 and DAFMAN 90-161. It does not change the wing publishing workflow; it becomes a source only if waiver tracking enters scope. Records under it follow AFI 33-322, ANGMAN 33-322 and the AFRIMS RDS. | Agent | - |
 | 2026-11-11 | Gap review (doc https://claude.ai/artifact/Ta3utvkZGP5aKXWWeRh7vU): (1A) all site members read all rows; item-level permissions off; the app filters by Requester and AO. (2) Dataverse solution import is offered on the PFM's tenant: test solution-aware flows next. (3) No governance notice is required; the PFM has built and shared Power Apps before. (4) The PFM is the base records manager: working files may live on SharePoint and may need a disposition date from the AFRIMS RDS. (5A) Requester column, Central time zone, test site, Accessibility Checker as a release gate. | PFM | Creator-only rows (2026-11-10) |
 | 2026-11-11 | The 15-business-day coordination period (DAFMAN 90-161 5.2) is a measure, not a hard deadline. Reminders, overdue warnings and escalation emails do exist, written in a measured, professional tone (no alarm wording, no blame); counted in weekdays only, labelled "weekdays (holidays not excluded)"; no non-duty days list. | PFM (corrects the same-day "metric only" entry; 1A) | Metric only, no warnings |
 | 2026-11-11 | .pii-guard also allows the escaped host usaf\.dps\.mil (tests/run.sh). Guard from archimedes_lever 1fb39b2: denylist entries wrapped in <> now match; a name inside an allowed host passes. | PFM | — |
@@ -116,13 +116,8 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 | 2026-11-11 | Repo stays public (the gov device reads raw links and Pages without login). Gov-network test details move out of the repo into the private collaboration log; the repo keeps only working rules. | PFM | Rec B: private repo + public drop repo |
 | 2026-11-11 | The future SharePoint page on the collaboration gives general lessons only: no specific addresses, file sizes or filter behavior. | PFM | full detail |
 | 2026-11-11 | Collaboration log moves to a private Claude doc (https://claude.ai/artifact/9zLxe6e9vJPKtRQv5xSSzk) so chats outside the Project can read it; the Project doc only points there. | PFM | Project doc claude/collab-log.md |
-| 2026-11-11 | Collaboration log lives in a private claude.ai Project doc (claude/collab-log.md), not the public repo; agents append each turning point. | PFM | — |
 | 2026-11-11 | Pages site is the hand-off bookmark (works on the gov device, links clickable); raw go.md is the fallback. | PFM | Pages trial |
-| 2026-11-11 | Trial: GitHub Pages front page (rhope-ops.github.io/90-161.Z, branch gh-pages) renders go.md from main with clickable links; go.md stays the source. | PFM | go.md plain text only |
 | 2026-11-11 | Hand-off page moves to go.md at the repo root (short address the PFM types once and bookmarks); plain-text URLs, no GitHub Pages. | PFM | docs/HANDOFF.md |
-| 2026-11-11 | Gov-device hand-off via a bookmarked docs/HANDOFF.md raw page; no more emails to the military address. | PFM | Plain-text hand-off emails |
-| 2026-11-11 | Hand-off emails are plain text only (no HTML part). | PFM | explicit HTML links |
-| 2026-11-11 | Hand-off emails: exact raw URLs as explicit links (no wrapper); written in the PFM's voice ("my computer"). | PFM | — |
 | 2026-11-11 | Build order C (renderer) > D (app) > B (getting-started doc). | PFM | — |
 | 2026-11-11 | TOC always for ANG wing publications (4.5.8.2, built per 4.5.8.3); no option to disable. | PFM | Rec "switch, default on" |
 | 2026-11-11 | Certifier name line "(Rank First Last)" under Certified by is required (15 of 19 published covers; absent only where the office is the person, e.g. HAF). | PFM | Rec "off by default" |
@@ -132,7 +127,6 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 | 2026-11-11 | DAFMAN 90-161 is the source of truth whenever any wing file (template, AO guide, checklist) or practice contradicts it. Wing files shape the customer process only; they never supply rules. | PFM | — |
 | 2026-11-11 | Resolved by that rule: indent 0.25 in per level; signature block at 4.0 in; TOC per 4.5.8.2 (ANG wing level); waiver wording per 4.5.5.11 example. | PFM | wing template variants |
 | 2026-11-11 | Two spaces before each new sentence (DAFMAN 90-161 measured: 6.55 pt between sentences vs 3.14 pt between words, n=53/1625, pages 40-46). | PFM | — |
-| 2026-11-11 | Gov-device tasks: send raw GitHub links by email to the PFM's military address. | PFM | Copy blocks in chat |
 | 2026-11-11 | Cover line reads "Certified by:" (as printed on published covers), not "Certified By:". | PFM | Rec |
 | 2026-11-11 | New CRM template from DAFMAN 90-161 Figure A12.1 (Word, measured column widths): templates/CRM_A12-1.docx. Replaces the PFM's old CRM. | PFM | Old CRM |
 | 2026-11-11 | CRM resolution codes A/R/M (Figure A12.1 key), not A/R/P (its column header). | PFM | — |
@@ -141,7 +135,6 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 | 2026-11-10 | Create the SharePoint lists with a Power Automate flow (docs/power-automate-provisioning.md); PowerShell/PnP path dropped (sign-in window never opened). | PFM | PnP provisioning |
 | 2026-11-10 | Site URL: repo holds only the domain pattern https://usaf.dps.mil/sites/<your-site>; the real site path stays on the gov device and in the flow. | PFM | — |
 | 2026-11-10 | Build both lanes in parallel: (A) renderer + validator, (B) SharePoint lists + PnP provisioning. | PFM | — |
-| 2026-11-10 | **Rec:** Renderer = PowerShell + Word COM (option A); environment check passed (docs/reviews/2026-11-10-gov-env-check.md). Option C stays open until the Premium check. | Agent | — |
 | 2026-11-10 | Public repo uses "PFM", not the PFM's name. | PFM | — |
 | 2026-11-10 | Repo is public, so the gov device reads it without a GitHub login. Rule: nothing that names the wing, people or office symbols goes in the repo. | PFM | Rec "make the repo public" |
 | 2026-11-10 | The gov device reads GitHub without a login (wording reduced 12 Nov, PFM: no network details in the public repo). | PFM | Transfer path "PFM opens the repo on the gov device" |
@@ -149,14 +142,11 @@ Newest first. "By" = PFM for a decision. "By" = Agent for a recommendation that 
 | 2026-11-10 | PFM is not a tenant admin. | PFM | — |
 | 2026-11-10 | The wing has no supplement to DAFMAN 90-161. | PFM | — |
 | 2026-11-10 | PFM is the PFM of an ANG wing. ANG wing publications are posted on the wing's own site, not through AFIMPT/AFDPO (DAFMAN 90-161 paras 1.1.3.2, 6.4.1, 6.6.3). Output must be camera-ready final, not an AFDPO-tagged draft. | PFM | "Final submission goes through AFIMPT" (Agent) |
-| 2026-11-10 | **Rec:** Enforce format in 3 layers: schema (model returns content only), deterministic renderer, rule validator. See docs/format-rules.md. | Agent | — |
 | 2026-11-10 | PFM is a site collection administrator and can reach SharePoint through PowerShell. | PFM | "no admin rights" assumption (partly) |
 | 2026-11-10 | Formatting goal: rules force output to look like DAFMAN 90-161 itself. AFIMPT is not used for formatting or tracking. | PFM | — |
 | 2026-11-10 | 90-161.Z is the system of record for endorsements (no TMT). | PFM | — |
 | 2026-11-10 | Transfer path: the PFM opens the repo on the gov device (wording reduced 12 Nov). | PFM | — |
 | 2026-11-10 | Rule source: DAFMAN 90-161, 18 Oct 2023, incorporating Change 1 (14 Jul 2025) and Corrective Action (1 May 2026), plus the wing supplement if one exists (none exists). | PFM | — |
-| 2026-11-10 | **Rec:** Pilot the document engine on ChatGPT Mil and Gemini (GenAI.mil) with the same 3 test drafts; pick by checklist pass rate. | Agent | — |
-| 2026-11-10 | Repo: private rhope-ops/90-161.Z, bootstrapped from standard_project. | PFM | — |
 | 2026-11-10 | Scope: wing/installation publications. | PFM | — |
 | 2026-11-10 | Platform: SharePoint Lists + Power Automate + Power Apps in DoD365. | PFM | — |
 | 2026-11-10 | Data boundary: government data stays in DoD365/GenAI.mil only; GitHub holds code, schemas, prompts and fake data. | PFM | — |

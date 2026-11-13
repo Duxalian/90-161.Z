@@ -10,5 +10,12 @@
       "seconds": 1.9,
       "max_slowdown": 0.25
     }
-  }
+  },
+  "ignore": [
+    "ref/**",
+    "scripts/gov/paste/**",
+    "flow/provisioning-payload.json",
+    "flow/packages/**",
+    "tests/fixtures/*.publication.json"
+  ]
 }
