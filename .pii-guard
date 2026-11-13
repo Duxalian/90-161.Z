@@ -11,3 +11,4 @@ www.dafhistory.af.mil
 www.trademark.af.mil
 # Escaped form of the same public host, in tests/run.sh (PFM, 2026-11-11).
 usaf\.dps\.mil
+check: mil
