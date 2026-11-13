@@ -39,8 +39,8 @@ Steps:
 **Time:** about 6 minutes (estimate).
 **Changes:** writes into T01 (renderer files and a new sample render), Config (the e-mail address and a small history file) and Rounds\R06. Moves finished files to the Recycle Bin: folders T02, T03, T04, T05, T06, T13, Rounds\R01 to R05, and the old T07 scripts. Only files 90-161.Z made: any other file stays, with its folder. The window lists each one (RECYCLE) before Run; uncheck "Clean up finished files" to skip it. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build BUILDID.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/COMMIT/scripts/gov/paste/90161Z-R06-round-r1.ps1
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 42f42d0e.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/b818d8a60fe291d1205612e0348d4bffc45a96d3/scripts/gov/paste/90161Z-R06-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
 3. In the window, check the bold "Writes to" line. In "Send results to", type the address you send results to (only this once).
 4. If anything in the window overlaps or is cut off, uncheck "This window looked right".
