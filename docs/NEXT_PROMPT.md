@@ -6,6 +6,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 
 - Bloat audit 1 done (docs/reviews/2026-11-13-bloat-audit.md); PFM answered B1-B5 (1A 2A 3A 4A). Next audit due 27 Nov 26 or 30 commits.
 - B2 short index merged (PFM 1B, 13 Nov). B3 at next revision of each gov task script. B4/B5 done (baseline affff84, sync 2f5570d); Actions secret set, manual run 43349922182 passed (3 denylist entries).
+- Baseline ecfd8a8 (checkout v5) synced here, workflow and pin only (71e5a42; run 43350378963 passed, no Node 20 warning); same bump in ICF c9077c6, no-more-beyond db264cf, transcription_assistant 417209a. Open: pre-push check gate held (e4b6660) for "13 hits", but pii_guard --all and Action run show 0 findings in 161 files: PFM to decide re-enable.
 - Waiting on the PFM: 3.5 legal answer; test site; CUI check for working files (gap review, docs/DECISIONS.md 2026-11-11); 5.1 after renderer round 2.
 
 ## State (main)
