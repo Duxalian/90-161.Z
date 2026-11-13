@@ -1,10 +1,10 @@
 {
-  "_doc": "Source for scripts/build_paste_bundles.py. Each bundle is one round: a self-contained PowerShell text the PFM copies from its raw page and pastes into Windows PowerShell ISE (F5). It writes the files, then opens the round runner (a window; text prompts if no window can open): steps run one by one with a live log and PASS/FAIL counts, then one results folder (Rounds\\\\<round>: a report file plus copies of the PDFs, to attach to one e-mail; zips do not cross the boundary) and a summary for the clipboard. It runs only the steps inside it (PFM 3A). Never hand-edit scripts/gov/paste/*.ps1: change this file or the sources and rebuild.",
+  "_doc": "Source for scripts/build_paste_bundles.py. Each bundle is one round: a self-contained PowerShell text the PFM copies from its raw page and pastes into Windows PowerShell ISE (F5). It writes the files, then opens the 90-161.Z Deployer (a window; text prompts if no window can open): steps run one by one with a live log and PASS/FAIL counts, then one results folder (Rounds\\\\<round>: a report file plus copies of the PDFs, to attach to one e-mail; zips do not cross the boundary) and a summary for the clipboard. It runs only the steps inside it (PFM 3A). Never hand-edit scripts/gov/paste/*.ps1: change this file or the sources and rebuild.",
   "bundles": [
     {
-      "out": "scripts/gov/paste/90161Z-R05-round-r1.ps1",
-      "round": "R05",
-      "title": "Round R05: renderer test r8 again; the runner ends with an Outlook draft (subject, summary, all results files; To empty; never sent), else the R04 folder-and-clipboard finish",
+      "out": "scripts/gov/paste/90161Z-R06-round-r1.ps1",
+      "round": "R06",
+      "title": "Round R06: 90-161.Z Deployer (real path, To box, Window-OK checkbox, OK/CHECK subject, progress and estimates, plain-words help); recycles finished files and reports what is left; renderer test r8 again",
       "files": [
         {
           "dir": "T01",
@@ -38,6 +38,60 @@
         {
           "dir": "T01",
           "name": "SAMPLEWINGI99-101.pdf"
+        }
+      ],
+      "cleanup": [
+        {
+          "path": "T02",
+          "kind": "dir"
+        },
+        {
+          "path": "T03",
+          "kind": "dir"
+        },
+        {
+          "path": "T04",
+          "kind": "dir"
+        },
+        {
+          "path": "T05",
+          "kind": "dir"
+        },
+        {
+          "path": "T06",
+          "kind": "dir"
+        },
+        {
+          "path": "T13",
+          "kind": "dir"
+        },
+        {
+          "path": "Rounds\\R01",
+          "kind": "dir"
+        },
+        {
+          "path": "Rounds\\R02",
+          "kind": "dir"
+        },
+        {
+          "path": "Rounds\\R03",
+          "kind": "dir"
+        },
+        {
+          "path": "Rounds\\R04",
+          "kind": "dir"
+        },
+        {
+          "path": "Rounds\\R05",
+          "kind": "dir"
+        },
+        {
+          "path": "T07\\90161Z-T07-seal-test-r*.ps1",
+          "kind": "glob"
+        },
+        {
+          "path": "T07\\90161Z-T07-seal-prep-r1.ps1",
+          "kind": "glob"
         }
       ]
     }
