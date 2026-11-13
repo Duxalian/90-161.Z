@@ -5,6 +5,7 @@ Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-13 | Wing PowerPoint master: the PFM keeps all four modern versions (I-IV) open, no pick yet; more changes may come. Hold the redesign of the 90-161.Z decision briefs until the PFM confirms a version. Delivered privately (not in this repo): Versions I-IV with 9 layouts each, and an 8-slide comparison deck (original, original v2 = fixes + upscaled shield + motto as text, Versions I-IV) proposing a wing-wide rollout in 2027. | PFM | Rec 32A/33D (pick one now) |
 | 2026-11-13 | R05: a round's last step makes an Outlook draft (subject, body, files; To empty; never sent); fallback = R04 steps. | PFM | docs/reviews/2026-11-13-r03-results.md |
 | 2026-11-13 | Enter starts the run (window: Enter after the DODID; text mode: Enter after the plan). Round summary line 1 = the e-mail subject; at DONE the summary is copied and the folder opens. | PFM | docs/reviews/2026-11-13-r03-results.md |
 | 2026-11-13 | Accessibility site name and list address are Settings values set at install (PublicationsSiteName, PublicationsListUrl; ship in T02 r10). | PFM | docs/reviews/2026-11-13-r03-results.md |
