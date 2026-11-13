@@ -3,7 +3,7 @@
   "title": "PFM Process Steps",
   "description": "Publications and Forms Manager (PFM) list of process steps for one publication action, derived from Department of the Air Force Manual (DAFMAN) 90-161, with Table A5.2 target business days. Status: draft, not verified.",
   "template": "GenericList",
-  "ref": "ARCHITECTURE s3 (Stages list); docs/process-model.md Stages table",
+  "ref": "ARCHITECTURE s3 (Stages list); docs/process-model.md Stages table. Members read only; only the PFM office edits (PFM 2026-11-12, P2A).",
   "fields": [
     {
       "internalName": "Title",
@@ -48,6 +48,29 @@
       "type": "Number",
       "required": false,
       "ref": "DAFMAN 90-161 Table A5.2 (milestone goals in business days); PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "AppliesTo",
+      "displayName": "Applies To",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 1A (12 Nov); the action types the stage applies to, from DAFMAN 90-161 Table A5.1 (docs/dafman-coverage/part-6.md, \"Applies To fill\")",
+      "choices": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Administrative Change",
+        "Guidance Memorandum",
+        "Certify Current",
+        "Rescind",
+        "Transfer",
+        "Corrective Action",
+        "Reissue Guidance Memorandum",
+        "Change OPR",
+        "Revise"
+      ],
+      "multi": true,
+      "description": "Office of Primary Responsibility (OPR) is named in the Change OPR action type."
     }
   ],
   "views": [
@@ -73,80 +96,202 @@
   ],
   "seed": [
     {
+      "StepNumber": 0,
+      "Title": "AO appointment",
+      "DAFMANRef": "Glossary (AO is designated by the OPR), 2.7.2, 2.8",
+      "ExitCondition": "AO named on the PFM Publications row",
+      "IsOptional": false,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change"
+      ]
+    },
+    {
       "StepNumber": 1,
-      "Title": "Preparation: directive or not, existing pubs, prior record set, contact PCM/PFM",
-      "DAFMANRef": "3.1",
-      "ExitCondition": "DAF Form 673 started",
-      "IsOptional": false
+      "Title": "Request",
+      "DAFMANRef": "3.1, 2.3.2, 5.6.3, 5.7.6.3",
+      "ExitCondition": "Request saved; PFM confirms; DAF Form 673 started",
+      "IsOptional": false,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Administrative Change",
+        "Guidance Memorandum",
+        "Certify Current",
+        "Rescind",
+        "Transfer",
+        "Revise"
+      ]
     },
     {
       "StepNumber": 2,
       "Title": "Drafting with SMEs",
       "DAFMANRef": "3.2, 4.2.2.1",
-      "ExitCondition": "Draft meets format rules (draft mode)",
+      "ExitCondition": "Draft uploaded",
       "IsOptional": false,
-      "TargetBusinessDays": 60
+      "TargetBusinessDays": 60,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Guidance Memorandum",
+        "Revise"
+      ]
     },
     {
       "StepNumber": 3,
-      "Title": "Pre-coordination (optional)",
-      "DAFMANRef": "3.3",
-      "ExitCondition": "",
-      "IsOptional": true
+      "Title": "Clean and format",
+      "DAFMANRef": "Q2A, 3.1.7, Chapter 4",
+      "ExitCondition": "Draft meets format rules (draft mode); PFM marks it ready",
+      "IsOptional": false,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Guidance Memorandum",
+        "Revise"
+      ]
     },
     {
       "StepNumber": 4,
-      "Title": "Privacy monitor review: the unit privacy monitor reviews the draft before formal coordination",
-      "DAFMANRef": "2.8.1, Table A3.1 note 2",
-      "ExitCondition": "Privacy monitor review documented",
-      "IsOptional": false
+      "Title": "Pre-coordination (optional)",
+      "DAFMANRef": "3.3",
+      "ExitCondition": "",
+      "IsOptional": true,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change"
+      ]
     },
     {
       "StepNumber": 5,
-      "Title": "Formal coordination: package = Word draft (flush left) + CRM + DAF Form 673",
-      "DAFMANRef": "3.4, 5.1, 5.1.5",
-      "ExitCondition": "All coordinators responded; all nonconcurs resolved (5.5.1)",
+      "Title": "Privacy review",
+      "DAFMANRef": "2.8.1, Table A3.1 note 2",
+      "ExitCondition": "Privacy monitor review documented",
       "IsOptional": false,
-      "TargetBusinessDays": 20
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change"
+      ]
     },
     {
       "StepNumber": 6,
-      "Title": "Legal coordination (servicing legal office below HQ DAF), after all other coordination and adjudication",
-      "DAFMANRef": "5.1.8.2, 3.4",
-      "ExitCondition": "Legal concur",
+      "Title": "Formal coordination",
+      "DAFMANRef": "3.4, 5.1, 5.1.5",
+      "ExitCondition": "All coordinators responded or marked N/A; all comments adjudicated (5.1.8.1, 2.8.13). An open nonconcur may go on to Legal and Certification (PFM 1A, Figure A5.1 step 4)",
       "IsOptional": false,
-      "TargetBusinessDays": 20
+      "TargetBusinessDays": 20,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Rescind",
+        "Transfer",
+        "Revise"
+      ]
     },
     {
       "StepNumber": 7,
-      "Title": "Certification: certifying official endorses DAF Form 673",
-      "DAFMANRef": "5.6",
-      "ExitCondition": "Endorsed",
+      "Title": "Legal coordination",
+      "DAFMANRef": "5.1.8.2, 3.4",
+      "ExitCondition": "Legal concur",
       "IsOptional": false,
-      "TargetBusinessDays": 10
+      "TargetBusinessDays": 20,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Guidance Memorandum",
+        "Rescind",
+        "Transfer",
+        "Revise"
+      ]
     },
     {
       "StepNumber": 8,
-      "Title": "Approval: approving official endorses DAF Form 673; delegation letter on file",
-      "DAFMANRef": "5.7",
+      "Title": "Certification",
+      "DAFMANRef": "5.6",
       "ExitCondition": "Endorsed",
       "IsOptional": false,
-      "TargetBusinessDays": 10
+      "TargetBusinessDays": 10,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Guidance Memorandum",
+        "Rescind",
+        "Transfer",
+        "Revise"
+      ]
     },
     {
       "StepNumber": 9,
-      "Title": "Submission: OPR sends 673 (or DAF Form 399 for certify-current), draft, figure files to PFM",
-      "DAFMANRef": "6.6.1",
-      "ExitCondition": "PFM has package",
-      "IsOptional": false
+      "Title": "Approval",
+      "DAFMANRef": "5.7",
+      "ExitCondition": "Endorsed",
+      "IsOptional": false,
+      "TargetBusinessDays": 10,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Administrative Change",
+        "Guidance Memorandum",
+        "Certify Current",
+        "Rescind",
+        "Transfer",
+        "Revise"
+      ]
     },
     {
       "StepNumber": 10,
-      "Title": "Posting: ANG wing PFM distributes on approved websites or other approved methods; updates the PI",
-      "DAFMANRef": "6.4.1-6.4.2, 1.1.3.2, Table A5.2 f (steps 9-10 together)",
-      "ExitCondition": "Posted on wing site",
+      "Title": "Submission",
+      "DAFMANRef": "6.6.1, Table A5.1",
+      "ExitCondition": "PFM has package",
       "IsOptional": false,
-      "TargetBusinessDays": 15
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Administrative Change",
+        "Guidance Memorandum",
+        "Certify Current",
+        "Rescind",
+        "Transfer",
+        "Revise"
+      ]
+    },
+    {
+      "StepNumber": 11,
+      "Title": "Final build and posting",
+      "DAFMANRef": "6.4.1-6.4.2, 1.1.3.2, 7.11.1, 7.5.2, Table A5.2 f",
+      "ExitCondition": "Posted on wing site; PI updated",
+      "IsOptional": false,
+      "TargetBusinessDays": 15,
+      "AppliesTo": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Administrative Change",
+        "Guidance Memorandum",
+        "Certify Current",
+        "Rescind",
+        "Transfer",
+        "Revise"
+      ]
+    },
+    {
+      "StepNumber": 12,
+      "Title": "Periodic review",
+      "DAFMANRef": "7.4.2, 7.4.4",
+      "ExitCondition": "OPR answer recorded",
+      "IsOptional": false,
+      "AppliesTo": []
     }
-  ]
+  ],
+  "seedOnProvision": true
 }

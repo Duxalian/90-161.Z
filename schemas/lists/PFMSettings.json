@@ -3,7 +3,7 @@
   "title": "PFM Settings",
   "description": "Publications and Forms Manager (PFM) settings: one row per setting the app and flows read (wing name for the subtitle, PFM mailbox, defaults). Values are entered on the government computer, never in the code repository.",
   "template": "GenericList",
-  "ref": "PFM 2026-11-11 (naming doc: PFM Settings)",
+  "ref": "PFM 2026-11-11 (naming doc: PFM Settings). Members read only; only the PFM office edits (PFM 2026-11-12, P2A).",
   "fields": [
     {
       "internalName": "Title",
@@ -57,6 +57,31 @@
       "Title": "GuardReserveApplicabilityCalendarDays",
       "SettingValue": "30",
       "SettingNotes": "Calendar days for Guard Applicability and Reserve Applicability coordinators below major command (MAJCOM) level (DAFMAN 90-161 5.2.2)."
+    },
+    {
+      "Title": "PublicationsSiteName",
+      "SettingValue": "",
+      "SettingNotes": "The wing site name in the ACCESSIBILITY statement (\"This publication is available for download on the XXX-XXX SharePoint.\"). Set once at install (PFM 2026-11-13)."
+    },
+    {
+      "Title": "PublicationsListUrl",
+      "SettingValue": "",
+      "SettingNotes": "Address of the master publications list; the hyperlink behind the site name in the ACCESSIBILITY statement. Set once at install (PFM 2026-11-13)."
+    },
+    {
+      "Title": "PFMOfficeMailbox",
+      "SettingValue": "",
+      "SettingNotes": "PFM office mailbox that sends the AO-appointment and org-box e-mails (List design 2026-11-12 s6). Value entered by the PFM."
+    },
+    {
+      "Title": "EscalationWeekdays",
+      "SettingValue": "",
+      "SettingNotes": "Weekdays before the org-box notice escalates (PFM 2.5B; List design 2026-11-12 s6). Value entered by the PFM."
+    },
+    {
+      "Title": "RecordsFreeze",
+      "SettingValue": "",
+      "SettingNotes": "Yes or No. While set, stops every closeout deletion of Working Files (PFM 4.6A; AFI 33-322 6.1.1.4.3; List design 2026-11-12 s7). Value entered by the PFM."
     }
   ]
 }
