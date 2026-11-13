@@ -22,7 +22,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
-1. Round R05 r1 on go.md (build b2b1974a): Outlook draft at DONE (fallback = R04 folder + clipboard); no DODID box (PFM 13 Nov). R04 passed (docs/reviews/2026-11-13-r04-results.md). Open: drop the DODID question from task scripts too. T02 r10 adds PFMSettings rows PublicationsSiteName, PublicationsListUrl.
+1. Round R05 r1 on go.md (build b2b1974a): Outlook draft at DONE (fallback = R04 folder + clipboard); no DODID box (PFM 13 Nov). R04 passed (docs/reviews/2026-11-13-r04-results.md). Task scripts drop the DODID question at their next revision (PFM 13 Nov). T02 r10 adds PFMSettings rows PublicationsSiteName, PublicationsListUrl.
 2. Task 6 prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
