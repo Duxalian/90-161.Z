@@ -5,9 +5,9 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Open now
 
 - Bloat audit 2 done (docs/reviews/2026-11-13-bloat-audit-2.md); P1-P4 approved and made: tests 21 s -> 12.7 s, baseline bc233b9, task-common block (scripts/build_task_scripts.py), 3 short DECISIONS lines. Next audit by 27 Nov 26.
-- History clean done 13 Nov 26: names gone from all of main and gh-pages (fresh-clone scan 0 in 1,053 file versions); old branches deleted; GitHub Support purge requested by the PFM. Delivery is now by pull request (AGENTS.md); PFM to set the main ruleset, auto-merge and auto-delete branches.
+- History clean done 13 Nov 26: names gone from all of main and gh-pages (fresh-clone scan 0 in 1,053 file versions); old branches deleted; GitHub Support purge requested by the PFM. Delivery is now by pull request (AGENTS.md); Auto-merge and auto-delete on; no main ruleset (not available; PFM 13 Nov).
 - Kit baseline: final sync 7f2965c (archimedes_lever); projects no longer sync, so sync_baseline.py, drift.py and .baseline are gone (owner decision 2026-11-13, other session). Pre-push check gate on.
-- Waiting on the PFM: 3.5 legal answer; test site; CUI check for working files (gap review, docs/DECISIONS.md 2026-11-11); 5.1 after renderer round 2.
+- Closed 13 Nov: 3.5A (JAG in app), test site = live site (isolated URL), site approved for CUI. Waiting on the PFM: 5.1 after renderer round 2.
 
 ## State (main)
 

@@ -5,6 +5,7 @@ Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-13 | Open items closed: (3.5A) JAG answers in the app; test site = the live site on its own URL, isolated until connected (replaces 5.7B); site approved for CUI. | PFM | archive |
 | 2026-11-13 | Delivery by pull request (A); details in AGENTS.md Delivery. | PFM | AGENTS.md |
 | 2026-11-13 | One-time history clean: names removed from all history (supersedes 2026-11-12 "no rewrite"). | PFM | archive |
 | 2026-11-13 | Bloat audit 2 answers: (P1) one pwsh process for the test validations; (P2) sync baseline bc233b9; (P3) B3A block into all 4 gov task scripts now; (P4) draft short lines. | PFM | docs/reviews/2026-11-13-bloat-audit-2.md |
