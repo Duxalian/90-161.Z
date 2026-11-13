@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R02). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R03). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -32,19 +32,18 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R02, automatic sensitivity label (open, 13 Nov 26)
+## Fix first: Round R03, renderer fixes from R02 (open, 13 Nov 26)
 
-**For:** ends the hand-labeling of generated files. I label one file by hand once; the round copies that label's settings, and from then on the renderer sets the same label on every file it makes. It also re-checks the table of contents with corrected measuring (R01: the PDF was right, the measuring was 0.5 in off).
-**Time:** about 10 minutes (estimate).
-**Changes:** writes into T13 (one script), T01 (renderer files and a new sample render), Config (90161Z-label.json: the label's settings; stays on my computer, never sent) and Rounds\R02. Nothing on the SharePoint site.
+**For:** checks three fixes: the runner window no longer crowds or overlaps in ISE; the ACCESSIBILITY line reads "This publication is available for download on the XXX-XXX SharePoint." with "XXX-XXX SharePoint" as a link; the sensitivity label still sets itself.
+**Time:** about 5 minutes (estimate).
+**Changes:** writes into T01 (renderer files and a new sample render) and Rounds\R03. It uses the label settings in Config from R02 and does not change them. Nothing on the SharePoint site.
 Steps:
-1. In File Explorer, open the T01 folder (%USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T01) and open SAMPLEWINGI99-101.docx (made by Round R01).
-2. In Word, set the sensitivity label to Uncontrolled/General (Home tab, Sensitivity). Save. Close Word.
-3. Paste and run this round (steps in "How a paste task works"). The window title shows build b0a74f5e.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/ec2935388726346a68f17a9dba4b737a909cd111/scripts/gov/paste/90161Z-R02-round-r1.ps1
-4. When the log says DONE, press Open results folder.
-Report: one e-mail, subject "90161Z R02": all files in Rounds\R02 (one report file and 1 PDF), the copied summary in the body.
-**If it fails:** if the log says "LABEL FAIL ... has no sensitivity label", do steps 1 and 2 again, then step 3. Otherwise send the line that starts with LABEL FAIL or STOPPED.
+1. Paste and run this round in ISE (steps in "How a paste task works"). The window title shows build 9874a890.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/8d30d1c275fa1a5da2b9751351ff7d862a65199c/scripts/gov/paste/90161Z-R03-round-r1.ps1
+2. Check the window: the DODID label sits above its box; nothing overlaps. Make the window smaller and larger once.
+3. When the log says DONE, press Open results folder. Open the PDF: click "XXX-XXX SharePoint" on page 1; it should try to open an example.sharepoint.com address (fake; a "cannot reach" page is fine).
+Report: one e-mail, subject "90161Z R03": all files in Rounds\R03 (one report file and 1 PDF), the copied summary in the body, and one line: window OK or what overlapped; link OK or not.
+**If it fails:** if the window still overlaps, send a screenshot of the window only (no DODID typed). Otherwise send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL.
 
 ## Task 11: rights test, r1 (open, 12 Nov 26)
 
@@ -145,6 +144,8 @@ Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 901
 
 ## Done
 
+- Round R02, automatic sensitivity label (12 Nov 26): label set by itself (PDF Uncontrolled/General); TOC positions right in the PDF (1.50 / 2.00 in), the Word read-back was wrong and is replaced by a PDF check. Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r02-results.md
 - Round R01, renderer round 2 and fake-seal test (12 Nov 26): window, steps and results folder worked; seal top 1.472 in (want 1.47); TOC number 1.50 in and text 2.00 in in the PDF; cover gaps within 0.01 in of DAFMAN. Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r01-results.md
 - Task 6, GenAI.mil extraction r1 (11 Nov 26): GPT and Gemini both 12 of 12 content checks; GPT had fewer errors. Grok dropped (too slow, 11 Nov 26).
