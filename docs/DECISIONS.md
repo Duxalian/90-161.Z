@@ -5,6 +5,7 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-13 | Retest PnP sign-in (revisits 1B): T16 tries SPO Management Shell with the DoD and High clouds, web login, interactive; read-only, optional step in R09. | PFM | scripts/gov/90161Z-T16-pnp-signin-test-r1.ps1 |
 | 2026-11-13 | Sweep while away: R09 = inventory (T15), T11 Part B form, T09 collector, task scripts drop the DODID question now; flow solution package as a draft. R09 waits for PFM review. No PnP steps (1B stands). | PFM | docs/NEXT_PROMPT.md |
 | 2026-11-13 | Deployer first: every gov-device step a script can do runs in the round, now and later; R08 replaces R07 and carries Tasks 10, 12, 14, 7. | PFM | AGENTS.md Project rules |
 | 2026-11-13 | Round e-mails: Claude watches Gmail for the round subject every 10 min for up to 2 h after a round goes live (no chat message needed). | PFM | AGENTS.md Unattended work |

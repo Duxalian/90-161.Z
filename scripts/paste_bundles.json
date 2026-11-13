@@ -4,7 +4,7 @@
     {
       "out": "scripts/gov/paste/90161Z-R09-round-r1.ps1",
       "round": "R09",
-      "title": "Round R09: environment inventory (T15), T11 Part B form, T09 e-Publishing collector, task scripts without the DODID question (new revisions); keeps T10 brief check, T12 downloads, T14 logo files, T07 seal prep",
+      "title": "Round R09: environment inventory (T15), T11 Part B form, T09 e-Publishing collector, task scripts without the DODID question, PnP sign-in retest (T16) (new revisions); keeps T10 brief check, T12 downloads, T14 logo files, T07 seal prep",
       "files": [
         {
           "dir": "T01",
@@ -57,6 +57,10 @@
         {
           "dir": "T14",
           "src": "assets/logo/90161Z-T14-site-logo-tile-r1.png"
+        },
+        {
+          "dir": "T16",
+          "src": "scripts/gov/90161Z-T16-pnp-signin-test-r1.ps1"
         }
       ],
       "steps": [
@@ -99,6 +103,13 @@
             "prompt": "Pick the synced Seals folder (in the 90-161.Z library). Cancel skips seal prep."
           },
           "screenOnly": "^seal\\d+ detail:"
+        },
+        {
+          "name": "T16 PnP sign-in test (read-only; sign-in windows, CAC)",
+          "dir": "T16",
+          "file": "90161Z-T16-pnp-signin-test-r1.ps1",
+          "default": false,
+          "minutes": 20
         }
       ],
       "collect": [
@@ -152,6 +163,11 @@
           "dir": "T07",
           "name": "90161Z-T07-result-r1.txt",
           "step": "T07 seal prep r3 (only after the shields are uploaded and synced)"
+        },
+        {
+          "dir": "T16",
+          "name": "90161Z-T16-pnp-result-r1.txt",
+          "step": "T16 PnP sign-in test (read-only; sign-in windows, CAC)"
         }
       ],
       "cleanup": [
