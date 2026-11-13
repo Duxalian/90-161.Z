@@ -19,7 +19,7 @@ Steps:
 3. File > New. Click in the white script pane. Press Ctrl+V, then F5.
 4. A window opens. There is no DODID box (from R05 on): it uses my Windows profile folder. Check the "Writes to" line: it says NOT found if the folder is wrong.
 5. Press Enter (or Run). Word steps take a few minutes each. Keep the window open until the log says DONE.
-6. At DONE an Outlook draft opens (from R05 on) with the subject, the summary and all result files. Fix the "Window:" line, type the To address, Send. If no draft opens, the results folder opens and the e-mail text is on the clipboard: new e-mail, Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
+6. At DONE an Outlook draft opens (from R05 on) with the subject, the summary and all result files. After "Window:" type OK or what overlapped, type the To address, Send. If no draft opens, the results folder opens and the e-mail text is on the clipboard: new e-mail, Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
 **If it fails:** send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
 <profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. An Outlook draft is only saved in Drafts, never sent by the script. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
 Sensitivity label: every render gets the label from Config\90161Z-label.json. Never delete the Config folder: without it, renders print "LABEL not set" and have no label. The file I labeled by hand is no longer needed. If Config is lost, run a round, then capture again from its new render (it is already labeled); label a file by hand again only if renders say LABEL FAIL.
@@ -39,13 +39,13 @@ Steps:
 **Time:** about 5 minutes (estimate).
 **Changes:** writes into T01 (renderer files and a new sample render) and Rounds\R05. Saves one draft in Outlook Drafts (To empty; the script never sends it). Nothing on the SharePoint site.
 Steps:
-1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build 5e41f4ae.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/3492949daec11e207f57b7538396d69a23c23016/scripts/gov/paste/90161Z-R05-round-r1.ps1
+1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build b2b1974a.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/fdfc7bcd5f3933ec8c2ce34b3b2dbed6d867b436/scripts/gov/paste/90161Z-R05-round-r1.ps1
 2. Check the "Writes to" line, then press Enter (or Run). No DODID box.
 3. At DONE an Outlook draft opens: subject 90161Z R05, the summary in the body, the report file and the PDF attached.
-4. In the draft, change the line "Window: OK" if anything in the window overlapped. Type the To address. Send.
+4. In the draft, after "Window:" type OK, or what overlapped. Type the To address. Send.
 **Report:** the draft itself (subject 90161Z R05, 2 files attached). If Outlook asked anything (a label, a security prompt), add one line with what it asked.
-**If it fails:** if no draft opens, the log says "Outlook draft not made (...)": the folder opens and the text is on the clipboard as in R04; send as before and add that line. If a step fails, send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL.
+**If it fails:** if the window stops answering after the last step, Outlook may be asking to sign in: finish that dialog first. If no draft opens, the log says "Outlook draft not made (...)": the folder opens and the text is on the clipboard as in R04; send as before and add that line. If a step fails, send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL.
 
 ## Clean up the project folder (optional, 13 Nov 26)
 
