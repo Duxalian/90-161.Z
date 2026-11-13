@@ -12,7 +12,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## State (main)
 
 - Cloud sessions: environment "90-161.Z" (pwsh + PSScriptAnalyzer; PII_GUARD_DENYLIST set).
-- Lists: 9 PFM lists, names and columns in docs/DECISIONS.md and schemas/lists; full-scope design docs/reviews/2026-11-12-list-design-full-scope.md. Next: T02 r10 (provisioning flow + seed rows + go.md task) after the batch answers that add columns (register 1.3-1.5, 4.5). Table A3.2 seed: docs/coordination-table-a3-2.md.
+- Lists: 9 PFM lists, names and columns in docs/DECISIONS.md and schemas/lists; full-scope design docs/reviews/2026-11-12-list-design-full-scope.md. T02 r10 schemas in the sweep draft PR (all batches answered, 12-13 Nov). Table A3.2 seed: docs/coordination-table-a3-2.md.
 - Provisioning now: flow/defs/90161Z-T02-provision-lists-r9.json -> flow/packages/90161Z-T02-provision-lists-r9.zip; docs/power-automate-provisioning.md.
 - Design check r7 flow and app rules ("Rules for the flows and the app", https://claude.ai/artifact/X8LbHd79Zh614i1qYzhyTW) are not built yet.
 - Coverage: docs/dafman-coverage/README.md (1,408 rows: Covered 383, N/A 314, Gap 73). Process: docs/process-model.md. Customer guidance r3: docs/guidance/customer-steps.md (review doc https://claude.ai/artifact/8qUeXnJNPhyEJNUYU6ShzV).
