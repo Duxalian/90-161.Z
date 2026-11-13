@@ -35,9 +35,9 @@ Chat history, Project files and remembered copies are not authority. If you cann
 
 ## Delivery
 
-- Deliver every change without being asked: commit, merge to main, push, verify that origin/main has the commit, and republish the affected artifacts.
+- Deliver every change without being asked, by pull request (the PFM, 2026-11-13): commit, push your branch, open a pull request to main, turn on auto-merge (else merge it once the pii-guard check passes), verify that origin/main has the commit, and republish the affected artifacts. GitHub deletes the merged branch.
 - A host limit wins over this section (for example a required branch, or a push or merge the host does not allow without the PFM): do the steps it allows, then report each other step as blocked, with its cause and what unblocks it.
-- Exception: for a UI or design change that the PFM has not approved, show a preview first (a preview artifact or a branch). Merge after the PFM approves. Delete previews after they ship.
+- Exception: for a UI or design change that the PFM has not approved, show a preview first (a preview artifact, or the pull request as a draft). Merge after the PFM approves. Delete previews after they ship.
 - For changes that are not UI or design, this rule overrides the personal "preview first" rule.
 - If a step is blocked, name the step and the cause. If permissions block a step, give the exact commands to paste, one code block for each command.
 - Put every deliverable where it survives (repo, doc, artifact) as soon as it exists.
@@ -138,7 +138,7 @@ The project log records how the project got there (milestones, breakthroughs, mi
 ## Unattended work
 
 - Work the PFM expects done while away needs a running owner before the turn ends: a started agent or a one-time scheduled task.
-- A scheduled task needs a prompt that stands alone and permission to commit, push to main and republish without a person.
+- A scheduled task needs a prompt that stands alone and permission to commit, open and merge a pull request and republish without a person.
 - Background work stops at the usage limit. Say when that can interrupt it.
 
 ## Boundaries
@@ -151,7 +151,7 @@ The project log records how the project got there (milestones, breakthroughs, mi
 - Platform (PFM, 2026-11-10): frontend and data on SharePoint Lists, Power Automate and Power Apps in DoD365. The PFM is a site collection administrator with PowerShell access to SharePoint (2026-11-10). No tenant admin rights and standard connectors only (confirmed by the PFM, 2026-11-12).
 - Deployable package (PFM, 2026-11-12): 90-161.Z must be a package other wings can install. Assume their PFMs have less access and fewer resources than this PFM. Every step that relies on extra authority (PowerShell to SharePoint, Exchange Send As, records-manager rights) needs a documented fallback that works without it.
 - Scope (PFM, 2026-11-10): ANG wing publications (supplements, OIs, local publications and forms). ANG wing publications post to the wing's own site, not through AFIMPT (DAFMAN 90-161 1.1.3.2, 6.4). No wing supplement exists.
-- Gov-device hand-off (PFM, 2026-11-11): tasks for the PFM's work computer go in go.md (his voice, raw.githubusercontent.com URLs one per line, no code). Do not email the military address. Keep open tasks at the top; move finished ones to Done. The PFM's bookmark is rhope-ops.github.io/90-161.Z: index.html (branch gh-pages) renders go.md from main; after changing index.html on main, copy it to gh-pages as one commit (PFM 6A, 2026-11-12: a full push of main is blocked by old history findings, docs/reviews/2026-11-12-pii-guard-history.md). Link every file, and every zip, by its raw.githubusercontent.com URL; never the rhope-ops.github.io copy of a file and never a github.com archive link. Gov-network test details stay in the private collaboration log, never in this public repo (PFM, 2026-11-11).
+- Gov-device hand-off (PFM, 2026-11-11): tasks for the PFM's work computer go in go.md (his voice, raw.githubusercontent.com URLs one per line, no code). Do not email the military address. Keep open tasks at the top; move finished ones to Done. The PFM's bookmark is rhope-ops.github.io/90-161.Z: index.html (branch gh-pages) renders go.md from main; after changing index.html on main, copy it to gh-pages as one commit (PFM 6A, 2026-11-12). Link every file, and every zip, by its raw.githubusercontent.com URL; never the rhope-ops.github.io copy of a file and never a github.com archive link. Gov-network test details stay in the private collaboration log, never in this public repo (PFM, 2026-11-11).
 - Gov-device usability (PFM, 2026-11-13): every update the PFM sees on the bookmark page (go.md) or in a runner window meets a basic usability bar: (1) one line on what it is for, and a time estimate marked as an estimate; (2) what it writes or changes on the computer or site, shown before anything runs; (3) numbered steps, one action each, plain words; (4) exactly what to send back (file names, subject line); (5) what to do if it fails. Results go back as plain files attached to one e-mail: zips do not cross the boundary, so rounds write a results folder, never a zip.
 - File names for the gov device (PFM, 2026-11-11): every file the PFM downloads is named 90161Z-T<NN>-<slug>-r<N> (2-digit task number, revision starts at r1, +1 for each fix) so it self-sorts in his folders. Flow display names use the same prefix. Exception: scripts that load each other by file name keep their names and go in one folder. tests/check_flow_defs.py enforces it for flow/defs.
 - Task folders on the gov device (PFM, 2026-11-11): each task's files go in `C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T<NN>`; go.md names the folder in every task. Every task script asks for the DODID (Enter = the profile folder; PFM 2A), goes to its task folder itself, and writes `<DODID>` instead of the number in all output. Never commit a DODID.
