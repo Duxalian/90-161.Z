@@ -22,7 +22,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md and docs/reviews/2026-11-13-r01-results.md (R01 passed).
-1. Round R03 (window layout in ISE, accessibility link, label): commit 8d30d1c, build 9874a890. R02 passed except window (docs/reviews/2026-11-13-r02-results.md). On results: run `python3 scripts/measure_pdf.py <pdf>` for L-012 positions.
+1. Round R04 (summary line 1 = subject, auto copy/open, DAFMAN link style): commit 96ee38b, build 90c3b8d7. R03 passed (docs/reviews/2026-11-13-r03-results.md). Results: run `python3 scripts/measure_pdf.py <pdf>`. T02 r10 adds PFMSettings rows PublicationsSiteName, PublicationsListUrl.
 2. Task 6 prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).

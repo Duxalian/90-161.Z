@@ -5,6 +5,8 @@ Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-13 | Enter never starts a run: no Enter-to-Run in windows; text mode needs RUN typed. Round summary line 1 = the e-mail subject; at DONE the summary is copied and the folder opens. | PFM | docs/reviews/2026-11-13-r03-results.md |
+| 2026-11-13 | Accessibility site name and list address are Settings values set at install (PublicationsSiteName, PublicationsListUrl; ship in T02 r10). | PFM | docs/reviews/2026-11-13-r03-results.md |
 | 2026-11-13 | Wing accessibility statement: "This publication is available for download on the XXX-XXX SharePoint."; "XXX-XXX SharePoint" links to the site's publications list, not the app. | PFM | docs/reviews/2026-11-13-r02-results.md |
 | 2026-11-13 | Pre-push check gate on: a push is blocked while scripts/check.sh fails (baseline hook). Setup actions move to Node 24 in the other repos. | PFM | archive |
 | 2026-11-13 | B2 short index approved (1B: with the PFM's edits in the review doc; the doc had none). | PFM | https://claude.ai/artifact/AtxHGVwB8hWc8utEF9KWc2 |

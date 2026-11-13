@@ -295,7 +295,9 @@ try {
     $find = $doc.Range($accStart, $sel.Range.Start)
     $find.Find.ClearFormatting(); $find.Find.MatchWildcards = $false
     if ($linkText -and $find.Find.Execute($linkText)) {
-      [void]$doc.Hyperlinks.Add($find, [string](Get-Prop $accLink 'url'), '', '', $linkText)
+      $hl = $doc.Hyperlinks.Add($find, [string](Get-Prop $accLink 'url'), '', '', $linkText)
+      # Match the DAFMAN 90-161 cover link (the e-Publishing address on its page 1): bold, pure blue, underlined (R03 PDF was theme teal, regular).
+      $hl.Range.Font.Bold = -1; $hl.Range.Font.Color = 16711680; $hl.Range.Font.Underline = 1   # wdColorBlue, wdUnderlineSingle
       $sel.EndKey($wdStory) | Out-Null; $sel.Font.Reset()   # no Hyperlink style on the text that follows
     } else { $script:formatFails++; Write-Output 'FORMAT-FAIL F-020 accessibility link text not found in the statement' }
   }

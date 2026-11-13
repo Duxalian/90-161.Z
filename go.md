@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R03). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R04). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -19,7 +19,7 @@ Steps:
 3. File > New. Click in the white script pane. Press Ctrl+V, then F5.
 4. A window opens. Leave the DODID box empty. Check the "Writes to" line: it says NOT found if the folder is wrong.
 5. Press Run. Word steps take a few minutes each. Keep the window open until the log says DONE.
-6. Press Open results folder. Attach all files in it to one e-mail with the subject the log names. Press Copy summary and paste it into the e-mail body. No zip: zips do not cross the boundary.
+6. At DONE the results folder opens and the e-mail text is on the clipboard (from R04 on). New e-mail: Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
 **If it fails:** send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
 With the DODID box empty, <profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
 
@@ -32,18 +32,19 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R03, renderer fixes from R02 (open, 13 Nov 26)
+## Fix first: Round R04, quicker finish and DAFMAN link style (open, 13 Nov 26)
 
-**For:** checks three fixes: the runner window no longer crowds or overlaps in ISE; the ACCESSIBILITY line reads "This publication is available for download on the XXX-XXX SharePoint." with "XXX-XXX SharePoint" as a link; the sensitivity label still sets itself.
+**For:** checks that a round now ends with the results folder open and the e-mail text on the clipboard (first line = subject), and that the ACCESSIBILITY link looks like the DAFMAN cover link (bold, blue, underlined).
 **Time:** about 5 minutes (estimate).
-**Changes:** writes into T01 (renderer files and a new sample render) and Rounds\R03. It uses the label settings in Config from R02 and does not change them. Nothing on the SharePoint site.
+**Changes:** writes into T01 (renderer files and a new sample render) and Rounds\R04. Nothing on the SharePoint site.
 Steps:
-1. Paste and run this round in ISE (steps in "How a paste task works"). The window title shows build 9874a890.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/8d30d1c275fa1a5da2b9751351ff7d862a65199c/scripts/gov/paste/90161Z-R03-round-r1.ps1
-2. Check the window: the DODID label sits above its box; nothing overlaps. Make the window smaller and larger once.
-3. When the log says DONE, press Open results folder. Open the PDF: click "XXX-XXX SharePoint" on page 1; it should try to open an example.sharepoint.com address (fake; a "cannot reach" page is fine).
-Report: one e-mail, subject "90161Z R03": all files in Rounds\R03 (one report file and 1 PDF), the copied summary in the body, and one line: window OK or what overlapped; link OK or not.
-**If it fails:** if the window still overlaps, send a screenshot of the window only (no DODID typed). Otherwise send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL.
+1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build 90c3b8d7.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/96ee38b8ec2fc6c7a0b2bf7fd6cfd879d29d4049/scripts/gov/paste/90161Z-R04-round-r1.ps1
+2. Press Run. Enter does nothing in this window.
+3. At DONE the results folder opens by itself and the e-mail text is on the clipboard.
+4. New e-mail: press Ctrl+V in the body, then cut the first line (90161Z R04) into the subject.
+5. Drag all files from the results folder into the e-mail. Add one line: "window OK" or what overlapped. Send.
+**If it fails:** send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL. If the folder does not open, press Open results folder; if the clipboard is empty, press Copy summary.
 
 ## Task 11: rights test, r1 (open, 12 Nov 26)
 
@@ -144,6 +145,8 @@ Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 901
 
 ## Done
 
+- Round R03, renderer fixes (12 Nov 26): 4 of 4 pass; TOC 1.50 / 2.00 in the PDF; label set; ACCESSIBILITY link works. Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r03-results.md
 - Round R02, automatic sensitivity label (12 Nov 26): label set by itself (PDF Uncontrolled/General); TOC positions right in the PDF (1.50 / 2.00 in), the Word read-back was wrong and is replaced by a PDF check. Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r02-results.md
 - Round R01, renderer round 2 and fake-seal test (12 Nov 26): window, steps and results folder worked; seal top 1.472 in (want 1.47); TOC number 1.50 in and text 2.00 in in the PDF; cover gaps within 0.01 in of DAFMAN. Details:
