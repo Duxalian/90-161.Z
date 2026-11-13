@@ -45,7 +45,7 @@
         "Revise"
       ],
       "ref": "DAFMAN 90-161 1.1.4.1-1.1.4.8 (action types); Interim Change needs full coordination, Administrative Change none (7.8.10.2); PFM 2026-11-11 (r7, design check decision 1A)",
-      "description": "Office of Primary Responsibility (OPR) is named in the Change OPR action type."
+      "description": "Office of Primary Responsibility (OPR), as in the choice value Change OPR."
     },
     {
       "internalName": "ProductType",

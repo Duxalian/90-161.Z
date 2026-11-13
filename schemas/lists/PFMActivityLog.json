@@ -5,7 +5,8 @@
   "template": "GenericList",
   "ref": "PFM 2026-11-11 (naming doc: PFM Activity Log). Members read only; only the PFM office edits (PFM 2026-11-12, P2A).",
   "indexBuiltIn": [
-    "Created"
+    "Created",
+    "Title"
   ],
   "fields": [
     {

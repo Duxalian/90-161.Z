@@ -1,6 +1,6 @@
 {
   "displayName": "90161Z T02 Provision Lists r10",
-  "description": "Creates the nine Publications and Forms Manager (PFM) lists, their columns, views and indexes from flow/provisioning-payload.json (embedded at build), adds the series and settings rows, then sets display titles. Asks for the site address only. One request at a time, in payload order. Process step rows are not sent (steps not yet approved).",
+  "description": "Creates the twelve Publications and Forms Manager (PFM) lists, their columns, views and indexes from flow/provisioning-payload.json (embedded at build), adds the series, settings, office and process step rows, then sets display titles. Asks for the site address only. One request at a time, in payload order. For a new install: a site that already has the lists needs an upgrade path (open decision, PR 10).",
   "connections": [
     "shared_sharepointonline"
   ],

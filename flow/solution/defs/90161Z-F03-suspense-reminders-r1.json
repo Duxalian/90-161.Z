@@ -26,7 +26,8 @@
           "minutes": [
             0
           ]
-        }
+        },
+        "startTime": "2026-11-16T07:00:00"
       }
     }
   },
@@ -52,7 +53,7 @@
         "parameters": {
           "dataset": "@parameters('Site URL (pfm_SiteUrl)')",
           "table": "@parameters('List PFM Endorsements (pfm_ListEndorsements)')",
-          "$filter": "EndorsementStatus eq 'Not Started' and DueDate eq null and CoordinationStage ne 'Legal'",
+          "$filter": "EndorsementStatus eq 'Not Started' and DueDate eq null and CoordinationStage ne 'Legal' and CoordinationRole ne 'Legal'",
           "$top": 5000
         },
         "authentication": "@parameters('$authentication')"
@@ -231,12 +232,12 @@
                 },
                 "Copy_to": {
                   "runAfter": {
-                    "Get_publication": [
+                    "Select_AO_emails": [
                       "Succeeded"
                     ]
                   },
                   "type": "Compose",
-                  "inputs": "@if(equals(outputs('Tier'), 'Escalation'), concat(coalesce(body('Get_publication')?['AO']?['Email'], ''), if(and(not(empty(body('Get_publication')?['AO']?['Email'])), not(empty(body('Get_publication')?['Requester']?['Email']))), ';', ''), coalesce(body('Get_publication')?['Requester']?['Email'], '')), '')"
+                  "inputs": "@if(equals(outputs('Tier'), 'Escalation'), concat(join(body('Select_AO_emails'), ';'), if(and(greater(length(body('Select_AO_emails')), 0), not(empty(body('Get_publication')?['Requester']?['Email']))), ';', ''), coalesce(body('Get_publication')?['Requester']?['Email'], '')), '')"
                 },
                 "Send_an_email_(V2)": {
                   "runAfter": {
@@ -283,6 +284,18 @@
                       "item/EventDetails": "@concat(outputs('Tier'), ' e-mail sent for endorsement row ', string(items('For_each_open_endorsement')?['ID']), '; suspense ', substring(items('For_each_open_endorsement')?['DueDate'], 0, 10))"
                     },
                     "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Select_AO_emails": {
+                  "runAfter": {
+                    "Get_publication": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@coalesce(body('Get_publication')?['AO'], json('[]'))",
+                    "select": "@item()?['Email']"
                   }
                 }
               },

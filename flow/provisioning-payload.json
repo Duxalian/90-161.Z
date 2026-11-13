@@ -464,7 +464,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"AppliesTo\" StaticName=\"AppliesTo\" DisplayName=\"Applies To\" Required=\"FALSE\" Description=\"Office of Primary Responsibility (OPR) is named in the Change OPR action type.\" Type=\"MultiChoice\"><CHOICES><CHOICE>New</CHOICE><CHOICE>Rewrite</CHOICE><CHOICE>Interim Change</CHOICE><CHOICE>Administrative Change</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Certify Current</CHOICE><CHOICE>Rescind</CHOICE><CHOICE>Transfer</CHOICE><CHOICE>Corrective Action</CHOICE><CHOICE>Reissue Guidance Memorandum</CHOICE><CHOICE>Change OPR</CHOICE><CHOICE>Revise</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"AppliesTo\" StaticName=\"AppliesTo\" DisplayName=\"Applies To\" Required=\"FALSE\" Description=\"Office of Primary Responsibility (OPR), as in the choice value Change OPR.\" Type=\"MultiChoice\"><CHOICES><CHOICE>New</CHOICE><CHOICE>Rewrite</CHOICE><CHOICE>Interim Change</CHOICE><CHOICE>Administrative Change</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Certify Current</CHOICE><CHOICE>Rescind</CHOICE><CHOICE>Transfer</CHOICE><CHOICE>Corrective Action</CHOICE><CHOICE>Reissue Guidance Memorandum</CHOICE><CHOICE>Change OPR</CHOICE><CHOICE>Revise</CHOICE></CHOICES></Field>",
      "Options": 24
     }
    }
@@ -716,7 +716,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"AppliesTo\" StaticName=\"AppliesTo\" DisplayName=\"Applies To\" Required=\"FALSE\" Description=\"Office of Primary Responsibility (OPR) is named in the Change OPR action type.\" Type=\"MultiChoice\"><CHOICES><CHOICE>New</CHOICE><CHOICE>Rewrite</CHOICE><CHOICE>Interim Change</CHOICE><CHOICE>Administrative Change</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Certify Current</CHOICE><CHOICE>Rescind</CHOICE><CHOICE>Transfer</CHOICE><CHOICE>Corrective Action</CHOICE><CHOICE>Reissue Guidance Memorandum</CHOICE><CHOICE>Change OPR</CHOICE><CHOICE>Revise</CHOICE><CHOICE>Help Panel</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"AppliesTo\" StaticName=\"AppliesTo\" DisplayName=\"Applies To\" Required=\"FALSE\" Description=\"Office of Primary Responsibility (OPR), as in the choice value Change OPR.\" Type=\"MultiChoice\"><CHOICES><CHOICE>New</CHOICE><CHOICE>Rewrite</CHOICE><CHOICE>Interim Change</CHOICE><CHOICE>Administrative Change</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Certify Current</CHOICE><CHOICE>Rescind</CHOICE><CHOICE>Transfer</CHOICE><CHOICE>Corrective Action</CHOICE><CHOICE>Reissue Guidance Memorandum</CHOICE><CHOICE>Change OPR</CHOICE><CHOICE>Revise</CHOICE><CHOICE>Help Panel</CHOICE></CHOICES></Field>",
      "Options": 24
     }
    }
@@ -1439,7 +1439,7 @@
      "__metadata": {
       "type": "SP.XmlSchemaFieldCreationInformation"
      },
-     "SchemaXml": "<Field Name=\"ActionType\" StaticName=\"ActionType\" DisplayName=\"Action Type\" Required=\"TRUE\" Description=\"Office of Primary Responsibility (OPR) is named in the Change OPR action type.\" Type=\"Choice\"><CHOICES><CHOICE>New</CHOICE><CHOICE>Rewrite</CHOICE><CHOICE>Interim Change</CHOICE><CHOICE>Administrative Change</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Certify Current</CHOICE><CHOICE>Rescind</CHOICE><CHOICE>Transfer</CHOICE><CHOICE>Corrective Action</CHOICE><CHOICE>Reissue Guidance Memorandum</CHOICE><CHOICE>Change OPR</CHOICE><CHOICE>Revise</CHOICE></CHOICES></Field>",
+     "SchemaXml": "<Field Name=\"ActionType\" StaticName=\"ActionType\" DisplayName=\"Action Type\" Required=\"TRUE\" Description=\"Office of Primary Responsibility (OPR), as in the choice value Change OPR.\" Type=\"Choice\"><CHOICES><CHOICE>New</CHOICE><CHOICE>Rewrite</CHOICE><CHOICE>Interim Change</CHOICE><CHOICE>Administrative Change</CHOICE><CHOICE>Guidance Memorandum</CHOICE><CHOICE>Certify Current</CHOICE><CHOICE>Rescind</CHOICE><CHOICE>Transfer</CHOICE><CHOICE>Corrective Action</CHOICE><CHOICE>Reissue Guidance Memorandum</CHOICE><CHOICE>Change OPR</CHOICE><CHOICE>Revise</CHOICE></CHOICES></Field>",
      "Options": 24
     }
    }
@@ -4890,6 +4890,16 @@
   {
    "method": "MERGE",
    "uri": "_api/web/lists/getbytitle('PFMActivityLog')/fields/getbyinternalnameortitle('Created')",
+   "body": {
+    "__metadata": {
+     "type": "SP.Field"
+    },
+    "Indexed": true
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFMActivityLog')/fields/getbyinternalnameortitle('Title')",
    "body": {
     "__metadata": {
      "type": "SP.Field"

@@ -70,7 +70,7 @@
         "Revise"
       ],
       "multi": true,
-      "description": "Office of Primary Responsibility (OPR) is named in the Change OPR action type."
+      "description": "Office of Primary Responsibility (OPR), as in the choice value Change OPR."
     }
   ],
   "views": [
