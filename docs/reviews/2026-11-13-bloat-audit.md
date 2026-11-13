@@ -73,3 +73,5 @@ The 24 untraced plan assumptions from 12 Nov stay in their own register (https:/
 ## Questions for the PFM
 
 Answered 13 Nov 26 (docs/DECISIONS.md): B1A "e-mail" in go.md (fixed: tests 53 pass, 0 fail); B2A short index + archive, draft for PFM approval; B3A build-time insert at each script's next revision; B4A and B5A fixed in the baseline, then synced.
+
+Update 13 Nov 26: B2 merged after PFM approval (1B). Start read 19,742 -> 11,078 tokens (budget 12,000); docs/DECISIONS.md 56,157 -> 21,420 bytes. Tests 53 pass, 0 fail.

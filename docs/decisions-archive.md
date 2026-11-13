@@ -2,10 +2,11 @@
 
 ## Full text of current rows
 
-Every current row of docs/DECISIONS.md before the short index (B2A, 2026-11-13), word for word.
+Full text of every current row, newest first. Rows from before the short index (B2A, 2026-11-13) are copied word for word.
 
 | Date | Decision | By | Replaces |
 |---|---|---|---|
+| 2026-11-13 | B2 short index approved: docs/DECISIONS.md holds one short line per current decision; full rows here. The PFM answered 1B (approve with edits in the review doc https://claude.ai/artifact/AtxHGVwB8hWc8utEF9KWc2); the doc had no edits at approval (rev 3). | PFM (1B) | Draft for approval (B2A) |
 | 2026-11-13 | Bloat audit 1 answers (docs/reviews/2026-11-13-bloat-audit.md): (B1A) go.md and runner messages spell it "e-mail" (style standard); the 13 Nov "email" row meant "not the personal mail service". (B2A) DECISIONS.md becomes a short index: one line per current decision with a link to its design doc; full row text moves word for word to docs/decisions-archive.md; the PFM approves the short lines before merge. (B3A) the gov task-script block (DODID prompt, masking, missing-file check, unblock, step runner) gets one source that a build step writes into each script, applied at each script's next revision. (B4A, B5A) fix the check-in placeholder false alarm and add the PII-guard pull-request Action in the baseline, then sync. | PFM (1A 2A 3A 4A) | "email" spelling in go.md (B1); full rows at start (B2) |
 | 2026-11-13 | Cover gaps stay as DAFMAN 90-161 page 1 (RELEASABILITY to rule, Supersedes/Pages to rule: within 0.01 in, docs/reviews/2026-11-13-r01-results.md). The "ppt master" e-mail of 13 Nov belongs to this project; agents leave it untouched until the PFM says otherwise. | PFM | - |
 | 2026-11-13 | Generated Word files get the Microsoft Purview sensitivity label automatically (PFM: hand-labeling each file must end). Method: a one-time capture of the label from one hand-labeled file into Config\\90161Z-label.json on the gov device (ids never leave it); the renderer applies it with Document.SensitivityLabel.SetLabel. Test: Round R02. | PFM | Label changed by hand on each file |
