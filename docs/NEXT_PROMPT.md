@@ -25,7 +25,8 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 1. Round R04 (summary line 1 = subject, auto copy/open, DAFMAN link style): commit 0ff6f57, build c259f51f (r2: Enter runs). Then R05: Outlook draft step (PFM approved). R03 passed (docs/reviews/2026-11-13-r03-results.md). Results: run `python3 scripts/measure_pdf.py <pdf>`. T02 r10 adds PFMSettings rows PublicationsSiteName, PublicationsListUrl.
 2. Task 6 prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
-4. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
+4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
+5. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
 
 ## Next design (after Task 5)
 

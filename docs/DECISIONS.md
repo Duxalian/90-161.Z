@@ -30,6 +30,7 @@ Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters
 | 2026-11-13 | RADE: (R1A) code embedded. (R2A) v1: file bridge, one agent flow. (R3A) repo rade. (R4A) PFM runs v1. (R5B) no other app first. (R6A) zip by e-mail. | PFM | https://claude.ai/artifact/GLdT7Nr4aVn3EenyYnAuJF |
 | 2026-11-13 | ISSM ruling: scripts without elevated credentials may be pasted and run in PowerShell ISE. No elevation, admin credentials or RunAs. | PFM | archive |
 | 2026-11-13 | Logo: woven square-in-a-square mark with a serif Greek rho, white and light blue for blue backgrounds (assets/logo, built by scripts/build_logo.py). | PFM | assets/logo/ |
+| 2026-11-13 | Site visuals (pages, header, list looks) by Power Automate flow, built after the T11 rights results; home page as a preview first. | PFM | docs/NEXT_PROMPT.md |
 | 2026-11-12 | Package: (15A) folders by permission. (16A) attachments off; metadata ties files. (17A) Document Role suggested. (18A) originals stay. (4) test zip. | PFM (15A 16A 17A 18A+, 4 test) | docs/roles-and-permissions.md |
 | 2026-11-12 | (10A) Acting PFM leaves next weekday after Acting Until. (11A) PFM or Alternate names Acting PFM. (12A) covers to CSV. (13A) PFM Office owns itself. (14B) intake. | PFM | docs/roles-and-permissions.md |
 | 2026-11-12 | (4A) PFM, Alternate, Acting PFM, Acting Until in PFM Settings. (5A) connection references. (6A) Acting PFM full rights. (7A) PFM Office group. (8A) intake. (9A) library. | PFM | docs/roles-and-permissions.md |
