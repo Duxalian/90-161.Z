@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R04 r3, Task 14). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R04 r3, Task 14, label note, folder cleanup). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -22,6 +22,7 @@ Steps:
 6. At DONE the results folder opens and the e-mail text is on the clipboard (from R04 on). New e-mail: Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
 **If it fails:** send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
 With the DODID box empty, <profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
+Sensitivity label: every render gets the label from Config\90161Z-label.json. Never delete the Config folder: without it, renders print "LABEL not set" and have no label. The file I labeled by hand is no longer needed. If Config is lost, run a round, then capture again from its new render (it is already labeled); label a file by hand again only if renders say LABEL FAIL.
 
 ## How a download task works
 
@@ -46,6 +47,20 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/a7277515a85e8a7ea9a89ab3ee7
 4. New e-mail: press Ctrl+V in the body, then cut the first line (90161Z R04) into the subject.
 5. Drag all files from the results folder into the e-mail. Add one line: "window OK" or what overlapped. Send.
 **If it fails:** send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL. If the folder does not open, press Open results folder; if the clipboard is empty, press Copy summary.
+
+## Clean up the project folder (optional, 13 Nov 26)
+
+**For:** removes files from finished tasks. Each one is on the bookmark page again if a later task needs it.
+**Time:** about 3 minutes (estimate).
+Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z
+**Changes:** deletes only the folders and files in steps 1-3 (OneDrive keeps them in its recycle bin for a while). Nothing on the SharePoint site.
+Steps:
+1. Delete these folders if they exist: T02, T03, T04, T05, T06, T13.
+2. Open Rounds. Delete R01, R02 and R03 (their results are recorded). Keep R04 until I send it.
+3. Open T07. Delete the old scripts 90161Z-T07-seal-test-r*.ps1 and 90161Z-T07-seal-prep-r1.ps1. Keep 90161Z-T07-key-r1.txt and anything else.
+4. Keep: Config, T01, T07, and the folders of open tasks (T09, T10, T11, T12, T14).
+**Report:** nothing to send.
+**If it fails:** if a file will not delete because it is open, close Word and PowerShell, then try again.
 
 ## Task 14: site logo, r1 (open, 13 Nov 26)
 
