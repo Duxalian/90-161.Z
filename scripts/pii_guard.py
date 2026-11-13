@@ -45,7 +45,8 @@ import tempfile
 
 ZERO = re.compile(r"^0+$")
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}")
-MIL = re.compile(r"(?i)\b[A-Za-z0-9._%+-]*[A-Za-z0-9-]\.mil\b(?![.-][A-Za-z0-9])")
+# The character before ".mil" must be a letter or digit: a domain label never ends in "-" (PFM, 2026-11-13).
+MIL = re.compile(r"(?i)\b[A-Za-z0-9._%+-]*[A-Za-z0-9]\.mil\b(?![.-][A-Za-z0-9])")
 PHONE = [
     re.compile(r"(?<![\w./-])\(?\d{3}\)?[-. ]\d{3}[-.]\d{4}(?![\w-])"),
     re.compile(r"(?<![\w./-])\(\d{3}\) ?\d{3}[-. ]\d{4}(?![\w-])"),
@@ -266,6 +267,8 @@ def self_test():
     expect(".mil off by default", "see genai" + dot + "mil today", [])
     expect(".mil email", "x" + dot + "y" + at + "us.af" + dot + "mil", ["email", "mil"], allow=mil_on)
     expect(".mil host", "see genai" + dot + "mil today", ["mil"], allow=mil_on)
+    expect(".mil after a hyphen is not a host", "Gmail-to-" + dot + "mil mail is filtered", [], allow=mil_on)
+    expect(".mil host with a hyphen inside", "see my-base" + dot + "mil today", ["mil"], allow=mil_on)
     expect("phone dashes", "call 555-123-" + "4567", ["phone"])
     expect("phone parens", "call (555) 123-" + "4567", ["phone"])
     expect("phone intl", "call +44 20 7946 " + "0958", ["phone"])
