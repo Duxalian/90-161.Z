@@ -97,10 +97,20 @@ function Get-SiteAddress([string]$ConfigDir) {
   return $v
 }
 function Hide-Site([string]$Text, [string]$Site) {
+  # The result is e-mailed: no site, tenant or sign-in address may stay in it (review R09 T16).
   if ($Site) {
     $Text = $Text -replace [regex]::Escape($Site.TrimEnd('/')), '<SITE>'
-    try { $Text = $Text -replace [regex]::Escape(([uri]$Site).Host), '<SITE-HOST>' } catch { $null = $_ }
+    try {
+      $h = ([uri]$Site).Host
+      $Text = $Text -replace [regex]::Escape($h), '<SITE-HOST>'
+      $tenant = ($h -split '\.')[0]
+      if ($tenant.Length -ge 3) { $Text = $Text -replace [regex]::Escape($tenant), '<TENANT>' }
+    } catch { $null = $_ }
   }
+  $Text = $Text -replace 'https?://\S+', '<URL>'
+  $Text = $Text -replace '\b[\w.-]+\.(sharepoint|onmicrosoft|microsoftonline|windows)\.(com|us|net|mil)\b', '<TENANT-HOST>'
+  $Text = $Text -replace '\b[\w.-]+\.mil\b', '<HOST>'
+  $Text = $Text -replace '\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b', '<GUID>'
   return $Text
 }
 
@@ -139,15 +149,18 @@ try {
         ' add-items=' + $p.Has($k::AddListItems) + ' lists=' + @(Get-PnPList -ErrorAction Stop).Count)
       if (-not $okRoute) { $okRoute = $r.Name }
     } catch {
-      $m = ([string]$_.Exception.Message) -replace '\s+', ' '
-      $lines.Add('ROUTE ' + $r.Name + ' FAIL ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
+      # Hide first, then cut (a cut inside an address would defeat the hiding). "not connected", not FAIL: a route that
+      # does not connect is a finding, not a broken round.
+      $m = ConvertTo-Masked (Hide-Site (([string]$_.Exception.Message) -replace '\s+', ' ') $site) $secret
+      $lines.Add('ROUTE ' + $r.Name + ' not connected ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
     } finally {
       try { Disconnect-PnPOnline -ErrorAction SilentlyContinue } catch { $null = $_ }
     }
   }
   $lines.Add('PNP result: ' + $(if ($okRoute) { 'connected with ' + $okRoute + ' (PASS)' } else { 'no route connected' }))
 } catch {
-  $lines.Add('STOPPED: ' + [string]$_)
+  $m = ConvertTo-Masked (Hide-Site ([string]$_) $site) $secret
+  $lines.Add('STOPPED: ' + $m.Substring(0, [Math]::Min(300, $m.Length)))
 } finally {
   $masked = @($lines | ForEach-Object { ConvertTo-Masked (Hide-Site $_ $site) $secret })
   try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-pnp-result-r1.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }

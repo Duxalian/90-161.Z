@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R09, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = '790d1d5c'
+$buildId = '39117c00'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R09'
 $usersRoot = 'C:\Users'
@@ -1859,7 +1859,7 @@ try {
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }
 '@ }
-$files += @{ Dir = 'T11'; Name = '90161Z-T11-partb-form-r1.ps1'; Kind = 'text'; Sha = 'd89e2222e1f2'; Data = @'
+$files += @{ Dir = 'T11'; Name = '90161Z-T11-partb-form-r1.ps1'; Kind = 'text'; Sha = '8b8598f3fa48'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 11 Part B form, r1. Windows PowerShell 5.1, Windows Forms only (no modules).
@@ -2027,11 +2027,12 @@ try {
   $dg.Add_CurrentCellDirtyStateChanged({ if ($dg.IsCurrentCellDirty -and $dg.CurrentCell.ColumnIndex -eq 3) { $dg.CommitEdit('CurrentCellChange') } })   # the result list saves at once; a note saves when you leave the cell
   $dg.Add_DataError({ $_.ThrowException = $false })   # a value the list does not hold shows as empty, never as an error box
   $dg.Add_CellValueChanged({ & $save })
-  $done.Add_Click({ & $save; $form.Close() })
+  $done.Add_Click({ [void]$dg.EndEdit(); & $save; $form.Close() })   # a note still being typed is saved too
   $form.Add_Shown({ $form.TopMost = $true; $form.Activate(); $form.TopMost = $false })
   $script:answered = 0
   & $save
   [void]$form.ShowDialog()
+  [void]$dg.EndEdit()
   & $save
   $total = $dg.Rows.Count
   if ($script:answered -eq $total) { Write-Host ('PARTB PASS answered=' + $script:answered + ' of ' + $total) }
@@ -2664,7 +2665,7 @@ pAGsP4xHAGA4fw1g/WEDAgDzeW0A6w9LEABYIfMGsP6wBwGALTJpAOsPqxAAWCR1A1h/2IYAwC71NYD1
 hzaA9Ye1cgWw0qMvzKiurqmqrmX9Ya2soiETBABgn2wBAFiJAACApQgAAFiKAACApQgAAFiKAACApQgAAFiKAACApQgAAFiKAACA
 pQgAAFiKAACApQgAAFjq/wMAAP//lseVFgAAAAZJREFUAwDw1wSxYMgYYgAAAABJRU5ErkJggg==
 '@ }
-$files += @{ Dir = 'T16'; Name = '90161Z-T16-pnp-signin-test-r1.ps1'; Kind = 'text'; Sha = '497c2fbcfdd0'; Data = @'
+$files += @{ Dir = 'T16'; Name = '90161Z-T16-pnp-signin-test-r1.ps1'; Kind = 'text'; Sha = 'be5a7fa2e65f'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 16 PnP sign-in test, r1. Read-only. Windows PowerShell 5.1, the installed PnP.PowerShell 1.x only.
@@ -2764,10 +2765,20 @@ function Get-SiteAddress([string]$ConfigDir) {
   return $v
 }
 function Hide-Site([string]$Text, [string]$Site) {
+  # The result is e-mailed: no site, tenant or sign-in address may stay in it (review R09 T16).
   if ($Site) {
     $Text = $Text -replace [regex]::Escape($Site.TrimEnd('/')), '<SITE>'
-    try { $Text = $Text -replace [regex]::Escape(([uri]$Site).Host), '<SITE-HOST>' } catch { $null = $_ }
+    try {
+      $h = ([uri]$Site).Host
+      $Text = $Text -replace [regex]::Escape($h), '<SITE-HOST>'
+      $tenant = ($h -split '\.')[0]
+      if ($tenant.Length -ge 3) { $Text = $Text -replace [regex]::Escape($tenant), '<TENANT>' }
+    } catch { $null = $_ }
   }
+  $Text = $Text -replace 'https?://\S+', '<URL>'
+  $Text = $Text -replace '\b[\w.-]+\.(sharepoint|onmicrosoft|microsoftonline|windows)\.(com|us|net|mil)\b', '<TENANT-HOST>'
+  $Text = $Text -replace '\b[\w.-]+\.mil\b', '<HOST>'
+  $Text = $Text -replace '\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b', '<GUID>'
   return $Text
 }
 
@@ -2806,15 +2817,18 @@ try {
         ' add-items=' + $p.Has($k::AddListItems) + ' lists=' + @(Get-PnPList -ErrorAction Stop).Count)
       if (-not $okRoute) { $okRoute = $r.Name }
     } catch {
-      $m = ([string]$_.Exception.Message) -replace '\s+', ' '
-      $lines.Add('ROUTE ' + $r.Name + ' FAIL ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
+      # Hide first, then cut (a cut inside an address would defeat the hiding). "not connected", not FAIL: a route that
+      # does not connect is a finding, not a broken round.
+      $m = ConvertTo-Masked (Hide-Site (([string]$_.Exception.Message) -replace '\s+', ' ') $site) $secret
+      $lines.Add('ROUTE ' + $r.Name + ' not connected ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
     } finally {
       try { Disconnect-PnPOnline -ErrorAction SilentlyContinue } catch { $null = $_ }
     }
   }
   $lines.Add('PNP result: ' + $(if ($okRoute) { 'connected with ' + $okRoute + ' (PASS)' } else { 'no route connected' }))
 } catch {
-  $lines.Add('STOPPED: ' + [string]$_)
+  $m = ConvertTo-Masked (Hide-Site ([string]$_) $site) $secret
+  $lines.Add('STOPPED: ' + $m.Substring(0, [Math]::Min(300, $m.Length)))
 } finally {
   $masked = @($lines | ForEach-Object { ConvertTo-Masked (Hide-Site $_ $site) $secret })
   try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-pnp-result-r1.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }

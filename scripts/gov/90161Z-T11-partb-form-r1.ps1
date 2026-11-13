@@ -165,11 +165,12 @@ try {
   $dg.Add_CurrentCellDirtyStateChanged({ if ($dg.IsCurrentCellDirty -and $dg.CurrentCell.ColumnIndex -eq 3) { $dg.CommitEdit('CurrentCellChange') } })   # the result list saves at once; a note saves when you leave the cell
   $dg.Add_DataError({ $_.ThrowException = $false })   # a value the list does not hold shows as empty, never as an error box
   $dg.Add_CellValueChanged({ & $save })
-  $done.Add_Click({ & $save; $form.Close() })
+  $done.Add_Click({ [void]$dg.EndEdit(); & $save; $form.Close() })   # a note still being typed is saved too
   $form.Add_Shown({ $form.TopMost = $true; $form.Activate(); $form.TopMost = $false })
   $script:answered = 0
   & $save
   [void]$form.ShowDialog()
+  [void]$dg.EndEdit()
   & $save
   $total = $dg.Rows.Count
   if ($script:answered -eq $total) { Write-Host ('PARTB PASS answered=' + $script:answered + ' of ' + $total) }
