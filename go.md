@@ -39,8 +39,8 @@ Steps:
 **Time:** about 8 minutes (estimate) for the default steps; Task 9 adds about 20 minutes, Task 11 Part B about 35, seal prep about 2.
 **Changes:** writes into T01, T07, T09, T10, T11, T12, T14, T15, Config and Rounds\R09. Reads settings (no change) for the inventory. Downloads 3 briefs (checked) and 3 public documents. Opens PowerPoint without a window and closes it. Moves Rounds\R06 to R08 and the old script revisions to the Recycle Bin. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build BUILDID.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/COMMIT/scripts/gov/paste/90161Z-R09-round-r1.ps1
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 83c168c9.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/2704ec23c8e81de39315f823f0cdfdf20ac65399/scripts/gov/paste/90161Z-R09-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
 3. Check the steps: the first three are checked. Check "T09 e-Publishing pages" and "T11 Part B" only when I have the time; check seal prep only after the shields are synced (Task 7 steps 1-4). Check "T16 PnP sign-in test" to retest PnP: it asks once for the site address (kept only on this computer), then opens up to 4 sign-in windows; sign in with the CAC each time. It reads permissions only and changes nothing on the site.
 4. If anything in the window overlaps or is cut off, uncheck "This window looked right".
