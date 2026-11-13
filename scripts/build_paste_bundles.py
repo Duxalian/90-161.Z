@@ -121,6 +121,8 @@ function Export-RoundResult([string]$Base, [string[]]$Summary) {
   if (-not (Test-Path -LiteralPath $out -PathType Container)) { [void](New-Item -ItemType Directory -Path $out -Force) }
   $count = 1; $missing = @()
   foreach ($c in $collect) {
+    $old = Join-Path $out $c.Name
+    if (Test-Path -LiteralPath $old -PathType Leaf) { Remove-Item -LiteralPath $old -Force }   # an older copy of the same name must not be sent again
     $p = Join-Path (Join-Path $Base $c.Dir) $c.Name
     if (Test-Path -LiteralPath $p -PathType Leaf) { Copy-Item -LiteralPath $p -Destination (Join-Path $out $c.Name) -Force; $count++ } else { $missing += ($c.Dir + '\' + $c.Name) }
   }
@@ -152,9 +154,10 @@ function Get-RoundPlan([string]$Typed) {
 function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scriptblock]$Tick, [scriptblock]$OnStep) {
   $script:runLog = New-Object System.Collections.Generic.List[string]
   $base = Resolve-Base $Typed
+  $summary = @('ROUND ' + $round + ' build ' + $buildId + ' ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
+  try {
   & $Say ('ROUND ' + $round + ' build ' + $buildId + ' -> ' + (ConvertTo-Masked $base))
   Write-BundleFile $base $Say
-  $summary = @('ROUND ' + $round + ' build ' + $buildId + ' ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
   for ($k = 0; $k -lt $steps.Count; $k++) {
     if (-not $Selected[$k]) { $summary += ($steps[$k].Name + ': skipped'); continue }
     & $Say ('STEP ' + $steps[$k].Name + ' running (Word steps can take minutes)...')
@@ -164,18 +167,32 @@ function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scr
     & $Say $line
     & $OnStep $k $line
   }
+  } catch {
+    # A run that stops midway still leaves a report to send (summary so far + the log up to the stop).
+    $summary += ('STOPPED: ' + (ConvertTo-Masked ([string]$_)))
+    [void](Export-RoundResult $base $summary)
+    throw
+  }
   $z = Export-RoundResult $base $summary
   $summary += ('RESULTS Rounds\' + $round + ' files=' + $z.Count + ' missing=' + @($z.Missing).Count + $(if (@($z.Missing).Count) { ' (' + ($z.Missing -join ', ') + ')' } else { '' }))
   & $Say $summary[-1]
   [void](Export-RoundResult $base $summary)   # rewrite so the report holds the RESULTS line
   $script:resultsDir = $z.Dir
   & $Say ''
-  & $Say ('DONE. Next: open the results folder ...\90-161.Z\Rounds\' + $round + ' (window: Open results folder), select all ' + $z.Count + ' files,')
-  & $Say ('attach them to one e-mail to your Gmail, subject "90161Z ' + $round + '", and paste the summary into the body (window: Copy summary).')
+  if (@($summary | Where-Object { $_ -match ': CHECK \(' }).Count -gt 0 -or @($z.Missing).Count -gt 0) {
+    & $Say 'NOTE: some steps say CHECK or files are missing (see RESULTS above). Send the results anyway; they show what went wrong.'
+  }
+  if ($script:textMode) {
+    & $Say ('DONE. The results folder ...\90-161.Z\Rounds\' + $round + ' opens now and the summary is on the clipboard.')
+    & $Say ('Attach all ' + $z.Count + ' files in that folder to one e-mail to your Gmail, subject "90161Z ' + $round + '", and paste the summary into the body.')
+  } else {
+    & $Say ('DONE. Press Open results folder and attach all ' + $z.Count + ' files in it to one e-mail to your Gmail, subject "90161Z ' + $round + '".')
+    & $Say 'Then press Copy summary and paste it into the e-mail body.'
+  }
   return ,$summary
 }
 
-$script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $stepMinutes = 30
+$script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $script:textMode = $false; $stepMinutes = 30
 $gui = $true
 try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false }
 if ($gui) {
@@ -187,7 +204,7 @@ if ($gui) {
     $lbl = New-Object System.Windows.Forms.Label
     $lbl.Text = 'DODID (leave empty to use your Windows profile folder):'; $lbl.Location = New-Object System.Drawing.Point(10, 14); $lbl.AutoSize = $true
     $idBox = New-Object System.Windows.Forms.TextBox
-    $idBox.Location = New-Object System.Drawing.Point(360, 10); $idBox.Width = 200; $idBox.UseSystemPasswordChar = $true
+    $idBox.Location = New-Object System.Drawing.Point(400, 10); $idBox.Width = 200; $idBox.UseSystemPasswordChar = $true
     $where = New-Object System.Windows.Forms.Label
     $where.Location = New-Object System.Drawing.Point(10, 42); $where.Size = New-Object System.Drawing.Size(820, 20)
     $list = New-Object System.Windows.Forms.CheckedListBox
@@ -235,6 +252,7 @@ if ($gui) {
   } catch { $gui = $false; Write-Host ('No window (' + $_.Exception.Message + '); text mode.') }
 }
 try {
+  $script:textMode = $true
   $say = { param($t) Add-RunLog $t; Write-Host $t }
   $typed = [string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')
   foreach ($l in (Get-RoundPlan $typed).Lines) { Write-Host $l }
