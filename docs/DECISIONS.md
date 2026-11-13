@@ -7,7 +7,7 @@ Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters
 |---|---|---|---|
 | 2026-11-13 | Bloat audit 2 answers: (P1) one pwsh process for the test validations; (P2) sync baseline bc233b9; (P3) B3A block into all 4 gov task scripts now; (P4) draft short lines. | PFM | docs/reviews/2026-11-13-bloat-audit-2.md |
 | 2026-11-13 | gh-pages holds index.html only: the 64 stale copies (old owner name) were removed (PFM). | PFM | archive |
-| 2026-11-13 | GitHub account renamed rhope-ops -> rhope-ops. All repos now say rhope-ops, history included (PFM); briefs wait for their rebuild. Bookmark rhope-ops.github.io/90-161.Z. | PFM | archive |
+| 2026-11-13 | GitHub account renamed from the old owner name to rhope-ops. All repos now say rhope-ops, history included (PFM); briefs wait for their rebuild. Bookmark rhope-ops.github.io/90-161.Z. | PFM | archive |
 | 2026-11-13 | Bloat audit: no removal, shortening or rewording without PFM approval; only audit-made, rebuilt generated and unreferenced scratch files go without it (.claude/bloat-audit.md). | PFM | archive |
 | 2026-11-13 | Wing PowerPoint master: Original v2 template and Versions I-IV made; v2 e-mailed to the PFM's work address on request (one-time exception). Design record kept privately. Open: pick a version. | PFM | archive |
 | 2026-11-13 | Wing PowerPoint master: all four versions (I-IV) stay open, no pick yet. The decision-brief redesign waits for the PFM's pick. Deliverables kept privately, not in this repo. | PFM | archive |
