@@ -35,6 +35,6 @@ Updated: 2026-11-13 by Claude. First: bloat audit due (never run; .claude/bloat-
 3. Then the Power Apps canvas app (customer intake, status, PFM queue; OPR opens the office record), Accessibility Checker 0 errors.
 
 ## Do not
-
+- Touch the "ppt master" e-mail (PFM 13 Nov: for this project, leave it until told).
 - Put government data, the wing's name, site path, DODIDs or office symbols in this repo or in Claude chats.
 - Take rules from the wing files. Format comes from code and DAFMAN 90-161.
