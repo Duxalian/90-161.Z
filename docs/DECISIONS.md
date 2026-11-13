@@ -5,6 +5,7 @@ Short index (PFM B2A, 2026-11-13): one line per current decision, 200 characters
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-13 | Rounds ask no DODID: the runner uses the Windows profile folder (the empty-box default worked in R04). Enter or Run starts. Task scripts drop it at their next revision. | PFM | docs/reviews/2026-11-13-r04-results.md |
 | 2026-11-13 | Open items closed: (3.5A) JAG answers in the app; test site = the live site on its own URL, isolated until connected (replaces 5.7B); site approved for CUI. | PFM | archive |
 | 2026-11-13 | Delivery by pull request (A); details in AGENTS.md Delivery. | PFM | AGENTS.md |
 | 2026-11-13 | One-time history clean: names removed from all history (supersedes 2026-11-12 "no rewrite"). | PFM | archive |
