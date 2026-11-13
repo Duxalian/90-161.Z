@@ -102,6 +102,7 @@ python3 scripts/build_rights_probe.py --check >/dev/null && ok "rights probe def
 python3 scripts/build_flow_package.py --check && ok "flow packages up to date" || bad "flow packages stale"
 python3 tests/check_flow_package.py && ok "flow packages match real export shape" || bad "flow package shape"
 python3 tests/check_flow_defs.py && ok "flow def names and expressions" || bad "flow def names or expressions"
+python3 scripts/build_flow_solution.py --check >/dev/null && python3 tests/check_flow_solution.py >/dev/null && ok "flow solution up to date and valid" || bad "flow solution stale or invalid"
 python3 tests/check_names.py && ok "naming rules (PFM 2026-11-11)" || bad "naming rules"
 for f in flow/defs/*.json; do python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" && ok "json $f" || bad "json $f"; done
 
