@@ -11,14 +11,13 @@ python3 scripts/bloat_check.py --test >/tmp/bloat.out 2>&1 && ok "bloat_check se
 
 scripts/lint.sh >/tmp/lint.out 2>&1 && ok "lint ($(tail -1 /tmp/lint.out))" || { cat /tmp/lint.out; bad "lint"; }
 
-out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path samples/publication.sample.json); rc=$?
-[ $rc -eq 0 ] && echo "$out" | tail -1 | grep -q '^VALIDATE fails=0 ' && ok "sample validates ($(echo "$out" | tail -1))" || { echo "$out"; bad "sample validates"; }
-
+# All Test-Publication.ps1 runs happen in ONE pwsh process (tests/ps/Invoke-Validations.ps1; PFM P1, bloat audit 2,
+# 2026-11-13): one pwsh start per input cost about 0.75 s each. Inputs are made first; each test reads vout/vrc.
+vd=$(mktemp -d)
+python3 - "$vd" <<'PY40'
 # F-040 (Attachment 10 note 4) and PFM 2B (2026-11-12): in a wing or delta publication (T-3) warns, a higher tier such as
 # the sample's (T-1) stays, and F-039 does not ask for a tier. Sample = wing with 0 (T-3). Copies add (T-3) to the 3
 # untiered statements: wing and delta warn 3 times with no F-039; a non-wing issuer has no F-040 but F-039 warns.
-t40=$(mktemp -d)
-python3 - "$t40" <<'PY40'
 import json, sys
 d = json.load(open('samples/publication.sample.json'))
 s = json.dumps(d)
@@ -31,15 +30,30 @@ json.dump(d, open(sys.argv[1] + '/delta.json', 'w'))
 d['meta']['byOrderOf'] = 'SECRETARY OF THE AIR FORCE'; d['meta']['issuerLine'] = 'SAMPLE HEADQUARTERS'
 s = json.dumps(d).replace(' (T-3)', '')
 json.dump(json.loads(s), open(sys.argv[1] + '/hq.json', 'w'))
+# F-020 accessibility link: the link text must be in the statement and the address must be https (PFM 13 Nov).
+d = json.load(open('samples/publication.sample.json'))
+d['meta']['accessibilityLink']['text'] = 'NOT IN TEXT'; d['meta']['accessibilityLink']['url'] = 'http://x'
+json.dump(d, open(sys.argv[1] + '/f020.json', 'w'))
 PY40
-c40() { pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path "$1" | grep -c "^WARN $2 "; }
-s40=$(c40 samples/publication.sample.json F-040); s39=$(c40 samples/publication.sample.json F-039)
-w40=$(c40 "$t40/wing.json" F-040); w39=$(c40 "$t40/wing.json" F-039); d40=$(c40 "$t40/delta.json" F-040)
-h40=$(c40 "$t40/hq.json" F-040); h39=$(c40 "$t40/hq.json" F-039); rm -rf "$t40"
+printf '%s\t%s\n' sample samples/publication.sample.json wing "$vd/wing.json" delta "$vd/delta.json" hq "$vd/hq.json" \
+  bad tests/fixtures/bad.publication.json f020 "$vd/f020.json" placeholder tests/fixtures/placeholder.publication.json \
+  seal tests/fixtures/seal.publication.json sealok tests/fixtures/seal-ok.publication.json > "$vd/list.txt"
+pwsh -NoProfile -File tests/ps/Invoke-Validations.ps1 -List "$vd/list.txt" -OutDir "$vd"
+vout() { cat "$vd/$1.out"; [ -f "$vd/$1.err" ] && cat "$vd/$1.err" >&2; true; }
+vrc() { cat "$vd/$1.rc"; }
+
+out=$(vout sample); rc=$(vrc sample)
+[ $rc -eq 0 ] && echo "$out" | tail -1 | grep -q '^VALIDATE fails=0 ' && ok "sample validates ($(echo "$out" | tail -1))" || { echo "$out"; bad "sample validates"; }
+
+# F-040 / F-039 inputs: see the batch above.
+c40() { vout "$1" | grep -c "^WARN $2 "; }
+s40=$(c40 sample F-040); s39=$(c40 sample F-039)
+w40=$(c40 wing F-040); w39=$(c40 wing F-039); d40=$(c40 delta F-040)
+h40=$(c40 hq F-040); h39=$(c40 hq F-039)
 r40="sample=$s40/$s39 wing=$w40/$w39 delta=$d40 hq=$h40/$h39"
 [ "$s40$s39$w40$w39$d40$h40" = "003030" ] && [ "$h39" -eq 3 ] && ok "F-040 and F-039 in wing/delta vs other issuers ($r40, F-040/F-039)" || bad "F-040/F-039 $r40 (want sample=0/0 wing=3/0 delta=3 hq=0/3)"
 
-out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path tests/fixtures/bad.publication.json); rc=$?
+out=$(vout bad); rc=$(vrc bad)
 got=$(echo "$out" | grep -oE '^FAIL [A-Z]+-?[0-9]*' | awk '{print $2}' | sort -u | tr '\n' ' ')
 want="F-005 F-013 F-018 F-020 F-021 F-022 F-025 F-026 F-029 F-031 F-033 F-034 F-035 F-037 SCHEMA W-001 "
 [ $rc -eq 1 ] && [ "$got" = "$want" ] && ok "bad fixture fails on expected rules" || { echo "got:  $got"; echo "want: $want"; bad "bad fixture"; }
@@ -48,10 +62,7 @@ for f in samples/publication.sample.json tests/fixtures/bad.publication.json sch
   python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" && ok "json $f" || bad "json $f"
 done
 
-# F-020 accessibility link: the link text must be in the statement and the address must be https (PFM 13 Nov).
-t20=$(mktemp)
-python3 -c "import json,sys; d=json.load(open('samples/publication.sample.json')); d['meta']['accessibilityLink']['text']='NOT IN TEXT'; d['meta']['accessibilityLink']['url']='http://x'; json.dump(d,open(sys.argv[1],'w'))" "$t20"
-n20=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path "$t20" | grep -c "^FAIL F-020 meta.accessibilityLink"); rm -f "$t20"
+n20=$(vout f020 | grep -c "^FAIL F-020 meta.accessibilityLink")
 [ "$n20" -eq 2 ] && ok "F-020 accessibility link checks (bad text and bad url: $n20 FAIL)" || bad "F-020 accessibility link checks ($n20 FAIL, want 2)"
 python3 - <<'PY' && ok "sample matches JSON schema" || bad "sample matches JSON schema"
 import json, sys
@@ -65,7 +76,7 @@ PY
 grep -q "\$nb = \$t.Replace('-', \[string\]\[char\]30)" scripts/gov/New-Publication.ps1 && ok "tier numbers use a Word nonbreaking hyphen (T01 r4)" || bad "tier nonbreaking hyphen"
 [ "$(ls scripts/gov/90161Z-T01-renderer-test-r*.ps1 | wc -l)" -eq 1 ] && ok "one T01 runner revision" || bad "more than one T01 runner"
 
-out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path tests/fixtures/placeholder.publication.json); rc=$?
+out=$(vout placeholder); rc=$(vrc placeholder)
 got=$(echo "$out" | grep -oE '^FAIL [A-Z]+-?[0-9]*' | awk '{print $2}' | sort -u | tr '\n' ' ')
 [ $rc -eq 1 ] && [ "$got" = "X-001 " ] && ok "placeholder fixture fails on X-001 only" || { echo "got: $got"; bad "placeholder fixture"; }
 python3 scripts/build_messy_draft.py --check && ok "T06 messy draft up to date" || bad "T06 messy draft stale"
@@ -77,10 +88,10 @@ python3 scripts/build_test_seals.py --check && ok "T07 test seals up to date" ||
 sealraw=$(mktemp -d); python3 scripts/build_test_seals.py --raw "$sealraw" >/dev/null
 out=$(pwsh -NoProfile -File tests/ps/Test-SealTrim.ps1 -RawDir "$sealraw"); rc=$?; rm -rf "$sealraw"
 [ $rc -eq 0 ] && [ "$(echo "$out" | grep -c '^PASS')" -eq 4 ] && ok "seal trim matches the reference on 4 test seals (L-007a)" || { echo "$out"; bad "seal trim"; }
-out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path tests/fixtures/seal.publication.json); rc=$?
+out=$(vout seal); rc=$(vrc seal)
 got=$(echo "$out" | grep -oE '^FAIL [A-Z]+-?[0-9a-z]*' | awk '{print $2}' | sort -u | tr '\n' ' ')
 [ $rc -eq 1 ] && [ "$got" = "L-007a " ] && ok "unprepared seal fails on L-007a only" || { echo "got: $got"; bad "seal fixture"; }
-out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path tests/fixtures/seal-ok.publication.json); rc=$?
+out=$(vout sealok); rc=$(vrc sealok)
 [ $rc -eq 0 ] && echo "$out" | tail -1 | grep -q '^VALIDATE fails=0 ' && ok "prepared seal path accepted (L-007a)" || { echo "$out" | grep FAIL; bad "prepared seal path"; }
 grep -q '$pic.Width = \[single\]$ShieldWidth; $pic.Height = \[single\]$ShieldWidth' scripts/gov/New-Publication.ps1 && ok "renderer places seals in the 1.20 in box (L-007)" || bad "renderer seal box"
 grep -q "Write-Output ('RENDER-ERROR line '" scripts/gov/New-Publication.ps1 && grep -q "exit 3 }" scripts/gov/New-Publication.ps1 && ok "renderer names the failing line and flags FORMAT-FAIL (T06/T07 cast error)" || bad "renderer error line"
@@ -239,5 +250,6 @@ for b in scripts/gov/paste/*.ps1; do
 done; rm -rf "$te"
 [ "$ab" -eq 0 ] && [ "$tw" -eq 0 ] && ok "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw; Enter path = round bundle test)" || bad "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw)"
 
+rm -rf "$vd"
 echo "TESTS pass=$pass fail=$fail"
 [ $fail -eq 0 ]
