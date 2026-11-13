@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R04). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R04, Task 14). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -45,6 +45,23 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/0ff6f57f78e0ea3ad63da7a83e0
 4. New e-mail: press Ctrl+V in the body, then cut the first line (90161Z R04) into the subject.
 5. Drag all files from the results folder into the e-mail. Add one line: "window OK" or what overlapped. Send.
 **If it fails:** send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL. If the folder does not open, press Open results folder; if the clipboard is empty, press Copy summary.
+
+## Task 14: site logo, r1 (open, 13 Nov 26)
+
+**For:** puts the 90-161.Z logo (woven squares with a ρ) on the SharePoint site header. White and light blue, made for a blue background.
+**Time:** about 5 minutes (estimate).
+Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T14
+**Changes:** saves 2 picture files into T14. On the site it changes only the logo and the logo thumbnail. Nothing runs on the computer. Needs site owner rights; without them, send the 2 files to a site owner.
+Steps:
+1. Save these 2 files into the T14 folder (steps in "How a download task works"):
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14-site-logo-r1.png
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14-site-logo-tile-r1.png
+2. Open the site. Click the gear (Settings), then Change the look, then Header.
+3. Under Site logo thumbnail, click Change and pick 90161Z-T14-site-logo-tile-r1.png (the logo on a blue square).
+4. Under Site logo, click Change and pick 90161Z-T14-site-logo-r1.png (clear background). Click Save.
+5. Look at the header. If the logo is hard to see (the header is white or light), do step 4 again with the tile file.
+**Report:** reply "T14 done", or the step number and what the screen said. No screenshots: they show the site name.
+**If it fails:** if Change the look or Header is missing, I am not a site owner: stop and say so. If the upload is refused, send the message text.
 
 ## Task 11: rights test, r1 (open, 12 Nov 26)
 
