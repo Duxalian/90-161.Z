@@ -3,7 +3,7 @@
   "title": "PFM Offices",
   "description": "Publications and Forms Manager (PFM) list of coordinating offices: one row per office, with its endorser and coordination role. Endorsement routing reuses it. Office data stays in SharePoint.",
   "template": "GenericList",
-  "ref": "PFM 2026-11-11 (naming doc: PFM Offices); DAFMAN 90-161 5.1 (offices with functional interest), 5.1.8.2 (Legal after all others)",
+  "ref": "PFM 2026-11-11 (naming doc: PFM Offices); DAFMAN 90-161 5.1 (offices with functional interest), 5.1.8.2 (Legal after all others). Members read only; only the PFM office edits (PFM 2026-11-12, P2A).",
   "fields": [
     {
       "internalName": "Title",
@@ -36,9 +36,11 @@
         "Reserve Applicability",
         "Higher Headquarters OPR",
         "Functional",
-        "Other"
+        "Other",
+        "Chief Information Officer",
+        "PFM"
       ],
-      "description": "Who the office coordinates for. Legal, Freedom of Information Act (FOIA), Privacy, Records and Information Collections come from Table A3.1 item 3 and item 1; Guard and Reserve Applicability from items 4 and 5; Higher Headquarters OPR is the office of primary responsibility (OPR) of the higher headquarters publication; Functional from Table A3.2."
+      "description": "Who the office coordinates for. Legal, Freedom of Information Act (FOIA), Privacy, Records and Information Collections come from Table A3.1 item 3 and item 1; Guard and Reserve Applicability from items 4 and 5; Higher Headquarters OPR is the office of primary responsibility (OPR) of the higher headquarters publication; Functional from Table A3.2. The PFM value is the Publications and Forms Manager (PFM)."
     },
     {
       "internalName": "MandatoryCoordinator",
@@ -61,6 +63,68 @@
       "required": false,
       "default": "1",
       "ref": "Hide offices no longer used"
+    },
+    {
+      "internalName": "SuggestWhen",
+      "displayName": "Suggest When",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows A24, B19; docs/coordination-table-a3-2.md (DAFMAN 90-161 Table A3.2 trigger questions, PFM 3B)"
+    },
+    {
+      "internalName": "PCM",
+      "displayName": "PCM",
+      "type": "User",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows A24, B19",
+      "description": "Publications Change Manager (PCM) of the organization; optional."
+    },
+    {
+      "internalName": "OrgBoxEmail",
+      "displayName": "Org Box E-Mail",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 1.3A (12 Nov); stage 0 and S4 e-mail the organization's CSS org box",
+      "description": "E-mail address of the organization box of the command support staff."
+    },
+    {
+      "internalName": "Level",
+      "displayName": "Level",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 1.5A, 1.6A (12 Nov); DAFMAN 90-161 5.6.3, 5.7.6.3",
+      "choices": [
+        "Wing",
+        "Group",
+        "Squadron",
+        "Flight",
+        "Section"
+      ]
+    },
+    {
+      "internalName": "ParentOffice",
+      "displayName": "Parent Office",
+      "type": "Lookup",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 1.5A, 1.6A (12 Nov)",
+      "lookup": {
+        "list": "PFMOffices",
+        "showField": "Title"
+      }
+    },
+    {
+      "internalName": "Leader",
+      "displayName": "Leader",
+      "type": "User",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 1.5A, 1.6A (12 Nov); the commander or director; the PFM updates it at each change of leader"
+    },
+    {
+      "internalName": "LeaderTitle",
+      "displayName": "Leader Title",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 1.5A, 1.6A (12 Nov); for example Commander"
     }
   ],
   "views": [
@@ -87,6 +151,199 @@
       },
       "default": false,
       "ref": "PFM 2026-11-11"
+    }
+  ],
+  "seedOnProvision": true,
+  "seed": [
+    {
+      "Title": "Manpower and personnel",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Affects manpower and organization programs; allocates or controls manpower resources; or evaluates manpower use\nManages, provides, or otherwise affects medical services for military and civilians\nManages civilian or military personnel programs or manages social action programs (such as equal opportunity)\nManages or otherwise affects training and education programs, to include educational research, evaluation, curriculum development and review\nImpacts or otherwise applies to morale, welfare, recreation, and services\nHas manpower, personnel, and/or labor implications (requires negotiations and/or bargaining with the union)\nImpacts Services programs designed to deliver capabilities to both space base deltas and deployed units\nImpacts nonappropriated funded Services programs\nImpacts postal service guidance\nImpacts or otherwise applies to additional duties"
+    },
+    {
+      "Title": "Intel",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Concerns plans, design, development, testing, acquisition maintenance, and disposal of weapon systems, automated information systems, software equipment, facilities, or services\nDevelops or analyzes strategic, defensive, and tactical operations, to include operational readiness, planning, standardization, system development, evaluation, training, or command and control\nImpacts security programs, including safeguarding classified information, handling classified information, classification and declassification, personnel security, integrated defense, installation security, weapons system security, or security forces matters\nAffects or impacts intelligence, surveillance and reconnaissance (ISR) policies or procedures\nImpacts USSF ISR policies or procedures (item 29)\nConcerns USSF special security or controlled access programs\nConcerns training, education, and professional development of ISR Guardians\nImpacts how USSF ISR resources are allocated"
+    },
+    {
+      "Title": "Operations",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Involves or affects aircrew members, as defined in AFPD 11-4, Aviation Service\nDevelops or analyzes strategic, defensive, and tactical operations, to include operational readiness, planning, standardization, system development, evaluation, training, or command and control\nAffects or involves international affairs related to training issues, including disclosure of information to foreign governments\nManages or otherwise affects aircrew flying training and/or aircrew education\nAffects or impacts counter-chemical, biological, radiological, nuclear (CBRN), countering weapons of mass destruction, or CBRN survivability policies and procedures"
+    },
+    {
+      "Title": "Logistics, Engineering and Force Protection",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Concerns plans, design, development, testing, acquisition, maintenance, logistics support, sustainment, and disposal of weapon systems, automated information systems, software equipment, facilities, or services\nConcerns managing real estate, facilities, and civil engineering or public works programs; provides facility services\nConcerns strategic munitions, including bombs, warheads, guided missiles and rockets, reentry vehicles and solid propellants\nManages safety programs, to include flight, weapons, systems safety; the Air Force Occupational and Environmental Safety, Fire Protection, and Health Standards (AFOSH); or Occupation Health and Safety Administration (OSHA) standards\nImpacts security programs, including integrated defense, installation security, weapons system security, or security forces matters\nImpacts or otherwise applies to morale, welfare, recreation, and services\nCreates documentation requirements on organizations that use core automated maintenance system\nInvolves activities with potential environmental impacts, or involves the production, acquisition, or handling of hazardous materials\nImpacts programs and policies regarding military munitions, remediation of property under the Military Munitions Response Program, demilitarization of military munitions, range clearances, explosive safety submissions, and first and emergency responder duties for responses to all-hazards including improvised explosive devices and weapons of mass destruction"
+    },
+    {
+      "Title": "Air Force Futures",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Develops DAF strategy and multi-domain operating concepts integrating through centralized design, and validating (and prioritizing) operational capabilities-based requirements to achieve national defense objectives and deliver timely and effective capability to the warfighter\nBridges the gap between Strategy and Planning by providing a future force design relevant to the threat, strategy, and need to develop new ways of operating as a joint force"
+    },
+    {
+      "Title": "Planning, Programming, Strategy and Operations",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Involves the DAF long-range resource allocation plan\nCould impact program objective memorandum development or other programming activities\nCould impact or affect DAF strategic planning or Service-level operational programming"
+    },
+    {
+      "Title": "Strategic Deterrence and Nuclear Integration",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Strategy, policy, doctrine, vulnerabilities, force structure and analysis documents affecting strategic deterrence and assurance\nRequirements, acquisition, programming, and budgeting processes for nuclear and global strike capabilities\nStrategic munitions, including bombs, warheads, guided missiles and rockets, reentry vehicles, and solid propellants\nNuclear enterprise capabilities and personnel requirements including key nuclear billets, 13N officer career field management, and USAF personnel reliability program\nNuclear command and control and nuclear command and control communications policy and guidance affecting nuclear command and control communications systems, doctrine, procedures, personnel, equipment, and facilities\nNuclear enterprise assessment and reporting data (e.g., metrics, trend analysis and performance)\nCounter-CBRN, countering weapons of mass destruction, or CBRN (survivability policies and procedures)\nExisting and future arms control treaties\nDoD foreign clearance program policies and procedures"
+    },
+    {
+      "Title": "Chaplain",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Manages or affects religious services, to include related morale and welfare programs"
+    },
+    {
+      "Title": "History and Museums Programs",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Impacts history, heritage, or museums programs, and official lineage, honors, and emblems of organizations"
+    },
+    {
+      "Title": "Safety",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Involves safety programs, to include aviation, occupational, weapons, space, systems, and human factors safety; the Air Force Occupational and Environmental Safety, Fire Protection, and Health Standards (AFOSH); or Occupation Health and Safety Administration (OSHA) standards\nInvolves the risk management process in the cyberspace domain\nInvolves activities with potential environmental impacts, or involves the production, acquisition, or handling of hazardous materials"
+    },
+    {
+      "Title": "Surgeon General",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Manages, provides, or otherwise affects medical services or medical training for military and civilians"
+    },
+    {
+      "Title": "Chief Scientist",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Involves scientific research, or requires scientific input and/or evaluation"
+    },
+    {
+      "Title": "Auditor",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Establishes audit objectives, policies, plans, or standards"
+    },
+    {
+      "Title": "Acquisition, contracting",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Concerns plans, requirements, design, development, testing, acquisition, engineering, maintenance, fielding, product support, and disposal of weapon systems, automated information systems, business systems, software equipment, facilities or services\nManage safety programs, to include flight, weapons, systems safety; AFOSH; or OSHA standards\nImpacts cyber security design considerations\nInvolves activities with potential environmental impacts, or involves the production, acquisition, or handling of hazardous materials\nInvolves science, technology, basic research, applied research, or advanced technology development\nImpacts people, organizations, processes, procedures, and systems that are used to plan, develop, test, acquire, dispose of, conduct, execute, and support nuclear operations and forces\nInvolves starting new acquisition programs, modifying existing systems, and managing systems throughout the life cycle\nImpacts contracting guidance including any changes or references to FAR, Defense FAR, and AF FAR\nInvolves industry, industrial preparedness or industrial facilities\nInvolves acquisition workforce management\nCreates documentation requirements on organizations that use core automated maintenance system\nPer HAFMD 1-10 and HAFMD 1-17, publication changes impacting space acquisition, integration, and contracting require SAF/AQ coordination with SAF/SQ"
+    },
+    {
+      "Title": "Comptroller",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Financial implications to include budget; cost estimating and analysis; inflation and escalation; economic analysis, business case analysis, and other comparative analyses; cost and planning factors; nonappropriated funds; systems acquisition and sustainment; or acquisition workforce management\nAdherence to regulatory and statutory language specific to budgeting and expenditure of funds, and is in one of the following publications series: 10, 14, 16, 20, 21, 23, 24, 25, 31, 32, 33, 34, 36, 38, 41, 44, 52, 61, 63, 64, 90 or 99"
+    },
+    {
+      "Title": "Public Affairs; International Affairs; Foreign Policy Advisor Program (item 20 lists all three)",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Affects or involves international affairs, including disclosure of information to foreign governments (item 20)\nAffects relations with congress or creates a requirement for legislative analysis (item 23)\nInvolves or affects relations with the general public\nAffects procedures or policies for the development or dissemination of information for external or internal audiences\nAffects procedures or policies for the dissemination of official information to external or internal audiences\nInvolves or affects relations with the media and/or general public\nInvolves visual information matters such as combat camera support, base level support (e.g., photography, broadcast, and graphics presentations); or authorizes visual information hardware or acquiring and using visual information products\nRelates to matters that involve multiple forms of information (to include visual information) or strategic communication capabilities applied in support of organizational or mission objectives\nInvolves the promulgation of unclassified pre-decisional information to large groups of people\nInvolves contracts related to any of the above areas or to programs that are likely to face elevated public scrutiny because of the costs, technology involved or their close association with matters of public concern or debate (item 25)"
+    },
+    {
+      "Title": "Inspector General Activities",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Affects policy, plans, oversight, and/or standards impacting the following IG activity areas: complaints resolution; senior official inquiries; DAF inspections, to include notification, scheduling, and access to units via Gatekeeper program; special investigations; the Office of Special Investigations (OSI); the Defense Cyber Crimes Center (DC3)"
+    },
+    {
+      "Title": "Local OSI office",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Involves OSI or affects criminal or counterintelligence activities"
+    },
+    {
+      "Title": "Office of Competitive Activities",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Addresses pacing and acute challenges"
+    },
+    {
+      "Title": "Studies and Analysis; Operations Analysis; A9; S9",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Could impact or affect DAF strategic planning or support to strategic analysis\nAnalyzes strategic, defensive, and tactical operations\nIncludes or impacts resources, recapitalization, modernization, investments and divestment analyses, operational assessments, risk assessment frameworks, digital computer models and simulations, studies management or lessons learned\nDAF, and DoD decision support analysis and assessment\nSubjects pertaining to data management/governance, data analytics, data science, data exploitation, information management, and knowledge management\nHas future force structure implications"
+    },
+    {
+      "Title": "Space Acquisition, Integration, and Contracting",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Concerns Space Test Program Management (AFI 10-1202)\nConcerns all policy and related publications listed for SAF/AQ that impact acquisition, integration, and contracting for DAF space systems and programs\nPer HAFMD 1-10 and HAFMD 1-17, publication changes impacting space acquisition, integration, and contracting require SAF/AQ coordination with SAF/SQ"
+    },
+    {
+      "Title": "Local small business office and local contracting office (as related to contracting actions for small business)",
+      "CoordinationRole": "Functional",
+      "MandatoryCoordinator": false,
+      "CoordinateLast": false,
+      "IsActive": true,
+      "SuggestWhen": "Affects or impacts DAF small business programs, small business goals, accomplishments, plans and/or progress for achieving the small business goals"
+    },
+    {
+      "Title": "Privacy",
+      "CoordinationRole": "Privacy",
+      "MandatoryCoordinator": true,
+      "CoordinateLast": false,
+      "IsActive": true
+    },
+    {
+      "Title": "Information Collections",
+      "CoordinationRole": "Information Collections",
+      "MandatoryCoordinator": true,
+      "CoordinateLast": false,
+      "IsActive": true
     }
   ]
 }

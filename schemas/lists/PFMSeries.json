@@ -3,7 +3,7 @@
   "title": "PFM Series",
   "description": "Publications and Forms Manager (PFM) list of publication series numbers and titles from Department of the Air Force Manual (DAFMAN) 90-161, Attachment 2, Table A2.1. Add or rename a series here; no schema change is needed.",
   "template": "GenericList",
-  "ref": "DAFMAN 90-161 4.3.1, Attachment 2 Table A2.1; PFM 2026-11-11",
+  "ref": "DAFMAN 90-161 4.3.1, Attachment 2 Table A2.1; PFM 2026-11-11. Members read only; only the PFM office edits (PFM 2026-11-12, P2A).",
   "seedOnProvision": true,
   "fields": [
     {

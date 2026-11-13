@@ -60,9 +60,11 @@
         "Reserve Applicability",
         "Higher Headquarters OPR",
         "Functional",
-        "Other"
+        "Other",
+        "Chief Information Officer",
+        "PFM"
       ],
-      "description": "Who the office coordinates for. Legal, Freedom of Information Act (FOIA), Privacy, Records and Information Collections come from Table A3.1 item 3 and item 1; Guard and Reserve Applicability from items 4 and 5; Higher Headquarters OPR is the office of primary responsibility (OPR) of the higher headquarters publication; Functional from Table A3.2."
+      "description": "Who the office coordinates for. Legal, Freedom of Information Act (FOIA), Privacy, Records and Information Collections come from Table A3.1 item 3 and item 1; Guard and Reserve Applicability from items 4 and 5; Higher Headquarters OPR is the office of primary responsibility (OPR) of the higher headquarters publication; Functional from Table A3.2. The PFM value is the Publications and Forms Manager (PFM)."
     },
     {
       "internalName": "Endorser",
@@ -89,7 +91,8 @@
         "Concur With Comment",
         "Concur—No Response",
         "Nonconcur",
-        "No Comment"
+        "No Comment",
+        "Not Applicable"
       ],
       "default": "Not Started",
       "ref": "DAFMAN 90-161 5.4.1-5.4.5 (Concur; Concur With Comment; Concur—No Response; Nonconcur; No Comment); ARCHITECTURE s4 step 2 (Not Started; capitalized per docs/style-standard.md (PFM 2026-11-11: DAFMAN 90-161 and The Tongue and Quill)); renamed from Status (PFM 2026-11-11: one meaning per label). Concur—No Response is not valid for Legal (5.4.3): the app and flows block it"
@@ -149,6 +152,34 @@
       "required": false,
       "ref": "ARCHITECTURE s4 step 4 (comments go to the CRM); DAFMAN 90-161 5.3",
       "description": "Link to the comment resolution matrix (CRM) file (DAFMAN 90-161 5.3)."
+    },
+    {
+      "internalName": "NoResponseExplanation",
+      "displayName": "No Response Explanation",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows A7, A21"
+    },
+    {
+      "internalName": "CriticalComment",
+      "displayName": "Critical Comment",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows A7, A21 (a critical comment forces Nonconcur)"
+    },
+    {
+      "internalName": "Transcribed",
+      "displayName": "Transcribed",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 1.4A (12 Nov); an answer that came by e-mail is entered by the AO or the PFM; DAFMAN 90-161 5.1.4.3"
+    },
+    {
+      "internalName": "EndorsementEvidenceLink",
+      "displayName": "Endorsement Evidence Link",
+      "type": "URL",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 1.4A (12 Nov); the e-mail is attached; DAFMAN 90-161 5.1.4.3"
     }
   ],
   "views": [

@@ -1,0 +1,159 @@
+{
+  "list": "PFMWaivers",
+  "title": "PFM Waivers",
+  "description": "Publications and Forms Manager (PFM) record of waivers written into wing publications (Department of the Air Force Manual (DAFMAN) 90-161, 9.5.3), with approval, renewal and notice dates.",
+  "template": "GenericList",
+  "ref": "List design 2026-11-12 s1 and s7; DAFMAN 90-161 9.5.1, 9.5.3, 9.6.2; ANGMAN 90-161 1.7.2, 1.7.7, 1.7.9, 1.9; PFM 2A (12 Nov). Flow rule (s7, PFM 4.4A, Table A10.1): warn when Tier is T-0, T-1 or T-2 and the Waiver Approver is a wing person (a Leader in PFM Offices).",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Title",
+      "type": "Text",
+      "required": true,
+      "ref": "List design 2026-11-12 s1",
+      "builtIn": true
+    },
+    {
+      "internalName": "Product",
+      "displayName": "Product",
+      "type": "Lookup",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: the wing publication that contains the waiver; only waivers written into wing publications (9.5.3)",
+      "lookup": {
+        "list": "PFMProductIndex",
+        "showField": "PublicationNumber"
+      }
+    },
+    {
+      "internalName": "WaivedPublication",
+      "displayName": "Waived Publication",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: higher-headquarters number"
+    },
+    {
+      "internalName": "WaivedParagraph",
+      "displayName": "Waived Paragraph",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "Tier",
+      "displayName": "Tier",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s1",
+      "choices": [
+        "T-1",
+        "T-2",
+        "T-3",
+        "Non-Tiered"
+      ]
+    },
+    {
+      "internalName": "WaiverApprover",
+      "displayName": "Waiver Approver",
+      "type": "User",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "ApprovedByDelegation",
+      "displayName": "Approved by Delegation",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s1; ANGMAN 90-161 1.7.7"
+    },
+    {
+      "internalName": "DelegationLetterLink",
+      "displayName": "Delegation Letter Link",
+      "type": "URL",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: required when Approved By Delegation is Yes (a flow rule)"
+    },
+    {
+      "internalName": "ApprovalDate",
+      "displayName": "Approval Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "WaiverEndDate",
+      "displayName": "Waiver End Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: Not To Exceed"
+    },
+    {
+      "internalName": "RenewalBasis",
+      "displayName": "Renewal Basis",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s1; ANGMAN 90-161 1.7.9; DAFMAN 90-161 9.5.1",
+      "choices": [
+        "Wing Commander Memorandum",
+        "Delegated Commander"
+      ]
+    },
+    {
+      "internalName": "ChangeOfCommandDate",
+      "displayName": "Change of Command Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: Delegated Commander only"
+    },
+    {
+      "internalName": "RenewalDue",
+      "displayName": "Renewal Due",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: set by a flow; within 90 days of a change of command (ANGMAN 90-161 1.7.9; DAFMAN 90-161 9.5.1)"
+    },
+    {
+      "internalName": "RevalidatedByMemorandumDate",
+      "displayName": "Revalidated by Memorandum Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s1; ANGMAN 90-161 1.7.9"
+    },
+    {
+      "internalName": "HHQOPRNotifiedDate",
+      "displayName": "HHQ OPR Notified Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: due Approval Date + 30 days; DAFMAN 90-161 9.6.2",
+      "description": "Date the higher headquarters (HHQ) office of primary responsibility (OPR) was notified."
+    },
+    {
+      "internalName": "ANGWaiverRepositoryLink",
+      "displayName": "ANG Waiver Repository Link",
+      "type": "URL",
+      "required": false,
+      "ref": "List design 2026-11-12 s1; ANGMAN 90-161 1.7.2, 1.9",
+      "description": "Link to the Air National Guard (ANG) waiver repository entry."
+    },
+    {
+      "internalName": "WaiverApprovalLink",
+      "displayName": "Waiver Approval Link",
+      "type": "URL",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "WaiverStatus",
+      "displayName": "Waiver Status",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s1; a lapsed waiver opens a revise or rescind action on the product (9.5.3)",
+      "choices": [
+        "Active",
+        "Renewal Due",
+        "Expired",
+        "Withdrawn"
+      ]
+    }
+  ],
+  "views": []
+}
