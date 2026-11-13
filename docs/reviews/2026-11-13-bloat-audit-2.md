@@ -79,3 +79,23 @@ Audit 1's stale-brief assumption (low) is closed: the handoff no longer carries 
 | T6 | log_check default path fails with a private log | Claude | after P2 |
 
 Timing baselines in .bloat-audit.json stay at 12.9 s and 0.5 s: re-recording at 21 s would hide finding 1. Record again after P1.
+
+## Update 13 Nov 26: proposals answered and made
+
+PFM answers (docs/DECISIONS.md): P1 do it, P2 sync now, P3 apply to all 4 now (not only a test), P4 draft lines (approved as drafted).
+
+| Measure | Before | After | How measured |
+|---|---|---|---|
+| tests/run.sh (s) | 21.7 / 20.1 / 21.0 | 12.5, 12.7, 14.8; new baseline recorded with `--time --record` | `$EPOCHREALTIME` around `tests/run.sh` |
+| Tests | pass=55 fail=0 | pass=56 fail=0 (+1: task-common check) | `tests/run.sh` |
+| Start read (~tokens) | 12,300 | 11,887 (budget 12,000) | `python3 scripts/bloat_check.py` |
+| Duplicate lines | 31 | 36 (the 4 generated block copies; see below) | same |
+| Baseline drift | 13 of 43 items differ | 1 of 44 (docs/FIRST_USE.md, tuned per project) | `python3 scripts/drift.py` |
+
+Made: P1 tests/ps/Invoke-Validations.ps1 (9 inputs in one pwsh process; same 55 PASS lines word for word). P2 sync_baseline --apply (AGENTS.md, kit scripts, .claude/project-log.md). P3 scripts/gov/src/task-common.ps1 + scripts/build_task_scripts.py (check fails on a stale copy or a DODID prompt outside the block); T01 r8, T06 r2, T07 seal prep r2, T07 seal test r3; R04 bundle r3 also writes seal prep r2 into T07; go.md Round R04 r3 and Task 7 Part B. P4 3 index lines shortened; the 2 PowerPoint rows' full text copied word for word to docs/decisions-archive.md. Also fixed (same files): docs/gov-test-plan.md named 2 retired bundles.
+
+Independent review (fresh `reviewer` subagent, diff and brief only): no major findings; 4 minor. Fixed: (1) helper now also captures Write-Host lines (6>&1). Accepted: (2) seal prep now trims -Id like the other runners; (3) Task 7 Part A has no current bundle (stated in docs/gov-test-plan.md); (4) go.md committed with this update.
+
+The 30 B3A duplicate lines remain in the duplicate count: they are now generated copies of one source (same as the round bundle), checked by `build_task_scripts.py --check`. Tech debt T2 closed; T4 open, now also covering these copies (proposal for the next audit: let bloat_check skip text between generated-block markers, in the baseline).
+
+Timing baselines: tests re-recorded at 12.2 s (`--time --record`). Check-in kept at 0.5 s: its 0.76-0.9 s runs are mostly `git fetch` (0.40 s measured, network-bound); the script did not change. Tech debt T7 (Claude, next audit): measure check-in without the fetch, or accept network variance in the limit (PFM's call).

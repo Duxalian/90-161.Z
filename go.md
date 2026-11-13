@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R04, Task 14). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R04 r3, Task 14). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -32,14 +32,15 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R04, quicker finish and DAFMAN link style (open, 13 Nov 26)
+## Fix first: Round R04 r3, quicker finish and DAFMAN link style (open, 13 Nov 26)
 
 **For:** checks that a round now ends with the results folder open and the e-mail text on the clipboard (first line = subject), and that the ACCESSIBILITY link looks like the DAFMAN cover link (bold, blue, underlined).
 **Time:** about 5 minutes (estimate).
-**Changes:** writes into T01 (renderer files and a new sample render) and Rounds\R04. Nothing on the SharePoint site.
+**Changes:** writes into T01 (renderer files and a new sample render), T07 (seal prep r2, for Task 7 Part B) and Rounds\R04. Nothing on the SharePoint site.
+r3 replaces r2: same test; the runner scripts now share one block of code. If I already ran r2, I send those results and skip r3.
 Steps:
-1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build c259f51f.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/0ff6f57f78e0ea3ad63da7a83e0af7d771e94537/scripts/gov/paste/90161Z-R04-round-r2.ps1
+1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build ac0d279b.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/a7277515a85e8a7ea9a89ab3ee77815d5431d70a/scripts/gov/paste/90161Z-R04-round-r3.ps1
 2. Type the DODID or leave the box empty, then press Enter (or Run).
 3. At DONE the results folder opens by itself and the e-mail text is on the clipboard.
 4. New e-mail: press Ctrl+V in the body, then cut the first line (90161Z R04) into the subject.
@@ -149,14 +150,14 @@ Report: one e-mail, subject "90161Z T09 r1": the 3 files and the click path from
 **Time:** about 20 minutes (estimate), plus waiting for files from units.
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T07
 **Changes:** on the real site, creates the library 90-161.Z and its Seals folder if they do not exist (site permissions, nothing special) and adds the shield files. On my computer, syncs that library and writes the prepared seals into Seals\Prepared, plus two text files in T07.
-Do this after Fix first: Round R01 writes the seal prep script into T07.
+Do this after Fix first: Round R04 r3 writes the seal prep script (r2) into T07.
 Steps:
 1. On the real site, if the library does not exist yet: New > Document library. Name: 90-161.Z. Create.
 2. In the library: New > Folder. Name: Seals.
 3. Upload each unit's shield into Seals. Any size or format (PNG, JPG, GIF, BMP, TIF); the larger and cleaner the better. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png).
 4. In the library, select Sync, so the files are also on my computer.
 5. In File Explorer, open the synced 90-161.Z library, then the Seals folder. Click the address bar, Ctrl+C.
-6. In the T07 folder, right-click 90161Z-T07-seal-prep-r1.ps1 > Run with PowerShell. Press Enter at the DODID question. When it asks for the seal folder, press Ctrl+V and Enter (do not leave it empty).
+6. In the T07 folder, right-click 90161Z-T07-seal-prep-r2.ps1 > Run with PowerShell. Press Enter at the DODID question. When it asks for the seal folder, press Ctrl+V and Enter (do not leave it empty).
 Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
 **If it fails:** FAIL means under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger file. WARN means under 150 dpi: usable, may print soft. If the script stops, send its STOPPED line.
 

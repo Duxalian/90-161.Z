@@ -13,7 +13,7 @@ foreach ($line in (Get-Content -LiteralPath $List)) {
   $global:LASTEXITCODE = 0
   $rc = 0
   try {
-    $out = & $validator -Path $path
+    $out = & $validator -Path $path 6>&1   # 6>&1: Write-Host lines too, as pwsh -File printed them
     $rc = $LASTEXITCODE
   } catch {
     $out = @()
