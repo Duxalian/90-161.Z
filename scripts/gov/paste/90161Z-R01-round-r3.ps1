@@ -4,9 +4,9 @@
   How to run: open Windows PowerShell ISE, File > New, paste all of this text into the script pane, press F5.
   A window opens: DODID (empty = profile folder), Run. It writes the files below into the task folders under
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
-  and saves Rounds\90161Z-R01-results-r1.zip. No download, no admin rights, nothing outside that folder.
+  and saves its results in Rounds\R01 (attach all files to one e-mail). No download, no admin rights.
 #>
-$buildId = 'fc3825fc'
+$buildId = 'b2e44389'
 $round = 'R01'
 $usersRoot = 'C:\Users'
 $files = @()
@@ -1795,9 +1795,7 @@ $steps = @()
 $steps += @{ Name = 'T01 renderer test r6'; Dir = 'T01'; File = '90161Z-T01-renderer-test-r6.ps1' }
 $steps += @{ Name = 'T07 seal test r2'; Dir = 'T07'; File = '90161Z-T07-seal-test-r2.ps1' }
 $collect = @()
-$collect += @{ Dir = 'T01'; Name = '90161Z-T01-result-r6.txt' }
 $collect += @{ Dir = 'T01'; Name = 'SAMPLEWINGI99-101.pdf' }
-$collect += @{ Dir = 'T07'; Name = '90161Z-T07-test-result-r2.txt' }
 $collect += @{ Dir = 'T07'; Name = 'SAMPLEWINGI99-101-TALL.pdf' }
 $collect += @{ Dir = 'T07'; Name = 'SAMPLEWINGI99-101-ROUND.pdf' }
 
@@ -1873,21 +1871,20 @@ function Get-StepLine($Step, $R) {
   if ($R.Fail -gt 0 -or $R.Exit -ne 0) { $state = 'CHECK' }
   return ($Step.Name + ': ' + $state + ' (PASS ' + $R.Pass + ', FAIL ' + $R.Fail + ', exit ' + $R.Exit + ')')
 }
-function Export-RoundZip([string]$Base, [string[]]$Summary) {
-  $out = Join-Path $Base 'Rounds'
+function Add-RunLog([string]$T) { if ($null -ne $script:runLog) { $script:runLog.Add($T) } }
+function Export-RoundResult([string]$Base, [string[]]$Summary) {
+  # One folder of plain files to attach to one e-mail (zips do not cross the boundary, PFM 13 Nov).
+  $out = Join-Path (Join-Path $Base 'Rounds') $round
   if (-not (Test-Path -LiteralPath $out -PathType Container)) { [void](New-Item -ItemType Directory -Path $out -Force) }
-  $sumPath = Join-Path $out ('90161Z-' + $round + '-summary-r1.txt')
-  [System.IO.File]::WriteAllText($sumPath, (($Summary -join "`r`n") + "`r`n"), (New-Object System.Text.UTF8Encoding $true))
-  $have = New-Object System.Collections.Generic.List[string]
-  $have.Add($sumPath)
-  $missing = @()
+  $count = 1; $missing = @()
   foreach ($c in $collect) {
     $p = Join-Path (Join-Path $Base $c.Dir) $c.Name
-    if (Test-Path -LiteralPath $p -PathType Leaf) { $have.Add($p) } else { $missing += ($c.Dir + '\' + $c.Name) }
+    if (Test-Path -LiteralPath $p -PathType Leaf) { Copy-Item -LiteralPath $p -Destination (Join-Path $out $c.Name) -Force; $count++ } else { $missing += ($c.Dir + '\' + $c.Name) }
   }
-  $zip = Join-Path $out ('90161Z-' + $round + '-results-r1.zip')
-  Compress-Archive -LiteralPath $have.ToArray() -DestinationPath $zip -Force
-  return @{ Zip = $zip; Count = $have.Count; Missing = $missing }
+  $report = Join-Path $out ('90161Z-' + $round + '-report-r1.txt')
+  $body = @($Summary) + @('', '---------------- full log ----------------') + @($script:runLog)
+  [System.IO.File]::WriteAllText($report, (($body -join "`r`n") + "`r`n"), (New-Object System.Text.UTF8Encoding $true))
+  return @{ Dir = $out; Count = $count; Missing = $missing }
 }
 function Get-RoundPlan([string]$Typed) {
   # What this round writes, before it runs (PFM 13 Nov: show the impact). Shows <DODID>, never the number.
@@ -1904,12 +1901,13 @@ function Get-RoundPlan([string]$Typed) {
     $p = Join-Path (Join-Path $base $f.Dir) $f.Name
     $lines += ('  ' + $f.Dir + '\' + $f.Name + $(if (Test-Path -LiteralPath $p -PathType Leaf) { '   (replaces the file there)' } else { '   (new)' }))
   }
-  $lines += ('  Rounds\90161Z-' + $round + '-results-r1.zip and -summary-r1.txt   (results)')
+  $lines += ('  Rounds\' + $round + '\   (results folder: one report file + copies of the PDFs, to attach to one e-mail)')
   $lines += 'Folders are made when missing. Files of the same name are replaced. Nothing else is changed, moved or deleted.'
   $lines += 'Steps then write their own results and PDFs into these task folders.'
   return @{ Shown = $shown; Found = $found; Lines = $lines }
 }
 function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scriptblock]$Tick, [scriptblock]$OnStep) {
+  $script:runLog = New-Object System.Collections.Generic.List[string]
   $base = Resolve-Base $Typed
   & $Say ('ROUND ' + $round + ' build ' + $buildId + ' -> ' + (ConvertTo-Masked $base))
   Write-BundleFile $base $Say
@@ -1923,15 +1921,18 @@ function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scr
     & $Say $line
     & $OnStep $k $line
   }
-  $z = Export-RoundZip $base $summary
-  $summary += ('ZIP ' + (Split-Path -Leaf $z.Zip) + ' files=' + $z.Count + ' missing=' + @($z.Missing).Count + $(if (@($z.Missing).Count) { ' (' + ($z.Missing -join ', ') + ')' } else { '' }))
-  [void](Export-RoundZip $base $summary)   # rewrite so the summary inside the zip has the ZIP line
+  $z = Export-RoundResult $base $summary
+  $summary += ('RESULTS Rounds\' + $round + ' files=' + $z.Count + ' missing=' + @($z.Missing).Count + $(if (@($z.Missing).Count) { ' (' + ($z.Missing -join ', ') + ')' } else { '' }))
   & $Say $summary[-1]
-  & $Say ('Saved in ' + (ConvertTo-Masked (Split-Path -Parent $z.Zip)) + '. E-mail the zip.')
+  [void](Export-RoundResult $base $summary)   # rewrite so the report holds the RESULTS line
+  $script:resultsDir = $z.Dir
+  & $Say ''
+  & $Say ('DONE. Next: open the results folder ...\90-161.Z\Rounds\' + $round + ' (window: Open results folder), select all ' + $z.Count + ' files,')
+  & $Say ('attach them to one e-mail to your Gmail, subject "90161Z ' + $round + '", and paste the summary into the body (window: Copy summary).')
   return ,$summary
 }
 
-$script:secret = @(); $script:dodid = ''; $script:child = $null; $stepMinutes = 30
+$script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $stepMinutes = 30
 $gui = $true
 try { Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing } catch { $gui = $false }
 if ($gui) {
@@ -1941,9 +1942,9 @@ if ($gui) {
     $form.Size = New-Object System.Drawing.Size(860, 640)
     $form.StartPosition = 'CenterScreen'
     $lbl = New-Object System.Windows.Forms.Label
-    $lbl.Text = 'DODID (empty = profile folder):'; $lbl.Location = New-Object System.Drawing.Point(10, 14); $lbl.AutoSize = $true
+    $lbl.Text = 'DODID (leave empty to use your Windows profile folder):'; $lbl.Location = New-Object System.Drawing.Point(10, 14); $lbl.AutoSize = $true
     $idBox = New-Object System.Windows.Forms.TextBox
-    $idBox.Location = New-Object System.Drawing.Point(200, 10); $idBox.Width = 200; $idBox.UseSystemPasswordChar = $true
+    $idBox.Location = New-Object System.Drawing.Point(360, 10); $idBox.Width = 200; $idBox.UseSystemPasswordChar = $true
     $where = New-Object System.Windows.Forms.Label
     $where.Location = New-Object System.Drawing.Point(10, 42); $where.Size = New-Object System.Drawing.Size(820, 20)
     $list = New-Object System.Windows.Forms.CheckedListBox
@@ -1957,20 +1958,26 @@ if ($gui) {
     $run.Text = 'Run'; $run.Location = New-Object System.Drawing.Point(10, 556); $run.Width = 120
     $copy = New-Object System.Windows.Forms.Button
     $copy.Text = 'Copy summary'; $copy.Location = New-Object System.Drawing.Point(140, 556); $copy.Width = 120; $copy.Enabled = $false
-    $form.Controls.AddRange(@($lbl, $idBox, $where, $list, $log, $run, $copy))
+    $open = New-Object System.Windows.Forms.Button
+    $open.Text = 'Open results folder'; $open.Location = New-Object System.Drawing.Point(270, 556); $open.Width = 150; $open.Enabled = $false
+    $form.Controls.AddRange(@($lbl, $idBox, $where, $list, $log, $run, $copy, $open))
     $showPlan = { $plan = Get-RoundPlan $idBox.Text; $where.Text = 'Writes to: ' + $plan.Shown + $(if ($plan.Found) { '' } else { '   (NOT found: check the DODID)' }); $plan }
     $idBox.Add_TextChanged({ [void](& $showPlan) })
     $first = & $showPlan
-    $log.Text = (($first.Lines + @('', 'Press Run to start. Uncheck a step to skip it.')) -join "`r`n") + "`r`n"
+    $howTo = @('HOW TO USE', '  1. Check the "Writes to" line above. Leave the DODID box empty unless that line says NOT found.',
+      '  2. Press Run. Word steps take a few minutes; keep this window open until it says DONE.',
+      '  3. Press Open results folder, attach all files in it to one e-mail, press Copy summary, paste it into the body.',
+      '  Uncheck a step to skip it. Closing the window stops a running step.', '')
+    $log.Text = (($howTo + $first.Lines) -join "`r`n") + "`r`n"
 
     $script:lastSummary = @()
-    $say = { param($t) try { $log.AppendText($t + "`r`n"); [System.Windows.Forms.Application]::DoEvents() } catch { Write-Host $t } }
+    $say = { param($t) Add-RunLog $t; try { $log.AppendText($t + "`r`n"); [System.Windows.Forms.Application]::DoEvents() } catch { Write-Host $t } }
     $tick = { [System.Windows.Forms.Application]::DoEvents() }
     $onStep = { param($k, $line) $list.Items[$k] = $line; $list.SetItemChecked($k, $true) }
     $run.Add_Click({
-      $run.Enabled = $false; $copy.Enabled = $false
+      $run.Enabled = $false; $copy.Enabled = $false; $open.Enabled = $false
       $sel = @(); for ($k = 0; $k -lt $steps.Count; $k++) { $sel += $list.GetItemChecked($k) }
-      try { $script:lastSummary = Invoke-Round $idBox.Text $sel $say $tick $onStep; $copy.Enabled = $true }
+      try { $script:lastSummary = Invoke-Round $idBox.Text $sel $say $tick $onStep; $copy.Enabled = $true; $open.Enabled = $true }
       catch { & $say ('STOPPED: ' + (ConvertTo-Masked ([string]$_))) }
       $run.Enabled = $true
     })
@@ -1978,17 +1985,19 @@ if ($gui) {
       try { [System.Windows.Forms.Clipboard]::SetText(($script:lastSummary -join "`r`n")); & $say 'Summary copied. Paste it into the e-mail body.' }
       catch { & $say ('Clipboard busy; press Copy summary again. (' + $_.Exception.Message + ')') }
     })
+    $open.Add_Click({ if ($script:resultsDir) { Start-Process -FilePath 'explorer.exe' -ArgumentList ('"' + $script:resultsDir + '"') } })
     $form.Add_FormClosing({ if ($script:child -and -not $script:child.HasExited) { try { $script:child.Kill() } catch { $null = $_ } } })
     [void]$form.ShowDialog()
     return
   } catch { $gui = $false; Write-Host ('No window (' + $_.Exception.Message + '); text mode.') }
 }
 try {
-  $say = { param($t) Write-Host $t }
+  $say = { param($t) Add-RunLog $t; Write-Host $t }
   $typed = [string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')
   foreach ($l in (Get-RoundPlan $typed).Lines) { Write-Host $l }
   $sel = @(); foreach ($s in $steps) { $sel += $true }
   $sum = Invoke-Round $typed $sel $say { } { }
+  if ($script:resultsDir -and $env:OS -eq 'Windows_NT') { Start-Process -FilePath 'explorer.exe' -ArgumentList ('"' + $script:resultsDir + '"') }
   if (Get-Command Set-Clipboard -ErrorAction SilentlyContinue) { try { Set-Clipboard -Value ($sum -join "`r`n"); Write-Host 'Summary copied to the clipboard.' } catch { Write-Host 'Clipboard not available.' } }
 } catch {
   Write-Host ''

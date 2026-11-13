@@ -200,8 +200,8 @@ out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
 
 # Round bundle end to end in pwsh (Linux, text mode: no Windows Forms): DODID and C:\Users swapped for a temp root.
 # Every written file must equal its source (text: BOM and CR removed); each step must start as a child process (on Linux
-# the runner stops at Unblock-File, so its step reads CHECK); the summary and the results zip must exist with the
-# summary inside. The window path (Windows Forms) cannot run here: lint only.
+# the runner stops at Unblock-File, so its step reads CHECK); the results folder must hold the report (summary + full
+# log) with no DODID. The window path (Windows Forms) cannot run here: lint only.
 tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pf=0; pr=0
 swap() { sed -e "s#Read-Host 'DODID (press Enter to use this computer''s profile folder)'#'test1234'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
@@ -210,15 +210,15 @@ for b in scripts/gov/paste/*.ps1; do
   r=$(python3 -c "import json;print([b['round'] for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'][0])")
   base="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"
   st=$(grep -c '^STEP .* running' "$tp/out.txt"); sm=$(grep -c ': \(OK\|CHECK\) (PASS' "$tp/out.txt")
-  [ "$st" -eq "$n" ] && [ "$sm" -eq "$n" ] && [ -f "$base/Rounds/90161Z-$r-summary-r1.txt" ] && unzip -l "$base/Rounds/90161Z-$r-results-r1.zip" 2>/dev/null | grep -q "90161Z-$r-summary-r1.txt" && pr=$((pr+1)) || { cat "$tp/out.txt" | tail -20; }
-  ! grep -rq "test1234" "$tp/out.txt" "$base/Rounds/90161Z-$r-summary-r1.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
+  [ "$st" -eq "$n" ] && [ "$sm" -eq "$n" ] && [ -f "$base/Rounds/$r/90161Z-$r-report-r1.txt" ] && grep -q "^RESULTS Rounds" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && grep -q "full log" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && pr=$((pr+1)) || { cat "$tp/out.txt" | tail -20; }
+  ! grep -rq "test1234" "$tp/out.txt" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
 done
 while IFS=$'\t' read -r dir src; do
   got="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z/${dir//\\//}/$(basename "$src")"
   case "$src" in *.png) cmp -s "$got" "$src" || pf=$((pf+1));; *) cmp -s <(tail -c +4 "$got" | tr -d '\r') <(swap "$src") || pf=$((pf+1));; esac
 done < <(python3 -c "import json;[print(f['dir']+'\t'+f['src']) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] for f in b['files']]")
 rm -rf "$tp"
-[ $pr -eq 1 ] && [ $pf -eq 0 ] && ok "round bundle text mode: files exact, steps run, zip with summary, DODID masked (rounds=$pr mismatches=$pf)" || bad "round bundle: rounds ok=$pr mismatches=$pf"
+[ $pr -eq 1 ] && [ $pf -eq 0 ] && ok "round bundle text mode: files exact, steps run, report in results folder, DODID masked (rounds=$pr mismatches=$pf)" || bad "round bundle: rounds ok=$pr mismatches=$pf"
 
 echo "TESTS pass=$pass fail=$fail"
 [ $fail -eq 0 ]
