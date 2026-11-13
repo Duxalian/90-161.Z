@@ -2,7 +2,7 @@
 # scripts/build_test_seals.py --raw, and compares with the Python reference box. Exit 0 = all match.
 param([Parameter(Mandatory = $true)][string]$RawDir)
 $ErrorActionPreference = 'Stop'
-$script = Join-Path $PSScriptRoot '..\..\scripts\gov\90161Z-T07-seal-prep-r1.ps1'
+$script = Join-Path $PSScriptRoot '..\..\scripts\gov\90161Z-T07-seal-prep-r2.ps1'
 $ast = [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $script).Path, [ref]$null, [ref]$null)
 $fn = $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -eq 'Get-EmblemBoxFromByte' }, $true) | Select-Object -First 1
 if (-not $fn) { Write-Output 'FAIL function Get-EmblemBoxFromByte not found'; exit 1 }
