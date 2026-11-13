@@ -559,7 +559,9 @@ try {
         # R01 (13 Nov): Information(5) read 1.00 / 1.50 in where the PDF shows 1.50 / 2.00 in, so horizontal values are
         # calibrated against the first TOC line (a Chapter entry), which the PDF shows at the 1.00 in margin (L-001, L-012).
         $ref = $tocAll[0].Range.Duplicate; $ref.Collapse(1)
-        $xShift = 72 - [double]$ref.Information(5)
+        $refX = [double]$ref.Information(5)
+        $xShift = 72 - $refX
+        if ($refX -lt 0 -or $xShift -lt -72 -or $xShift -gt 72) { Write-Output ('MEASURE-ERROR calibration: first TOC line read at ' + $refX + ' pt; horizontal values not shifted'); $xShift = 0 }
         Write-Output ('MEASURE calibration horizontal shift=' + [math]::Round($xShift / 72, 3) + 'in (first TOC line read at ' + [math]::Round(([double]$ref.Information(5)) / 72, 3) + 'in, true 1.00in)')
         $first = $toc2[0].Range.Duplicate; $first.Collapse(1)
         Write-Output (& $measure 'L-012 TOC number left' ([double]$first.Information(5) + $xShift) 1.50 0.03)
@@ -588,7 +590,8 @@ try {
   $labelCfg = Join-Path (Split-Path -Parent $PSScriptRoot) 'Config\90161Z-label.json'
   if (Test-Path -LiteralPath $labelCfg -PathType Leaf) {
     try {
-      $cfg = Get-Content -LiteralPath $labelCfg -Raw | ConvertFrom-Json
+      try { $cfg = Get-Content -LiteralPath $labelCfg -Raw | ConvertFrom-Json }
+      catch { throw 'Config\90161Z-label.json cannot be read; run the label capture step again' }   # fixed text: never echo the file
       $sl = $doc.SensitivityLabel
       $li = $sl.CreateLabelInfo()
       $li.LabelId = [string]$cfg.labelId; $li.SiteId = [string]$cfg.siteId; $li.LabelName = [string]$cfg.labelName
