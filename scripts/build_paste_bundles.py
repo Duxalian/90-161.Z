@@ -129,6 +129,25 @@ function Export-RoundZip([string]$Base, [string[]]$Summary) {
   Compress-Archive -LiteralPath $have.ToArray() -DestinationPath $zip -Force
   return @{ Zip = $zip; Count = $have.Count; Missing = $missing }
 }
+function Get-RoundPlan([string]$Typed) {
+  # What this round writes, before it runs (PFM 13 Nov: show the impact). Shows <DODID>, never the number.
+  $leaf = ''
+  if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
+  $id = ([string]$Typed).Trim(); $who = '<DODID you typed>'
+  if (-not $id) { $id = $leaf; $who = '<your profile folder>' }
+  $base = Join-Path (Join-Path (Join-Path $usersRoot $id) 'OneDrive - United States Air Force') '90-161.Z'
+  $shown = $usersRoot + '\' + $who + '\OneDrive - United States Air Force\90-161.Z'
+  $found = Test-Path -LiteralPath (Split-Path -Parent $base) -PathType Container
+  $lines = @('WRITES TO ' + $shown + $(if ($found) { '' } else { '   (OneDrive folder NOT found: check the DODID)' }))
+  foreach ($f in $files) {
+    $p = Join-Path (Join-Path $base $f.Dir) $f.Name
+    $lines += ('  ' + $f.Dir + '\' + $f.Name + $(if (Test-Path -LiteralPath $p -PathType Leaf) { '   (replaces the file there)' } else { '   (new)' }))
+  }
+  $lines += ('  Rounds\90161Z-' + $round + '-results-r1.zip and -summary-r1.txt   (results)')
+  $lines += 'Folders are made when missing. Files of the same name are replaced. Nothing else is changed, moved or deleted.'
+  $lines += 'Steps then write their own results and PDFs into these task folders.'
+  return @{ Shown = $shown; Found = $found; Lines = $lines }
+}
 function Invoke-Round([string]$Typed, [bool[]]$Selected, [scriptblock]$Say, [scriptblock]$Tick, [scriptblock]$OnStep) {
   $base = Resolve-Base $Typed
   & $Say ('ROUND ' + $round + ' build ' + $buildId + ' -> ' + (ConvertTo-Masked $base))
@@ -164,18 +183,25 @@ if ($gui) {
     $lbl.Text = 'DODID (empty = profile folder):'; $lbl.Location = New-Object System.Drawing.Point(10, 14); $lbl.AutoSize = $true
     $idBox = New-Object System.Windows.Forms.TextBox
     $idBox.Location = New-Object System.Drawing.Point(200, 10); $idBox.Width = 200; $idBox.UseSystemPasswordChar = $true
+    $where = New-Object System.Windows.Forms.Label
+    $where.Location = New-Object System.Drawing.Point(10, 42); $where.Size = New-Object System.Drawing.Size(820, 20)
     $list = New-Object System.Windows.Forms.CheckedListBox
-    $list.Location = New-Object System.Drawing.Point(10, 44); $list.Size = New-Object System.Drawing.Size(820, 90); $list.CheckOnClick = $true
+    $list.Location = New-Object System.Drawing.Point(10, 68); $list.Size = New-Object System.Drawing.Size(820, 90); $list.CheckOnClick = $true
     foreach ($s in $steps) { [void]$list.Items.Add($s.Name, $true) }
     $log = New-Object System.Windows.Forms.TextBox
-    $log.Location = New-Object System.Drawing.Point(10, 144); $log.Size = New-Object System.Drawing.Size(820, 400)
+    $log.Location = New-Object System.Drawing.Point(10, 168); $log.Size = New-Object System.Drawing.Size(820, 376)
     $log.Multiline = $true; $log.ScrollBars = 'Both'; $log.WordWrap = $false; $log.ReadOnly = $true
     $log.Font = New-Object System.Drawing.Font('Consolas', 9)
     $run = New-Object System.Windows.Forms.Button
     $run.Text = 'Run'; $run.Location = New-Object System.Drawing.Point(10, 556); $run.Width = 120
     $copy = New-Object System.Windows.Forms.Button
     $copy.Text = 'Copy summary'; $copy.Location = New-Object System.Drawing.Point(140, 556); $copy.Width = 120; $copy.Enabled = $false
-    $form.Controls.AddRange(@($lbl, $idBox, $list, $log, $run, $copy))
+    $form.Controls.AddRange(@($lbl, $idBox, $where, $list, $log, $run, $copy))
+    $showPlan = { $plan = Get-RoundPlan $idBox.Text; $where.Text = 'Writes to: ' + $plan.Shown + $(if ($plan.Found) { '' } else { '   (NOT found: check the DODID)' }); $plan }
+    $idBox.Add_TextChanged({ [void](& $showPlan) })
+    $first = & $showPlan
+    $log.Text = (($first.Lines + @('', 'Press Run to start. Uncheck a step to skip it.')) -join "`r`n") + "`r`n"
+
     $script:lastSummary = @()
     $say = { param($t) try { $log.AppendText($t + "`r`n"); [System.Windows.Forms.Application]::DoEvents() } catch { Write-Host $t } }
     $tick = { [System.Windows.Forms.Application]::DoEvents() }
@@ -199,6 +225,7 @@ if ($gui) {
 try {
   $say = { param($t) Write-Host $t }
   $typed = [string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')
+  foreach ($l in (Get-RoundPlan $typed).Lines) { Write-Host $l }
   $sel = @(); foreach ($s in $steps) { $sel += $true }
   $sum = Invoke-Round $typed $sel $say { } { }
   if (Get-Command Set-Clipboard -ErrorAction SilentlyContinue) { try { Set-Clipboard -Value ($sum -join "`r`n"); Write-Host 'Summary copied to the clipboard.' } catch { Write-Host 'Clipboard not available.' } }
