@@ -344,6 +344,41 @@
       "MandatoryCoordinator": true,
       "CoordinateLast": false,
       "IsActive": true
+    },
+    {
+      "Title": "Legal (Staff Judge Advocate)",
+      "CoordinationRole": "Legal",
+      "MandatoryCoordinator": true,
+      "CoordinateLast": true,
+      "IsActive": true
+    },
+    {
+      "Title": "Chief Information Officer",
+      "CoordinationRole": "Chief Information Officer",
+      "MandatoryCoordinator": true,
+      "CoordinateLast": false,
+      "IsActive": true
+    },
+    {
+      "Title": "Publications and Forms Manager",
+      "CoordinationRole": "PFM",
+      "MandatoryCoordinator": true,
+      "CoordinateLast": false,
+      "IsActive": true
+    },
+    {
+      "Title": "Freedom of Information Act",
+      "CoordinationRole": "FOIA",
+      "MandatoryCoordinator": true,
+      "CoordinateLast": false,
+      "IsActive": true
+    },
+    {
+      "Title": "Records",
+      "CoordinationRole": "Records",
+      "MandatoryCoordinator": true,
+      "CoordinateLast": false,
+      "IsActive": true
     }
   ]
 }
