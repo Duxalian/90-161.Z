@@ -22,7 +22,7 @@ Updated: 2026-11-13 by Claude. First: bloat audit due (never run; .claude/bloat-
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2 (go.md Fix first): 6/6 renders made PDFs; cover gaps within 0.011 in of DAFMAN; only L-012 TOC indent failed (cast error) and seal top 1.383 vs 1.47. New-Publication.ps1 now tries 3 routes for L-012 and prints `route=` with a read-back; seal +6.3 pt. Evidence: docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md.
-1. Round R01 r3 (PFM 1A 3A 6A; 13 Nov: results folder, no zip; usability bar in AGENTS.md): one paste, pinned to branch ccr-2cb71415-mt9o5x commit a85fa43 (build 646c5ca9); merge Stage 1 to main after this gov run works. Check MEASURE lines once against the PDFs. RADE decisions R1A-R6A (DECISIONS 13 Nov).
+1. Round R02 (13 Nov): label capture T13 + renderer applies the Purview label + calibrated MEASURE; branch ccr-2cb71415-mt9o5x commit ec29353, build b0a74f5e. R01 passed (docs/reviews/2026-11-13-r01-results.md). Merge Stage 1 to main after R02 works.
 2. Task 6 r1 done: GPT and Gemini 12/12; GPT is the extractor, Gemini fallback (PFM 1A). Grok dropped. Prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. F-040 decided (PFM 1A 2B 3A): no tier on wing statements except T-0/T-1/T-2 above the wing; prompt r2 (M8) ready for the next Task 6 run.

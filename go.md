@@ -1,13 +1,13 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26. Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R02). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 
 Every task below has the same parts: **For** (why), **Time** (an estimate), **Changes** (what it writes or changes, before I start), **Steps**, **Report** (what to send back) and **If it fails**.
 Reload this page to see new tasks (GitHub can serve a copy up to 5 minutes old).
-Never send real publication content, names, site addresses or group names. Reply in the Claude chat or by e-mail to my Gmail.
+Never send real publication content, names, site addresses or group names. Reply in the Claude chat or by email.
 
 ## How a paste task (round) works
 
@@ -19,7 +19,7 @@ Steps:
 3. File > New. Click in the white script pane. Press Ctrl+V, then F5.
 4. A window opens. Leave the DODID box empty. Check the "Writes to" line: it says NOT found if the folder is wrong.
 5. Press Run. Word steps take a few minutes each. Keep the window open until the log says DONE.
-6. Press Open results folder. Attach all files in it to one e-mail to my Gmail with the subject the log names. Press Copy summary and paste it into the e-mail body. No zip: zips do not cross the boundary.
+6. Press Open results folder. Attach all files in it to one email with the subject the log names. Press Copy summary and paste it into the email body. No zip: zips do not cross the boundary.
 **If it fails:** send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
 With the DODID box empty, <profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
 
@@ -32,17 +32,19 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R01, renderer round 2 (open, 13 Nov 26)
+## Fix first: Round R02, automatic sensitivity label (open, 13 Nov 26)
 
-**For:** tests the last two renderer fixes (table of contents indents; seal 0.09 in too high) and the fake-seal test (Task 7 Part A). The renderer now measures itself: its MEASURE lines say PASS or FAIL.
-**Time:** about 10 to 15 minutes (estimate), mostly Word working.
-**Changes:** writes into T01, T07, T07\TestSeals and Rounds\R01 on my computer. Nothing on the SharePoint site.
+**For:** ends the hand-labeling of generated files. I label one file by hand once; the round copies that label's settings, and from then on the renderer sets the same label on every file it makes. It also re-checks the table of contents with corrected measuring (R01: the PDF was right, the measuring was 0.5 in off).
+**Time:** about 10 minutes (estimate).
+**Changes:** writes into T13 (one script), T01 (renderer files and a new sample render), Config (90161Z-label.json: the label's settings; stays on my computer, never sent) and Rounds\R02. Nothing on the SharePoint site.
 Steps:
-1. Paste and run this round (steps in "How a paste task works"). The window title shows build 646c5ca9.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/a85fa43a38918d2566db215e0c5de3b0a60807be/scripts/gov/paste/90161Z-R01-round-r3.ps1
-2. When the log says DONE, press Open results folder.
-Report: one e-mail to my Gmail, subject "90161Z R01": all files in Rounds\R01 (one report file and up to 3 PDFs), the copied summary in the body. Send it also if a step says CHECK.
-**If it fails:** send the STOPPED line, and say whether a window opened.
+1. In File Explorer, open the T01 folder (%USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T01) and open SAMPLEWINGI99-101.docx (made by Round R01).
+2. In Word, set the sensitivity label to Uncontrolled/General (Home tab, Sensitivity). Save. Close Word.
+3. Paste and run this round (steps in "How a paste task works"). The window title shows build b0a74f5e.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/ec2935388726346a68f17a9dba4b737a909cd111/scripts/gov/paste/90161Z-R02-round-r1.ps1
+4. When the log says DONE, press Open results folder.
+Report: one email, subject "90161Z R02": all files in Rounds\R02 (one report file and 1 PDF), the copied summary in the body.
+**If it fails:** if the log says "LABEL FAIL ... has no sensitivity label", do steps 1 and 2 again, then step 3. Otherwise send the line that starts with LABEL FAIL or STOPPED.
 
 ## Task 11: rights test, r1 (open, 12 Nov 26)
 
@@ -59,7 +61,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T
 Part B, manual checks:
 5. Open this page, go to section 6 and write down what each row asks for:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/rights-test-plan.md
-Report: one e-mail to my Gmail, subject "90161Z T11 r1": the result file and my Part B notes. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
+Report: one email, subject "90161Z T11 r1": the result file and my Part B notes. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
 **If it fails:** if the run stops early, delete anything named "PFM Rights Probe ..." by hand and send the name of the step that failed and its error text (no names).
 
 ## Task 8: edit own rows only, r1 (open, 11 Nov 26)
@@ -106,7 +108,7 @@ https://www.ang.af.mil/Portals/77/documents/ANG%20Graphics%20Standard.pdf
 https://www.dafhistory.af.mil/Portals/16/documents/Organizational-Records/GuideAirForceHeraldryJune2022.pdf
 3. Open this page, press Ctrl+S, Save as type: Webpage, Single File (*.mhtml), into the T12 folder:
 https://www.trademark.af.mil/Branding/Air-Force-Symbol/
-Report: one e-mail to my Gmail, subject "90161Z T12 r1": the 3 files. They are public documents.
+Report: one email, subject "90161Z T12 r1": the 3 files. They are public documents.
 **If it fails:** if a link is dead, search for its title ("ANG Graphics Standard", "Guide to Air Force Heraldry", "Air Force Symbol") and save what that finds.
 
 ## Task 9: e-Publishing pages for the numbering index, r1 (open, 11 Nov 26)
@@ -121,7 +123,7 @@ Steps:
 3. Do the same for Air National Guard publications, one series. Save as 90161Z-T09-epubs-ang-r1.mhtml.
 4. Do the same for my gaining MAJCOM's publications, one series. Save as 90161Z-T09-epubs-majcom-r1.mhtml.
 5. Write down what I clicked to get to each list (menu names only).
-Report: one e-mail to my Gmail, subject "90161Z T09 r1": the 3 files and the click path from step 5. Do not type the MAJCOM's name in the e-mail text. Claude keeps these pages, and anything made from them, out of the repository.
+Report: one email, subject "90161Z T09 r1": the 3 files and the click path from step 5. Do not type the MAJCOM's name in the email text. Claude keeps these pages, and anything made from them, out of the repository.
 **If it fails:** if a page saves without the list, save what shows and say which page.
 
 ## Task 7: real seals, Part B, r1 (open, 11 Nov 26)
@@ -143,6 +145,7 @@ Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 901
 
 ## Done
 
+- Round R01, renderer round 2 and fake-seal test (12 Nov 26): window, steps and results folder worked; seal top 1.472 in (want 1.47); TOC number 1.50 in and text 2.00 in in the PDF; cover gaps within 0.01 in of DAFMAN. Details: docs/reviews/2026-11-13-r01-results.md.
 - Task 6, GenAI.mil extraction r1 (11 Nov 26): GPT and Gemini both 12 of 12 content checks; GPT had fewer errors. Grok dropped (too slow, 11 Nov 26).
 - Task 2, create the lists r9 (11 Nov 26): pass on the real site. Lists: 9, fields and views: 213, rows: 41, updates: 15.
 - Task 5, solution export sample (11 Nov 26): export received; Claude uses it for solution-aware flows. The flow used a SharePoint connection reference from another solution; future packages carry their own.
