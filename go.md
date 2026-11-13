@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R04 done, Task 14, label note, folder cleanup, installer brief r6). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R05: Outlook draft, no DODID box; Round R04 done, Task 14, label note, folder cleanup, installer brief r6). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -17,11 +17,11 @@ Steps:
 1. Open the round's link in its task below. Press Ctrl+A, then Ctrl+C.
 2. Start menu: type ISE and open Windows PowerShell ISE as myself (not "Run as administrator").
 3. File > New. Click in the white script pane. Press Ctrl+V, then F5.
-4. A window opens. Leave the DODID box empty. Check the "Writes to" line: it says NOT found if the folder is wrong.
+4. A window opens. There is no DODID box (from R05 on): it uses my Windows profile folder. Check the "Writes to" line: it says NOT found if the folder is wrong.
 5. Press Enter (or Run). Word steps take a few minutes each. Keep the window open until the log says DONE.
-6. At DONE the results folder opens and the e-mail text is on the clipboard (from R04 on). New e-mail: Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
+6. At DONE an Outlook draft opens (from R05 on) with the subject, the summary and all result files. Fix the "Window:" line, type the To address, Send. If no draft opens, the results folder opens and the e-mail text is on the clipboard: new e-mail, Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
 **If it fails:** send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
-With the DODID box empty, <profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
+<profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. An Outlook draft is only saved in Drafts, never sent by the script. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
 Sensitivity label: every render gets the label from Config\90161Z-label.json. Never delete the Config folder: without it, renders print "LABEL not set" and have no label. The file I labeled by hand is no longer needed. If Config is lost, run a round, then capture again from its new render (it is already labeled); label a file by hand again only if renders say LABEL FAIL.
 
 ## How a download task works
@@ -32,6 +32,20 @@ Steps:
 2. Save the file with Ctrl+S into the task's folder. The folder box in each task has a Copy button: paste its path into the Save dialog's address bar (%USERPROFILE% becomes my profile folder).
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
+
+## Fix first: Round R05 r1, Outlook draft and no DODID box (open, 13 Nov 26)
+
+**For:** checks that a round now ends with a ready Outlook draft (subject, summary, all result files), and that the window no longer asks for the DODID.
+**Time:** about 5 minutes (estimate).
+**Changes:** writes into T01 (renderer files and a new sample render) and Rounds\R05. Saves one draft in Outlook Drafts (To empty; the script never sends it). Nothing on the SharePoint site.
+Steps:
+1. Paste and run this round in ISE (steps 1-3 in "How a paste task works"). The window title shows build 5e41f4ae.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/3492949daec11e207f57b7538396d69a23c23016/scripts/gov/paste/90161Z-R05-round-r1.ps1
+2. Check the "Writes to" line, then press Enter (or Run). No DODID box.
+3. At DONE an Outlook draft opens: subject 90161Z R05, the summary in the body, the report file and the PDF attached.
+4. In the draft, change the line "Window: OK" if anything in the window overlapped. Type the To address. Send.
+**Report:** the draft itself (subject 90161Z R05, 2 files attached). If Outlook asked anything (a label, a security prompt), add one line with what it asked.
+**If it fails:** if no draft opens, the log says "Outlook draft not made (...)": the folder opens and the text is on the clipboard as in R04; send as before and add that line. If a step fails, send the line that starts with STOPPED, FORMAT-FAIL or LABEL FAIL.
 
 ## Clean up the project folder (optional, 13 Nov 26)
 
