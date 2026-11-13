@@ -4,8 +4,8 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 
 ## Open now
 
-- Bloat audit 1 done (docs/reviews/2026-11-13-bloat-audit.md); its questions B1-B5 wait on the PFM. Next audit due 27 Nov 26 or 30 commits.
-- FAIL on main: tests/check_names.py flags "email" in go.md (6 lines) against the style rule "e-mail" (B1).
+- Bloat audit 1 done (docs/reviews/2026-11-13-bloat-audit.md); PFM answered B1-B5 (1A 2A 3A 4A). Next audit due 27 Nov 26 or 30 commits.
+- Bloat audit answers 1A-4A (DECISIONS 2026-11-13): B2 short-index draft waits for PFM approval; B3 at next revision of each gov task script; B4/B5 in the baseline.
 - Waiting on the PFM: 3.5 legal answer; test site; CUI check for working files (gap review, docs/DECISIONS.md 2026-11-11); 5.1 after renderer round 2.
 
 ## State (main)

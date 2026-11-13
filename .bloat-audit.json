@@ -2,12 +2,12 @@
   "timings": {
     "tests": {
       "cmd": "tests/run.sh",
-      "seconds": 15.0,
+      "seconds": 12.9,
       "max_slowdown": 0.25
     },
     "check-in": {
       "cmd": "scripts/session_checkin.sh",
-      "seconds": 1.9,
+      "seconds": 0.5,
       "max_slowdown": 0.25
     }
   },

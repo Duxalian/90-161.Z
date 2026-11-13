@@ -72,4 +72,4 @@ The 24 untraced plan assumptions from 12 Nov stay in their own register (https:/
 
 ## Questions for the PFM
 
-B1-B5 are in the turn summary of 13 Nov 26 and in docs/NEXT_PROMPT.md.
+Answered 13 Nov 26 (docs/DECISIONS.md): B1A "e-mail" in go.md (fixed: tests 53 pass, 0 fail); B2A short index + archive, draft for PFM approval; B3A build-time insert at each script's next revision; B4A and B5A fixed in the baseline, then synced.

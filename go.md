@@ -7,7 +7,7 @@ raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
 
 Every task below has the same parts: **For** (why), **Time** (an estimate), **Changes** (what it writes or changes, before I start), **Steps**, **Report** (what to send back) and **If it fails**.
 Reload this page to see new tasks (GitHub can serve a copy up to 5 minutes old).
-Never send real publication content, names, site addresses or group names. Reply in the Claude chat or by email.
+Never send real publication content, names, site addresses or group names. Reply in the Claude chat or by e-mail.
 
 ## How a paste task (round) works
 
@@ -19,7 +19,7 @@ Steps:
 3. File > New. Click in the white script pane. Press Ctrl+V, then F5.
 4. A window opens. Leave the DODID box empty. Check the "Writes to" line: it says NOT found if the folder is wrong.
 5. Press Run. Word steps take a few minutes each. Keep the window open until the log says DONE.
-6. Press Open results folder. Attach all files in it to one email with the subject the log names. Press Copy summary and paste it into the email body. No zip: zips do not cross the boundary.
+6. Press Open results folder. Attach all files in it to one e-mail with the subject the log names. Press Copy summary and paste it into the e-mail body. No zip: zips do not cross the boundary.
 **If it fails:** send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
 With the DODID box empty, <profile folder> is the folder under C:\Users that my Windows profile uses; that is what the path needs. Finished task folders can be deleted: a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt.
 
@@ -43,7 +43,7 @@ Steps:
 3. Paste and run this round (steps in "How a paste task works"). The window title shows build b0a74f5e.
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/ec2935388726346a68f17a9dba4b737a909cd111/scripts/gov/paste/90161Z-R02-round-r1.ps1
 4. When the log says DONE, press Open results folder.
-Report: one email, subject "90161Z R02": all files in Rounds\R02 (one report file and 1 PDF), the copied summary in the body.
+Report: one e-mail, subject "90161Z R02": all files in Rounds\R02 (one report file and 1 PDF), the copied summary in the body.
 **If it fails:** if the log says "LABEL FAIL ... has no sensitivity label", do steps 1 and 2 again, then step 3. Otherwise send the line that starts with LABEL FAIL or STOPPED.
 
 ## Task 11: rights test, r1 (open, 12 Nov 26)
@@ -61,7 +61,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T
 Part B, manual checks:
 5. Open this page, go to section 6 and write down what each row asks for:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/rights-test-plan.md
-Report: one email, subject "90161Z T11 r1": the result file and my Part B notes. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
+Report: one e-mail, subject "90161Z T11 r1": the result file and my Part B notes. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
 **If it fails:** if the run stops early, delete anything named "PFM Rights Probe ..." by hand and send the name of the step that failed and its error text (no names).
 
 ## Task 8: edit own rows only, r1 (open, 11 Nov 26)
@@ -108,7 +108,7 @@ https://www.ang.af.mil/Portals/77/documents/ANG%20Graphics%20Standard.pdf
 https://www.dafhistory.af.mil/Portals/16/documents/Organizational-Records/GuideAirForceHeraldryJune2022.pdf
 3. Open this page, press Ctrl+S, Save as type: Webpage, Single File (*.mhtml), into the T12 folder:
 https://www.trademark.af.mil/Branding/Air-Force-Symbol/
-Report: one email, subject "90161Z T12 r1": the 3 files. They are public documents.
+Report: one e-mail, subject "90161Z T12 r1": the 3 files. They are public documents.
 **If it fails:** if a link is dead, search for its title ("ANG Graphics Standard", "Guide to Air Force Heraldry", "Air Force Symbol") and save what that finds.
 
 ## Task 9: e-Publishing pages for the numbering index, r1 (open, 11 Nov 26)
@@ -123,7 +123,7 @@ Steps:
 3. Do the same for Air National Guard publications, one series. Save as 90161Z-T09-epubs-ang-r1.mhtml.
 4. Do the same for my gaining MAJCOM's publications, one series. Save as 90161Z-T09-epubs-majcom-r1.mhtml.
 5. Write down what I clicked to get to each list (menu names only).
-Report: one email, subject "90161Z T09 r1": the 3 files and the click path from step 5. Do not type the MAJCOM's name in the email text. Claude keeps these pages, and anything made from them, out of the repository.
+Report: one e-mail, subject "90161Z T09 r1": the 3 files and the click path from step 5. Do not type the MAJCOM's name in the e-mail text. Claude keeps these pages, and anything made from them, out of the repository.
 **If it fails:** if a page saves without the list, save what shows and say which page.
 
 ## Task 7: real seals, Part B, r1 (open, 11 Nov 26)
