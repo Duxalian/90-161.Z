@@ -1,0 +1,208 @@
+{
+  "list": "PFMRecommendations",
+  "title": "PFM Recommendations (DAF Form 847)",
+  "description": "Publications and Forms Manager (PFM) record of recommended changes to publications (Department of the Air Force (DAF) Form 847): inbound from a wing publication and outbound to a higher headquarters publication.",
+  "template": "GenericList",
+  "ref": "List design 2026-11-12 s1 and s7; gap row B1; DAFMAN 90-161 7.4.5, Attachment 6, Table A6.1 sections 3-5, A6.3.1",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Summary",
+      "type": "Text",
+      "required": true,
+      "ref": "List design 2026-11-12 s1: Title = summary",
+      "builtIn": true
+    },
+    {
+      "internalName": "Direction",
+      "displayName": "Direction",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s1; DAFMAN 90-161 7.4.5, A6.3.1",
+      "choices": [
+        "Inbound",
+        "Outbound"
+      ]
+    },
+    {
+      "internalName": "Product",
+      "displayName": "Product",
+      "type": "Lookup",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: Inbound",
+      "lookup": {
+        "list": "PFMProductIndex",
+        "showField": "PublicationNumber"
+      }
+    },
+    {
+      "internalName": "TargetPublication",
+      "displayName": "Target Publication",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: Outbound; higher-headquarters number and title"
+    },
+    {
+      "internalName": "TrackingNumber",
+      "displayName": "Tracking Number",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: the PFM assigns it; DAFMAN 90-161 Table A6.1 Section 3"
+    },
+    {
+      "internalName": "ReceivedDate",
+      "displayName": "Received Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "Originator",
+      "displayName": "Originator",
+      "type": "User",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "Paragraph",
+      "displayName": "Paragraph",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "ProposedChange",
+      "displayName": "Proposed Change",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "Rationale",
+      "displayName": "Rationale",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "Emergency",
+      "displayName": "Emergency",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "Safety",
+      "displayName": "Safety",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "RecommendationStatus",
+      "displayName": "Recommendation Status",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s1",
+      "choices": [
+        "Received",
+        "With OPR",
+        "Approved",
+        "Disapproved",
+        "Incorporated"
+      ],
+      "description": "With OPR means with the Office of Primary Responsibility (OPR)."
+    },
+    {
+      "internalName": "Disposition",
+      "displayName": "Disposition",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: required when Recommendation Status is Disapproved (a flow rule)"
+    },
+    {
+      "internalName": "DispositionDate",
+      "displayName": "Disposition Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "FollowUpAction",
+      "displayName": "Follow-Up Action",
+      "type": "Lookup",
+      "required": false,
+      "ref": "List design 2026-11-12 s1",
+      "lookup": {
+        "list": "PFMPublications",
+        "showField": "Title"
+      }
+    },
+    {
+      "internalName": "Form847Link",
+      "displayName": "DAF Form 847 Link",
+      "type": "URL",
+      "required": false,
+      "ref": "List design 2026-11-12 s1",
+      "description": "Link to the Department of the Air Force (DAF) Form 847."
+    },
+    {
+      "internalName": "SquadronConcurrence",
+      "displayName": "Squadron Concurrence",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s7: PFM 4.5A; Table A6.1 sections 3-5 (outbound)",
+      "choices": [
+        "Concur",
+        "Concur With Remarks",
+        "Nonconcur"
+      ]
+    },
+    {
+      "internalName": "GroupConcurrence",
+      "displayName": "Group Concurrence",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s7: PFM 4.5A; Table A6.1 sections 3-5 (outbound)",
+      "choices": [
+        "Concur",
+        "Concur With Remarks",
+        "Nonconcur"
+      ]
+    },
+    {
+      "internalName": "WingConcurrence",
+      "displayName": "Wing Concurrence",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s7: PFM 4.5A; Table A6.1 sections 3-5 (outbound)",
+      "choices": [
+        "Concur",
+        "Concur With Remarks",
+        "Nonconcur"
+      ]
+    },
+    {
+      "internalName": "SquadronConcurrenceDate",
+      "displayName": "Squadron Concurrence Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s7: PFM 4.5A"
+    },
+    {
+      "internalName": "GroupConcurrenceDate",
+      "displayName": "Group Concurrence Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s7: PFM 4.5A"
+    },
+    {
+      "internalName": "WingConcurrenceDate",
+      "displayName": "Wing Concurrence Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s7: PFM 4.5A"
+    }
+  ],
+  "views": []
+}

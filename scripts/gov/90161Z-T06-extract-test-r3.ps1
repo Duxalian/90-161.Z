@@ -2,7 +2,7 @@
 .SYNOPSIS
   90-161.Z Task 6 runner, r2: GenAI.mil extraction test (docs/gov-test-plan.md, Task 6). Windows PowerShell 5.1.
 .DESCRIPTION
-  Asks for the DODID (Enter = this computer's profile folder), goes to the Task 6 folder
+  Uses this computer's profile folder as the DODID (no question), goes to the Task 6 folder
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T06, checks that 90161Z-T06-extracted-r1.json
   is there and that the Task 1 folder (T01) holds the renderer scripts, runs the validator and the final
   render with PDF on the extracted JSON, and saves the output to 90161Z-T06-result-r2.txt in the T06 folder.
@@ -25,7 +25,7 @@ function Get-TaskId([string]$Id) {
   $leaf = ''
   if ($env:USERPROFILE) { $leaf = Split-Path -Leaf $env:USERPROFILE }
   $value = ([string]$Id).Trim()
-  if (-not $value) { $value = ([string](Read-Host 'DODID (press Enter to use this computer''s profile folder)')).Trim() }
+  # No DODID question (PFM 13 Nov 26): the Windows profile folder name is used when -Id is not given.
   if (-not $value) { $value = $leaf }
   if ($value -notmatch '^[A-Za-z0-9._-]{4,}$') { throw 'DODID not valid: use the folder name under C:\Users (4 or more letters, digits, dot, dash or underscore).' }
   $secret = @(@($value, $leaf, $env:USERNAME) |

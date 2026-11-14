@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R08 replaces R07: window fix plus Tasks 10, 12, 14 and 7 through the Deployer). Bookmark on my work computer (clickable links):
+Updated: 13 Nov 26 (Round R09: inventory, Task 11 form, Task 9 collector; task scripts without the DODID question). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -33,23 +33,22 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R08 r1, Deployer window fix and open tasks (open, 13 Nov 26)
+## Fix first: Round R09 r1, inventory, Task 11 form, Task 9 collector (open, 14 Nov 26)
 
-**For:** fixes the Deployer window (R06 ran as text in ISE) and does every open-task step a script can do: checks the 3 briefs in PowerPoint (Task 10), downloads the 3 color documents (Task 12), saves the logo files (Task 14) and, only if I check it, prepares the seals (Task 7). R08 replaces R07: skip R07.
-**Time:** about 8 minutes (estimate); add 2 minutes if seal prep runs.
-**Changes:** writes into T01, T07, T10, T12, T14, Config and Rounds\R08. Downloads 3 briefs from GitHub (checked) and 3 public documents from Air Force public websites. Opens PowerPoint without a window and closes it. Seal prep (if checked) writes prepared seals into the Seals folder I pick and 2 text files in T07. Moves Rounds\R06 and R07 to the Recycle Bin. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
+**For:** one round that does every script-able step left: records this computer's setup for other wings (read-only), turns Task 11 Part B into a form, collects the Task 9 pages, and runs everything R08 did. Task scripts no longer ask for the DODID. If R08 is not run yet, run R09 instead.
+**Time:** about 8 minutes (estimate) for the default steps; Task 9 adds about 20 minutes, Task 11 Part B about 35, seal prep about 2.
+**Changes:** writes into T01, T07, T09, T10, T11, T12, T14, T15, Config and Rounds\R09. Reads settings (no change) for the inventory. Downloads 3 briefs (checked) and 3 public documents. Opens PowerPoint without a window and closes it. Moves Rounds\R06 to R08 and the old script revisions to the Recycle Bin. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build d1605b13.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/d4d8a71738b182e8c1dc5b4227bac497df2f2e82/scripts/gov/paste/90161Z-R08-round-r1.ps1
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 83c168c9.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/2704ec23c8e81de39315f823f0cdfdf20ac65399/scripts/gov/paste/90161Z-R09-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-3. The 90-161.Z Deployer window opens. In "Send results to", type the address you send results to (only this once), then Enter.
-4. Seal prep is unchecked. Check it only if the unit shields are already in the synced Seals folder (Task 7 steps 1-4); Run then asks for that folder.
-5. If anything in the window overlaps or is cut off, uncheck "This window looked right".
-6. Press Enter (or Run). The progress bar and timer show each step; wait for DONE.
-7. The Outlook draft opens with the address, subject 90161Z R08 OK (or CHECK), the summary and the files. Send it.
-8. Then do the by-hand parts: Task 14 steps 2-5 (the logo files are already in T14) and Task 10 (open each brief and judge it).
-**Report:** the draft itself; Claude watches the inbox for the subject. For Task 10, reply in the Claude chat with the changes I want.
-**If it fails:** if the window still does not open, let the text run finish and send the draft: the report names the cause. A line FETCH FAIL means a download was blocked: save that file from its task below instead. Otherwise read the WHAT TO DO line in the window.
+3. Check the steps: the first three are checked. Check "T09 e-Publishing pages" and "T11 Part B" only when I have the time; check seal prep only after the shields are synced (Task 7 steps 1-4). Check "T16 PnP sign-in test" to retest PnP: it asks once for the site address (kept only on this computer), then opens up to 4 sign-in windows; sign in with the CAC each time. It reads permissions only and changes nothing on the site.
+4. If anything in the window overlaps or is cut off, uncheck "This window looked right".
+5. Press Enter (or Run). T09 opens a checklist and the T09 folder: save the 3 pages there (Task 9 steps 1-4), then press Done. T11 opens a table: do each row, pick the result, add a short note without names, then press Save and close (it saves as I go; I can stop and finish in a later round).
+6. The Outlook draft opens with the address, subject 90161Z R09 OK (or CHECK), the summary and the files. Send it.
+7. Then the by-hand parts: Task 14 steps 2-5, Task 10 (judge each brief), Task 11 Part A (the flow import).
+**Report:** the draft itself; Claude watches the inbox for the subject.
+**If it fails:** read the WHAT TO DO line in the window. A FETCH FAIL line: save that file from its task below. If the window does not open, let the text run finish and send the draft: the report names the cause.
 
 ## Task 14: site logo, r1 (open, 13 Nov 26)
 
@@ -58,7 +57,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/d4d8a71738b182e8c1dc5b4227b
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T14
 **Changes:** saves 2 picture files into T14. On the site it changes only the logo and the logo thumbnail. Nothing runs on the computer. Needs site owner rights; without them, send the 2 files to a site owner.
 Steps:
-1. Round R08 saves these 2 files into the T14 folder. Without R08, save them (steps in "How a download task works"):
+1. The current round (R08 or later) saves these 2 files into the T14 folder. Without a round, save them (steps in "How a download task works"):
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14-site-logo-r1.png
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14-site-logo-tile-r1.png
 2. Open the site. Click the gear (Settings), then Change the look, then Header.
@@ -74,7 +73,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14
 **Time:** about 45 minutes (estimate): Part A 10, Part B 35.
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T11
 **Changes:** imports one flow into my Power Automate. The flow creates test lists and a test group named "PFM Rights Probe ..." on the site and deletes them at the end; the deleted lists stay in the site recycle bin, where I may empty them. It adds one result file to the site's Documents library.
-Part A, the probe flow:
+Part B runs as a form in Round R09 (check "T11 Part B"); the rows below are the same. Part A, the probe flow:
 1. Save this file into the T11 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T11-rights-probe-r1.zip
 2. Power Automate: My flows > Import > Import Package (Legacy). Pick the file. For the SharePoint connection, pick my existing one. Import.
@@ -110,7 +109,7 @@ Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T10
   r6 (13 Nov 26) only replaces the old owner name in 5 links and updates the decision count; if I already checked r5, I save r6 and only check that it opens.
 - Adoption brief r2 (12 slides): the path to ANG-wide use. Use only after other wing PFMs show interest.
 Steps:
-1. Round R08 saves the three files into the T10 folder and checks each in PowerPoint (90161Z-T10-check-r1.txt). Without R08, save them:
+1. The current round (R08 or later) saves the three files into the T10 folder and checks each in PowerPoint (90161Z-T10-check-r1.txt). Without a round, save them:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-command-brief-r5.pptx
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-installer-brief-r6.pptx
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-adoption-brief-r2.pptx
@@ -120,7 +119,7 @@ Report: reply in the Claude chat: the changes I want, and whether each brief may
 
 ## Task 12: color sources, r1 (open, 12 Nov 26)
 
-**For:** these 3 public documents set the official Air Force and ANG colors for the briefs and the app. Claude cannot open Air Force websites from the cloud. Round R08 downloads all 3 and attaches them to its e-mail: do this task only for a file R08 reports as FETCH FAIL.
+**For:** these 3 public documents set the official Air Force and ANG colors for the briefs and the app. Claude cannot open Air Force websites from the cloud. The current round (R08 or later) downloads all 3 and attaches them to its e-mail: do this task only for a file the round reports as FETCH FAIL.
 **Time:** about 5 minutes (estimate).
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T12
 **Changes:** saves 3 files into T12. Nothing else.
@@ -137,7 +136,7 @@ Report: one e-mail, subject "90161Z T12 r1": the 3 files. They are public docume
 ## Task 9: e-Publishing pages for the numbering index, r1 (open, 11 Nov 26)
 
 **For:** Claude needs 3 saved e-Publishing pages to write the script that reads publication titles and numbers. Claude cannot open e-Publishing from the cloud. Decided 1A 2A: departmental, Air National Guard and my gaining MAJCOM publications.
-**Time:** about 20 minutes (estimate).
+**Time:** about 20 minutes (estimate). Round R09 (check "T09 e-Publishing pages") opens the folder and a checklist and attaches the files: then skip the Report step below.
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T09
 **Changes:** saves 3 files into T09. Nothing else.
 Steps:
@@ -162,7 +161,7 @@ Steps:
 3. Upload each unit's shield into Seals. Any size or format (PNG, JPG, GIF, BMP, TIF); the larger and cleaner the better. Name each file with the unit's short name, no spaces (for example SAMPLEUNIT.png).
 4. In the library, select Sync, so the files are also on my computer.
 5. In File Explorer, open the synced 90-161.Z library, then the Seals folder. Click the address bar, Ctrl+C.
-6. Run the current round with "T07 seal prep" checked and pick the Seals folder when it asks (the round attaches only the result file). Without a round: in the T07 folder, right-click 90161Z-T07-seal-prep-r2.ps1 > Run with PowerShell, press Enter at the DODID question, then paste the folder path (Ctrl+V, Enter).
+6. Run the current round with "T07 seal prep" checked and pick the Seals folder when it asks (the round attaches only the result file). Without a round: in the T07 folder, right-click 90161Z-T07-seal-prep-r3.ps1 > Run with PowerShell, then paste the folder path when it asks (Ctrl+V, Enter).
 Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 90161Z-T07-key-r1.txt on my computer: it says which number is which unit. Never send seal files or unit names.
 **If it fails:** FAIL means under 100 dpi, no prepared file: ask the unit or the MAJCOM for a larger file. WARN means under 150 dpi: usable, may print soft. If the script stops, send its STOPPED line.
 

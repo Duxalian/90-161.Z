@@ -12,8 +12,8 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## State (main)
 
 - Cloud sessions: environment "90-161.Z" (pwsh + PSScriptAnalyzer; PII_GUARD_DENYLIST set).
-- Lists: 9 PFM lists, names and columns in docs/DECISIONS.md and schemas/lists; full-scope design docs/reviews/2026-11-12-list-design-full-scope.md. Next: T02 r10 (provisioning flow + seed rows + go.md task) after the batch answers that add columns (register 1.3-1.5, 4.5). Table A3.2 seed: docs/coordination-table-a3-2.md.
-- Provisioning now: flow/defs/90161Z-T02-provision-lists-r9.json -> flow/packages/90161Z-T02-provision-lists-r9.zip; docs/power-automate-provisioning.md.
+- Lists: 9 PFM lists, names and columns in docs/DECISIONS.md and schemas/lists; full-scope design docs/reviews/2026-11-12-list-design-full-scope.md. T02 r10 schemas in the sweep draft PR (all batches answered, 12-13 Nov). Table A3.2 seed: docs/coordination-table-a3-2.md.
+- Provisioning: flow/defs/90161Z-T02-provision-lists-r10.json -> flow/packages/90161Z-T02-provision-lists-r10.zip (12 lists, new installs). The lists go on a new site; r10 builds them all (PFM S1, 14 Nov); docs/power-automate-provisioning.md.
 - Design check r7 flow and app rules ("Rules for the flows and the app", https://claude.ai/artifact/X8LbHd79Zh614i1qYzhyTW) are not built yet.
 - Coverage: docs/dafman-coverage/README.md (1,408 rows: Covered 383, N/A 314, Gap 73). Process: docs/process-model.md. Customer guidance r3: docs/guidance/customer-steps.md (review doc https://claude.ai/artifact/8qUeXnJNPhyEJNUYU6ShzV).
 - Phases: docs/phases.md; roles docs/roles-and-permissions.md; backups docs/backup-and-restore.md; screen map docs/app/screen-map.md; setup docs/setup-and-updates.md; rights tests docs/rights-test-plan.md (results to the private log only).
@@ -22,7 +22,7 @@ Updated: 2026-11-13 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
-1. Round R08 r1 on go.md (replaces R07): window fix + T10 brief check, T12 downloads, T14 logo files, T07 seal prep (optional, folder picker). Claude watches Gmail for "90161Z R08". Deployer-first rule: AGENTS.md Project rules. Task scripts drop the DODID question at next revision.
+1. R09 live (build 83c168c9). Next build: go.md task for T02 r10 on the new site (builds all 12 lists; PFM S1, 14 Nov) and the endorsement routing flow (S5A, Legal last). Open: S2, S3, S5 3-15, S6, S7 in docs/reviews/2026-11-13-sweep-decisions.md. Claude watches Gmail for "90161Z R09".
 2. Task 6 prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).

@@ -2,9 +2,9 @@
   "_doc": "Source for scripts/build_paste_bundles.py. Each bundle is one round: a self-contained PowerShell text the PFM copies from its raw page and pastes into Windows PowerShell ISE (F5). It writes the files, then opens the 90-161.Z Deployer (a window; text prompts if no window can open): steps run one by one with a live log and PASS/FAIL counts, then one results folder (Rounds\\\\<round>: a report file plus copies of the PDFs, to attach to one e-mail; zips do not cross the boundary) and a summary for the clipboard. It runs only the steps inside it (PFM 3A). Never hand-edit scripts/gov/paste/*.ps1: change this file or the sources and rebuild.",
   "bundles": [
     {
-      "out": "scripts/gov/paste/90161Z-R08-round-r1.ps1",
-      "round": "R08",
-      "title": "Round R08: Deployer window fix (from R07) plus open tasks through the Deployer: T10 brief check in PowerPoint, T12 color sources download, T14 logo files, T07 seal prep (optional, asks for the synced Seals folder); renderer test r8",
+      "out": "scripts/gov/paste/90161Z-R09-round-r1.ps1",
+      "round": "R09",
+      "title": "Round R09: environment inventory (T15), T11 Part B form, T09 e-Publishing collector, task scripts without the DODID question, PnP sign-in retest (T16) (new revisions); keeps T10 brief check, T12 downloads, T14 logo files, T07 seal prep",
       "files": [
         {
           "dir": "T01",
@@ -24,15 +24,31 @@
         },
         {
           "dir": "T01",
-          "src": "scripts/gov/90161Z-T01-renderer-test-r8.ps1"
+          "src": "scripts/gov/90161Z-T01-renderer-test-r9.ps1"
         },
         {
-          "dir": "T07",
-          "src": "scripts/gov/90161Z-T07-seal-prep-r2.ps1"
+          "dir": "T15",
+          "src": "scripts/gov/90161Z-T15-env-inventory-r1.ps1"
         },
         {
           "dir": "T10",
-          "src": "scripts/gov/90161Z-T10-brief-check-r1.ps1"
+          "src": "scripts/gov/90161Z-T10-brief-check-r2.ps1"
+        },
+        {
+          "dir": "T09",
+          "src": "scripts/gov/90161Z-T09-epubs-collect-r1.ps1"
+        },
+        {
+          "dir": "T11",
+          "src": "scripts/gov/90161Z-T11-partb-form-r1.ps1"
+        },
+        {
+          "dir": "T11",
+          "src": "scripts/gov/data/90161Z-T11-partb-rows-r1.json"
+        },
+        {
+          "dir": "T07",
+          "src": "scripts/gov/90161Z-T07-seal-prep-r3.ps1"
         },
         {
           "dir": "T14",
@@ -41,32 +57,67 @@
         {
           "dir": "T14",
           "src": "assets/logo/90161Z-T14-site-logo-tile-r1.png"
+        },
+        {
+          "dir": "T16",
+          "src": "scripts/gov/90161Z-T16-pnp-signin-test-r1.ps1"
         }
       ],
       "steps": [
         {
-          "name": "T01 renderer test r8",
+          "name": "T15 environment inventory r1 (read-only)",
+          "dir": "T15",
+          "file": "90161Z-T15-env-inventory-r1.ps1"
+        },
+        {
+          "name": "T01 renderer test r9",
           "dir": "T01",
-          "file": "90161Z-T01-renderer-test-r8.ps1"
+          "file": "90161Z-T01-renderer-test-r9.ps1"
         },
         {
-          "name": "T10 brief check r1",
+          "name": "T10 brief check r2",
           "dir": "T10",
-          "file": "90161Z-T10-brief-check-r1.ps1"
+          "file": "90161Z-T10-brief-check-r2.ps1"
         },
         {
-          "name": "T07 seal prep r2 (only after the shields are uploaded and synced)",
+          "name": "T09 e-Publishing pages (opens a checklist; about 20 min)",
+          "dir": "T09",
+          "file": "90161Z-T09-epubs-collect-r1.ps1",
+          "default": false,
+          "minutes": 90
+        },
+        {
+          "name": "T11 Part B manual checks form (about 35 min)",
+          "dir": "T11",
+          "file": "90161Z-T11-partb-form-r1.ps1",
+          "default": false,
+          "minutes": 180
+        },
+        {
+          "name": "T07 seal prep r3 (only after the shields are uploaded and synced)",
           "dir": "T07",
-          "file": "90161Z-T07-seal-prep-r2.ps1",
+          "file": "90161Z-T07-seal-prep-r3.ps1",
           "default": false,
           "ask": {
             "param": "SealDir",
             "prompt": "Pick the synced Seals folder (in the 90-161.Z library). Cancel skips seal prep."
           },
           "screenOnly": "^seal\\d+ detail:"
+        },
+        {
+          "name": "T16 PnP sign-in test (read-only; sign-in windows, CAC)",
+          "dir": "T16",
+          "file": "90161Z-T16-pnp-signin-test-r1.ps1",
+          "default": false,
+          "minutes": 20
         }
       ],
       "collect": [
+        {
+          "dir": "T15",
+          "name": "90161Z-T15-inventory-r1.txt",
+          "step": "T15 environment inventory r1 (read-only)"
+        },
         {
           "dir": "T01",
           "name": "SAMPLEWINGI99-101.pdf"
@@ -74,7 +125,7 @@
         {
           "dir": "T10",
           "name": "90161Z-T10-check-r1.txt",
-          "step": "T10 brief check r1"
+          "step": "T10 brief check r2"
         },
         {
           "dir": "T12",
@@ -89,9 +140,34 @@
           "name": "90161Z-T12-af-symbol-page-r1.htm"
         },
         {
+          "dir": "T09",
+          "name": "90161Z-T09-epubs-departmental-r1.mhtml",
+          "step": "T09 e-Publishing pages (opens a checklist; about 20 min)"
+        },
+        {
+          "dir": "T09",
+          "name": "90161Z-T09-epubs-ang-r1.mhtml",
+          "step": "T09 e-Publishing pages (opens a checklist; about 20 min)"
+        },
+        {
+          "dir": "T09",
+          "name": "90161Z-T09-epubs-majcom-r1.mhtml",
+          "step": "T09 e-Publishing pages (opens a checklist; about 20 min)"
+        },
+        {
+          "dir": "T11",
+          "name": "90161Z-T11-partb-r1.txt",
+          "step": "T11 Part B manual checks form (about 35 min)"
+        },
+        {
           "dir": "T07",
           "name": "90161Z-T07-result-r1.txt",
-          "step": "T07 seal prep r2 (only after the shields are uploaded and synced)"
+          "step": "T07 seal prep r3 (only after the shields are uploaded and synced)"
+        },
+        {
+          "dir": "T16",
+          "name": "90161Z-T16-pnp-result-r1.txt",
+          "step": "T16 PnP sign-in test (read-only; sign-in windows, CAC)"
         }
       ],
       "cleanup": [
@@ -134,6 +210,26 @@
         {
           "path": "Rounds\\R07",
           "kind": "dir"
+        },
+        {
+          "path": "Rounds\\R08",
+          "kind": "dir"
+        },
+        {
+          "path": "T07\\90161Z-T07-seal-prep-r2.ps1",
+          "kind": "glob"
+        },
+        {
+          "path": "T10\\90161Z-T10-brief-check-r1.ps1",
+          "kind": "glob"
+        },
+        {
+          "path": "T01\\90161Z-T01-renderer-test-r8.ps1",
+          "kind": "glob"
+        },
+        {
+          "path": "T01\\90161Z-T01-result-r8.txt",
+          "kind": "glob"
         }
       ],
       "fetch": [

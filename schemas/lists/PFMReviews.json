@@ -100,6 +100,50 @@
         "showField": "Title"
       },
       "ref": "The PFM Publications action that carries out the response (Certify Current, Rewrite, Transfer or Rescind)"
+    },
+    {
+      "internalName": "RequestingOfficial",
+      "displayName": "Requesting Official",
+      "type": "User",
+      "required": false,
+      "ref": "List design 2026-11-12 s3a: special review out of cycle (process-model S1-S7; DAFMAN 90-161 7.4.3)"
+    },
+    {
+      "internalName": "ReviewReason",
+      "displayName": "Review Reason",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3a: DAFMAN 90-161 7.4.3 wording",
+      "choices": [
+        "Commander Request",
+        "Mission Change",
+        "Implemented Publication Change",
+        "Law or Regulation Change",
+        "Policy Change",
+        "Reorganization",
+        "Other"
+      ]
+    },
+    {
+      "internalName": "ReviewRequestID",
+      "displayName": "Review Request Identifier",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s3a: one per request, groups a batch"
+    },
+    {
+      "internalName": "ReviewScope",
+      "displayName": "Review Scope",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3a: process-model S1-S7; DAFMAN 90-161 7.4.3"
+    },
+    {
+      "internalName": "ReviewNeededBy",
+      "displayName": "Review Needed By",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s3a: optional; the date the requester needs answers"
     }
   ],
   "views": [

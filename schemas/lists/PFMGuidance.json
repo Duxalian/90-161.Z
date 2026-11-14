@@ -1,0 +1,116 @@
+{
+  "list": "PFMGuidance",
+  "title": "PFM Guidance",
+  "description": "Publications and Forms Manager (PFM) guidance shown on each screen of the app: heading, audience, order, instructions and what must be done before moving on.",
+  "template": "GenericList",
+  "ref": "List design 2026-11-12 s1 (PFM Guidance; review finding 14); gap row 12A. No seed rows yet: the screens need the PFM's content approval (docs/guidance/customer-steps.md). Members read only; only the PFM office edits (PFM 2026-11-12, P2A).",
+  "fields": [
+    {
+      "internalName": "Title",
+      "displayName": "Heading",
+      "type": "Text",
+      "required": true,
+      "ref": "List design 2026-11-12 s1: Title = Heading",
+      "builtIn": true
+    },
+    {
+      "internalName": "GuidanceKey",
+      "displayName": "Guidance Key",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: unique, indexed",
+      "indexed": true,
+      "unique": true
+    },
+    {
+      "internalName": "Audience",
+      "displayName": "Audience",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: \"Coordinator\" is the DAFMAN word for the offices that review (5.1)",
+      "choices": [
+        "AO",
+        "Any Member",
+        "Coordinator",
+        "Command Support Staff",
+        "Certifying Official",
+        "Approving Official",
+        "PFM"
+      ],
+      "description": "Who the screen is for. Action Officer (AO) and Publications and Forms Manager (PFM) are named by role."
+    },
+    {
+      "internalName": "ScreenOrder",
+      "displayName": "Screen Order",
+      "type": "Number",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: the PFM can change the order without an app edit"
+    },
+    {
+      "internalName": "Instructions",
+      "displayName": "Instructions",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "DAFMANRef",
+      "displayName": "DAFMAN Reference",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: house name as on PFM Process Steps",
+      "description": "Paragraph or table in Department of the Air Force Manual (DAFMAN) 90-161."
+    },
+    {
+      "internalName": "DoneWhen",
+      "displayName": "Done When",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s1"
+    },
+    {
+      "internalName": "IsActive",
+      "displayName": "Active",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: house name as on PFM Offices (the design spelled \"Is Active\")",
+      "default": "1"
+    },
+    {
+      "internalName": "AppliesTo",
+      "displayName": "Applies To",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: the Action Type values plus Help Panel; holds the screen path (review finding 14)",
+      "choices": [
+        "New",
+        "Rewrite",
+        "Interim Change",
+        "Administrative Change",
+        "Guidance Memorandum",
+        "Certify Current",
+        "Rescind",
+        "Transfer",
+        "Corrective Action",
+        "Reissue Guidance Memorandum",
+        "Change OPR",
+        "Revise",
+        "Help Panel"
+      ],
+      "description": "Office of Primary Responsibility (OPR), as in the choice value Change OPR.",
+      "multi": true
+    },
+    {
+      "internalName": "ProcessStep",
+      "displayName": "Process Step",
+      "type": "Lookup",
+      "required": false,
+      "ref": "List design 2026-11-12 s1: optional; holds the screen path",
+      "lookup": {
+        "list": "PFMProcessSteps",
+        "showField": "Title"
+      }
+    }
+  ],
+  "views": []
+}

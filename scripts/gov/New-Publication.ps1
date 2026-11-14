@@ -589,7 +589,7 @@ try {
   } catch { Write-Output ('MEASURE-ERROR ' + $_.Exception.Message) }
 
   # ---------------- sensitivity label (PFM 13 Nov): apply the label captured once from a hand-labeled file ----------------
-  # Config\90161Z-label.json (written by 90161Z-T13-label-capture-r1.ps1, kept only on this computer) holds the label and
+  # Config\90161Z-label.json (written by 90161Z-T13-label-capture-r2.ps1, kept only on this computer) holds the label and
   # tenant ids; they are never printed. Lowering a label needs a justification (Office VBA LabelInfo.Justification).
   $labelCfg = Join-Path (Split-Path -Parent $PSScriptRoot) 'Config\90161Z-label.json'
   if (Test-Path -LiteralPath $labelCfg -PathType Leaf) {

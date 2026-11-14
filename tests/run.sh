@@ -102,6 +102,7 @@ python3 scripts/build_rights_probe.py --check >/dev/null && ok "rights probe def
 python3 scripts/build_flow_package.py --check && ok "flow packages up to date" || bad "flow packages stale"
 python3 tests/check_flow_package.py && ok "flow packages match real export shape" || bad "flow package shape"
 python3 tests/check_flow_defs.py && ok "flow def names and expressions" || bad "flow def names or expressions"
+python3 scripts/build_flow_solution.py --check >/dev/null && python3 tests/check_flow_solution.py >/dev/null && ok "flow solution up to date and valid" || bad "flow solution stale or invalid"
 python3 tests/check_names.py && ok "naming rules (PFM 2026-11-11)" || bad "naming rules"
 for f in flow/defs/*.json; do python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" && ok "json $f" || bad "json $f"; done
 
@@ -119,7 +120,9 @@ assert all(('Get_' + l[3:] + '_ID') in d for l in p['lookupPlaceholders']), p['l
 body = d['Create_Fields_And_Views']['actions']['Create_Field_Or_View']['inputs']['parameters']['parameters/body']
 assert all(f'__{l}_ID__' in body for l in p['lookupPlaceholders'])
 assert d['Add_Rows']['runAfter'] == {'Create_Fields_And_Views': ['Succeeded']} and d['Apply_Updates']['runAfter'] == {'Add_Rows': ['Succeeded']}
-assert len(p['rows']) == 41
+x = json.dumps(p)
+assert x.count('MultiChoice') == 2 and x.count('UserMulti') == 1 and x.count('EnforceUniqueValues') == 2 and x.count('<And>') == 1, 'multi, unique and two-condition views reach the payload'
+assert len(p['rows']) == 88  # 39 series + 7 settings + 29 offices (22 A3.2 + 7 mandatory, Q13 and 4.2A) + 13 process steps
 assert 'PFMProductIndex' in p['lookupPlaceholders'] and p['listOrder'][-1] == 'PFMReviews'
 lo = p['listOrder']; assert lo.index('PFMProductIndex') < lo.index('PFMPublications') < lo.index('PFMReviews'), lo
 gv = [r for r in p['fields'] if r['body'].get('Title') == 'PFM - Prescribed Forms by Publication']
@@ -127,7 +130,7 @@ q = gv[0]['body']['ViewQuery']
 assert q.index('<Where>') < q.index('<GroupBy') < q.index('<OrderBy>'), q
 assert [r['body']['__metadata']['type'] for r in p['rows']].count('SP.Data.PFMSeriesListItem') == 39
 st = {r['body']['Title']: r['body']['SettingValue'] for r in p['rows'] if r['body']['__metadata']['type'] == 'SP.Data.PFMSettingsListItem'}
-assert st == {'CoordinationSuspenseBusinessDays': '15', 'GuardReserveApplicabilityCalendarDays': '30'}, st
+assert st == {'CoordinationSuspenseBusinessDays': '15', 'GuardReserveApplicabilityCalendarDays': '30', 'PublicationsSiteName': '', 'PublicationsListUrl': '', 'PFMOfficeMailbox': '', 'EscalationWeekdays': '', 'RecordsFreeze': ''}, st
 nums = [r['body']['SeriesNumber'] for r in p['rows'] if 'SeriesNumber' in r['body']]
 assert len(set(nums)) == 39 and 16 in nums and 17 in nums
 gets = [a for a in d if a.startswith('Get_') and a.endswith('_ID')]
@@ -161,7 +164,7 @@ import json, glob
 S = {json.load(open(f))['list']: json.load(open(f)) for f in glob.glob('schemas/lists/*.json')}
 F = lambda l: {f['internalName']: f for f in S[l]['fields']}
 pub, end, pi, rv, off = F('PFMPublications'), F('PFMEndorsements'), F('PFMProductIndex'), F('PFMReviews'), F('PFMOffices')
-assert pub['ActionType']['choices'] == ['New', 'Rewrite', 'Interim Change', 'Administrative Change', 'Guidance Memorandum', 'Certify Current', 'Rescind', 'Transfer']
+assert pub['ActionType']['choices'] == ['New', 'Rewrite', 'Interim Change', 'Administrative Change', 'Guidance Memorandum', 'Certify Current', 'Rescind', 'Transfer', 'Corrective Action', 'Reissue Guidance Memorandum', 'Change OPR', 'Revise']
 assert pub['Product']['lookup']['list'] == 'PFMProductIndex'
 assert 'Execution' not in end and not end['EndorserOrder']['required']
 assert end['CoordinationStage']['choices'] == ['Privacy Review', 'Formal Coordination', 'Legal'] and end['CoordinationStage']['required']
@@ -171,8 +174,8 @@ assert all(pi[k]['lookup']['list'] == 'PFMProductIndex' for k in ('SupersededBy'
 assert rv['OPRResponse']['choices'] == ['Certify Current', 'Requires Revision', 'Requires Transfer', 'Is Obsolete', 'Other', 'No Response']
 assert rv['Product']['lookup']['list'] == 'PFMProductIndex' and rv['FollowUpAction']['lookup']['list'] == 'PFMPublications'
 steps = S['PFMProcessSteps']['seed']
-assert [s['StepNumber'] for s in steps] == list(range(1, 11)) and 'Privacy' in steps[3]['Title']
-assert {s['StepNumber']: s.get('TargetBusinessDays') for s in steps if s.get('TargetBusinessDays')} == {2: 60, 5: 20, 6: 20, 7: 10, 8: 10, 10: 15}
+assert [s['StepNumber'] for s in steps] == list(range(0, 13)) and 'Privacy' in steps[5]['Title']
+assert {s['StepNumber']: s.get('TargetBusinessDays') for s in steps if s.get('TargetBusinessDays')} == {2: 60, 6: 20, 7: 20, 8: 10, 9: 10, 11: 15}
 PY
 
 python3 - <<'PY' && ok "sample CSVs match schema columns and choices" || bad "sample CSVs"
@@ -186,7 +189,7 @@ for f in glob.glob('samples/lists/*.csv'):
             if v and S[k]['type'] == 'Choice': assert v in S[k]['choices'], (f, k, v)
 PY
 
-python3 scripts/build_list_mockup.py /tmp/pfm-lists-mockup.html | grep -q "9 lists" && ! grep -qE "[0-9]{4}-[0-9]{2}-[0-9]{2}</td>|Not started|Emailed" /tmp/pfm-lists-mockup.html && ok "list mockup builds (T&Q dates and terms)" || bad "list mockup"
+python3 scripts/build_list_mockup.py /tmp/pfm-lists-mockup.html | grep -q "12 lists" && ! grep -qE "[0-9]{4}-[0-9]{2}-[0-9]{2}</td>|Not started|Emailed" /tmp/pfm-lists-mockup.html && ok "list mockup builds (T&Q dates and terms)" || bad "list mockup"
 
 python3 - <<'PY' && ok "flow payload XML parses" || bad "flow payload XML"
 import json, xml.etree.ElementTree as ET
@@ -198,7 +201,7 @@ for r in d['fields']:
 PY
 
 out=$(pwsh -NoProfile -File scripts/gov/Provision-Lists.ps1 -PlanOnly -SchemaPath schemas/lists 2>&1 | tail -1)
-[ "$out" = "PLAN lists=9 fields=80 views=18" ] && ok "lists plan ($out)" || bad "lists plan: $out"
+[ "$out" = "PLAN lists=12 fields=196 views=18" ] && ok "lists plan ($out)" || bad "lists plan: $out"
 
 node templates/build_crm_template.js >/tmp/crm.out 2>&1 && grep -q "tableWidthDXA=9331 columns=9" /tmp/crm.out && ok "CRM template builds ($(cat /tmp/crm.out | sed s,.*CRM_A12-1.docx,,))" || bad "CRM template build"
 # Build is deterministic (fixed dates): a rebuild must match the committed file byte for byte.
@@ -216,9 +219,15 @@ got=$(pwsh -NoProfile -c '. ./scripts/gov/Publication.Common.ps1; $p = Get-Conte
 # Rule source = the approved DAFMAN edition (docs/DECISIONS.md 2026-11-10): ref/ files must match ref/SHA256SUMS (bloat audit 2026-11-13).
 out=$(cd ref && sha256sum -c --quiet SHA256SUMS 2>&1) && ok "ref files match ref/SHA256SUMS" || { echo "$out"; bad "ref files match ref/SHA256SUMS"; }
 
+# F-032/F-039 false positives (T06 review 12 Nov 26): cover values count as use; office symbols and AFI-type prefixes skip the
+# four-times rule; the fixed summary-of-changes sentence is not a compliance statement. Sample: only OPR and ANG warn.
+out=$(pwsh -NoProfile -File scripts/gov/Test-Publication.ps1 -Path samples/publication.sample.json 2>&1 | grep -E "^WARN F-032|^VALIDATE")
+echo "$out" | grep -q "VALIDATE fails=0 warns=2" && ! echo "$out" | grep -qE "'(OPR-A|OPR-B|AFI)'" && ok "validator F-032 false positives gone (sample warns=2: OPR, ANG)" || { echo "$out"; bad "validator F-032 false positives"; }
 # B3A/P3 (PFM 2026-11-13): one source for the gov task-script block; no task script asks for the DODID outside it.
 out=$(python3 scripts/build_task_scripts.py --check 2>&1); [ $? -eq 0 ] && ok "task scripts share one block ($(echo "$out" | tail -1))" || { echo "$out"; bad "task-common block (run python3 scripts/build_task_scripts.py)"; }
 
+# Task 11 Part B rows come from docs/rights-test-plan.md section 6 (one source; the Deployer form reads the JSON).
+out=$(python3 scripts/build_rights_rows.py --check 2>&1 | tail -1); [ $? -eq 0 ] && echo "$out" | grep -q "stale=0" && ok "T11 Part B rows match the plan ($out)" || bad "T11 Part B rows stale: $out (run python3 scripts/build_rights_rows.py)"
 out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
 [ "$out" = "PASTE bundles=1 stale=0" ] && ok "paste bundles current ($out)" || bad "paste bundles: $out (run python3 scripts/build_paste_bundles.py)"
 
@@ -229,10 +238,10 @@ out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
 tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pf=0; pr=0; pc=0
 # R06 cleanup fixture: finished folders with our files and one file 90-161.Z did not make (must stay).
 ob="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"; mkdir -p "$ob/T02" "$ob/T13" "$ob/Rounds/R06" "$ob/T07" "$ob/T09"
-touch "$ob/T02/90161Z-T02-provision-lists-r9.zip" "$ob/T02/Provision-Lists.ps1" "$ob/T13/90161Z-T13-label-capture-r1.ps1" "$ob/T13/my-notes.docx" \
-  "$ob/Rounds/R06/90161Z-R06-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r3.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
-echo "public sample" > "$tp/fx.bin"
-swap() { sed -e "s#Url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/#Url = 'file://$PWD/#" -e "s#Url = 'https://www\.[^']*'#Url = 'file://$tp/fx.bin'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
+touch "$ob/T02/90161Z-T02-provision-lists-r9.zip" "$ob/T02/Provision-Lists.ps1" "$ob/T13/90161Z-T13-label-capture-r2.ps1" "$ob/T13/my-notes.docx" \
+  "$ob/Rounds/R06/90161Z-R06-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r4.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
+echo "public sample" > "$tp/fx.bin"; printf '## Fix first: Round R99 r1, test (open, 1 Jan 26)\n' > "$tp/go.md"
+swap() { sed -e "s#^\$goUrl = '.*'#\$goUrl = 'file://$tp/go.md'#" -e "s#Url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/#Url = 'file://$PWD/#" -e "s#Url = 'https://www\.[^']*'#Url = 'file://$tp/fx.bin'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
   swap "$b" > "$tp/b.ps1"; USERPROFILE="$tp/u/test1234" pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
   # Text mode runs the default steps that need no folder (the optional seal step is skipped).
@@ -245,12 +254,13 @@ for b in scripts/gov/paste/*.ps1; do
   ! { grep -v '^WRITES TO ' "$tp/out.txt" | grep -q "test1234"; } && ! grep -q "test1234" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
   grep -q "^WRITES TO $tp/u/test1234/" "$tp/out.txt" || { echo "real path not shown"; pf=$((pf+1)); }
   grep -q "^WHAT TO DO: Open Outlook" "$tp/out.txt" || { echo "no plain-words help after the draft fallback"; pf=$((pf+1)); }
+  grep -q "^NEWER ROUND R99 is on the bookmark page" "$tp/out.txt" || { echo "newer-round banner missing"; pf=$((pf+1)); }
   grep -q "^NOTE: no window, text mode: " "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "report does not name the no-window cause"; pf=$((pf+1)); }
   # Downloads: repo files must match their SHA-256; public files land and are attached; the skipped step's file is not expected.
   nf=$(python3 -c "import json;print(sum(len(b.get('fetch',[])) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
   grep -q "^FETCH files=$nf failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "downloads: want FETCH files=$nf failed=0"; grep "^FETCH" "$base/Rounds/$r/90161Z-$r-report-r1.txt"; pf=$((pf+1)); }
   ! grep -q "90161Z-T07-result-r1.txt" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "a skipped step's file was expected"; pf=$((pf+1)); }
-  [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R06" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r3.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r1.ps1" ] \
+  [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R06" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r4.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r2.ps1" ] \
     && [ -f "$ob/T07/90161Z-T07-key-r1.txt" ] && [ -f "$ob/T09/90161Z-T09-page-r1.htm" ] \
     && grep -q "^CLEANUP to Recycle Bin: files=5 folders=2 kept-other=1 failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" \
     && grep -q "^LEFT .*T13(1, 1 other)" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && head -1 "$base/Rounds/$r/90161Z-$r-report-r1.txt" | tr -d "\r" | grep -q "90161Z $r CHECK$" \
@@ -281,6 +291,9 @@ dq=0; for b in scripts/gov/paste/*.ps1; do sed -n '/round runner (generated/,$p'
 fa=$(grep -ohE "(New-Object System\.Drawing\.Font|\[System\.Drawing\.Font\]::new)\([^)]*,[^)]*, *[\"'][A-Za-z]+[\"'] *\)" scripts/gov/paste/*.ps1 scripts/build_paste_bundles.py | wc -l)
 amb=$(pwsh -NoProfile -c 'Add-Type -AssemblyName System.Drawing.Common; try { $null = New-Object System.Drawing.Font("Segoe UI", 10, "Bold"); "bound" } catch { if ($_.Exception.Message -match "ambiguous") { "ambiguous" } else { "bound" } }' 2>&1 | tail -1)
 [ "$fa" -eq 0 ] && [ "$amb" = "ambiguous" ] && ok "Deployer fonts: no string enum in Font() (found: $fa; pwsh confirms the string form is $amb)" || bad "Deployer fonts: string enum in Font() found=$fa (pwsh: $amb)"
+# T16 PnP retest: the e-mailed result must hold no site, tenant, sign-in address, GUID or .mil host (review R09 T16).
+hs=$(pwsh -NoProfile -c '$src = Get-Content scripts/gov/90161Z-T16-pnp-signin-test-r1.ps1 -Raw; Invoke-Expression ([regex]::Match($src, "(?s)function Hide-Site.*?\n}\n").Value); Hide-Site "x https://login.microsoftonline.us/0a1b2c3d-1111-2222-3333-444455556666/o fakeco.onmicrosoft.us https://fakeco.sharepoint.us/sites/pfmtest/_api fakeco-admin.sharepoint.us /sites/pfmtest/_api %2Fsites%2Fpfmtest pfmtest" "https://fakeco.sharepoint.us/sites/pfmtest"' 2>&1)
+! echo "$hs" | grep -qiE "fakeco|0a1b2c3d|pfmtest|https?://" && ok "T16 hides site, tenant, sign-in address and GUID" || { echo "$hs"; bad "T16 masking"; }
 # R05 (PFM 2026-11-13): every bundle makes an Outlook draft and never sends it; off Windows it falls back to folder + clipboard.
 nd=$(grep -L 'ComObject Outlook.Application' scripts/gov/paste/*.ps1 | wc -l); ns=$(grep -ciE '\.Send\(|\.Send\b *$' scripts/gov/paste/*.ps1 | awk -F: '{s+=$NF} END{print s+0}')
 grep -q '\$script:draftMade = (-not \$why)' scripts/build_paste_bundles.py && grep -q "Outlook draft not made" scripts/build_paste_bundles.py; fb=$?

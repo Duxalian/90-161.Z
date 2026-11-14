@@ -100,7 +100,7 @@ Scope: Chapter 5 (staffing, coordination, certification and approval), Chapter 6
 | 6.1.3 Note | 3037 | OPRs are encouraged to tell affected staff offices when a publication is released, revised or rescinded, alerting them to related publications. | - | OPR | Yes | list design:21 (Notice Sent event type, for rescind notices only); no release/revision notice step | Partial |
 | 6.1.4 | 3041 | PMs and GMs are posted under the subject series; a GM that amends a publication is posted "on top" so users see it first, publication unaltered. | - | PFM | Yes (wing GMs) | - (no posting step or PI field for it) | Gap |
 | 6.2 | 3046 | Heading: posting and printing classified or CUI products. | - | - | Partial (CUI yes; classified excluded) | - | Info |
-| 6.2.1 | 3048 | Classified electronic publications may be posted on local SIPRNET sites. | - | OPR | Partial: classified excluded by PFM decision | DECISIONS.md:42 (classified products left out) | Gap |
+| 6.2.1 | 3048 | Classified electronic publications may be posted on local SIPRNET sites. | - | OPR | Partial: classified excluded by PFM decision | PFM S4 (14 Nov 26): N/A, see docs/reviews/2026-11-13-coverage-gap-sweep.md | N/A |
 | 6.2.2 | 3050 | CUI publications may be offered on WMS or another approved locally managed site; OPR consults security on accessibility and releasability. | - | OPR | Yes (locally managed site) | list design:35 (Access Level: Public, Restricted, CUI) | Covered |
 | 6.2.3 | 3056 | OPRs ensure SIPRNET, other-site or OPR-only publications are listed under an unclassified title in the e-Publishing PI. | T-1 | OPR | No (e-Publishing PI; wing PI is 6.4.2) | process-model.md:48 | N/A |
 | 6.2.4 | 3059 | AFDPO does not schedule classified or CUI products for printing; requests include justification and funding. | - | AFDPO | No (AFDPO printing only) | - | N/A |
@@ -129,10 +129,10 @@ Scope: Chapter 5 (staffing, coordination, certification and approval), Chapter 6
 | 6.6.6 | 3146 | AFDPO issues physical products to DoD and agencies; monthly maximum issue; justification letters for over-maximum orders. | T-3 | AFDPO | No (AFDPO ordering only) | - | N/A |
 | 6.7 | 3168 | Heading: processing publications and forms for printing. | - | - | Partial | DECISIONS.md:42 (printed products left out) | Info |
 | 6.7.1 | 3169 | OPRs give written justification to create or continue printed products; convert to electronic where practicable. | T-1 | OPR | Yes | list design:30 (Printing And Distribution, added for forms 8.10.1.2 only); DECISIONS.md:42 | Partial |
-| 6.7.2 | 3175 | OPR gives the local PFM a GPO Form 952, DAF Form 673, a clean printout and artwork; PFM helps with forms and graphics. | T-1 | OPR | Yes | DECISIONS.md:42 (printed products left out) | Gap |
-| 6.7.3 | 3178 | PFMs ensure multicolor printing is necessary and minimal; OPR justifies extra color or printing features in the 673 "Additional Information". | T-1 | PFM | Yes | DECISIONS.md:42 | Gap |
+| 6.7.2 | 3175 | OPR gives the local PFM a GPO Form 952, DAF Form 673, a clean printout and artwork; PFM helps with forms and graphics. | T-1 | OPR | Yes | PFM S4 (14 Nov 26): N/A, see docs/reviews/2026-11-13-coverage-gap-sweep.md | N/A |
+| 6.7.3 | 3178 | PFMs ensure multicolor printing is necessary and minimal; OPR justifies extra color or printing features in the 673 "Additional Information". | T-1 | PFM | Yes | PFM S4 (14 Nov 26): N/A, see docs/reviews/2026-11-13-coverage-gap-sweep.md | N/A |
 | 6.7.3 Note | 3180 | Avoid excessive printing requirements (coated paper, embossing, die-cutting, foil stamping). | - | OPR | Yes | - | Info |
-| 6.7.4 | 3183 | To sell unrestricted products to the public, the OPR completes GPO Form 3868 and the local PFM sends it through SAF/AAGP. | T-2 | PFM | Yes (rare) | DECISIONS.md:42 | Gap |
+| 6.7.4 | 3183 | To sell unrestricted products to the public, the OPR completes GPO Form 3868 and the local PFM sends it through SAF/AAGP. | T-2 | PFM | Yes (rare) | PFM S4 (14 Nov 26): N/A, see docs/reviews/2026-11-13-coverage-gap-sweep.md | N/A |
 | 6.7.5 | 3191 | Order unclassified physical products from the Order Portal or DLA; WMS for downloads; contact the PFM for bulk printing. | - | OPR | Yes | - | Info |
 | 6.7.5 Note | 3194 | Printing funds may be centralized within the local publishing function. | - | PFM | Yes | - | Info |
 | 6.7.6 | 3196 | Limited distribution is requested in the 673 "Additional Information" block; large lists go through Order Portal. | - | OPR | Yes | list design:30 (Printing And Distribution) | Partial |

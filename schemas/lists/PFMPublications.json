@@ -38,9 +38,14 @@
         "Guidance Memorandum",
         "Certify Current",
         "Rescind",
-        "Transfer"
+        "Transfer",
+        "Corrective Action",
+        "Reissue Guidance Memorandum",
+        "Change OPR",
+        "Revise"
       ],
-      "ref": "DAFMAN 90-161 1.1.4.1-1.1.4.8 (action types); Interim Change needs full coordination, Administrative Change none (7.8.10.2); PFM 2026-11-11 (r7, design check decision 1A)"
+      "ref": "DAFMAN 90-161 1.1.4.1-1.1.4.8 (action types); Interim Change needs full coordination, Administrative Change none (7.8.10.2); PFM 2026-11-11 (r7, design check decision 1A)",
+      "description": "Office of Primary Responsibility (OPR), as in the choice value Change OPR."
     },
     {
       "internalName": "ProductType",
@@ -153,8 +158,9 @@
       "displayName": "AO",
       "type": "User",
       "required": false,
-      "ref": "DAFMAN 90-161 (action officer, AO); PFM 2026-11-11 (person from the GAL, shows the user's card)",
-      "description": "The action officer (AO) who prepares the action."
+      "ref": "DAFMAN 90-161 (action officer, AO); PFM 2026-11-11 (person from the GAL, shows the user's card); allows multiple values: the AO and at most one alternate (List design 2026-11-12 header, PFM 2A 12 Nov)",
+      "description": "The action officer (AO) who prepares the action.",
+      "multi": true
     },
     {
       "internalName": "DraftLink",
@@ -219,6 +225,296 @@
       "required": false,
       "ref": "DAFMAN 90-161 5.6-5.7 (DAF Form 673), 7.5.1 (DAF Form 399 for Certify Current); PFM 2026-11-11 (r7, design check decision 1A)",
       "description": "Link to the signed Department of the Air Force (DAF) Form 673, or DAF Form 399 for Certify Current."
+    },
+    {
+      "internalName": "NumberApproved",
+      "displayName": "Number Approved",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row A4 (the PFM approves all numbers)"
+    },
+    {
+      "internalName": "SummaryOfChanges",
+      "displayName": "Summary of Changes",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows B8, B17 (package gate)"
+    },
+    {
+      "internalName": "ChangeRationale",
+      "displayName": "Change Rationale",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows B8, B17 (package gate)"
+    },
+    {
+      "internalName": "CurrentVersionLink",
+      "displayName": "Current Version Link",
+      "type": "URL",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows B8, B17 (package gate)"
+    },
+    {
+      "internalName": "TrackChangesRemoved",
+      "displayName": "Track Changes Removed",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows B8, B17 (package gate)"
+    },
+    {
+      "internalName": "MasterForm673Link",
+      "displayName": "Master DAF Form 673 Link",
+      "type": "URL",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows A6, B10; DAF Form 673 (Coordination Record)",
+      "description": "Link to the master Department of the Air Force (DAF) Form 673."
+    },
+    {
+      "internalName": "OpenNonconcurs",
+      "displayName": "Open Nonconcurs",
+      "type": "Number",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows A6, B10; set by a flow; DAFMAN 90-161 5.5.2 (approval needs 0 or an impasse memo)"
+    },
+    {
+      "internalName": "ImpasseMemoLink",
+      "displayName": "Impasse Memo Link",
+      "type": "URL",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows A6, B10; PFM 1A (12 Nov); DAFMAN 90-161 5.5.2"
+    },
+    {
+      "internalName": "FormJustification",
+      "displayName": "Form Justification",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B6; DAFMAN 90-161 8.10.1.2"
+    },
+    {
+      "internalName": "DataFieldsCollected",
+      "displayName": "Data Fields Collected",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B6; DAFMAN 90-161 8.10.1.2"
+    },
+    {
+      "internalName": "PrintingAndDistribution",
+      "displayName": "Printing and Distribution",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B6; DAFMAN 90-161 8.10.1.2"
+    },
+    {
+      "internalName": "AppliesToAFRUnit",
+      "displayName": "Applies to AFR Unit",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row A3 (Air Force Reserve, AFR)",
+      "description": "Whether the publication applies to a unit of the Air Force Reserve (AFR)."
+    },
+    {
+      "internalName": "DeviatesFromHHQ",
+      "displayName": "Deviates From HHQ",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B15; DAFMAN 90-161 1.5.4 (T-1; R10)",
+      "description": "Whether the publication deviates from a higher headquarters (HHQ) publication."
+    },
+    {
+      "internalName": "LessRestrictiveThanHHQ",
+      "displayName": "Less Restrictive Than HHQ",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B16; DAFMAN 90-161 1.5.4 (T-1; R10)",
+      "description": "Whether the publication is less restrictive than a higher headquarters (HHQ) publication."
+    },
+    {
+      "internalName": "ContainsCopyright",
+      "displayName": "Contains Copyright",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B13"
+    },
+    {
+      "internalName": "PrescribesPaperRecords",
+      "displayName": "Prescribes Paper Records",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: DAFMAN 90-161 7.1.4"
+    },
+    {
+      "internalName": "ContainsWaiver",
+      "displayName": "Contains Waiver",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row A17; DAFMAN 90-161 9.5.3"
+    },
+    {
+      "internalName": "PrivacyActWarningRequired",
+      "displayName": "Privacy Act Warning Required",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B12"
+    },
+    {
+      "internalName": "AgreementCitation",
+      "displayName": "Agreement Citation",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B15"
+    },
+    {
+      "internalName": "InformationCollection",
+      "displayName": "Information Collection",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B5; the action value is what the action proposes, a flow copies it to the product at posting (R6)",
+      "choices": [
+        "None",
+        "Internal",
+        "Public"
+      ]
+    },
+    {
+      "internalName": "AOIsContractor",
+      "displayName": "AO Is Contractor",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B14",
+      "description": "Whether the action officer (AO) is a contractor."
+    },
+    {
+      "internalName": "GovernmentDecisionMaker",
+      "displayName": "Government Decision Maker",
+      "type": "User",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B14"
+    },
+    {
+      "internalName": "AccessLevel",
+      "displayName": "Access Level",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B18; the action value is copied to the product at posting (R6)",
+      "choices": [
+        "Public",
+        "Restricted",
+        "CUI"
+      ],
+      "description": "Access marking. CUI is Controlled Unclassified Information (CUI)."
+    },
+    {
+      "internalName": "EffectiveDateJustification",
+      "displayName": "Effective Date Justification",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row A9 (future effective date)"
+    },
+    {
+      "internalName": "AllCommentsAdjudicated",
+      "displayName": "All Comments Adjudicated",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 3.3A; the AO confirms before Legal, the PFM spot-checks; DAFMAN 90-161 5.1.8.1"
+    },
+    {
+      "internalName": "LegalHold",
+      "displayName": "Legal Hold",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 4.6A; set by the PFM; stops the closeout deletion of Working Files; AFI 33-322 9.1.3"
+    },
+    {
+      "internalName": "DirectiveGuidanceMoved",
+      "displayName": "Directive Guidance Moved",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: Figure A5.1 note; gap row A16 (rescind gate)"
+    },
+    {
+      "internalName": "RetainedFormsRelinked",
+      "displayName": "Retained Forms Relinked",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: Figure A5.1 note; gap row A16 (rescind gate)"
+    },
+    {
+      "internalName": "Section508Checked",
+      "displayName": "Section 508 Checked",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B4; on both lists, a flow copies it to the product at posting (R6)"
+    },
+    {
+      "internalName": "GuidanceMemorandumJustification",
+      "displayName": "Guidance Memorandum Justification",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: DAFMAN 90-161 5.1.7 (T-1; R9)"
+    },
+    {
+      "internalName": "AlsoCertifiesCurrent",
+      "displayName": "Also Certifies Current",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: DAFMAN 90-161 7.5.3 (R11): an interim change that also certifies the publication current resets Last Certified Current Date"
+    },
+    {
+      "internalName": "AO1Email",
+      "displayName": "AO 1 E-Mail",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 3A (12 Nov); a flow writes it from AO; the app filters on it (a filter on a multi-person column is not delegable)",
+      "indexed": true,
+      "description": "E-mail address of the Action Officer (AO)."
+    },
+    {
+      "internalName": "AO2Email",
+      "displayName": "AO 2 E-Mail",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 3A (12 Nov); a flow writes it from AO; the app filters on it (a filter on a multi-person column is not delegable)",
+      "indexed": true,
+      "description": "E-mail address of the Action Officer (AO)."
+    },
+    {
+      "internalName": "AppliesToLevel",
+      "displayName": "Applies to Level",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 4A (12 Nov); Table A11.1 item 8; squadron and flight values are by analogy; sets the type check (N6) and the officials (N11)",
+      "choices": [
+        "Wing and Units Below",
+        "Wing Staff Only",
+        "Group and Units Below",
+        "Group Staff Only",
+        "Squadron and Units Below",
+        "Squadron Staff Only",
+        "Flight",
+        "Section"
+      ]
+    },
+    {
+      "internalName": "NeedAndAuthority",
+      "displayName": "Need and Authority",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3a: process-model N3-N5, N7; DAFMAN 90-161 3.1.2, 3.1.4, 3.1.8, 1.1.3.6.4"
+    },
+    {
+      "internalName": "ExistingGuidanceChecked",
+      "displayName": "Existing Guidance Checked",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3a: process-model N3-N5, N7; DAFMAN 90-161 3.1.2, 3.1.4, 3.1.8, 1.1.3.6.4"
+    },
+    {
+      "internalName": "ImplementsPDDirectly",
+      "displayName": "Implements PD Directly",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3a: process-model N3-N5, N7; DAFMAN 90-161 1.1.3.6.4",
+      "description": "Whether the publication implements a policy directive (PD) directly."
     }
   ],
   "views": [

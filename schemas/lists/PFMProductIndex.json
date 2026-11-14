@@ -69,7 +69,9 @@
       "displayName": "Publication Number",
       "type": "Text",
       "required": false,
-      "ref": "DAFMAN 90-161 6.4.2 (PI entries identify each publication)"
+      "ref": "DAFMAN 90-161 6.4.2 (PI entries identify each publication); enforces unique values (List design 2026-11-12 s3a, DAFMAN 90-161 4.3.2: one number per product)",
+      "unique": true,
+      "indexed": true
     },
     {
       "internalName": "PrescribingPublication",
@@ -122,7 +124,8 @@
         "Inactive",
         "Superseded",
         "Rescinded",
-        "Expired"
+        "Expired",
+        "In Development"
       ],
       "default": "Active",
       "ref": "Inactive = past the four-year periodic review without certify-as-current (DAFMAN 90-161 7.4.2; PFM 2026-11-11, the PFM's existing practice). Superseded and Rescinded trigger AFRIMS RDS T 33-38 R 07 for the record set (DAF Forms 673 and 399 and accompanying documentation); the publication and its index entry stay browsable. Expired = a guidance memorandum past its 1-year life (DAFMAN glossary \"obsolete\": rescinded, superseded or expired; 7.9.3); PFM 2026-11-11 (r7, design check decision 1A)"
@@ -182,6 +185,142 @@
       "type": "URL",
       "required": false,
       "ref": "DAFMAN 90-161 7.2.1; PFM 2026-11-11 (r7, design check decision 1A)"
+    },
+    {
+      "internalName": "EditionDate",
+      "displayName": "Edition Date",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows B2, B3"
+    },
+    {
+      "internalName": "Locked",
+      "displayName": "Locked",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap rows B2, B3"
+    },
+    {
+      "internalName": "FormType",
+      "displayName": "Form Type",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: DAFMAN 90-161 Table 8.1 (types and descriptions of forms)",
+      "choices": [
+        "Command or Field",
+        "Headquarters Unit",
+        "Office",
+        "One-Time",
+        "Test",
+        "Morale, Welfare, and Recreation"
+      ]
+    },
+    {
+      "internalName": "PrivacyActStatementIncluded",
+      "displayName": "Privacy Act Statement Included",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: DAFMAN 90-161 8.9.1.2"
+    },
+    {
+      "internalName": "InformationCollection",
+      "displayName": "Information Collection",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B5; the product value is the record after posting (R6)",
+      "choices": [
+        "None",
+        "Internal",
+        "Public"
+      ]
+    },
+    {
+      "internalName": "OMBNumber",
+      "displayName": "OMB Number",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B5",
+      "description": "Office of Management and Budget (OMB) control number."
+    },
+    {
+      "internalName": "OMBExpiration",
+      "displayName": "OMB Expiration",
+      "type": "DateTime",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B5",
+      "description": "Expiration date of the Office of Management and Budget (OMB) control number."
+    },
+    {
+      "internalName": "Markings",
+      "displayName": "Markings",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: DAFMAN 90-161 8.9.5 (classified left out, PFM 2026-11-11 decision 5)",
+      "choices": [
+        "None",
+        "CUI",
+        "Accountable",
+        "Safeguarded"
+      ],
+      "description": "Access marking. CUI is Controlled Unclassified Information (CUI)."
+    },
+    {
+      "internalName": "AccessLevel",
+      "displayName": "Access Level",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B18; the product value is the record after posting (R6)",
+      "choices": [
+        "Public",
+        "Restricted",
+        "CUI"
+      ],
+      "description": "Access marking. CUI is Controlled Unclassified Information (CUI)."
+    },
+    {
+      "internalName": "Section508Checked",
+      "displayName": "Section 508 Checked",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row B4; the product value is the record after posting (R6)"
+    },
+    {
+      "internalName": "ContainsWaiver",
+      "displayName": "Contains Waiver",
+      "type": "Boolean",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row A17; the product value is the record after posting (R6)"
+    },
+    {
+      "internalName": "AdoptedForms",
+      "displayName": "Adopted Forms",
+      "type": "Note",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: DAFMAN 90-161 8.8.2 (R7); designation, number, title"
+    },
+    {
+      "internalName": "Implements",
+      "displayName": "Implements",
+      "type": "Text",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: gap row A13; higher-headquarters publication numbers"
+    },
+    {
+      "internalName": "AppliesToLevel",
+      "displayName": "Applies to Level",
+      "type": "Choice",
+      "required": false,
+      "ref": "List design 2026-11-12 s3: PFM 4A (12 Nov); copied from the action at posting",
+      "choices": [
+        "Wing and Units Below",
+        "Wing Staff Only",
+        "Group and Units Below",
+        "Group Staff Only",
+        "Squadron and Units Below",
+        "Squadron Staff Only",
+        "Flight",
+        "Section"
+      ]
     }
   ],
   "views": [
@@ -227,7 +366,13 @@
         }
       ],
       "default": false,
-      "ref": "Users browse old products (PFM 2026-11-11: rescinded publications stay reviewable)"
+      "ref": "Users browse old products (PFM 2026-11-11: rescinded publications stay reviewable); List design 2026-11-12 s5a: not In Development",
+      "where": {
+        "field": "ProductStatus",
+        "op": "Neq",
+        "type": "Choice",
+        "value": "In Development"
+      }
     },
     {
       "name": "PFM - By Number",
@@ -263,7 +408,13 @@
         }
       ],
       "default": false,
-      "ref": "DAFMAN 90-161 7.4.2"
+      "ref": "DAFMAN 90-161 7.4.2; List design 2026-11-12 s5a: not In Development",
+      "where": {
+        "field": "ProductStatus",
+        "op": "Neq",
+        "type": "Choice",
+        "value": "In Development"
+      }
     },
     {
       "name": "PFM - Not Active",
@@ -287,7 +438,13 @@
         "value": "Active"
       },
       "default": false,
-      "ref": "Inactive, Superseded or Rescinded; record sets of Superseded or Rescinded products are due for destruction (T 33-38 R 07)"
+      "ref": "Inactive, Superseded or Rescinded; record sets of Superseded or Rescinded products are due for destruction (T 33-38 R 07); List design 2026-11-12 s5a: and Product Status is not In Development",
+      "andWhere": {
+        "field": "ProductStatus",
+        "op": "Neq",
+        "type": "Choice",
+        "value": "In Development"
+      }
     },
     {
       "name": "PFM - Prescribed Forms by Publication",

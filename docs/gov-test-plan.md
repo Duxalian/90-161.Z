@@ -8,7 +8,7 @@ Paste and run (PFM 2026-11-12; ISSM written approval): the round bundle `scripts
 
 Task folder (PFM, 2026-11-11): `C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T01`. Files the bundle writes (or, without the bundle, save from go.md raw links):
 
-- `scripts/gov/90161Z-T01-renderer-test-r8.ps1` (runner; `-Id` and `-NoPause` for the bundle)
+- `scripts/gov/90161Z-T01-renderer-test-r9.ps1` (runner; `-Id` and `-NoPause` for the bundle)
 - `scripts/gov/Publication.Common.ps1` (shared; must sit in the same folder)
 - `scripts/gov/Test-Publication.ps1`
 - `scripts/gov/New-Publication.ps1`
@@ -16,7 +16,7 @@ Task folder (PFM, 2026-11-11): `C:\Users\<DODID>\OneDrive - United States Air Fo
 
 ## Run
 
-Without the bundle: in File Explorer, right-click `90161Z-T01-renderer-test-r8.ps1` > **Run with PowerShell**. No path is typed, so the "-File ... does not exist" error cannot occur.
+Without the bundle: in File Explorer, right-click `90161Z-T01-renderer-test-r9.ps1` > **Run with PowerShell**. No path is typed, so the "-File ... does not exist" error cannot occur.
 
 1. It asks for the DODID. Type it, or press Enter to use this computer's profile folder (`C:\Users\<that folder>`).
 2. It goes to the T01 folder, checks the 4 other files are there, unblocks the scripts, and runs: validator, draft render, final render with PDF.
@@ -51,7 +51,7 @@ Report any check that fails with what you see. No real content is needed: the sa
 
 Goal: GenAI.mil turns a messy draft into content JSON, and the Task 1 renderer builds the publication from it.
 
-Files (T06 folder): `prompts/90161Z-T06-extract-prompt-r2.txt` (the prompt; r2 removes (T-3) in wing publications, M8), `samples/90161Z-T06-messy-draft-r1.docx` (fake draft, built by `scripts/build_messy_draft.py`), `scripts/gov/90161Z-T06-extract-test-r2.ps1` (runner; uses the renderer scripts in the T01 folder, so Task 1 r5 first).
+Files (T06 folder): `prompts/90161Z-T06-extract-prompt-r2.txt` (the prompt; r2 removes (T-3) in wing publications, M8), `samples/90161Z-T06-messy-draft-r1.docx` (fake draft, built by `scripts/build_messy_draft.py`), `scripts/gov/90161Z-T06-extract-test-r3.ps1` (runner; uses the renderer scripts in the T01 folder, so Task 1 r5 first).
 
 | # | Check | Pass |
 |---|---|---|
@@ -62,7 +62,7 @@ Files (T06 folder): `prompts/90161Z-T06-extract-prompt-r2.txt` (the prompt; r2 r
 
 ## Task 7: seals (r3)
 
-Part A uses 4 fake seals from `scripts/build_test_seals.py` (EXPECTED there). No current round bundle holds Part A (the T07 paste bundle was retired with the R rounds); a later round adds it. `90161Z-T07-seal-test-r3.ps1` runs the seal prep, then renders the T01 sample with the tall and the round prepared seal.
+Part A uses 4 fake seals from `scripts/build_test_seals.py` (EXPECTED there). No current round bundle holds Part A (the T07 paste bundle was retired with the R rounds); a later round adds it. `90161Z-T07-seal-test-r4.ps1` runs the seal prep, then renders the T01 sample with the tall and the round prepared seal.
 
 | # | Check | Pass |
 |---|---|---|

@@ -162,7 +162,7 @@ Key for "Covered by": PM = docs/process-model.md; LD = docs/reviews/2026-11-12-l
 | 1.5.2 | 957 | Limit publication and printing of hard copy; redesign processes to be electronic | T-0 | all | Yes | LD:30 (Printing And Distribution for forms); LD:31 (Prescribes Paper Records) | Partial |
 | 1.5.3 | 966 | A FOIA specialist reviews DAF publications before publication | T-1 | coordinator | Yes | PM:42; DEC:16 (FOIA mandatory row); GC:10 A1 | Covered |
 | 1.5.4 | 975 | OPRs ensure each publication and form has a Privacy Act warning statement when necessary | T-1 | OPR | Yes | LD:31 (Privacy Act Warning Required); GC:55 B12; FR:50 F-025 | Covered |
-| 1.5.5 | 983 | The DAF notifies the public in the Federal Register of publications affecting the public (AFI 33-320) | - | HQ DAF | Partial (only if a wing publication affects the public) | - | Gap |
+| 1.5.5 | 983 | The DAF notifies the public in the Federal Register of publications affecting the public (AFI 33-320) | - | HQ DAF | Partial (only if a wing publication affects the public) | PFM S4 (14 Nov 26): N/A, see docs/reviews/2026-11-13-coverage-gap-sweep.md | N/A |
 | 1.5.6 | 986 | Use copyrighted material per AFI 51-303; permission cites releasability limits; model statement in 4.5.5.4 | - | OPR | Yes | LD:31 (Contains Copyright); GC:56 B13; FR:50 F-025 (copyright) | Covered |
 | 1.5.6.1 | 990 | OPR documents on DAF Form 673 (Additional Information block) that the draft has copyrighted material | T-1 | OPR | Yes | LD:31 (Contains Copyright); GC:56 B13 | Covered |
 | 1.5.6.2 | 993 | Title page bottom, centered, bold capitals: THIS PUBLICATION CONTAINS COPYRIGHTED MATERIAL | - | OPR | Yes | FR:50 F-025 covers the opening statement only; title-page line: Renderer gap | Renderer |
@@ -213,7 +213,7 @@ Key for "Covered by": PM = docs/process-model.md; LD = docs/reviews/2026-11-12-l
 | 2.3.3 | 1170 | Appoint an OAR for controlled publications and forms; commander signs DAF Form 1846 | - | commander | No (OAR/commander task, not PFM-tracked; DEC:42 item 5) | DEC:42 | N/A |
 | 2.4 | 1177 | PCM is the organization's lead for publications change management; appointment only required at HQ DAF | - | PCM | Partial (optional at wing) | LD:43 (PCM optional) | Covered |
 | 2.4.1 | 1183 | PCM works with the AO so publications implement DoD issuances promptly | - | PCM | Partial (only if wing has a PCM) | LD:43 | Info |
-| 2.4.2 | 1186 | PCM assists the AO on needed changes, courses of action, risk priority 1-4, impact, tiering, coordination | - | PCM | Partial (only if wing has a PCM) | no risk priority field | Gap |
+| 2.4.2 | 1186 | PCM assists the AO on needed changes, courses of action, risk priority 1-4, impact, tiering, coordination | - | PCM | Partial (only if wing has a PCM) | PFM S4 (14 Nov 26): N/A, see docs/reviews/2026-11-13-coverage-gap-sweep.md | N/A |
 | 2.4.3 | 1190 | PCM has experience and authority to assess and manage content and mission risk | - | PCM | Partial (only if wing has a PCM) | - | Info |
 | 2.4.4 | 1193 | PCM liaises with the risk management process manager (AFI 90-802) | - | PCM | Partial (only if wing has a PCM) | - | Info |
 | 2.4.5 | 1197 | PCM is focal point for content and mission-related change issues | - | PCM | Partial (only if wing has a PCM) | LD:43 | Info |

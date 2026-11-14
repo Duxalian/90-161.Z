@@ -45,25 +45,30 @@ def field_xml(f):
     elif t == 'DateTime': a += ['Type="DateTime"', 'Format="DateOnly"']
     elif t == 'URL': a += ['Type="URL"', 'Format="Hyperlink"']
     elif t == 'Choice':
-        a += ['Type="Choice"']
+        a += ['Type="MultiChoice"' if f.get('multi') else 'Type="Choice"']
         inner = '<CHOICES>' + ''.join(f'<CHOICE>{escape(c)}</CHOICE>' for c in f['choices']) + '</CHOICES>'
     elif t == 'Lookup':
         a += ['Type="Lookup"', 'List="{__%s_ID__}"' % f['lookup']['list'],
               f'ShowField={quoteattr(f["lookup"].get("showField", "Title"))}']
-    elif t == 'User': a += ['Type="User"', 'UserSelectionMode="PeopleOnly"', 'UserSelectionScope="0"']
+    elif t == 'User': a += (['Type="UserMulti"', 'Mult="TRUE"'] if f.get('multi') else ['Type="User"']) + ['UserSelectionMode="PeopleOnly"', 'UserSelectionScope="0"']
     elif t == 'Number': a += ['Type="Number"', 'Decimals="0"']  # whole numbers: series, order, step
     elif t in ('Text', 'Boolean'): a += [f'Type="{t}"']
     else: sys.exit(f'unsupported field type {t}')
-    if f.get('indexed'): a += ['Indexed="TRUE"']
+    if f.get('indexed') or f.get('unique'): a += ['Indexed="TRUE"']
+    if f.get('unique'): a += ['EnforceUniqueValues="TRUE"']  # SharePoint needs the column indexed for this
     if f.get('default') not in (None, ''):
         inner += f'<Default>{escape(str(f["default"]))}</Default>'
     return '<Field ' + ' '.join(a) + '>' + inner + '</Field>'
 
 def view_query(v):
     q = ''
-    w = v.get('where')
-    if w:
-        q += f'<Where><{w["op"]}><FieldRef Name={quoteattr(w["field"])}/><Value Type={quoteattr(w["type"])}>{escape(str(w["value"]))}</Value></{w["op"]}></Where>'
+    def cond(w):
+        return f'<{w["op"]}><FieldRef Name={quoteattr(w["field"])}/><Value Type={quoteattr(w["type"])}>{escape(str(w["value"]))}</Value></{w["op"]}>'
+    w, w2 = v.get('where'), v.get('andWhere')
+    if w and w2:
+        q += '<Where><And>' + cond(w) + cond(w2) + '</And></Where>'
+    elif w:
+        q += '<Where>' + cond(w) + '</Where>'
     if v.get('groupBy'):
         q += f'<GroupBy Collapse="FALSE"><FieldRef Name={quoteattr(v["groupBy"])}/></GroupBy>'
     if v.get('orderBy'):
@@ -104,9 +109,12 @@ def build():
         if t and t['displayName'] != 'Title':
             updates.append({'method': 'MERGE', 'uri': base + "/fields/getbyinternalnameortitle('Title')",
                             'body': {'__metadata': {'type': 'SP.Field'}, 'Title': t['displayName']}})
+        multi = {f['internalName'] for f in s['fields'] if f.get('multi') and f['type'] == 'Choice'}
         for row in s.get('seed', []) or []:
             item = {'__metadata': {'type': f'SP.Data.{name}ListItem'}}
             item.update(row)
+            for k in multi & set(row):  # a multi-choice value goes as a string collection (SharePoint REST, verbose JSON)
+                item[k] = {'__metadata': {'type': 'Collection(Edm.String)'}, 'results': list(row[k])}
             (rows if s.get('seedOnProvision') else seed).append({'method': 'POST', 'uri': base + '/items', 'body': item})
     for name in order(schemas):  # list titles last (see docstring)
         updates.append({'method': 'MERGE', 'uri': f'_api/web/lists/getbytitle({lit(name)})',
