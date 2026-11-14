@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R15, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = '2771331d'
+$buildId = '2838b248'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R15'
 $usersRoot = 'C:\Users'
@@ -3851,6 +3851,10 @@ try {
 '@
 $rightWords = @{ ViewListItems = 'read items'; AddListItems = 'add items'; EditListItems = 'edit items'; ManageLists = 'manage lists'; ManageWeb = 'manage the site'; ManagePermissions = 'manage permissions' }
 $rightsNeeded = @('ManageLists', 'ManageWeb', 'ManagePermissions')   # what T16 site setup and list set-up use
+function Split-Sentence([string]$Text) {
+  # One sentence per line on screen (PFM 14 Nov 26): a break after . ! or ? when a capital, a quote or a bracket follows.
+  return ($Text -replace '(?<=[.!?])\s+(?=[A-Z"\[])', "`r`n")
+}
 function Format-CheckResult([string]$State, [string]$Detail, [string]$Fix) {
   # Text rule (PFM 14 Nov 26): sentences start with a capital and end with a full stop. Names on the screen (buttons,
   # menus) are in "double quotes"; literal values the computer reports (versions, codes, error names) are in [brackets].
@@ -4089,9 +4093,9 @@ if ($gui) {
     $form.SuspendLayout()
     $form.AutoScaleDimensions = New-Object System.Drawing.SizeF(96, 96); $form.AutoScaleMode = 'Dpi'   # sizes below are at 100 % scaling
     $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
-    $form.ClientSize = New-Object System.Drawing.Size(940, 740); $form.MinimumSize = New-Object System.Drawing.Size(680, 540)
+    $form.ClientSize = New-Object System.Drawing.Size(1120, 760)   # wider: less wrapping (PFM 14 Nov 26); $form.MinimumSize = New-Object System.Drawing.Size(680, 540)
     $form.StartPosition = 'CenterScreen'; $form.KeyPreview = $true
-    $wrap = New-Object System.Drawing.Size(880, 0)
+    $wrap = New-Object System.Drawing.Size(1060, 0)
     $grid = & $mkRows @('AutoSize', 'AutoSize', 'Percent', 'AutoSize')
     $grid.Padding = New-Object System.Windows.Forms.Padding(10)
     # Header on every screen: where you are (screen k of 3), last round, newer round.
@@ -4140,10 +4144,19 @@ if ($gui) {
     $siteBox.Width = 520; $siteBox.Text = Get-SiteUrl $basePath; if (-not $siteBox.Text) { $siteBox.Text = $sitePrefix }   # PFM 14 Nov 26: start the box with the DAF SharePoint address
     $siteBox.Add_GotFocus({ $siteBox.SelectionStart = $siteBox.Text.Length; $siteBox.SelectionLength = 0 }); $siteBox.AccessibleName = 'Site address, starts with https://'
     $sitePanel.Controls.AddRange(@($siteLabel, $siteBox))
-    $checkView = New-Object System.Windows.Forms.ListView
-    $checkView.View = 'Details'; $checkView.FullRowSelect = $true; $checkView.HideSelection = $false; $checkView.Dock = 'Fill'; $checkView.ShowItemToolTips = $true
+    # A grid, not a list view: rows grow so each sentence of the details sits on its own line (PFM 14 Nov 26). The Result
+    # column has a fixed width, so it does not move while checks run.
+    $checkView = New-Object System.Windows.Forms.DataGridView
+    $checkView.Dock = 'Fill'; $checkView.ReadOnly = $true; $checkView.AllowUserToAddRows = $false; $checkView.AllowUserToDeleteRows = $false
+    $checkView.AllowUserToResizeRows = $false; $checkView.RowHeadersVisible = $false; $checkView.SelectionMode = 'FullRowSelect'; $checkView.MultiSelect = $false
+    $checkView.AutoSizeRowsMode = 'AllCells'; $checkView.ColumnHeadersHeightSizeMode = 'AutoSize'; $checkView.BorderStyle = 'FixedSingle'
     $checkView.AccessibleName = 'Check results'
-    foreach ($h in 'Check', 'Result', 'Details') { [void]$checkView.Columns.Add($h) }
+    try { $checkView.BackgroundColor = [System.Drawing.SystemColors]::Window; $checkView.DefaultCellStyle.WrapMode = 'True'
+      $checkView.DefaultCellStyle.SelectionBackColor = [System.Drawing.SystemColors]::Window; $checkView.DefaultCellStyle.SelectionForeColor = [System.Drawing.SystemColors]::WindowText } catch { $null = $_ }
+    foreach ($h in @(@('Check', 36), @('Result', 0), @('Details', 64))) {
+      $ci = $checkView.Columns.Add($h[0], $h[0]); $col = $checkView.Columns[$ci]; $col.SortMode = 'NotSortable'
+      if ($h[1]) { $col.AutoSizeMode = 'Fill'; $col.FillWeight = $h[1] } else { $col.AutoSizeMode = 'None'; $col.Width = 96 }
+    }
     $checkBtns = New-Object System.Windows.Forms.FlowLayoutPanel
     $checkBtns.AutoSize = $true; $checkBtns.WrapContents = $true; $checkBtns.Dock = 'Fill'
     $againB = & $mkButton 'Run checks again'
@@ -4231,18 +4244,18 @@ if ($gui) {
       $log.Text = (($howTo + $first.Lines) -join "`r`n") + "`r`n"
     }
     $setRow = { param([int]$I, $R)
-      $it = $checkView.Items[$I]
-      $it.SubItems[1].Text = $R.State
-      $it.SubItems[2].Text = $R.Detail + $(if ($R.Fix) { '. ' + $R.Fix } else { '' })
-      $it.ToolTipText = $it.SubItems[2].Text
-      try { $it.UseItemStyleForSubItems = $false; $it.SubItems[1].ForeColor = Get-CheckColor $R.State } catch { $null = $_ }
+      $row = $checkView.Rows[$I]
+      $row.Cells[1].Value = $R.State
+      $row.Cells[2].Value = Split-Sentence ($R.Detail + $(if ($R.Fix) { ' ' + $R.Fix } else { '' }))
+      try { $k = Get-CheckColor $R.State; $row.Cells[1].Style.ForeColor = $k; $row.Cells[1].Style.SelectionForeColor = $k } catch { $null = $_ }
       [System.Windows.Forms.Application]::DoEvents() }
     $showCheckState = {
       $c = @{ PASSED = 0; WARNING = 0; FAILED = 0; 'NOT RUN' = 0 }
       foreach ($id in $script:appChecks) { $r = $script:checkResults[$id]; if ($r) { $c[$r.State]++ } else { $c['NOT RUN']++ } }
       $block = Get-CheckBlock $script:checkResults
-      $checkStatus.Text = 'Passed ' + $c.PASSED + ', warnings ' + $c.WARNING + ', failed ' + $c.FAILED + ', not run ' + $c['NOT RUN'] + '.   ' +
+      $checkStatus.Text = 'Passed ' + $c.PASSED + ', warnings ' + $c.WARNING + ', failed ' + $c.FAILED + ', not run ' + $c['NOT RUN'] + '.' + "`r`n" +
         $(if ($c.FAILED) { 'You cannot deploy yet. Fix each check marked FAILED, then select "Run checks again".' } elseif ($block) { 'You cannot deploy yet. Run the checks marked NOT RUN (use the buttons above).' } else { 'All checks passed. Press Enter or select "Next: deploy".' })
+      $checkStatus.Text = Split-Sentence $checkStatus.Text
       try { $checkStatus.ForeColor = Get-CheckColor $(if ($block) { 'FAILED' } elseif ($c.WARNING) { 'WARNING' } else { 'PASSED' }) } catch { $null = $_ }
       $next.Enabled = (-not $block) }
     $runChecks = { param([string[]]$Kinds, [string[]]$Only)
@@ -4266,22 +4279,18 @@ if ($gui) {
       } }
     $fillChecks = {
       $checkHead.Text = 'Check that you can deploy ' + $script:app.Name
-      $checkView.Items.Clear()
-      foreach ($id in $script:appChecks) {
-        $d = Get-CheckDef $id
-        $it = New-Object System.Windows.Forms.ListViewItem($d.Group + ': ' + $d.Name)
-        $wait = $(if ($d.Kind -eq 'signin') { 'Select "Sign in and check site rights". You sign in with your CAC. Nothing is changed.' } elseif ($d.Kind -eq 'guide') { 'Select "Check Power Automate". You look and answer.' } else { 'waiting' })
-        [void]$it.SubItems.Add('NOT RUN'); [void]$it.SubItems.Add($wait)
-        try { $it.UseItemStyleForSubItems = $false; $it.SubItems[1].ForeColor = Get-CheckColor 'NOT RUN' } catch { $null = $_ }
-        [void]$checkView.Items.Add($it)
+      $checkView.Rows.Clear()
+      for ($i = 0; $i -lt $script:appChecks.Count; $i++) {
+        $d = Get-CheckDef $script:appChecks[$i]
+        $wait = $(if ($d.Kind -eq 'signin') { 'Select "Sign in and check site rights". You sign in with your CAC. Nothing is changed.' } elseif ($d.Kind -eq 'guide') { 'Select "Check Power Automate". You look and answer.' } else { 'Waiting.' })
+        [void]$checkView.Rows.Add([object[]]@(($d.Group + ': ' + $d.Name), 'NOT RUN', (Split-Sentence $wait)))
+        try { $k = Get-CheckColor 'NOT RUN'; $checkView.Rows[$i].Cells[1].Style.ForeColor = $k; $checkView.Rows[$i].Cells[1].Style.SelectionForeColor = $k } catch { $null = $_ }
       }
+      $checkView.ClearSelection()
       $needSite = [bool](@($script:appChecks | Where-Object { $_ -in 'net-site', 'site-rights' }).Count)
       $sitePanel.Visible = $needSite
       $rightsB.Visible = ($script:appChecks -contains 'site-rights')
       $flowB.Visible = ($script:appChecks -contains 'flow-guide') }
-    $sizeColumns = {
-      $w = $checkView.ClientSize.Width
-      if ($w -gt 200) { $checkView.Columns[0].Width = [int]($w * 0.34); $checkView.Columns[1].Width = [int]($w * 0.12); $checkView.Columns[2].Width = $w - $checkView.Columns[0].Width - $checkView.Columns[1].Width - 4 } }
     $showScreen = { param([int]$I)
       $script:screen = $I
       $pChoose.Visible = ($I -eq 0); $pCheck.Visible = ($I -eq 1); $pDeploy.Visible = ($I -eq 2)
@@ -4291,7 +4300,6 @@ if ($gui) {
       if ($I -eq 0) { $form.AcceptButton = $next; $appList.Focus() | Out-Null }
       if ($I -eq 1) {
         $form.AcceptButton = $next
-        & $sizeColumns
         if ($sitePanel.Visible -and -not (Test-SiteUrl $siteBox.Text.Trim())) { $siteBox.Focus() | Out-Null } else { $next.Focus() | Out-Null }
       }
       if ($I -eq 2) {
@@ -4299,7 +4307,7 @@ if ($gui) {
         $form.AcceptButton = $run
         if ($toBox.Text) { $run.Focus() | Out-Null } else { $toBox.Focus() | Out-Null }
       } }
-    $appList.Add_SelectedIndexChanged({ if ($appList.SelectedIndex -ge 0) { Select-App $appList.SelectedIndex; $t = Get-AppText $script:app $hist0; $appInfo.Text = $t.Summary; $appMeta.Text = $t.Meta } })
+    $appList.Add_SelectedIndexChanged({ if ($appList.SelectedIndex -ge 0) { Select-App $appList.SelectedIndex; $t = Get-AppText $script:app $hist0; $appInfo.Text = Split-Sentence $t.Summary; $appMeta.Text = $t.Meta } })
     $appList.Add_DoubleClick({ $next.PerformClick() })
     $next.Add_Click({
       if ($script:screen -eq 0) { & $fillChecks; & $showScreen 1; & $runChecks @('auto') @(); & $showScreen 1; return }
@@ -4309,7 +4317,8 @@ if ($gui) {
     $againB.Add_Click({ & $runChecks @('auto') @() })
     $rightsB.Add_Click({ & $runChecks @('signin') @('site-rights') })
     $flowB.Add_Click({ & $runChecks @('guide') @('flow-guide') })
-    $checkView.Add_Resize({ & $sizeColumns })
+    # Enter in the grid moves on, as elsewhere (the grid would move to the next row).
+    $checkView.Add_KeyDown({ if ($_.KeyCode -eq 'Return') { $_.Handled = $true; $_.SuppressKeyPress = $true; if ($next.Enabled) { $next.PerformClick() } } })
     # Enter in a box moves on instead of acting (review R06 #3: a stray Enter must not start a cleanup).
     $siteBox.Add_Enter({ $form.AcceptButton = $null })
     $siteBox.Add_Leave({ $form.AcceptButton = $next })
