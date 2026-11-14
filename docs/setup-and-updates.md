@@ -16,7 +16,7 @@ The app cannot check rights before it exists, so setup has 4 parts. Each part st
 | Part | What runs | Where | Result |
 |---|---|---|---|
 | 0. Preflight | Flow "90161Z Setup Check" (imported first, alone) | Power Automate | A report of each right: PASS, MISSING (with the request text) or UNKNOWN (with the manual check) |
-| 1. Lists | Provisioning flow (T02 r10 and later) | Power Automate | Lists, columns, views, seed rows; Schema Version row in PFM Settings |
+| 1. Lists | Provisioning flow (T02 r11 and later) | Power Automate | Lists, columns, views, seed rows; Schema Version row in PFM Settings |
 | 2. App and flows | Solution or package import; connections made by the installer | Power Apps | App and flows bound to the wing's site |
 | 3. First-run setup | Setup screen in the app, shown while PFM Settings "Setup Complete" = No | Power Apps | Wing values entered and checked; self-test; Setup Complete = Yes |
 

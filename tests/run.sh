@@ -155,8 +155,14 @@ for i, r in enumerate(p['updates']):
 for i, r in enumerate(p['updates']):
     for u, j in renamed.items():
         assert not (r['uri'].startswith(u + '/') and i > j), 'request uses a list title after its rename'
-for k in ('Create_Lists', 'Create_Fields_And_Views', 'Add_Rows', 'Apply_Updates'):
+for k in ('Create_Lists', 'Create_Fields_And_Views', 'Add_Rows', 'Apply_Updates', 'Set_Item_Permissions'):
     assert d[k]['runtimeConfiguration']['concurrency']['repetitions'] == 1, k
+# Item-level permissions (PFM 10A, in the flow from r11): after the titles, by display title, a refusal still reaches Result
+perm = p['permissions']
+assert sorted(r['uri'] for r in perm) == ["_api/web/lists/getbytitle('PFM%20Endorsements')", "_api/web/lists/getbytitle('PFM%20Publications')"], perm
+assert all(r['body']['ReadSecurity'] == 1 and r['body']['WriteSecurity'] == 2 for r in perm)
+assert d['Set_Item_Permissions']['runAfter'] == {'Apply_Updates': ['Succeeded']} and d['Set_Item_Permissions']['foreach'] == "@outputs('Payload')?['permissions']"
+assert d['Result']['runAfter'] == {'Set_Item_Permissions': ['Succeeded', 'Failed']} and 'NOT SET' in d['Result']['inputs']
 PY
 
 python3 - <<'PY' && ok "r7 schema rules (DAFMAN design check 2026-11-11)" || bad "r7 schema rules"

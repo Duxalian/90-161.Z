@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 13 Nov 26 (Round R09: inventory, Task 11 form, Task 9 collector; task scripts without the DODID question). Bookmark on my work computer (clickable links):
+Updated: 14 Nov 26 (Task 2 r11: the 12 lists on the new site; Task 8 is now step 7 of Task 2; Tasks 11 and 14 use the new site). Bookmark on my work computer (clickable links):
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -50,17 +50,36 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/2704ec23c8e81de39315f823f0c
 **Report:** the draft itself; Claude watches the inbox for the subject.
 **If it fails:** read the WHAT TO DO line in the window. A FETCH FAIL line: save that file from its task below. If the window does not open, let the text run finish and send the draft: the report names the cause.
 
+## Task 2: create the 12 lists on the new site, r11 (open, 14 Nov 26)
+
+**For:** builds all 12 PFM lists, their columns, views and starting rows on the new site (decided 14 Nov 26), and sets "edit own rows" on PFM Publications and PFM Endorsements (this replaces the old Task 8).
+**Time:** about 20 minutes (estimate): 5 to import, about 15 for the run.
+Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T02
+**Changes:** imports one flow into my Power Automate. On the new site only: creates 12 lists named PFM ..., adds 88 rows (series, settings, offices, process steps) changes the item-level permissions of 2 of those lists, and (step 8, by hand) sets the site time zone to Central. Nothing on the old site. Nothing runs on the computer.
+Steps:
+1. Save this file into the T02 folder (steps in "How a download task works"):
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r11.zip
+2. Power Automate: My flows > Import > Import Package (Legacy). Pick the file. For the SharePoint connection, pick my existing one. Import.
+3. Open the new site. Copy its address from the address bar (up to and including the site name, nothing after it).
+4. Run "90161Z T02 Provision Lists r11". Site URL: paste the address. Run once only.
+5. Wait until the run shows Succeeded (about 15 minutes). Open the step Result.
+6. Result must say "Lists: 12, fields and views: 329, rows: 88, updates: 21. Provisioning finished. Item-level permissions: set on 2 lists."
+7. Only if Result says "Item-level permissions: NOT SET": open PFM Publications > Settings (gear) > List settings > Advanced settings > Item-level Permissions. Read access: Read all items. Create and Edit access: Create items and edit items that were created by the user. OK. Do the same for PFM Endorsements.
+8. Site settings (gear) > Site information > View all site settings > Regional settings: Time zone (UTC-06:00) Central Time. OK.
+**Report:** reply "T02 done" and the Result text from step 6 (it holds counts only, no names).
+**If it fails:** do not run it again on top. Send only the failed step's name, its HTTP status and error code (for example 400 / -2130575342), no addresses. Claude then sends the clean-up steps (delete the PFM lists and empty the recycle bin) before a second run.
+
 ## Task 14: site logo, r1 (open, 13 Nov 26)
 
 **For:** puts the 90-161.Z logo (woven squares with a ρ) on the SharePoint site header. White and light blue, made for a blue background.
 **Time:** about 5 minutes (estimate).
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T14
-**Changes:** saves 2 picture files into T14. On the site it changes only the logo and the logo thumbnail. Nothing runs on the computer. Needs site owner rights; without them, send the 2 files to a site owner.
+**Changes:** saves 2 picture files into T14. On the new site (the one Task 2 fills) it changes only the logo and the logo thumbnail. Nothing runs on the computer. Needs site owner rights; without them, send the 2 files to a site owner.
 Steps:
 1. The current round (R08 or later) saves these 2 files into the T14 folder. Without a round, save them (steps in "How a download task works"):
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14-site-logo-r1.png
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14-site-logo-tile-r1.png
-2. Open the site. Click the gear (Settings), then Change the look, then Header.
+2. Open the new site. Click the gear (Settings), then Change the look, then Header.
 3. Under Site logo thumbnail, click Change and pick 90161Z-T14-site-logo-tile-r1.png (the logo on a blue square).
 4. Under Site logo, click Change and pick 90161Z-T14-site-logo-r1.png (clear background). Click Save.
 5. Look at the header. If the logo is hard to see (the header is white or light), set Site logo to 90161Z-T14-site-logo-tile-r1.png as well, then Save.
@@ -77,26 +96,13 @@ Part B runs as a form in Round R09 (check "T11 Part B"); the rows below are the 
 1. Save this file into the T11 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T11-rights-probe-r1.zip
 2. Power Automate: My flows > Import > Import Package (Legacy). Pick the file. For the SharePoint connection, pick my existing one. Import.
-3. Run "90161Z T11 Rights Probe r1". Site address: the site with the PFM lists. Coworker e-mail: one regular member of that site (not an owner). Wing group e-mail: the group that gives wing members access, if it has an e-mail address.
+3. Do this after Task 2. Run "90161Z T11 Rights Probe r1". Site address: the new site (the one Task 2 filled). Coworker e-mail: one regular member of that site (not an owner). Wing group e-mail: the group that gives wing members access, if it has an e-mail address.
 4. When the run ends, open the site's Documents library and download 90161Z-T11-rights-result-r1.json.
 Part B, manual checks:
 5. Open this page, go to section 6 and write down what each row asks for:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/rights-test-plan.md
 Report: one e-mail, subject "90161Z T11 r1": the result file and my Part B notes. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
 **If it fails:** if the run stops early, delete anything named "PFM Rights Probe ..." by hand and send the name of the step that failed and its error text (no names).
-
-## Task 8: edit own rows only, r1 (open, 11 Nov 26)
-
-**For:** sets the decided rule (10A): everyone reads all rows; on two lists, people edit only the rows they created.
-**Time:** about 10 minutes (estimate).
-**Changes:** changes one setting on two lists on the real site: PFM Publications and PFM Endorsements. To undo, set it back to "Create and edit all items".
-Steps:
-1. On the real site, open PFM Publications. Settings (gear) > List settings > Advanced settings.
-2. Item-level Permissions. Read access: Read all items. Create and Edit access: Create items and edit items that were created by the user. Select OK.
-3. Do the same for PFM Endorsements. Leave the other seven lists as they are.
-4. Check: as a site member who is not an owner (or ask one), open PFM Publications. A row that person did not create shows no Edit.
-Report: reply "Task 8 done" and the step 4 result (Edit shown or not shown).
-**If it fails:** if Advanced settings has no Item-level Permissions, reply with what the page shows instead.
 
 ## Task 10: decision briefs, r5 (open, 12 Nov 26)
 

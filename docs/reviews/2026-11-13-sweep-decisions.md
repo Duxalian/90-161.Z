@@ -2,7 +2,7 @@
 
 Answered 14 Nov 26: S1 = the lists go on a new site, so T02 r10 builds all 12 from scratch (no upgrade flow; the PFM first chose A, then said the site is new); S4 confirm all 33, S5 item 1 A, R09 live. Still open: S2, S3, S5 items 3-15, S6 (AGENTS.md lines, T09 allow entry), S7.
 
-Everything in draft PR rhope-ops/90-161.Z#10 that needs the PFM. Nothing in the PR is live until the PFM approves it. Each "Rec" is Claude's recommendation, not a decision. Answer by number (for example "S1 A, S2 approve, S5 all Rec").
+Written for PR rhope-ops/90-161.Z#10 (merged 13 Nov 26). The open items below still need the PFM. Each "Rec" is Claude's recommendation, not a decision. Answer by number (for example "S1 A, S2 approve, S5 all Rec").
 
 ## S1. T02 r10 on the live site (highest impact)
 

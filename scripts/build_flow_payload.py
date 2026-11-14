@@ -10,6 +10,8 @@ Output: flow/provisioning-payload.json with arrays the flow sends in order:
   rows    - rows the flow adds after fields and views, before updates (lists with "seedOnProvision": true,
             e.g. PFM Series from DAFMAN Table A2.1)
   seed    - optional rows of other lists (Process Steps: process model is draft); not sent by the flow
+  permissions - MERGE ReadSecurity/WriteSecurity on lists with "itemLevelPermissions" (PFM 10A), by display
+            title, after updates in their own loop; the flow reports a refusal instead of failing (T02 r11)
 Every request is a SharePoint REST call relative to the site: {"method", "uri", "body"}.
 Do not hand-edit the output. Change the schemas and run: python3 scripts/build_flow_payload.py
 """
@@ -119,11 +121,16 @@ def build():
     for name in order(schemas):  # list titles last (see docstring)
         updates.append({'method': 'MERGE', 'uri': f'_api/web/lists/getbytitle({lit(name)})',
                         'body': {'__metadata': {'type': 'SP.List'}, 'Title': schemas[name]['title']}})
-    for r in lists + fields + updates + rows + seed:  # view titles have spaces; never rely on the connector to encode them
+    # Item-level permissions (PFM 10A; in the flow from T02 r11): after the titles, by display title, in their own loop so a refusal does not stop the run
+    permissions = [{'method': 'MERGE', 'uri': f'_api/web/lists/getbytitle({lit(schemas[n]["title"])})',
+                    'body': {'__metadata': {'type': 'SP.List'}, 'ReadSecurity': schemas[n]['itemLevelPermissions']['read'],
+                             'WriteSecurity': schemas[n]['itemLevelPermissions']['write']}}
+                   for n in order(schemas) if 'itemLevelPermissions' in schemas[n]]
+    for r in lists + fields + updates + rows + seed + permissions:  # view titles have spaces; never rely on the connector to encode them
         r['uri'] = r['uri'].replace(' ', '%20')
     return {'generatedFrom': 'schemas/lists/*.json', 'listOrder': order(schemas),
             'lookupPlaceholders': sorted({f['lookup']['list'] for s in schemas.values() for f in s['fields'] if f['type'] == 'Lookup'}),
-            'lists': lists, 'fields': fields, 'rows': rows, 'updates': updates, 'seed': seed}
+            'lists': lists, 'fields': fields, 'rows': rows, 'updates': updates, 'seed': seed, 'permissions': permissions}
 
 if __name__ == '__main__':
     out = build()
@@ -133,4 +140,4 @@ if __name__ == '__main__':
         ok = os.path.exists(path) and open(path, encoding='utf-8').read() == text
         print('PAYLOAD up to date' if ok else 'PAYLOAD stale: run scripts/build_flow_payload.py'); sys.exit(0 if ok else 1)
     open(path, 'w', encoding='utf-8').write(text)
-    print(f"PAYLOAD lists={len(out['lists'])} fieldsAndViews={len(out['fields'])} rows={len(out['rows'])} updates={len(out['updates'])} seed={len(out['seed'])} order={','.join(out['listOrder'])}")
+    print(f"PAYLOAD lists={len(out['lists'])} fieldsAndViews={len(out['fields'])} rows={len(out['rows'])} updates={len(out['updates'])} seed={len(out['seed'])} permissions={len(out['permissions'])} order={','.join(out['listOrder'])}")

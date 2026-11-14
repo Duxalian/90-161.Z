@@ -5058,5 +5058,29 @@
    }
   }
  ],
- "seed": []
+ "seed": [],
+ "permissions": [
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFM%20Publications')",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "ReadSecurity": 1,
+    "WriteSecurity": 2
+   }
+  },
+  {
+   "method": "MERGE",
+   "uri": "_api/web/lists/getbytitle('PFM%20Endorsements')",
+   "body": {
+    "__metadata": {
+     "type": "SP.List"
+    },
+    "ReadSecurity": 1,
+    "WriteSecurity": 2
+   }
+  }
+ ]
 }
