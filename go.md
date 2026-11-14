@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 14 Nov 26 (Task 2 r11: the 12 lists on the new site; Task 8 is now step 7 of Task 2; Tasks 11 and 14 use the new site). Bookmark on my work computer (clickable links):
+Updated: 14 Nov 26 (R10 results in; Tasks 9 and 12 done; Task 11 Part B waits for the next round, which automates most of it).
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -32,21 +32,6 @@ Steps:
 2. Save the file with Ctrl+S into the task's folder. The folder box in each task has a Copy button: paste its path into the Save dialog's address bar (%USERPROFILE% becomes my profile folder).
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
-
-## Fix first: Round R10 r1, page saver for Tasks 9 and 12, Task 11 form fix (open, 14 Nov 26)
-
-**For:** fixes what R09 showed: Task 9 now says what it wants and has Copy buttons for the folder and file names; Task 12 uses the same window with Open buttons (the sites block scripts); the 3 briefs are built in (GitHub blocked the downloads); the Task 11 form opens; every window fits my screen.
-**Time:** about 5 minutes (estimate) for the default steps; Task 9 adds about 20 minutes, Task 12 about 5, Task 11 Part B about 35.
-**Changes:** writes into T01, T07, T09, T10, T11, T12, T14, T15, T16, Config and Rounds\R10. Moves Rounds\R09 and the old Task 9 and Task 11 scripts to the Recycle Bin. Opens PowerPoint without a window and closes it. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
-Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 8fa41cac.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/2802903e069d98d59321d4473ed3468267b55dba/scripts/gov/paste/90161Z-R10-round-r1.ps1
-2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-3. The first three steps are checked. Check "T09 e-Publishing pages", "T12 color documents" or "T11 Part B" when I have the time for them.
-4. Press Enter (or Run). T09 and T12 each open a window that says why, what to save and where: use its Copy buttons in the Save window, then press Done. T11 opens a table: pick a result per row, short notes without names, Save and close.
-5. The Outlook draft opens with the summary and the files. Send it.
-**Report:** the draft itself; Claude watches the inbox for the subject.
-**If it fails:** read the WHAT TO DO line in the window. If a window is cut off, uncheck "This window looked right" and send anyway.
 
 ## Task 2: create the 12 lists on the new site, r11 (open, 14 Nov 26)
 
@@ -90,7 +75,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14
 **Time:** about 45 minutes (estimate): Part A 10, Part B 35.
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T11
 **Changes:** imports one flow into my Power Automate. The flow creates test lists and a test group named "PFM Rights Probe ..." on the site and deletes them at the end; the deleted lists stay in the site recycle bin, where I may empty them. It adds one result file to the site's Documents library.
-Part B runs as a form in the current round (check "T11 Part B"); the rows below are the same. Part A, the probe flow:
+Part B: wait for the next round. It does most Part B rows by itself (PFM, 14 Nov 26); the R10 answers are kept. Part A, the probe flow:
 1. Save this file into the T11 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T11-rights-probe-r1.zip
 2. Power Automate: My flows > Import > Import Package (Legacy). Pick the file. For the SharePoint connection, pick my existing one. Import.
@@ -121,37 +106,6 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-
 Report: reply in the Claude chat: the changes I want, and whether each brief may go to its audience.
 **If it fails:** if a file shows a repair message, name the brief.
 
-## Task 12: color sources, r1 (open, 12 Nov 26)
-
-**For:** these 3 public documents set the official Air Force and ANG colors for the briefs and the app. Claude cannot open Air Force websites from the cloud, and the sites block scripts (R09), so the current round (check "T12 color documents") opens a window with an Open button per document and Copy buttons for the folder and names, then attaches the files.
-**Time:** about 5 minutes (estimate).
-Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T12
-**Changes:** saves 3 files into T12. Nothing else.
-Steps:
-1. Save this PDF into the T12 folder:
-https://www.ang.af.mil/Portals/77/documents/ANG%20Graphics%20Standard.pdf
-2. Save this PDF into the T12 folder:
-https://www.dafhistory.af.mil/Portals/16/documents/Organizational-Records/GuideAirForceHeraldryJune2022.pdf
-3. Open this page, press Ctrl+S, Save as type: Webpage, Single File (*.mhtml), into the T12 folder:
-https://www.trademark.af.mil/Branding/Air-Force-Symbol/
-Report: one e-mail, subject "90161Z T12 r1": the 3 files. They are public documents.
-**If it fails:** if a link is dead, search for its title ("ANG Graphics Standard", "Guide to Air Force Heraldry", "Air Force Symbol") and save what that finds.
-
-## Task 9: e-Publishing pages for the numbering index, r1 (open, 11 Nov 26)
-
-**For:** Claude needs 3 saved e-Publishing pages to write the script that reads publication titles and numbers. Claude cannot open e-Publishing from the cloud. Decided 1A 2A: departmental, Air National Guard and my gaining MAJCOM publications.
-**Time:** about 20 minutes (estimate). The current round (check "T09 e-Publishing pages") opens a window that says what to save, with Copy buttons for the folder and names, and attaches the files: then skip the Report step below.
-Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T09
-**Changes:** saves 3 files into T09. Nothing else.
-Steps:
-1. Open e-Publishing (the Air Force publications website). Go to the product index for departmental publications and open one series with many publications (for example 33). Wait until the list shows. If the list has a "Show entries" or page-size box, set it to the largest number (or All) first.
-2. Press Ctrl+S. Save as type: Webpage, Single File (*.mhtml). Save it in the T09 folder as 90161Z-T09-epubs-departmental-r1.mhtml.
-3. Do the same for Air National Guard publications, one series. Save as 90161Z-T09-epubs-ang-r1.mhtml.
-4. Do the same for my gaining MAJCOM's publications, one series. Save as 90161Z-T09-epubs-majcom-r1.mhtml.
-5. Write down what I clicked to get to each list (menu names only).
-Report: one e-mail, subject "90161Z T09 r1": the 3 files and the click path from step 5. Do not type the MAJCOM's name in the e-mail text. Claude keeps these pages, and anything made from them, out of the repository.
-**If it fails:** if a page saves without the list, save what shows and say which page.
-
 ## Task 7: real seals, Part B, r1 (open, 11 Nov 26)
 
 **For:** prepares every unit's real shield for the publication covers. Decided: each unit's own shield (1C) in the project library (2A, 12 Nov 26), every seal prepared to the same 1.20 in box, centered. Part A (fake seals) passed in Round R01.
@@ -171,6 +125,10 @@ Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 901
 
 ## Done
 
+- Round R10 (13 Nov 26): window, inventory, renderer, brief check (3 of 3), PnP web login passed; Task 9 pages (3 of 3) and Task 12 documents (3 of 3) received; Task 11 form worked (2 of 18 rows answered). Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r10-results.md
+- Task 9, e-Publishing pages (13 Nov 26, in R10): 3 of 3 saved with the list; Claude writes the reader next.
+- Task 12, color sources (13 Nov 26, in R10): 3 of 3 documents received; Claude reads the colors next.
 - Round R09 (13 Nov 26): window, inventory, renderer and PnP retest passed (PnP web login connected with full list rights); downloads were blocked, Task 9 names did not match, the Task 11 form stopped: fixed in R10. Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r09-results.md
 - Round R06, Deployer and cleanup (13 Nov 26): 4 of 4 pass; Copy script worked; cleanup recycled 4 files and 1 folder; the draft opened; the window did not (text mode), fix in R08. Details:
