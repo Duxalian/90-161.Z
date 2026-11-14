@@ -4,7 +4,7 @@
     {
       "out": "scripts/gov/paste/90161Z-R13-round-r1.ps1",
       "round": "R13",
-      "title": "Round R13: rights probe flow delivered and guided by the Deployer; seal prep searches all Inbox folders and Junk E-mail; site setup r2 (seals library fix, waits for the probe result); clearer log text",
+      "title": "Round R13: rights probe flow delivered and guided by the Deployer; seal prep searches every Outlook mail folder; site setup r2 (seals library fix, waits for the probe result); clearer log text",
       "files": [
         {
           "dir": "T01",
