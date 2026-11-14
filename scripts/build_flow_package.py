@@ -23,6 +23,16 @@ CONNECTORS = {
         "displayName": "SharePoint", "apiName": "sharepointonline",
         "iconUri": "https://gov.static.powerapps.us/resource/ppcr/releases/v1.0.1769/1.0.1769.4361/sharepointonline/icon.png",
     },
+    # Not yet seen in a real export from the tenant (14 Nov 26): names from the public connector list, icon path by
+    # the SharePoint pattern. The icon is display only; T11 probe r2 is the first package that uses them.
+    "shared_office365users": {
+        "displayName": "Office 365 Users", "apiName": "office365users",
+        "iconUri": "https://gov.static.powerapps.us/resource/ppcr/releases/v1.0.1769/1.0.1769.4361/office365users/icon.png",
+    },
+    "shared_office365": {
+        "displayName": "Office 365 Outlook", "apiName": "office365",
+        "iconUri": "https://gov.static.powerapps.us/resource/ppcr/releases/v1.0.1769/1.0.1769.4361/office365/icon.png",
+    },
 }
 
 

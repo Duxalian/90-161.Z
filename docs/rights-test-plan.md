@@ -1,10 +1,11 @@
-# Rights test plan r1 (12 Nov 26)
+# Rights test plan r2 (14 Nov 26)
 
 PFM decision (12 Nov): every assumption about rights is tested on the tenant before the design relies on it, with a fallback for each. This file lists each right the design needs, who is expected to have it, how it is tested, and the fallback. "Expected" comes from Microsoft documentation or this project's earlier tests; confidence is marked H (high), M (medium) or L (low). A row counts as proven only after a test on the DoD tenant. Results are gov-network test details, so they go in the private project log, never in this public repo (AGENTS.md Project rules); the repo records only the design rule that follows.
 
 How it is tested:
-- **Probe flow** (go.md Task 11): flow/packages/90161Z-T11-rights-probe-r1.zip, built from scripts/build_rights_probe.py. 31 SharePoint checks (R = read, W = write on TEST objects, X = cleanup). It runs as the PFM and also asks SharePoint what a named coworker could do (R11, R12), so one person can test the regular-user view.
-- **Manual checks** (M rows): steps in Power Apps, Power Automate and Outlook that no flow can test. Each says what to click and what to write down; nothing is created that stays, and nothing is shared with Everyone.
+- **Probe flow** (go.md Task 11): flow/packages/90161Z-T11-rights-probe-r2.zip, built from scripts/build_rights_probe.py. 31 SharePoint checks (R = read, W = write on TEST objects, X = cleanup) and 6 mail and people checks (U = Office 365 Users, E = Outlook; r2, PFM 14 Nov 26). It runs as the PFM and also asks SharePoint what a named coworker could do (R11, R12), so one person can test the regular-user view. E01, E03 and E04 send one test mail each to the PFM only (approved 14 Nov 26).
+- **Outlook check** (round step "T11 Outlook check"): scripts/gov/90161Z-T11-outlook-check-r1.ps1, read-only. O1 opens the office mailbox inbox; O2 reads how the probe's test mails arrived (from me, sent as, on behalf of).
+- **Manual checks** (M rows): steps in Power Apps, Power Automate and the browser that the probe and the Outlook check cannot do (they need Dataverse, the share dialogs or the browser). Each says what to click and what to write down; nothing is created that stays, and nothing is shared with Everyone.
 
 Roles: **U** regular site member · **O** site owner (Full Control) · **A** site collection admin (the PFM) · **K** maker in the Default environment (any licensed user, by default) · **MB** rights on the office mailbox · admin roles (tenant SharePoint, Power Platform, Exchange) are outside a PFM's reach.
 
@@ -33,8 +34,8 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 | # | Right | Needed for | Expected | Conf | Test | Fallback |
 |---|---|---|---|---|---|---|
 | P1 | Create flows with SharePoint | Everything | K | H | Proven: T02 r9 ran | - |
-| P2 | Use Office 365 Outlook, Office 365 Users in one flow with SharePoint | E-mails, people lookups | Data policy | M | M03 | None: ask Power Platform admins |
-| P3 | Use Approvals, Teams, RSS, Power Apps for Makers | Optional features | Data policy; Approvals needs Dataverse | L | M03 | Leave the feature out |
+| P2 | Use Office 365 Outlook, Office 365 Users in one flow with SharePoint | E-mails, people lookups | Data policy | M | M03 (R10), probe r2 saves | None: ask Power Platform admins |
+| P3 | Use Approvals, Teams, RSS, Power Apps for Makers | Optional features | Data policy; Approvals needs Dataverse | L | M03 (R10) | Leave the feature out |
 | P4 | Import a legacy package | Flows | K | H | Proven: T02 r9 imported | - |
 | P5 | Create and export a solution | Solution route | K | H | Proven: T05 export | - |
 | P6 | Import a solution | Solution route | K | M | M04 | Legacy package plus .msapp |
@@ -47,7 +48,7 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 | P13 | Share a flow run-only and choose "use this connection" | App-started flows (G7) | K | M | M08 | App writes only rows the user owns |
 | P14 | Add a co-owner to a flow and to the app | Continuity (P5A) | K | H | M09 | Export and re-import by the successor |
 | P15 | Create another environment | Own environment option | Tenant setting | L | M10 (look only) | Default environment |
-| P16 | See own license and request limits | Capacity | K | M | M11 | - |
+| P16 | See own license and request limits | Capacity | K | M | U02 | - |
 | P18 | Largest file a Power Apps flow input accepts | "Attach all documentation" upload (6.5) | K | M | Pilot (phase 8): needs the app | Upload straight into the library Intake folder |
 | P19 | A co-owner re-binds a connection reference to their own connection | Continuity (5A) | K | M | Pilot (phase 8): needs the solution | Co-owner rebuilds the connections by hand |
 | P17 | Change the owner of a flow or app | Handover | Power Platform admin only | H | Not testable by a PFM | Runbook: co-owner rebuilds connections (P5A) |
@@ -56,17 +57,17 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 
 | # | Right | Needed for | Expected | Conf | Test | Fallback |
 |---|---|---|---|---|---|---|
-| E1 | Send from own mailbox in a flow | All notices | K | H | M12 | - |
-| E2 | Open the office mailbox (Full Access) | Reading 847s, replies | MB | M | M13 | Forwarding rule set by the mailbox owner |
-| E3 | Send as the office mailbox from a flow | Notices from the office (P4A) | MB Send As (Exchange admins grant) | M | M14 | Send from the PFM, office box on copy and as Reply-To |
-| E4 | Send on behalf of the office mailbox | Same | MB Send on Behalf | M | M15 | Same as E3 |
-| E5 | Start a flow when mail arrives in the office mailbox | 847 intake, result capture | MB Full Access | M | M16 | PFM forwards by hand |
+| E1 | Send from own mailbox in a flow | All notices | K | H | E01, O2 | - |
+| E2 | Open the office mailbox (Full Access) | Reading 847s, replies | MB | M | O1, E02 | Forwarding rule set by the mailbox owner |
+| E3 | Send as the office mailbox from a flow | Notices from the office (P4A) | MB Send As (Exchange admins grant) | M | E03, O2 | Send from the PFM, office box on copy and as Reply-To |
+| E4 | Send on behalf of the office mailbox | Same | MB Send on Behalf | M | E04, O2 | Same as E3 |
+| E5 | Start a flow when mail arrives in the office mailbox | 847 intake, result capture | MB Full Access | M | E02 (rights), M16 (trigger) | PFM forwards by hand |
 
 ## 4. Directory and groups
 
 | # | Right | Needed for | Expected | Conf | Test | Fallback |
 |---|---|---|---|---|---|---|
-| D1 | Look up people (Office 365 Users) | Person pickers, AO lookup | K, data policy | M | M03 | SharePoint person fields only |
+| D1 | Look up people (Office 365 Users) | Person pickers, AO lookup | K, data policy | M | U01 | SharePoint person fields only |
 | D2 | Create an M365 group | M365 group option | Tenant setting | L | M17 (look only) | Use an existing group |
 | D3 | Create or change an AD security group | AD group option | Communications squadron only | H | Not testable | Ask the squadron |
 | D4 | See a group's type when picking it | Setup explanation | K | M | R13, M07 | Setup asks the PFM |
@@ -80,28 +81,39 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 
 ## 6. Manual checks (go.md Task 11, part B)
 
-Write down only what each check shows (allowed, blocked, error text without names). Do not keep anything you create; delete it at the end.
+Write down only what each check shows (allowed, blocked, error text without names). Do not keep anything you create; delete it at the end. Done in R10 (results in the private log): M03. Done by the probe r2 and the Outlook check from r2 on: M11 (U02), M12 (E01), M13 (O1), M14 (E03), M15 (E04).
 
 | # | Do | Write down |
 |---|---|---|
-| M03 | Power Automate: new instant flow. Add one action each: SharePoint Get items, Office 365 Outlook Send an email (V2), Office 365 Users Get my profile (V2), Approvals Start and wait for an approval, Microsoft Teams Post message, RSS List all RSS feed items, Power Apps for Makers Get Apps. Save. | Saved, or the data policy error and which connectors it names |
-| M04 | Power Apps: Solutions, Import solution, choose the T05 sample zip you exported earlier | Imported, or the error |
+| M04 | Power Apps: Solutions, Import solution, choose 90161Z-flows-solution-r1.zip (the round saves it in T11; the T05 sample is gone) | Imported, or the error |
 | M05 | In a new solution: New, More, Environment variable, Data type Data source, Connector SharePoint, Parameter type Site | Allowed, or not offered |
 | M06 | Power Apps: create a blank canvas app, save it as "90161Z TEST" | Saved |
 | M07 | Share "90161Z TEST": type the wing's AD group, an M365 group name, a SharePoint group name, and look for "Everyone". Do not press Share | Which kinds show up |
-| M08 | Share the M03 flow run-only with one coworker; open "Manage run-only permissions" | Whether "Use this connection" is offered for SharePoint and Outlook |
-| M09 | Add a coworker as co-owner of the M03 flow and of "90161Z TEST"; then remove them | Allowed or not |
+| M08 | Share the flow "90161Z T11 Rights Probe r2" run-only with one coworker; open "Manage run-only permissions"; then remove them | Whether "Use this connection" is offered for SharePoint and Outlook |
+| M09 | Add a coworker as co-owner of the flow "90161Z T11 Rights Probe r2" and of "90161Z TEST"; then remove them | Allowed or not |
 | M10 | Power Platform admin center or the environment picker: is "New environment" or "Create developer environment" offered (do not create) | Offered or not |
-| M11 | Power Automate: Settings (gear), View my licenses | License names only |
-| M12 | In the M03 flow: Send an email (V2) to yourself; run it | Arrived or error |
-| M13 | Outlook: Add shared folder or mailbox, the office mailbox | Opens or not |
-| M14 | M03 flow: Send an email from a shared mailbox (V2), office mailbox, to yourself; run | Arrived (and the From line) or error |
-| M15 | M03 flow: Send an email (V2), show advanced, From (Send as) = office mailbox, to yourself; run | Arrived (From shows "on behalf of"?) or error |
 | M16 | New automated flow: When a new email arrives in a shared mailbox (V2), office mailbox; save; send a test mail to the office box | Flow ran or error |
 | M17 | Outlook: New, Group (look only) | Offered or not |
 | M18 | SharePoint start page: Create site (look only) | Offered or not |
 | M20 | SharePoint: open any document library you can read, tick 2 or 3 files, press Download | One .zip downloaded, or each file separately, or Download not offered |
-| M19 | Clean up: delete the M03 and M16 flows, "90161Z TEST" and its solution | Done |
+| M21 | Microsoft Forms (Microsoft 365 app launcher, Forms): create a form "90161Z TEST form" with one question | Offered and saved, or error |
+| M22 | Power Automate: new automated flow, trigger "When a new response is submitted" (Microsoft Forms), pick "90161Z TEST form"; save | Saved or error |
+| M23 | Power Apps: Tables in the Default environment (Dataverse), and whether a Premium connector can be added to "90161Z TEST" (look only) | Tables shown or not; Premium allowed or blocked |
+| M24 | Power Apps and Power Automate: is Copilot or AI Builder offered (look only) | Offered or not |
+| M25 | SharePoint list PFM Publications: Integrate, Power Apps, Customize forms; Integrate, Power Automate (look only, do not save) | Each offered or not |
+| M19 | Clean up: delete the M16 and M22 flows, "90161Z TEST", its solution, the solution M04 imported, and "90161Z TEST form" | Done |
+
+## 7. Capability inventory (future projects)
+
+PFM 14 Nov 26: the probes also record what later projects can use. All read-only; results go to the private log like the rows above.
+
+| Where | What it records |
+|---|---|
+| Probe r2 R15-R26 | Site and site collection features, list and site templates offered, search, storage, app catalog, term store, content types, Site Pages, sensitivity label and sharing, list form setting |
+| Probe r2 U02 | License names (shows Premium, Power Apps, Power Automate, Copilot plans) |
+| T15 r2 (round) | All installed modules, PowerShell 7 and other tools, Office and Windows COM apps, WebView2, Teams, Power BI Desktop, fonts, C# compile, AppLocker rule counts, certificate count, .NET runtimes, more hosts |
+| T16 r2 (round) | PnP on the new site: rights, PFM lists, storage, features, content types, site admin count, term store, search, app catalog, site designs, Power Platform environments and flows by PnP |
+| M21-M25 | Microsoft Forms and its flow trigger, Dataverse and Premium, Copilot and AI Builder, list form and flow integration |
 
 ## Reading the result
 

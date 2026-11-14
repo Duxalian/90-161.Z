@@ -1,8 +1,10 @@
 {
-  "displayName": "90161Z T11 Rights Probe r1",
-  "description": "Tests what the person who runs it, and an optional coworker, can do on a SharePoint site. Creates TEST objects, then deletes them. Records status codes and permission masks only, no names.",
+  "displayName": "90161Z T11 Rights Probe r2",
+  "description": "Tests what the person who runs it, and an optional coworker, can do on a SharePoint site, and what they can do with the office mailbox. Creates TEST objects, then deletes them; sends 3 test mails to the person who runs it. Records status codes, permission masks and license names only, no names.",
   "connections": [
-    "shared_sharepointonline"
+    "shared_sharepointonline",
+    "shared_office365users",
+    "shared_office365"
   ],
   "triggers": {
     "manual": {
@@ -32,6 +34,13 @@
               "x-ms-dynamically-added": true,
               "x-ms-content-hint": "TEXT",
               "description": "The group that gives wing members access. If empty, R13 fails; that is expected"
+            },
+            "text_3": {
+              "title": "Office mailbox e-mail (optional)",
+              "type": "string",
+              "x-ms-dynamically-added": true,
+              "x-ms-content-hint": "TEXT",
+              "description": "The office's shared mailbox. If empty, E02-E04 fail; that is expected"
             }
           },
           "required": [
@@ -975,9 +984,621 @@
         }
       }
     },
-    "W01": {
+    "R15": {
       "runAfter": {
         "Record_R14": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/features?$select=DefinitionId",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R15": {
+      "runAfter": {
+        "R15": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R15",
+          "what": "Site features turned on (IDs only)",
+          "code": "@{outputs('R15')?['statusCode']}",
+          "out": "@{take(string(body('R15')), 3000)}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R15')?['statusCode'], 0)), 400), take(string(body('R15')), 600), '')}"
+        }
+      }
+    },
+    "R16": {
+      "runAfter": {
+        "Record_R15": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/site/features?$select=DefinitionId",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R16": {
+      "runAfter": {
+        "R16": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R16",
+          "what": "Site collection features turned on (IDs only)",
+          "code": "@{outputs('R16')?['statusCode']}",
+          "out": "@{take(string(body('R16')), 3000)}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R16')?['statusCode'], 0)), 400), take(string(body('R16')), 600), '')}"
+        }
+      }
+    },
+    "R17": {
+      "runAfter": {
+        "Record_R16": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/listtemplates?$select=Name,ListTemplateTypeKind,Hidden&$filter=Hidden%20eq%20false",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R17": {
+      "runAfter": {
+        "R17": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R17",
+          "what": "List templates offered",
+          "code": "@{outputs('R17')?['statusCode']}",
+          "out": "@{take(string(body('R17')), 3000)}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R17')?['statusCode'], 0)), 400), take(string(body('R17')), 600), '')}"
+        }
+      }
+    },
+    "R18": {
+      "runAfter": {
+        "Record_R17": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/getavailablewebtemplates(lcid=1033,doincludecrosslanguage=false)?$select=Name",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R18": {
+      "runAfter": {
+        "R18": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R18",
+          "what": "Site templates offered for subsites",
+          "code": "@{outputs('R18')?['statusCode']}",
+          "out": "@{take(string(body('R18')), 3000)}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R18')?['statusCode'], 0)), 400), take(string(body('R18')), 600), '')}"
+        }
+      }
+    },
+    "R19": {
+      "runAfter": {
+        "Record_R18": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/search/query?querytext='*'&rowlimit=1&selectproperties='Path'",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R19": {
+      "runAfter": {
+        "R19": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R19",
+          "what": "Search works (one result, count only)",
+          "code": "@{outputs('R19')?['statusCode']}",
+          "out": "@{body('R19')?['PrimaryQueryResult']?['RelevantResults']?['TotalRows']}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R19')?['statusCode'], 0)), 400), take(string(body('R19')), 600), '')}"
+        }
+      }
+    },
+    "R20": {
+      "runAfter": {
+        "Record_R19": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/site/usage",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R20": {
+      "runAfter": {
+        "R20": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R20",
+          "what": "Storage used and quota",
+          "code": "@{outputs('R20')?['statusCode']}",
+          "out": "@{take(string(body('R20')), 3000)}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R20')?['statusCode'], 0)), 400), take(string(body('R20')), 600), '')}"
+        }
+      }
+    },
+    "R21": {
+      "runAfter": {
+        "Record_R20": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/SP_TenantSettings_Current",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R21": {
+      "runAfter": {
+        "R21": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R21",
+          "what": "Tenant app catalog exists (for SPFx web parts)",
+          "code": "@{outputs('R21')?['statusCode']}",
+          "out": "@{if(empty(body('R21')?['CorporateCatalogUrl']), 'no app catalog', 'app catalog exists')}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R21')?['statusCode'], 0)), 400), take(string(body('R21')), 600), '')}"
+        }
+      }
+    },
+    "R22": {
+      "runAfter": {
+        "Record_R21": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/v2.1/termStore?$select=defaultLanguageTag",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R22": {
+      "runAfter": {
+        "R22": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R22",
+          "what": "Term store readable (managed metadata)",
+          "code": "@{outputs('R22')?['statusCode']}",
+          "out": "@{take(string(body('R22')), 3000)}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R22')?['statusCode'], 0)), 400), take(string(body('R22')), 600), '')}"
+        }
+      }
+    },
+    "R23": {
+      "runAfter": {
+        "Record_R22": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/contenttypes?$select=Name&$top=500",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R23": {
+      "runAfter": {
+        "R23": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R23",
+          "what": "Content types on the site (count)",
+          "code": "@{outputs('R23')?['statusCode']}",
+          "out": "@{length(coalesce(body('R23')?['value'], json('[]')))}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R23')?['statusCode'], 0)), 400), take(string(body('R23')), 600), '')}"
+        }
+      }
+    },
+    "R24": {
+      "runAfter": {
+        "Record_R23": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/lists/getbytitle('Site Pages')?$select=ItemCount,EnableVersioning,EnableModeration",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R24": {
+      "runAfter": {
+        "R24": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R24",
+          "what": "Site pages library and modern pages allowed",
+          "code": "@{outputs('R24')?['statusCode']}",
+          "out": "@{take(string(body('R24')), 3000)}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R24')?['statusCode'], 0)), 400), take(string(body('R24')), 600), '')}"
+        }
+      }
+    },
+    "R25": {
+      "runAfter": {
+        "Record_R24": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/site?$select=SensitivityLabelId,ShareByEmailEnabled,ShareByLinkEnabled",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R25": {
+      "runAfter": {
+        "R25": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R25",
+          "what": "Site sensitivity label and sharing",
+          "code": "@{outputs('R25')?['statusCode']}",
+          "out": "@{take(string(body('R25')), 3000)}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R25')?['statusCode'], 0)), 400), take(string(body('R25')), 600), '')}"
+        }
+      }
+    },
+    "R26": {
+      "runAfter": {
+        "Record_R25": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "dataset": "@triggerBody()['text']",
+          "parameters/method": "GET",
+          "parameters/uri": "_api/web/lists/getbytitle('PFM Publications')?$select=DisableGridEditing,EnableAttachments,DefaultDisplayFormUrl",
+          "parameters/headers": {
+            "Accept": "application/json;odata=nometadata"
+          }
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+          "connectionName": "shared_sharepointonline",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_R26": {
+      "runAfter": {
+        "R26": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "R26",
+          "what": "Power Apps / Power Automate integration on a list (form and flow buttons)",
+          "code": "@{outputs('R26')?['statusCode']}",
+          "out": "@{if(empty(body('R26')?['DefaultDisplayFormUrl']), 'no form', 'form set')}",
+          "err": "@{if(greaterOrEquals(int(coalesce(outputs('R26')?['statusCode'], 0)), 400), take(string(body('R26')), 600), '')}"
+        }
+      }
+    },
+    "W01": {
+      "runAfter": {
+        "Record_R26": [
           "Succeeded",
           "Failed",
           "Skipped",
@@ -1663,9 +2284,296 @@
         }
       }
     },
-    "Write_Result_File": {
+    "U01": {
       "runAfter": {
         "Record_X03": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {},
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365users",
+          "connectionName": "shared_office365users",
+          "operationId": "MyProfile_V2"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_U01": {
+      "runAfter": {
+        "U01": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "U01",
+          "what": "Office 365 Users: read my own profile (D1)",
+          "code": "@{outputs('U01')?['statusCode']}",
+          "out": "@{if(empty(body('U01')?['mail']), 'no mail address', 'mail address found')}",
+          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('U01')?['statusCode'], 0)), 400), take(string(body('U01')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+        }
+      }
+    },
+    "U02": {
+      "runAfter": {
+        "Record_U01": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "Uri": "/v1.0/me/licenseDetails?$select=skuPartNumber",
+          "Method": "GET"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365users",
+          "connectionName": "shared_office365users",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_U02": {
+      "runAfter": {
+        "U02": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "U02",
+          "what": "My license names (P16, was M11)",
+          "code": "@{outputs('U02')?['statusCode']}",
+          "out": "@{replace(replace(take(string(body('U02')), 3000), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}",
+          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('U02')?['statusCode'], 0)), 400), take(string(body('U02')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+        }
+      }
+    },
+    "E01": {
+      "runAfter": {
+        "Record_U02": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "emailMessage/To": "@{body('U01')?['mail']}",
+          "emailMessage/Subject": "90161Z TEST E01 my mailbox",
+          "emailMessage/Body": "<p>90-161.Z rights probe test mail (Task 11). Delete it after the round reads it.</p>",
+          "emailMessage/Importance": "Normal"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+          "connectionName": "shared_office365",
+          "operationId": "SendEmailV2"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_E01": {
+      "runAfter": {
+        "E01": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "E01",
+          "what": "Send a mail from my mailbox to me (E1, was M12)",
+          "code": "@{outputs('E01')?['statusCode']}",
+          "out": "-",
+          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('E01')?['statusCode'], 0)), 400), take(string(body('E01')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+        }
+      }
+    },
+    "E02": {
+      "runAfter": {
+        "Record_E01": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "Uri": "/v1.0/users/@{triggerBody()?['text_3']}/mailFolders/inbox/messages?$top=1&$select=receivedDateTime",
+          "Method": "GET"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+          "connectionName": "shared_office365",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_E02": {
+      "runAfter": {
+        "E02": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "E02",
+          "what": "Read the office mailbox inbox (E2, E5, with T11 Outlook check O1)",
+          "code": "@{outputs('E02')?['statusCode']}",
+          "out": "-",
+          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('E02')?['statusCode'], 0)), 400), take(string(body('E02')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+        }
+      }
+    },
+    "E03": {
+      "runAfter": {
+        "Record_E02": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "emailMessage/MailboxAddress": "@{triggerBody()?['text_3']}",
+          "emailMessage/To": "@{body('U01')?['mail']}",
+          "emailMessage/Subject": "90161Z TEST E03 shared mailbox action",
+          "emailMessage/Body": "<p>90-161.Z rights probe test mail (Task 11). Delete it after the round reads it.</p>",
+          "emailMessage/Importance": "Normal"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+          "connectionName": "shared_office365",
+          "operationId": "SharedMailboxSendEmailV2"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_E03": {
+      "runAfter": {
+        "E03": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "E03",
+          "what": "Send from the office mailbox, shared-mailbox action (E3, was M14)",
+          "code": "@{outputs('E03')?['statusCode']}",
+          "out": "-",
+          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('E03')?['statusCode'], 0)), 400), take(string(body('E03')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+        }
+      }
+    },
+    "E04": {
+      "runAfter": {
+        "Record_E03": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "emailMessage/To": "@{body('U01')?['mail']}",
+          "emailMessage/From": "@{triggerBody()?['text_3']}",
+          "emailMessage/Subject": "90161Z TEST E04 from field",
+          "emailMessage/Body": "<p>90-161.Z rights probe test mail (Task 11). Delete it after the round reads it.</p>",
+          "emailMessage/Importance": "Normal"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+          "connectionName": "shared_office365",
+          "operationId": "SendEmailV2"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "Record_E04": {
+      "runAfter": {
+        "E04": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "E04",
+          "what": "Send with From = the office mailbox (E4, was M15)",
+          "code": "@{outputs('E04')?['statusCode']}",
+          "out": "-",
+          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('E04')?['statusCode'], 0)), 400), take(string(body('E04')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+        }
+      }
+    },
+    "Write_Result_File": {
+      "runAfter": {
+        "Record_E04": [
           "Succeeded",
           "Failed",
           "Skipped",
@@ -1677,7 +2585,7 @@
         "parameters": {
           "dataset": "@triggerBody()['text']",
           "parameters/method": "POST",
-          "parameters/uri": "_api/web/DefaultDocumentLibrary/RootFolder/Files/add(url='90161Z-T11-rights-result-r1.json',overwrite=true)",
+          "parameters/uri": "_api/web/DefaultDocumentLibrary/RootFolder/Files/add(url='90161Z-T11-rights-result-r2.json',overwrite=true)",
           "parameters/headers": {
             "Accept": "application/json;odata=nometadata",
             "Content-Type": "application/json;odata=verbose"

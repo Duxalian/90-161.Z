@@ -22,7 +22,7 @@ Updated: 2026-11-14 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
-1. R10 results processed 14 Nov: docs/reviews/2026-11-14-r10-results.md (all steps OK; T09 3 pages and T12 3 documents received, kept outside the repo; T11 Part B 2 of 18 by hand). Next: T11 automation (PFM 14 Nov: probe flow r2 + Outlook COM in the round; 3 test mails from the office mailbox to the PFM only; coworker co-owner add then remove), T09 reader, T12 colors, T16 r2 on the new site. Task 2 r11 on the new site. Open: S2, S3, S5 3-15, S6, S7, S8-S11, F1-F4 (sweep page).
+1. R11 r1 on go.md + Task 11 r2 (14 Nov): probe flow r2 (49 checks: 37 SharePoint incl. R15-R26 inventory, U01-U02, E01-E04 mail), round step T11 Outlook check (read-only), Part B form 17 rows (M21-M25 Forms/Dataverse/Copilot/list integration), T15 r2 and T16 r2 inventory (new site, web login only). Open: M09 co-owner automation not built (Flow Management operation IDs unverified; a wrong ID stops the probe saving). New connectors Office 365 Users/Outlook in packages are unverified on the tenant. R10 results: docs/reviews/2026-11-14-r10-results.md. Next after R11: T09 reader, T12 colors. Claude watches Gmail for "90161Z R11". Open: S2, S3, S5 3-15, S6, S7, S8-S11, F1-F4 (sweep page).
 2. Task 6 prompt r2 follow-up: list AFI (validator F-032/F-039 fixed 13 Nov).
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).

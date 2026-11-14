@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 14 Nov 26 (R10 results in; Tasks 9 and 12 done; Task 11 Part B waits for the next round, which automates most of it).
+Updated: 14 Nov 26 (Round R11 and Task 11 r2: most Task 11 checks are now automatic, plus a wider inventory for future projects).
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -32,6 +32,22 @@ Steps:
 2. Save the file with Ctrl+S into the task's folder. The folder box in each task has a Copy button: paste its path into the Save dialog's address bar (%USERPROFILE% becomes my profile folder).
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
+
+## Round R11 r1: Task 11 checks and wider inventory (open, 14 Nov 26)
+
+**For:** reads the Task 11 test e-mails, runs the Task 11 form (17 checks), and records more about this computer and the new site for future projects.
+**Time:** about 5 minutes (estimate) for the default steps; Task 11 Part B adds about 25, the PnP step about 2.
+**Changes:** writes into T01, T07, T10, T11, T14, T15, T16, Config and Rounds\R11. Moves Rounds\R10, the T09 and T12 page-saver scripts and the old T15 and T16 scripts to the Recycle Bin (my saved pages stay). Opens PowerPoint without a window and closes it. Reads Outlook and the new site; changes nothing in either. Saves one Outlook draft (never sent).
+Steps:
+1. Do Task 11 Part A first if I want the Task 11 steps (it sends the test e-mails).
+2. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R11-round-r1.ps1
+3. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
+4. The first three steps are checked. Also check "T11 Outlook check", "T11 Part B" and "T16 PnP test" when I have the time.
+5. Press Enter (or Run). The Outlook check asks once for the office mailbox address; the PnP step asks for the NEW site address (change it if it shows the old one) and opens a CAC sign-in. The form: pick a result per row, short notes without names, Save and close.
+6. The Outlook draft opens with the summary and the files. Send it.
+**Report:** the draft itself; Claude watches the inbox for the subject.
+**If it fails:** read the WHAT TO DO line in the window. If Outlook asks to allow access to e-mail addresses, choose Allow for 1 minute. If a window is cut off, uncheck "This window looked right" and send anyway.
 
 ## Task 2: create the 12 lists on the new site, r11 (open, 14 Nov 26)
 
@@ -69,24 +85,21 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14
 **Report:** reply "T14 done", or the step number and what the screen said. No screenshots: they show the site name.
 **If it fails:** if Change the look or Header is missing, I am not a site owner: stop and say so. If the upload is refused, send the message text.
 
-## Task 11: rights test, r1 (open, 12 Nov 26)
+## Task 11: rights and capability test, r2 (open, 14 Nov 26)
 
-**For:** finds what I can and cannot do as a regular user, as site owner and as site collection admin, plus the office mailbox and Power Platform. Every later design step depends on these answers.
-**Time:** about 45 minutes (estimate): Part A 10, Part B 35.
+**For:** finds what I can and cannot do on the new site, with the office mailbox, in Power Apps, Power Automate and Forms. Every later design step depends on these answers, and the inventory helps future projects. r2 does most checks by itself (decided 14 Nov 26).
+**Time:** about 35 minutes (estimate): Part A 10, Part B (in the round) 25.
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T11
-**Changes:** imports one flow into my Power Automate. The flow creates test lists and a test group named "PFM Rights Probe ..." on the site and deletes them at the end; the deleted lists stay in the site recycle bin, where I may empty them. It adds one result file to the site's Documents library.
-Part B: wait for the next round. It does most Part B rows by itself (PFM, 14 Nov 26); the R10 answers are kept. Part A, the probe flow:
+**Changes:** imports one flow into my Power Automate. On the new site the flow creates test lists and a test group named "PFM Rights Probe ..." and deletes them at the end (they stay in the site recycle bin), and adds one result file to the Documents library. It sends 3 test e-mails to me only: 1 from my mailbox, 2 from the office mailbox (subjects start "90161Z TEST"). Nothing else.
+Part A, the probe flow (after Task 2):
 1. Save this file into the T11 folder:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T11-rights-probe-r1.zip
-2. Power Automate: My flows > Import > Import Package (Legacy). Pick the file. For the SharePoint connection, pick my existing one. Import.
-3. Do this after Task 2. Run "90161Z T11 Rights Probe r1". Site address: the new site (the one Task 2 filled). Coworker e-mail: one regular member of that site (not an owner). Wing group e-mail: the group that gives wing members access, if it has an e-mail address.
-4. When the run ends, open the site's Documents library and download 90161Z-T11-rights-result-r1.json.
-Part B, manual checks:
-5. Open this page, go to section 6 and write down what each row asks for:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/rights-test-plan.md
-Report: one e-mail, subject "90161Z T11 r1": the result file and my Part B notes. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
-**If it fails:** if the run stops early, delete anything named "PFM Rights Probe ..." by hand and send the name of the step that failed and its error text (no names).
-
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T11-rights-probe-r2.zip
+2. Power Automate: My flows > Import > Import Package (Legacy). Pick the file. For each connection (SharePoint, Office 365 Users, Office 365 Outlook) pick my existing one, or Create new if I have none. Import.
+3. Run "90161Z T11 Rights Probe r2". Site address: the new site. Coworker e-mail: one regular member of that site (not an owner). Wing group e-mail: the group that gives wing members access, if it has one. Office mailbox e-mail: the office shared mailbox.
+4. When the run ends, open the site's Documents library, download 90161Z-T11-rights-result-r2.json and save it into the T11 folder. Keep the 3 "90161Z TEST" e-mails until the round has run.
+Part B: run the current round with "T11 Outlook check" and "T11 Part B" checked (see its task). The round reads the test e-mails, opens the form for the 17 checks only a person can do, and attaches the result file.
+Report: the round's e-mail. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
+**If it fails:** if the import asks for a connection I cannot make, send its name. If the run stops early, delete anything named "PFM Rights Probe ..." by hand and send the name of the step that failed and its error text (no names). A red step in the run is a result, not a failure: the run goes on.
 ## Task 10: decision briefs, r5 (open, 12 Nov 26)
 
 **For:** a last check of the three briefs before they go to their audiences.
