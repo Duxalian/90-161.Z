@@ -274,7 +274,7 @@ for b in scripts/gov/paste/*.ps1; do
   # Choose and Check screens (PFM 14 Nov 26): the report names the application and counts the checks; text mode cannot
   # sign in, so the sign-in check is NOT RUN, and no check line holds the DODID.
   rp="$base/Rounds/$r/90161Z-$r-report-r1.txt"
-  grep -q "^Application: " "$rp" && tr -d "\r" < "$rp" | grep -qE "^Checks: passed [0-9]+, warnings [0-9]+, failed [0-9]+, not run [0-9]+\.$" && grep -q "^  NOT RUN: You can change the site" "$rp" && grep -q "^  PASSED: You can import flows" "$tp/out.txt" || { echo "application or check lines missing in the report"; grep -E "^(Application|Checks|  [A-Z])" "$rp"; pf=$((pf+1)); }
+  grep -q "^Application: " "$rp" && tr -d "\r" < "$rp" | grep -qE "^Checks\. Passed: [0-9]+\. Warnings: [0-9]+\. Failed: [0-9]+\. Not run: [0-9]+\.$" && grep -q "^  NOT RUN: You can change the site" "$rp" && grep -q "^  PASSED: You can import flows" "$tp/out.txt" || { echo "application or check lines missing in the report"; grep -E "^(Application|Checks|  [A-Z])" "$rp"; pf=$((pf+1)); }
   grep -q "^Note: no window could open, so the round runs in text mode" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "report does not name the no-window cause"; pf=$((pf+1)); }
   # Downloads: repo files must match their SHA-256; public files land and are attached; the skipped step's file is not expected.
   nf=$(python3 -c "import json;print(sum(len(b.get('fetch',[])) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
