@@ -1,23 +1,21 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 16 PnP sign-in test, r1. Read-only. Windows PowerShell 5.1, the installed PnP.PowerShell 1.x only.
+  90-161.Z Task 16 PnP test and SharePoint inventory, r2. Read-only. Windows PowerShell 5.1, the installed PnP.PowerShell 1.x.
 .DESCRIPTION
-  Re-tests decision 1B (12 Nov 26: both no-app-registration sign-ins failed on 10 Nov). The 10 Nov test never named the
-  government cloud (-AzureEnvironment) and never tried the SharePoint Online Management Shell app, a Microsoft app
-  that exists in every tenant, so it needs no app registration. This test tries 4 routes in order and stops at the
-  first that connects:
-    1. -SPOManagementShell -AzureEnvironment USGovernmentDoD   (sign-in window; pick the CAC certificate)
-    2. -SPOManagementShell -AzureEnvironment USGovernmentHigh
-    3. -UseWebLogin                                            (the 10 Nov route, for comparison)
-    4. -Interactive -AzureEnvironment USGovernmentDoD          (the PnP app Microsoft removed in 2024; expected to fail)
-  On a connect it reads only: the permission to manage lists, manage the site and add items, and the list count.
+  R09 and R10: -UseWebLogin connected (manage lists, manage site, add items all True); the SPO Management Shell routes
+  cannot work in PnP 1.12 (parameter set error both rounds), so r2 tries web login only.
+  r2 asks for the site address every run, filled in with the last one, so the PFM can point it at the new site
+  (PFM 14 Nov 26: read-only PnP test on the new site). After it connects it records, read-only, what later projects can
+  rely on (PFM 14 Nov 26: document more functionality): rights, lists, storage, features, content types, term store,
+  search, app catalog, site collection admin count, and whether the Power Platform cmdlets work with this sign-in.
+  Each item says PASS with a count or value, or "not available" with the error type. No names are kept.
   It changes nothing on the site and nothing on this computer except the site address file below.
-  The site address is asked once and kept only on this computer in Config\90161Z-site.txt; every output line shows
-  it as <SITE>, and the DODID as <DODID>. Error text is cut to 160 characters.
-  Output: 90161Z-T16-pnp-result-r1.txt in the T16 folder (send this).
-  Parameters (used by the 90-161.Z Deployer): -Id, -NoPause, -AllRoutes (try every route even after a connect).
+  The site address is kept only on this computer in Config\90161Z-site.txt; every output line shows it as <SITE>, and
+  the DODID as <DODID>. Error text is cut to 160 characters.
+  Output: 90161Z-T16-pnp-result-r2.txt in the T16 folder (send this).
+  Parameters (used by the 90-161.Z Deployer): -Id, -NoPause.
 #>
-param([string]$Id, [switch]$NoPause, [switch]$AllRoutes)
+param([string]$Id, [switch]$NoPause)
 $task = 'T16'
 
 # >>> task-common: generated from scripts/gov/src/task-common.ps1 by scripts/build_task_scripts.py (do not edit)
@@ -85,11 +83,12 @@ function Invoke-TaskStep([hashtable]$Step, [string]$ScriptDir, [string[]]$Secret
 # <<< task-common
 
 function Get-SiteAddress([string]$ConfigDir) {
-  # Kept only on this computer (the repo is public). Asked once with a small Windows dialog.
+  # Kept only on this computer (the repo is public). Asked every run, filled in with the last address (r2: new site).
   $f = Join-Path $ConfigDir '90161Z-site.txt'
-  if (Test-Path -LiteralPath $f -PathType Leaf) { $v = ([string](Get-Content -LiteralPath $f -TotalCount 1)).Trim(); if ($v) { return $v } }
+  $last = 'https://'
+  if (Test-Path -LiteralPath $f -PathType Leaf) { $v = ([string](Get-Content -LiteralPath $f -TotalCount 1)).Trim(); if ($v) { $last = $v } }
   Add-Type -AssemblyName Microsoft.VisualBasic
-  $v = [string][Microsoft.VisualBasic.Interaction]::InputBox('Address of the SharePoint site with the PFM lists (starts with https://). Kept only on this computer.', '90-161.Z Task 16', 'https://')
+  $v = [string][Microsoft.VisualBasic.Interaction]::InputBox('Address of the NEW SharePoint site (the one Task 2 filled), starts with https://. Change it if it shows the old site. Kept only on this computer.', '90-161.Z Task 16', $last)
   $v = $v.Trim()
   if ($v -notmatch '^https://[^/]+/sites/[^/]+') { throw 'SITE ADDRESS not given or not a site address (https://<host>/sites/<name>). Run again.' }
   if (-not (Test-Path -LiteralPath $ConfigDir -PathType Container)) { [void](New-Item -ItemType Directory -Path $ConfigDir -Force) }
@@ -131,49 +130,67 @@ try {
   $dir = Get-TaskDir $id $task 'Task 16' -Create
   Set-Location -LiteralPath $dir
   $configDir = Join-Path (Split-Path -Parent $dir) 'Config'
+  $prev = ''; $sf = Join-Path $configDir '90161Z-site.txt'
+  if (Test-Path -LiteralPath $sf -PathType Leaf) { $prev = ([string](Get-Content -LiteralPath $sf -TotalCount 1)).Trim() }
   $site = Get-SiteAddress $configDir
-  $lines.Add('TASK T16 PnP sign-in test r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', read-only')
+  $sameSite = [string]($prev -and ($prev -ieq $site))
+  $lines.Add('TASK T16 PnP test and inventory r2, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', read-only')
   $mod = @(Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending)
   if (-not $mod.Count) { throw 'PNP not installed: PnP.PowerShell is not on this computer.' }
   $null = & { Import-Module PnP.PowerShell -RequiredVersion $mod[0].Version -DisableNameChecking } *>&1   # module warnings never reach the log
   $lines.Add('PNP module=' + $mod[0].Version + ' powershell=' + $PSVersionTable.PSVersion)
-  $routes = @(
-    @{ Name = 'spo-shell-dod'; Args = @{ SPOManagementShell = $true; AzureEnvironment = 'USGovernmentDoD' } },
-    @{ Name = 'spo-shell-high'; Args = @{ SPOManagementShell = $true; AzureEnvironment = 'USGovernmentHigh' } },
-    @{ Name = 'web-login'; Args = @{ UseWebLogin = $true } },
-    @{ Name = 'interactive-dod'; Args = @{ Interactive = $true; AzureEnvironment = 'USGovernmentDoD' } })
-  $okRoute = ''
-  foreach ($r in $routes) {
-    if ($okRoute -and -not $AllRoutes) { $lines.Add('ROUTE ' + $r.Name + ' skipped (a route already connected)'); continue }
-    Write-Host ('Trying ' + $r.Name + ': a sign-in window may open; sign in with your CAC...')
-    $a = $r.Args
+  $lines.Add('SITE same-as-last-run=' + $sameSite)
+  $script:item = $lines
+  function Add-Inv([string]$Name, [scriptblock]$Read) {
     try {
-      # Everything PnP writes itself (warnings, sign-in text) is captured and dropped: only this script's masked lines leave.
-      $null = & { Connect-PnPOnline -Url $site @a -ErrorAction Stop } *>&1
-      $script:web = $null; $script:listCount = 0
-      $null = & { $script:web = Get-PnPWeb -Includes EffectiveBasePermissions -ErrorAction Stop; $script:listCount = @(Get-PnPList -ErrorAction Stop).Count } *>&1
-      $p = $script:web.EffectiveBasePermissions
-      $k = [Microsoft.SharePoint.Client.PermissionKind]
-      $lines.Add('ROUTE ' + $r.Name + ' PASS manage-lists=' + $p.Has($k::ManageLists) + ' manage-site=' + $p.Has($k::ManageWeb) +
-        ' add-items=' + $p.Has($k::AddListItems) + ' lists=' + $script:listCount)
-      if (-not $okRoute) { $okRoute = $r.Name }
+      $script:val = $null
+      $null = & { $script:val = & $Read } *>&1
+      $script:item.Add('INV ' + $Name + ' PASS ' + [string]$script:val)
     } catch {
-      # Hide first, then cut (a cut inside an address would defeat the hiding). "not connected", not FAIL: a route that
-      # does not connect is a finding, not a broken round.
-      $m = ConvertTo-Masked (Hide-Site (([string]$_.Exception.Message) -replace '\s+', ' ') $site) $secret
-      $m = $m -replace '(?i)\bfail', 'fault'   # the Deployer counts the word FAIL as a broken step
-      $lines.Add('ROUTE ' + $r.Name + ' not connected ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
-    } finally {
-      try { $null = & { Disconnect-PnPOnline -ErrorAction SilentlyContinue } *>&1 } catch { $null = $_ }
+      $script:item.Add('INV ' + $Name + ' not available ' + ($_.Exception.GetType().Name -replace '(?i)fail', 'fault'))
     }
   }
-  $lines.Add('PNP result: ' + $(if ($okRoute) { 'connected with ' + $okRoute + ' (PASS)' } else { 'no route connected' }))
+  $connected = $false
+  Write-Host 'Connecting with web login: a sign-in window may open; sign in with your CAC...'
+  try {
+    # Everything PnP writes itself (warnings, sign-in text) is captured and dropped: only this script's masked lines leave.
+    $null = & { Connect-PnPOnline -Url $site -UseWebLogin -ErrorAction Stop } *>&1
+    $script:web = $null; $script:listCount = 0
+    $null = & { $script:web = Get-PnPWeb -Includes EffectiveBasePermissions -ErrorAction Stop; $script:listCount = @(Get-PnPList -ErrorAction Stop).Count } *>&1
+    $p = $script:web.EffectiveBasePermissions
+    $k = [Microsoft.SharePoint.Client.PermissionKind]
+    $lines.Add('ROUTE web-login PASS manage-lists=' + $p.Has($k::ManageLists) + ' manage-site=' + $p.Has($k::ManageWeb) +
+      ' manage-permissions=' + $p.Has($k::ManagePermissions) + ' add-items=' + $p.Has($k::AddListItems) + ' lists=' + $script:listCount)
+    $connected = $true
+    Add-Inv 'pfm-lists' { @(Get-PnPList -ErrorAction Stop | Where-Object { $_.Title -like 'PFM *' }).Count }
+    Add-Inv 'storage-mb-used' { $u = (Get-PnPSite -Includes Usage -ErrorAction Stop).Usage; [Math]::Round($u.Storage / 1MB, 1) }
+    Add-Inv 'web-features' { @(Get-PnPFeature -Scope Web -ErrorAction Stop).Count }
+    Add-Inv 'site-features' { @(Get-PnPFeature -Scope Site -ErrorAction Stop).Count }
+    Add-Inv 'content-types' { @(Get-PnPContentType -ErrorAction Stop).Count }
+    Add-Inv 'site-admins-count' { @(Get-PnPSiteCollectionAdmin -ErrorAction Stop).Count }
+    Add-Inv 'term-groups' { @(Get-PnPTermGroup -ErrorAction Stop).Count }
+    Add-Inv 'search-rows' { (Submit-PnPSearchQuery -Query '*' -MaxResults 1 -ErrorAction Stop).TotalRows }
+    Add-Inv 'app-catalog' { if (Get-PnPTenantAppCatalogUrl -ErrorAction Stop) { 'exists' } else { 'none' } }
+    Add-Inv 'site-designs-readable' { @(Get-PnPSiteDesign -ErrorAction Stop).Count }
+    Add-Inv 'power-platform-environments' { @(Get-PnPPowerPlatformEnvironment -ErrorAction Stop).Count }
+    # Get-PnPFlow needs -Environment (without it PowerShell would wait for input).
+    Add-Inv 'flows-listable' { $e = @(Get-PnPPowerPlatformEnvironment -ErrorAction Stop)[0]; if (-not $e) { throw [System.InvalidOperationException]::new('no environment') }; @(Get-PnPFlow -Environment $e -ErrorAction Stop).Count }
+  } catch {
+    # Hide first, then cut (a cut inside an address would defeat the hiding). "not connected", not FAIL: a sign-in that
+    # does not connect is a finding, not a broken round.
+    $m = ConvertTo-Masked (Hide-Site (([string]$_.Exception.Message) -replace '\s+', ' ') $site) $secret
+    $m = $m -replace '(?i)\bfail', 'fault'   # the Deployer counts the word FAIL as a broken step
+    $lines.Add('ROUTE web-login not connected ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
+  } finally {
+    try { $null = & { Disconnect-PnPOnline -ErrorAction SilentlyContinue } *>&1 } catch { $null = $_ }
+  }
+  $lines.Add('PNP result: ' + $(if ($connected) { 'connected with web-login (PASS)' } else { 'not connected' }))
 } catch {
   $m = ConvertTo-Masked (Hide-Site ([string]$_) $site) $secret
   $lines.Add('STOPPED: ' + $m.Substring(0, [Math]::Min(300, $m.Length)))
 } finally {
   $masked = @($lines | ForEach-Object { ConvertTo-Masked (Hide-Site $_ $site) $secret })
-  try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-pnp-result-r1.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }
+  try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-pnp-result-r2.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }
   $masked | ForEach-Object { Write-Host $_ }
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }

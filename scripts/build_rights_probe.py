@@ -9,12 +9,16 @@ Coworker checks (R11, R12) answer "what can a regular member do" without a secon
 getusereffectivepermissions for the address the PFM types. Decoding the permission masks happens in the cloud,
 from the result file (docs/rights-test-plan.md "Reading the result").
 R13 (ensureuser) adds the group to the site's hidden user list; that entry stays and is harmless.
+r2 (PFM 2026-11-14, automate Part B): MAIL_CHECKS add Office 365 Users and Outlook checks that replace manual rows
+M11-M15: my licenses, a test mail to me from my mailbox, reading the office mailbox, and two test mails to me from the
+office mailbox (shared-mailbox action; From field). The PFM approved these test mails (to the PFM only). The round's
+T11 Outlook check reads how they arrived (send as or on behalf). Error text has the two addresses replaced.
 Results: the run's Result step, and a file 90161Z-T11-rights-result-r<N>.json in the site's default library.
-The result holds no names: only status codes, permission masks, principal types and role names."""
+The result holds no names: only status codes, permission masks, principal types, role names and license names."""
 import json, pathlib, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-REV = 1
+REV = 2
 NAME = f"90161Z-T11-rights-probe-r{REV}"
 RESULT_FILE = f"90161Z-T11-rights-result-r{REV}.json"
 TEST_LIST, TEST_LIB, TEST_GROUP = "PFMRightsProbeTEST", "PFMRightsProbeLib", "PFM Rights Probe TEST"
@@ -52,6 +56,27 @@ CHECKS = [
      {"logonName": "@{triggerBody()?['text_2']}"}, None, "@{body('R13')?['PrincipalType']}"),
     ("R14", "Site Owners group has a Full Control role", "GET",
      "_api/web/associatedownergroup?$select=Id,AllowMembersEditMembership", None, None, None),
+    # r2 capability inventory (PFM 2026-11-14: document more for future projects). Read-only; names of people never kept.
+    ("R15", "Site features turned on (IDs only)", "GET", "_api/web/features?$select=DefinitionId", None, None, None),
+    ("R16", "Site collection features turned on (IDs only)", "GET", "_api/site/features?$select=DefinitionId", None, None, None),
+    ("R17", "List templates offered", "GET", "_api/web/listtemplates?$select=Name,ListTemplateTypeKind,Hidden&$filter=Hidden%20eq%20false", None, None, None),
+    ("R18", "Site templates offered for subsites", "GET",
+     "_api/web/getavailablewebtemplates(lcid=1033,doincludecrosslanguage=false)?$select=Name", None, None, None),
+    ("R19", "Search works (one result, count only)", "GET",
+     "_api/search/query?querytext='*'&rowlimit=1&selectproperties='Path'", None, None, "@{body('R19')?['PrimaryQueryResult']?['RelevantResults']?['TotalRows']}"),
+    ("R20", "Storage used and quota", "GET", "_api/site/usage", None, None, None),
+    ("R21", "Tenant app catalog exists (for SPFx web parts)", "GET", "_api/SP_TenantSettings_Current", None, None,
+     "@{if(empty(body('R21')?['CorporateCatalogUrl']), 'no app catalog', 'app catalog exists')}"),
+    ("R22", "Term store readable (managed metadata)", "GET", "_api/v2.1/termStore?$select=defaultLanguageTag", None, None,
+     "@{body('R22')?['defaultLanguageTag']}"),   # keep: an OData v4 reply can carry the site URL in @odata.context
+    ("R23", "Content types on the site (count)", "GET", "_api/web/contenttypes?$select=Name&$top=500", None, None,
+     "@{length(coalesce(body('R23')?['value'], json('[]')))}"),
+    ("R24", "Site pages library and modern pages allowed", "GET",
+     "_api/web/lists/getbytitle('Site Pages')?$select=ItemCount,EnableVersioning,EnableModeration", None, None, None),
+    ("R25", "Site sensitivity label and sharing", "GET", "_api/site?$select=SensitivityLabelId,ShareByEmailEnabled,ShareByLinkEnabled", None, None, None),
+    ("R26", "Power Apps / Power Automate integration on a list (form and flow buttons)", "GET",
+     "_api/web/lists/getbytitle('PFM Publications')?$select=DisableGridEditing,EnableAttachments,DefaultDisplayFormUrl", None, None,
+     "@{if(empty(body('R26')?['DefaultDisplayFormUrl']), 'no form', 'form set')}"),
     ("W01", "Create a list", "POST", "_api/web/lists",
      {"__metadata": {"type": "SP.List"}, "BaseTemplate": 100, "Title": TEST_LIST}, None, "@{body('W01')?['Id']}"),
     ("W02", "Add a column", "POST", f"_api/web/lists/getbytitle('{TEST_LIST}')/fields",
@@ -78,6 +103,35 @@ CHECKS = [
      {"X-HTTP-Method": "DELETE", "IF-MATCH": "*"}, None),
     ("X03", "Cleanup: delete the test group", "POST", "_api/web/sitegroups/removebyid(@{body('W07')?['Id']})", None, None, None),
 ]
+ME = "@{body('U01')?['mail']}"
+OFFICE = "@{triggerBody()?['text_3']}"
+TEST_BODY = "<p>90-161.Z rights probe test mail (Task 11). Delete it after the round reads it.</p>"
+# (id, what it answers, connector, operationId, parameters, keep expression): run after the SharePoint checks.
+MAIL_CHECKS = [
+    ("U01", "Office 365 Users: read my own profile (D1)", "shared_office365users", "MyProfile_V2", {},
+     "@{if(empty(body('U01')?['mail']), 'no mail address', 'mail address found')}"),
+    ("U02", "My license names (P16, was M11)", "shared_office365users", "HttpRequest",
+     {"Uri": "/v1.0/me/licenseDetails?$select=skuPartNumber", "Method": "GET"}, "@{join(coalesce(body('U02_names'), json('[]')), ', ')}"),
+    ("E01", "Send a mail from my mailbox to me (E1, was M12)", "shared_office365", "SendEmailV2",
+     {"emailMessage/To": ME, "emailMessage/Subject": "90161Z TEST E01 my mailbox", "emailMessage/Body": TEST_BODY,
+      "emailMessage/Importance": "Normal"}, "-"),
+    ("E02", "Read the office mailbox inbox (E2, E5, with T11 Outlook check O1)", "shared_office365", "HttpRequest",
+     {"Uri": "/v1.0/users/" + OFFICE + "/mailFolders/inbox/messages?$top=1&$select=receivedDateTime", "Method": "GET"}, "-"),
+    ("E03", "Send from the office mailbox, shared-mailbox action (E3, was M14)", "shared_office365", "SharedMailboxSendEmailV2",
+     {"emailMessage/MailboxAddress": OFFICE, "emailMessage/To": ME, "emailMessage/Subject": "90161Z TEST E03 shared mailbox action",
+      "emailMessage/Body": TEST_BODY, "emailMessage/Importance": "Normal"}, "-"),
+    ("E04", "Send with From = the office mailbox (E4, was M15)", "shared_office365", "SendEmailV2",
+     {"emailMessage/To": ME, "emailMessage/From": OFFICE, "emailMessage/Subject": "90161Z TEST E04 from field",
+      "emailMessage/Body": TEST_BODY, "emailMessage/Importance": "Normal"}, "-"),
+]
+# Error text can quote the addresses: replace both before the text is kept.
+# if(empty()): replace() refuses an empty old value, and an optional field left empty can be '' or null.
+# toLower first: an error can spell an address in other capitals than the one typed.
+HIDE = ("replace(replace(toLower({x}), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), "
+        "if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')")
+# Only the license names leave U02: the Graph reply also carries the user's object ID.
+EXTRA = {"U02": ("U02_names", {"type": "Select", "inputs": {"from": "@coalesce(body('U02')?['value'], json('[]'))",
+                                                            "select": "@item()?['skuPartNumber']"}})}
 ALL = ["Succeeded", "Failed", "Skipped", "TimedOut"]
 HOST = {"apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "HttpRequest"}
 AUTH = {"value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']", "type": "Raw"}
@@ -92,33 +146,55 @@ def http(method, uri, body, headers, after):
     return {"runAfter": after, "type": "OpenApiConnection", "inputs": {"parameters": p, "host": HOST, "authentication": AUTH}}
 
 
+def op(conn, operation, params, after):
+    return {"runAfter": after, "type": "OpenApiConnection", "inputs": {"parameters": params, "host": {
+        "apiId": f"/providers/Microsoft.PowerApps/apis/{conn}", "connectionName": conn, "operationId": operation}, "authentication": AUTH}}
+
+
+def record(cid, what, keep, hide=False):
+    err = f"if(greaterOrEquals(int(coalesce(outputs('{cid}')?['statusCode'], 0)), 400), take(string(body('{cid}')), 600), '')"
+    out = f"take(string(body('{cid}')), 3000)"
+    if hide: err, out = HIDE.format(x=err), HIDE.format(x=out)
+    return {"runAfter": {cid: ALL}, "type": "AppendToArrayVariable", "inputs": {"name": "Results", "value": {
+        "id": cid, "what": what, "code": f"@{{outputs('{cid}')?['statusCode']}}",
+        "out": keep or f"@{{{out}}}", "err": f"@{{{err}}}"}}}
+
+
 def build():
     actions = {"Results": {"runAfter": {}, "type": "InitializeVariable",
                            "inputs": {"variables": [{"name": "Results", "type": "array", "value": []}]}}}
     prev = "Results"
     for cid, what, method, uri, body, headers, keep in CHECKS:
         actions[cid] = http(method, uri, body, headers, {prev: ALL})
-        rec = f"Record_{cid}"
-        actions[rec] = {"runAfter": {cid: ALL}, "type": "AppendToArrayVariable", "inputs": {"name": "Results", "value": {
-            "id": cid, "what": what, "code": f"@{{outputs('{cid}')?['statusCode']}}",
-            "out": keep or f"@{{take(string(body('{cid}')), 3000)}}",
-            "err": f"@{{if(greaterOrEquals(int(coalesce(outputs('{cid}')?['statusCode'], 0)), 400), take(string(body('{cid}')), 600), '')}}"}}}
-        prev = rec
+        actions[f"Record_{cid}"] = record(cid, what, keep)
+        prev = f"Record_{cid}"
+    for cid, what, conn, operation, params, keep in MAIL_CHECKS:
+        actions[cid] = op(conn, operation, params, {prev: ALL})
+        after = cid
+        if cid in EXTRA:
+            xname, xact = EXTRA[cid]
+            actions[xname] = dict(xact, runAfter={cid: ALL})
+            after = xname
+        actions[f"Record_{cid}"] = record(cid, what, keep, hide=True)
+        actions[f"Record_{cid}"]["runAfter"] = {after: ALL}
+        prev = f"Record_{cid}"
     actions["Write_Result_File"] = http("POST", f"_api/web/DefaultDocumentLibrary/RootFolder/Files/add(url='{RESULT_FILE}',overwrite=true)",
                                         None, None, {prev: ALL})
     actions["Write_Result_File"]["inputs"]["parameters"]["parameters/body"] = "@{string(variables('Results'))}"
     actions["Result"] = {"runAfter": {"Write_Result_File": ALL}, "type": "Compose", "inputs": "@variables('Results')"}
     return {
         "displayName": f"90161Z T11 Rights Probe r{REV}",
-        "description": "Tests what the person who runs it, and an optional coworker, can do on a SharePoint site. Creates TEST objects, then deletes them. Records status codes and permission masks only, no names.",
-        "connections": ["shared_sharepointonline"],
+        "description": "Tests what the person who runs it, and an optional coworker, can do on a SharePoint site, and what they can do with the office mailbox. Creates TEST objects, then deletes them; sends 3 test mails to the person who runs it. Records status codes, permission masks and license names only, no names.",
+        "connections": ["shared_sharepointonline", "shared_office365users", "shared_office365"],
         "triggers": {"manual": {"type": "Request", "kind": "Button", "inputs": {"schema": {"type": "object", "properties": {
             "text": {"title": "Site address", "type": "string", "x-ms-dynamically-added": True, "x-ms-content-hint": "TEXT",
                      "description": "Copy it from the browser: everything up to and including the site name"},
             "text_1": {"title": "Coworker e-mail (optional)", "type": "string", "x-ms-dynamically-added": True, "x-ms-content-hint": "TEXT",
                        "description": "A regular site member. If empty, R11 and R12 fail; that is expected"},
             "text_2": {"title": "Wing group e-mail (optional)", "type": "string", "x-ms-dynamically-added": True, "x-ms-content-hint": "TEXT",
-                       "description": "The group that gives wing members access. If empty, R13 fails; that is expected"}},
+                       "description": "The group that gives wing members access. If empty, R13 fails; that is expected"},
+            "text_3": {"title": "Office mailbox e-mail (optional)", "type": "string", "x-ms-dynamically-added": True, "x-ms-content-hint": "TEXT",
+                       "description": "The office's shared mailbox. If empty, E02-E04 fail; that is expected"}},
             "required": ["text"]}}}},
         "actions": actions,
     }
@@ -130,4 +206,6 @@ if __name__ == "__main__":
     if "--check" in sys.argv:
         ok = out.exists() and out.read_text(encoding="utf-8") == text
         print("OK rights probe def" if ok else f"STALE {out.name}: run scripts/build_rights_probe.py"); sys.exit(0 if ok else 1)
-    out.write_text(text, encoding="utf-8"); print(f"wrote {out.relative_to(ROOT)} ({len(CHECKS)} checks)")
+    out.write_text(text, encoding="utf-8"); old = ROOT / "flow" / "defs" / f"90161Z-T11-rights-probe-r{REV - 1}.json"
+    if old.exists(): old.unlink()  # one live revision
+    print(f"wrote {out.relative_to(ROOT)} ({len(CHECKS) + len(MAIL_CHECKS)} checks)")

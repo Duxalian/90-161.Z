@@ -2,13 +2,8 @@
   "source": "docs/rights-test-plan.md section 6",
   "rows": [
     {
-      "id": "M03",
-      "do": "Power Automate: new instant flow. Add one action each: SharePoint Get items, Office 365 Outlook Send an email (V2), Office 365 Users Get my profile (V2), Approvals Start and wait for an approval, Microsoft Teams Post message, RSS List all RSS feed items, Power Apps for Makers Get Apps. Save.",
-      "note": "Saved, or the data policy error and which connectors it names"
-    },
-    {
       "id": "M04",
-      "do": "Power Apps: Solutions, Import solution, choose the T05 sample zip you exported earlier",
+      "do": "Power Apps: Solutions, Import solution, choose 90161Z-flows-solution-r1.zip (the round saves it in T11; the T05 sample is gone). Under Advanced settings, clear \"Enable plug-in steps and flows\" so its flows stay off",
       "note": "Imported, or the error"
     },
     {
@@ -28,43 +23,18 @@
     },
     {
       "id": "M08",
-      "do": "Share the M03 flow run-only with one coworker; open \"Manage run-only permissions\"",
+      "do": "Share the flow \"90161Z T11 Rights Probe r2\" run-only with one coworker; open \"Manage run-only permissions\"; then remove them",
       "note": "Whether \"Use this connection\" is offered for SharePoint and Outlook"
     },
     {
       "id": "M09",
-      "do": "Add a coworker as co-owner of the M03 flow and of \"90161Z TEST\"; then remove them",
+      "do": "Add a coworker as co-owner of the flow \"90161Z T11 Rights Probe r2\" and of \"90161Z TEST\"; then remove them",
       "note": "Allowed or not"
     },
     {
       "id": "M10",
       "do": "Power Platform admin center or the environment picker: is \"New environment\" or \"Create developer environment\" offered (do not create)",
       "note": "Offered or not"
-    },
-    {
-      "id": "M11",
-      "do": "Power Automate: Settings (gear), View my licenses",
-      "note": "License names only"
-    },
-    {
-      "id": "M12",
-      "do": "In the M03 flow: Send an email (V2) to yourself; run it",
-      "note": "Arrived or error"
-    },
-    {
-      "id": "M13",
-      "do": "Outlook: Add shared folder or mailbox, the office mailbox",
-      "note": "Opens or not"
-    },
-    {
-      "id": "M14",
-      "do": "M03 flow: Send an email from a shared mailbox (V2), office mailbox, to yourself; run",
-      "note": "Arrived (and the From line) or error"
-    },
-    {
-      "id": "M15",
-      "do": "M03 flow: Send an email (V2), show advanced, From (Send as) = office mailbox, to yourself; run",
-      "note": "Arrived (From shows \"on behalf of\"?) or error"
     },
     {
       "id": "M16",
@@ -87,8 +57,33 @@
       "note": "One .zip downloaded, or each file separately, or Download not offered"
     },
     {
+      "id": "M21",
+      "do": "Microsoft Forms (Microsoft 365 app launcher, Forms): create a form \"90161Z TEST form\" with one question",
+      "note": "Offered and saved, or error"
+    },
+    {
+      "id": "M22",
+      "do": "Power Automate: new automated flow, trigger \"When a new response is submitted\" (Microsoft Forms), pick \"90161Z TEST form\"; save",
+      "note": "Saved or error"
+    },
+    {
+      "id": "M23",
+      "do": "Power Apps: Tables in the Default environment (Dataverse), and whether a Premium connector can be added to \"90161Z TEST\" (look only)",
+      "note": "Tables shown or not; Premium allowed or blocked"
+    },
+    {
+      "id": "M24",
+      "do": "Power Apps and Power Automate: is Copilot or AI Builder offered (look only)",
+      "note": "Offered or not"
+    },
+    {
+      "id": "M25",
+      "do": "SharePoint list PFM Publications: Integrate, Power Apps, Customize forms; Integrate, Power Automate (look only, do not save)",
+      "note": "Each offered or not"
+    },
+    {
       "id": "M19",
-      "do": "Clean up: delete the M03 and M16 flows, \"90161Z TEST\" and its solution",
+      "do": "Clean up: delete the M16 and M22 flows, \"90161Z TEST\", its solution, the solution M04 imported, and \"90161Z TEST form\"",
       "note": "Done"
     }
   ]
