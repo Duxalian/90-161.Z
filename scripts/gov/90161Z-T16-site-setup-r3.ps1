@@ -3,7 +3,7 @@
   90-161.Z Task 16 site setup, r3 (R14: logo r2, variant A bold white, PFM 14 Nov 26). Windows PowerShell 5.1, the installed PnP.PowerShell 1.12.0 (no other module).
 .DESCRIPTION
   What it is for: sets up the new SharePoint site in one run, so the PFM does not click it by hand (DECISIONS 14 Nov 26:
-  optional Deployer PnP write steps, allowed because the read-only PnP test passed). About 10 minutes (an estimate).
+  optional Deployer PnP write steps, allowed because the read-only PnP test passed). About 5 minutes (an estimate).
   Power Automate and the manual site pages stay the documented fallback for every item.
 
   WHAT IT CHANGES ON THE SITE (nothing else on the site, nothing on this computer except the files named below):

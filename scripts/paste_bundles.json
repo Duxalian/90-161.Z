@@ -4,7 +4,7 @@
     {
       "out": "scripts/gov/paste/90161Z-R14-round-r1.ps1",
       "round": "R14",
-      "title": "Round R14: site logo r2 (variant A, bold white) set by site setup r3; probe window fixed (minimizable, beside the browser)",
+      "title": "Round R14: site logo r2 (variant A, bold white) set by site setup r3; the guide-step window (not used here) is minimizable and sits beside the browser",
       "files": [
         {
           "dir": "T14",
@@ -164,10 +164,6 @@
         {
           "path": "T11\\90161Z-T11-rights-result-r2.json",
           "kind": "glob"
-        },
-        {
-          "path": "T11",
-          "kind": "dir"
         },
         {
           "path": "Rounds\\R12",

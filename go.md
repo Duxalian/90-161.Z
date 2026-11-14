@@ -28,7 +28,7 @@ Sensitivity label: every render gets the label from Config\90161Z-label.json. Ne
 
 **For:** sets the logo I picked (variant A, bold white) in the site header. The step window for Power Automate tasks is also fixed (it can be minimized and sits beside the browser); this round does not use it.
 **Time:** about 5 minutes (estimate).
-**Changes:** on my computer: writes into T14, T16 and Rounds\R14; moves T11, Rounds\R12, the old logo files and the old site setup script to the Recycle Bin. On the new site: uploads the new logo and thumbnail to Site Assets and sets them in the header; checks the permissions, time zone, seals and lists again (no change when already right). Saves one Outlook draft (never sent).
+**Changes:** on my computer: writes into T14, T16 and Rounds\R14; moves Rounds\R12, the old logo files and the old site setup script to the Recycle Bin. On the new site: uploads the new logo and thumbnail to Site Assets and sets them in the header; checks the permissions, time zone, seals and lists again (no change when already right). Saves one Outlook draft (never sent).
 Steps:
 1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R14-round-r1.ps1
