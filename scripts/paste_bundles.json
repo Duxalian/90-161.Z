@@ -290,7 +290,7 @@
       "apps": [
         {
           "name": "90-161.Z: publications tracker (test round R15)",
-          "summary": "Tests how the tracker's flows will be put on your site. You import one test flow and the access test flow in Power Automate. Then the Deployer sets the site logo, checks the site settings and collects the results of both flows.",
+          "summary": "Tests the flow import, then sets up your site: logo, settings and an access test.",
           "steps": [
             "T17 Solution import test",
             "T11 Rights probe r4: import and run the flow",

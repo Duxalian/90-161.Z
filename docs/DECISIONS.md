@@ -5,6 +5,8 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-14 | No deploy unless every check passes (FAILED or NOT RUN blocks; WARNING does not; no "deploy anyway"). Check text: sentence case, screen names in "quotes", reported values in [brackets]. | PFM | https://claude.ai/artifact/RY4rWNuBP3rwAai9v3uWD8 |
+| 2026-11-14 | Plain-English sweep: go.md and Deployer step notes in R16; each flow, package and solution at its next revision. Deployer first screen stays minimal. | PFM | scripts/build_paste_bundles.py |
 | 2026-11-14 | All text the PFM or a user sees (Deployer window, packages, imports, descriptions, subtitles) is plain, simple English. | PFM | scripts/build_paste_bundles.py |
 | 2026-11-14 | Deployer window: Choose app > Check > Deploy; embedded catalog only (3A stays); two bars (PROGRESS lines, else time); checks: computer, network, site rights (PnP sign-in), Power Automate. | PFM | scripts/build_paste_bundles.py |
 | 2026-11-14 | Site logo = variant A, bold white (lines 60% thicker than r1; replaces option D's header logo). Thumbnail stays navy, same bold lines. | PFM | https://claude.ai/artifact/AZUqwxiPwSruC65eH1uhHx |
