@@ -11,14 +11,17 @@ from the result file (docs/rights-test-plan.md "Reading the result").
 R13 (ensureuser) adds the group to the site's hidden user list; that entry stays and is harmless.
 r2 (PFM 2026-11-14, automate Part B): MAIL_CHECKS add Office 365 Users and Outlook checks that replace manual rows
 M11-M15: my licenses, a test mail to me from my mailbox, reading the office mailbox, and two test mails to me from the
-office mailbox (shared-mailbox action; From field). The PFM approved these test mails (to the PFM only). The round's
-T11 Outlook check reads how they arrived (send as or on behalf). Error text has the two addresses replaced.
+office mailbox (shared-mailbox action; From field). The PFM approved these test mails (to the PFM only).
+r3 (PFM 2026-11-14): the Outlook COM check stopped at the Outlook address prompt, so the flow now does that part: E05
+waits 2 minutes, then reads the test mails in my mailbox (Graph, subject, from, sender) and records for E01, E03 and
+E04 whether each arrived and how (from-me, sent-as-office, on-behalf-of-office, other) by comparing the from and sender
+addresses to ME and OFFICE in lower case. Addresses are never written. Error text has the two addresses replaced.
 Results: the run's Result step, and a file 90161Z-T11-rights-result-r<N>.json in the site's default library.
 The result holds no names: only status codes, permission masks, principal types, role names and license names."""
 import json, pathlib, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-REV = 2
+REV = 3
 NAME = f"90161Z-T11-rights-probe-r{REV}"
 RESULT_FILE = f"90161Z-T11-rights-result-r{REV}.json"
 TEST_LIST, TEST_LIB, TEST_GROUP = "PFMRightsProbeTEST", "PFMRightsProbeLib", "PFM Rights Probe TEST"
@@ -106,6 +109,25 @@ CHECKS = [
 ME = "@{body('U01')?['mail']}"
 OFFICE = "@{triggerBody()?['text_3']}"
 TEST_BODY = "<p>90-161.Z rights probe test mail (Task 11). Delete it after the round reads it.</p>"
+# E05: Select turns each test mail into "E0n:how"; the keep expression reads arrived and how from that list. No address is kept.
+_FROM = "toLower(coalesce(item()?['from']?['emailAddress']?['address'], '<none>'))"
+_SENDER = "toLower(coalesce(item()?['sender']?['emailAddress']?['address'], '<none>'))"
+_ME = "toLower(coalesce(body('U01')?['mail'], '<me>'))"
+_OFF = "toLower(coalesce(triggerBody()?['text_3'], '<office>'))"
+E05_HOW = ("concat(substring(item()?['subject'], add(indexOf(item()?['subject'], 'TEST E0'), 5), 3), ':', "
+           f"if(and(equals({_FROM}, {_ME}), equals({_SENDER}, {_ME})), 'from-me', "
+           f"if(and(equals({_FROM}, {_OFF}), equals({_SENDER}, {_OFF})), 'sent-as-office', "
+           f"if(and(equals({_FROM}, {_OFF}), equals({_SENDER}, {_ME})), 'on-behalf-of-office', 'other'))))")
+_J = "join(coalesce(body('E05_how'), json('[]')), ',')"
+
+
+def _e05(tag):
+    how = (f"if(contains({_J}, '{tag}:from-me'), 'from-me', if(contains({_J}, '{tag}:sent-as-office'), 'sent-as-office', "
+           f"if(contains({_J}, '{tag}:on-behalf-of-office'), 'on-behalf-of-office', 'other')))")
+    return f"concat('{tag} arrived=', contains({_J}, '{tag}:'), ' how=', if(contains({_J}, '{tag}:'), {how}, 'none'))"
+
+
+E05_KEEP = "concat(" + ", '; ', ".join(_e05(t) for t in ("E01", "E03", "E04")) + ")"
 # (id, what it answers, connector, operationId, parameters, keep expression): run after the SharePoint checks.
 MAIL_CHECKS = [
     ("U01", "Office 365 Users: read my own profile (D1)", "shared_office365users", "MyProfile_V2", {},
@@ -115,7 +137,7 @@ MAIL_CHECKS = [
     ("E01", "Send a mail from my mailbox to me (E1, was M12)", "shared_office365", "SendEmailV2",
      {"emailMessage/To": ME, "emailMessage/Subject": "90161Z TEST E01 my mailbox", "emailMessage/Body": TEST_BODY,
       "emailMessage/Importance": "Normal"}, "-"),
-    ("E02", "Read the office mailbox inbox (E2, E5, with T11 Outlook check O1)", "shared_office365", "HttpRequest",
+    ("E02", "Read the office mailbox inbox (E2, E5)", "shared_office365", "HttpRequest",
      {"Uri": "/v1.0/users/" + OFFICE + "/mailFolders/inbox/messages?$top=1&$select=receivedDateTime", "Method": "GET"}, "-"),
     ("E03", "Send from the office mailbox, shared-mailbox action (E3, was M14)", "shared_office365", "SharedMailboxSendEmailV2",
      {"emailMessage/MailboxAddress": OFFICE, "emailMessage/To": ME, "emailMessage/Subject": "90161Z TEST E03 shared mailbox action",
@@ -123,6 +145,9 @@ MAIL_CHECKS = [
     ("E04", "Send with From = the office mailbox (E4, was M15)", "shared_office365", "SendEmailV2",
      {"emailMessage/To": ME, "emailMessage/From": OFFICE, "emailMessage/Subject": "90161Z TEST E04 from field",
       "emailMessage/Body": TEST_BODY, "emailMessage/Importance": "Normal"}, "-"),
+    ("E05", "After 2 minutes: did E01, E03, E04 arrive, and how (from-me, sent-as-office, on-behalf-of-office, other)", "shared_office365", "HttpRequest",
+     {"Uri": "/v1.0/me/messages?$filter=startswith(subject,'90161Z TEST E0')&$select=subject,from,sender&$top=20", "Method": "GET"},
+     "@{" + E05_KEEP + "}"),
 ]
 # Error text can quote the addresses: replace both before the text is kept.
 # if(empty()): replace() refuses an empty old value, and an optional field left empty can be '' or null.
@@ -130,7 +155,8 @@ MAIL_CHECKS = [
 HIDE = ("replace(replace(toLower({x}), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), "
         "if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')")
 # Only the license names leave U02: the Graph reply also carries the user's object ID.
-EXTRA = {"U02": ("U02_names", {"type": "Select", "inputs": {"from": "@coalesce(body('U02')?['value'], json('[]'))",
+EXTRA = {"E05": ("E05_how", {"type": "Select", "inputs": {"from": "@coalesce(body('E05')?['value'], json('[]'))", "select": "@" + E05_HOW}}),
+         "U02": ("U02_names", {"type": "Select", "inputs": {"from": "@coalesce(body('U02')?['value'], json('[]'))",
                                                             "select": "@item()?['skuPartNumber']"}})}
 ALL = ["Succeeded", "Failed", "Skipped", "TimedOut"]
 HOST = {"apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "HttpRequest"}
@@ -169,6 +195,9 @@ def build():
         actions[f"Record_{cid}"] = record(cid, what, keep)
         prev = f"Record_{cid}"
     for cid, what, conn, operation, params, keep in MAIL_CHECKS:
+        if cid == "E05":   # the test mails need time to arrive
+            actions["Delay_E05"] = {"runAfter": {prev: ALL}, "type": "Wait", "inputs": {"interval": {"count": 2, "unit": "Minute"}}}
+            prev = "Delay_E05"
         actions[cid] = op(conn, operation, params, {prev: ALL})
         after = cid
         if cid in EXTRA:
@@ -184,7 +213,7 @@ def build():
     actions["Result"] = {"runAfter": {"Write_Result_File": ALL}, "type": "Compose", "inputs": "@variables('Results')"}
     return {
         "displayName": f"90161Z T11 Rights Probe r{REV}",
-        "description": "Tests what the person who runs it, and an optional coworker, can do on a SharePoint site, and what they can do with the office mailbox. Creates TEST objects, then deletes them; sends 3 test mails to the person who runs it. Records status codes, permission masks and license names only, no names.",
+        "description": "Tests what the person who runs it, and an optional coworker, can do on a SharePoint site, and what they can do with the office mailbox. Creates TEST objects, then deletes them; sends 3 test mails to the person who runs it, waits 2 minutes and reads how they arrived (no addresses kept). Records status codes, permission masks and license names only, no names.",
         "connections": ["shared_sharepointonline", "shared_office365users", "shared_office365"],
         "triggers": {"manual": {"type": "Request", "kind": "Button", "inputs": {"schema": {"type": "object", "properties": {
             "text": {"title": "Site address", "type": "string", "x-ms-dynamically-added": True, "x-ms-content-hint": "TEXT",
@@ -194,7 +223,7 @@ def build():
             "text_2": {"title": "Wing group e-mail (optional)", "type": "string", "x-ms-dynamically-added": True, "x-ms-content-hint": "TEXT",
                        "description": "The group that gives wing members access. If empty, R13 fails; that is expected"},
             "text_3": {"title": "Office mailbox e-mail (optional)", "type": "string", "x-ms-dynamically-added": True, "x-ms-content-hint": "TEXT",
-                       "description": "The office's shared mailbox. If empty, E02-E04 fail; that is expected"}},
+                       "description": "The office's shared mailbox. If empty, E02-E05 fail; that is expected"}},
             "required": ["text"]}}}},
         "actions": actions,
     }

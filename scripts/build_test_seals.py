@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build fake test seals for Task 7 (seal prep, L-007a). Never hand-edit the PNGs; change this script and rebuild.
 
-The images are plain shapes, not real insignia. EXPECTED gives the result 90161Z-T07-seal-prep-r3.ps1 must report.
+The images are plain shapes, not real insignia. EXPECTED gives the result 90161Z-T07-seal-prep-r4.ps1 must report.
 
 Usage:
   python3 scripts/build_test_seals.py            write samples/90161Z-T07-testseal-*-r1.png
