@@ -5,7 +5,7 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
-| 2026-11-14 | Typical wing users have Read on the site (R13 probe; PFM confirmed). Customers cannot add list rows themselves: requests come in through a form or a flow. | PFM | docs/reviews/2026-11-14-r13-results.md |
+| 2026-11-14 | Wing users have only Read on the site; anyone using the app enters data through it. Open: how the app writes (list-level rights or a flow), see NEXT_PROMPT. | PFM | docs/reviews/2026-11-14-r13-results.md |
 | 2026-11-14 | The Deployer delivers every file a round needs (no separate downloads) and guides steps done in another program (R13: probe flow import); its log text reads professionally. | PFM | docs/reviews/2026-11-14-r12-results.md |
 | 2026-11-14 | Passed steps (T01 render test, T15 inventory) run in a round only when their files changed since the round that last passed them (hash in scripts/paste_bundles.json); still tickable by hand. | PFM | scripts/build_paste_bundles.py |
 | 2026-11-14 | Remove manual gov-device work wherever a script can do it without weaker checks (R12: PnP site setup, seal prep from T07\Seals, probe flow reads its own test mails). | PFM | docs/reviews/2026-11-14-r11-results.md |

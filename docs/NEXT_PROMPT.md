@@ -21,12 +21,12 @@ Updated: 2026-11-14 by Claude. Keep this file at 40 lines or fewer and state onl
 
 ## Waiting on the PFM (go.md)
 
-0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
 1. R13 passed (14 Nov): probe r3 ran from the guided step; 17 of 17 seals prepared and uploaded (34 files); site setup 0 problems; Task 11 complete. Results: docs/reviews/2026-11-14-r13-results.md; probe answers in the private log (row 127). go.md has no open task. Next: the PFM picks a logo variant on the preview https://claude.ai/artifact/AZUqwxiPwSruC65eH1uhHx (Now, A bold white, B navy tile, C bold navy), then a round sets it; probe r4 drops request addresses from kept errors, then T09 reader, T12 colors. T01, T15, T16 PnP test output text not cleaned yet (steps off). Open: S2, S3, S5 3-15, S6, S7, S8-S11, F1-F4 (sweep page).
 2. Task 6 prompt r2 follow-up: list AFI (validator F-032/F-039 fixed 13 Nov).
 3. Seals: Claude corrected 17 unit seals (1,200 px, glow removed, 2 px feather; tool in the session scratchpad, not in the repo) and mailed them in 6 parts; R13 prepared and uploaded all 17 (library 90-161.Z, Seals and Seals/Prepared).
 4. Logo option D (PFM 14 Nov): mark r1 no fill on the blue header, navy thumbnail (assets/logo, scripts/build_logo.py); R12 and R13 set the logo (read back), but the PFM sees only a thin white border: redesign as a preview. After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
-5. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
+5. App writes (PFM 14 Nov: wing users Read on the site, data entry through the app): Power Apps writes with the user's own rights, so choose list-level Contribute on the app's lists (site stays Read) or a flow that writes with the PFM's connection. Agent REC: list-level rights on the intake lists only (probe W04/W05: breaking inheritance works).
+6. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
 
 ## Next design (after Task 5)
 
