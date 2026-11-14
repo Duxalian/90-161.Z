@@ -26,7 +26,7 @@ Sensitivity label: every render gets the label from Config\90161Z-label.json. Ne
 
 ## Round R13 r1: the probe flow, the seals and the site setup in one round (open, 14 Nov 26)
 
-**For:** finishes what R12 could not: the probe flow r3 (Task 11 Part A) now comes from the round itself (no separate download), seal prep also searches Outlook subfolders and Junk E-mail, and the seals upload is fixed. The log text is rewritten to read cleanly.
+**For:** finishes what R12 could not: the probe flow r3 (Task 11 Part A) now comes from the round itself (no separate download), seal prep searches every Outlook mail folder, and the seals upload is fixed. The log text is rewritten to read cleanly.
 **Time:** about 25 minutes (estimate): probe flow import and run 5-10, seal prep 1, site setup 5 plus up to 15 waiting for the probe result.
 **Changes:** on my computer: writes into T01, T07, T11, T14, T15, T16, Config and Rounds\R13; saves the seal attachments from the "90161Z T07 seals" e-mails into T07\Seals (reads Outlook, changes nothing there); moves Rounds\R11, T10, the Part B form and old scripts to the Recycle Bin. In Power Automate: imports one flow, "90161Z T11 Rights Probe r3", and runs it (what it does on the site: Task 11 below). On the new site: checks the permissions and time zone (already set), sets the logo again, creates the library 90-161.Z with the folders Seals and Seals/Prepared, uploads the seals, and copies the probe result to T11. Nothing else. Saves one Outlook draft (never sent).
 Steps:
