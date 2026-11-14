@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R13, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = 'a4346f96'
+$buildId = '87137f23'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R13'
 $usersRoot = 'C:\Users'
@@ -1601,7 +1601,7 @@ try {
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }
 '@ }
-$files += @{ Dir = 'T07'; Name = '90161Z-T07-seal-prep-r5.ps1'; Kind = 'text'; Sha = '25c77ca0eac9'; Data = @'
+$files += @{ Dir = 'T07'; Name = '90161Z-T07-seal-prep-r5.ps1'; Kind = 'text'; Sha = '850222610bf8'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 7 seal prep, r5 (L-007, L-007a). Windows PowerShell 5.1, System.Drawing only (no modules).
@@ -1806,8 +1806,9 @@ try {
         $cut = (Get-Date).AddDays(-30)
         foreach ($folder in $folders) {
           $searched++
-          $items = $folder.Items
-          try { $items.Sort('[ReceivedTime]', $true) } catch { continue }
+          # Filter to the last 30 days before sorting, so a large mailbox stays fast (review R13).
+          try { $items = $folder.Items.Restrict("[ReceivedTime] >= '" + $cut.ToString('g') + "'") } catch { $items = $folder.Items }
+          try { if ($items.Count -eq 0) { continue }; $items.Sort('[ReceivedTime]', $true) } catch { continue }
           foreach ($m in $items) {
             try {
               if ($m.Class -ne 43) { continue }

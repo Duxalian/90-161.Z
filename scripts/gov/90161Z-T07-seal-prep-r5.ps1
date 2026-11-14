@@ -202,8 +202,9 @@ try {
         $cut = (Get-Date).AddDays(-30)
         foreach ($folder in $folders) {
           $searched++
-          $items = $folder.Items
-          try { $items.Sort('[ReceivedTime]', $true) } catch { continue }
+          # Filter to the last 30 days before sorting, so a large mailbox stays fast (review R13).
+          try { $items = $folder.Items.Restrict("[ReceivedTime] >= '" + $cut.ToString('g') + "'") } catch { $items = $folder.Items }
+          try { if ($items.Count -eq 0) { continue }; $items.Sort('[ReceivedTime]', $true) } catch { continue }
           foreach ($m in $items) {
             try {
               if ($m.Class -ne 43) { continue }
