@@ -11,10 +11,13 @@ Names (PFM, 2026-11-11, docs/DECISIONS.md): every list has the prefix PFM. Each 
 | PFM Offices | PFMOffices | One row per coordinating office | All site members |
 | PFM Series | PFMSeries | Series numbers and titles (DAFMAN Table A2.1), 39 rows added by the flow | All site members |
 | PFM Process Steps | PFMProcessSteps | The process steps with Table A5.2 target business days (draft; not seeded) | All site members |
-| PFM Settings | PFMSettings | One row per setting (wing name, PFM mailbox, defaults); 2 rows added by the flow (DAFMAN 5.2, 5.2.2 suspense days) | All site members |
-| PFM Publications | PFMPublications | One row per action (8 DAFMAN 1.1.4 types); points to its Product Index row | All site members |
+| PFM Settings | PFMSettings | One row per setting (wing name, PFM mailbox, defaults); 7 rows added by the flow (2 with values: DAFMAN 5.2, 5.2.2 suspense days) | All site members |
+| PFM Guidance | PFMGuidance | The guidance the app shows on each screen | All site members |
+| PFM Publications | PFMPublications | One row per action (8 DAFMAN 1.1.4 types); points to its Product Index row | All site members; edit own rows (10A) |
+| PFM Waivers | PFMWaivers | Waivers written into wing publications (DAFMAN 9.5.3) | All site members |
 | PFM Activity Log | PFMActivityLog | One row per event; Created and Publication indexed | All site members |
-| PFM Endorsements | PFMEndorsements | One row per coordinator per action; Coordination Stage (Privacy Review, Formal Coordination, Legal) | All site members |
+| PFM Endorsements | PFMEndorsements | One row per coordinator per action; Coordination Stage (Privacy Review, Formal Coordination, Legal) | All site members; edit own rows (10A) |
+| PFM Recommendations (DAF Form 847) | PFMRecommendations | Recommended changes to publications (DAF Form 847) | All site members |
 | PFM Product Index | PFMProductIndex | The Product Index (DAFMAN 6.4.2) | All site members |
 | PFM Reviews | PFMReviews | One row per periodic or special review (DAFMAN 7.4.2-7.4.4) | All site members |
 
@@ -22,24 +25,25 @@ Columns, views and their DAFMAN references: `schemas/lists/*.json` (one file per
 
 ## 2. Import and run
 
-Package: `flow/packages/90161Z-T02-provision-lists-r10.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r10.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2.
+Package: `flow/packages/90161Z-T02-provision-lists-r11.zip` (built by `python3 scripts/build_flow_package.py` from `flow/defs/90161Z-T02-provision-lists-r11.json`; the payload is embedded at build). Steps for the gov device are in go.md, Task 2 (new site, PFM S1, 2026-11-14).
 
 The flow asks for one input, **Site URL**: the full address of the site that will hold the lists. Paste it from the site's address bar. The site-title check was removed in r9 (PFM, 2026-11-12); check the address before you run.
 
 Order of work:
-1. **Create Lists**: 9 lists under their URL names, versioning on.
+1. **Create Lists**: 12 lists under their URL names, versioning on.
 2. **Get ... ID** (Offices, Process Steps, Product Index, Publications, Series): the IDs that lookup columns need.
 3. **Create Fields And Views**: columns, views and view columns, one request at a time.
-4. **Add Rows**: the 39 series rows into PFM Series and the 2 rows into PFM Settings.
+4. **Add Rows**: 88 rows: 39 into PFM Series, 7 into PFM Settings, 29 into PFM Offices, 13 into PFM Process Steps.
 5. **Apply Updates**: index Created on the Activity Log, rename the Title column where a list uses another label (Setting, Event, Office), then set each list's display title. This runs last because steps 1-3 find lists by URL name.
-6. **Result** shows the counts.
+6. **Set Item Permissions** (from r11): item-level permissions on PFM Publications and PFM Endorsements (section 4). If SharePoint refuses, the run still ends and Result says NOT SET.
+7. **Result** shows the counts and the permission result.
 
 ## 3. Checks after the run
 
 | Check | Pass |
 |---|---|
-| Run | Succeeded; Result shows "Lists: 9, fields and views: 213, rows: 41, updates: 15. Provisioning finished." |
-| Site contents | The 9 display titles in section 1 exist; PFM Series has 39 rows; PFM Settings has 2 rows |
+| Run | Succeeded; Result shows "Lists: 12, fields and views: 329, rows: 88, updates: 21. Provisioning finished. Item-level permissions: set on 2 lists." |
+| Site contents | The 12 display titles in section 1 exist; PFM Series has 39 rows, PFM Settings 7, PFM Offices 29, PFM Process Steps 13 |
 | List address | Open PFM Publications: the address ends in /Lists/PFMPublications |
 | PFM Endorsements, Endorser column | Type Person or Group, people only |
 | PFM Endorsements, Endorsement Status column | Choices: Not Started, Concur, Concur With Comment, Concur—No Response, Nonconcur, No Comment; default Not Started |
@@ -58,12 +62,12 @@ If a run fails part way (any step red, Result not shown), do not run it again on
 
 If a step fails, open it and send only the HTTP status code and the error code (for example `400 / -2130575342`). Do not send URLs or names.
 
-## 4. Permissions and site settings (manual)
+## 4. Permissions and site settings
 
 Decided (PFM, 2026-11-12, 10A): all site members read all rows. On PFM Publications and PFM Endorsements, members edit only rows they created. Read access stays "Read all items", so the AO, endorsers and flows still see every row. A row a flow creates is "created by" the flow's connection owner, so customers and endorsers change those rows through the app, which runs a flow (endorser results). Site collection administrators and people with Manage Lists edit every row.
 
 1. Leave each PFM list on the site's permissions (no unique permissions).
-2. PFM Publications and PFM Endorsements only: List settings > Advanced settings > Item-level Permissions. Read access: Read all items. Create and Edit access: Create items and edit items that were created by the user. OK. Other lists: no change.
+2. Set by the flow from r11 (PFM, 2026-11-14). By hand only if Result says NOT SET (fallback, also for wings whose flow is refused): PFM Publications and PFM Endorsements only: List settings > Advanced settings > Item-level Permissions. Read access: Read all items. Create and Edit access: Create items and edit items that were created by the user. OK. Other lists: no change.
 3. Site settings > Regional settings > Time zone: (UTC-06:00) Central Time. Date-only columns (suspense, due and review dates) then show the same day for everyone.
 
 ## Change a list or column

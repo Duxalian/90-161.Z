@@ -4,6 +4,11 @@
   "description": "Publications and Forms Manager (PFM) record of coordination: one row per coordinator per action, with stage, role, status, suspense, response and nonconcur resolution (Department of the Air Force Manual (DAFMAN) 90-161, 3.4 and 5.1-5.5).",
   "template": "GenericList",
   "ref": "ARCHITECTURE s3 (Endorsements list) and s4 (endorsement flow)",
+  "itemLevelPermissions": {
+    "read": 1,
+    "write": 2,
+    "decision": "PFM 10A (2026-11-12); in the flow from T02 r11 (PFM, 2026-11-14)"
+  },
   "fields": [
     {
       "internalName": "Title",

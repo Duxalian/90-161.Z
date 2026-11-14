@@ -4,6 +4,11 @@
   "description": "Publications and Forms Manager (PFM) record of actions: one row per action on a publication or form (Department of the Air Force Manual (DAFMAN) 90-161, 1.1.4), with its process step, certification and approval. Each action points to its PFM Product Index row.",
   "template": "GenericList",
   "ref": "ARCHITECTURE s3 (Publications list)",
+  "itemLevelPermissions": {
+    "read": 1,
+    "write": 2,
+    "decision": "PFM 10A (2026-11-12); in the flow from T02 r11 (PFM, 2026-11-14)"
+  },
   "fields": [
     {
       "internalName": "Title",

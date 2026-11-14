@@ -29,6 +29,7 @@ ENV = [  # (schema name, display name, default value)
     ("pfm_ListEndorsements", "List PFM Endorsements", "PFM Endorsements"),
     ("pfm_ListProductIndex", "List PFM Product Index", "PFM Product Index"),
     ("pfm_ListProcessSteps", "List PFM Process Steps", "PFM Process Steps"),
+    ("pfm_ListOffices", "List PFM Offices", "PFM Offices"),
     ("pfm_ReminderLeadDays", "Reminder lead days", ""),
     ("pfm_EscalationLagDays", "Escalation lag days", ""),
 ]
