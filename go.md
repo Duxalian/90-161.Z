@@ -33,7 +33,7 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Next: Round R09 r1, inventory, Task 11 form, Task 9 collector (open, 13 Nov 26)
+## Fix first: Round R09 r1, inventory, Task 11 form, Task 9 collector (open, 14 Nov 26)
 
 **For:** one round that does every script-able step left: records this computer's setup for other wings (read-only), turns Task 11 Part B into a form, collects the Task 9 pages, and runs everything R08 did. Task scripts no longer ask for the DODID. If R08 is not run yet, run R09 instead.
 **Time:** about 8 minutes (estimate) for the default steps; Task 9 adds about 20 minutes, Task 11 Part B about 35, seal prep about 2.

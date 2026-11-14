@@ -20,11 +20,13 @@ Columns in each part: Para | Line | Requirement | Tier | Actor | Applies to ANG 
 | Status | Rows | Meaning |
 |---|---|---|
 | Covered | 384 | The plan implements it (approved design counts; most of it is not built yet) |
-| N/A | 314 | Does not apply to an ANG wing (reason in the row) |
+| N/A | 347 | Does not apply to an ANG wing (reason in the row) |
 | Renderer | 285 | Format or content rule for the renderer: 178 have a rule or code, 107 are "Renderer gap" (37 of them form design, Attachment 7) |
 | Info | 201 | Definition or explanation, no requirement |
 | Partial | 152 | Some of it is covered |
-| Gap | 72 | Applies, nothing covers it |
+| Gap | 39 | Applies, nothing covers it |
+
+Updated 14 Nov 26 (PFM S4): the 33 N/A candidates of docs/reviews/2026-11-13-coverage-gap-sweep.md marked N/A (Gap 72 to 39, N/A 314 to 347).
 
 Recounted 12 Nov 26 after the second independent review: 7.2.3.7 Covered to Partial; ANGMAN 1.7.9 Partial to Covered (PFM 1A); 8.8.6 and ANGMAN 1.7.2 Gap to N/A (PFM 4B, 2A).
 
