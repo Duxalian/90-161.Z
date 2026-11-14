@@ -111,7 +111,7 @@ MAIL_CHECKS = [
     ("U01", "Office 365 Users: read my own profile (D1)", "shared_office365users", "MyProfile_V2", {},
      "@{if(empty(body('U01')?['mail']), 'no mail address', 'mail address found')}"),
     ("U02", "My license names (P16, was M11)", "shared_office365users", "HttpRequest",
-     {"Uri": "/v1.0/me/licenseDetails?$select=skuPartNumber", "Method": "GET"}, "@{join(body('U02_names'), ', ')}"),
+     {"Uri": "/v1.0/me/licenseDetails?$select=skuPartNumber", "Method": "GET"}, "@{join(coalesce(body('U02_names'), json('[]')), ', ')}"),
     ("E01", "Send a mail from my mailbox to me (E1, was M12)", "shared_office365", "SendEmailV2",
      {"emailMessage/To": ME, "emailMessage/Subject": "90161Z TEST E01 my mailbox", "emailMessage/Body": TEST_BODY,
       "emailMessage/Importance": "Normal"}, "-"),

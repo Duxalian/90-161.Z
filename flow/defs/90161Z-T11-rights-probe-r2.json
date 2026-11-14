@@ -2385,7 +2385,7 @@
           "id": "U02",
           "what": "My license names (P16, was M11)",
           "code": "@{outputs('U02')?['statusCode']}",
-          "out": "@{join(body('U02_names'), ', ')}",
+          "out": "@{join(coalesce(body('U02_names'), json('[]')), ', ')}",
           "err": "@{replace(replace(toLower(if(greaterOrEquals(int(coalesce(outputs('U02')?['statusCode'], 0)), 400), take(string(body('U02')), 600), '')), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')}"
         }
       }
