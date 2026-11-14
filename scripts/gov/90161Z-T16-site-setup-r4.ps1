@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 16 site setup, r3 (R14: logo r2, variant A bold white, PFM 14 Nov 26). Windows PowerShell 5.1, the installed PnP.PowerShell 1.12.0 (no other module).
+  90-161.Z Task 16 site setup, r4 (R15: collects the probe r4 and solution test results, masked; logo r2). Windows PowerShell 5.1, the installed PnP.PowerShell 1.12.0 (no other module).
 .DESCRIPTION
   What it is for: sets up the new SharePoint site in one run, so the PFM does not click it by hand (DECISIONS 14 Nov 26:
   optional Deployer PnP write steps, allowed because the read-only PnP test passed). About 5 minutes (an estimate).
@@ -17,15 +17,16 @@
        permissions); uploads the images from T07\Seals and T07\Seals\Prepared. An image already there is replaced.
        r2 (R12 FAIL "File Not Found"): the folder paths come from the library's own root folder (its address can differ
        from its title), and Resolve-PnPFolder makes missing folders; a FAIL line names the stage that failed.
-    e. Probe result: copies "90161Z-T11-rights-result-r3.json" from the site's default Documents library to the T11 folder
-       (reads the site, writes only the T11 folder). r2: when the round's probe step was confirmed in the last 2 hours
-       (T11\90161Z-T11-probe-started.txt), it waits for the file, checking every 30 seconds for up to 15 minutes.
+    e. Flow results: copies "90161Z-T11-rights-result-r4.json" (probe, to T11) and "90161Z-T17-solution-result-r1.txt"
+       (solution import test, to T17) from the site's default Documents library, and masks the site address, host and
+       path in each copy (r4). When the round's guide step for that flow was confirmed in the last 2 hours (its marker
+       file), it waits for the file, checking every 30 seconds for up to 15 minutes.
     f. Task 2 check: counts the PFM lists and their rows (read-only).
   Each item is checked on its own and prints PASS (already right), SET (changed and read back), SKIP (nothing to do) or
   FAIL; one item never stops the others. Counts only: no list, seal or file names are written (seal names are unit names).
   The site address is kept only on this computer in Config\90161Z-site.txt; every output line shows it as <SITE> and the DODID
   as <DODID>. Error text is cut to 160 characters.
-  Output: 90161Z-T16-setup-r3.txt in the T16 folder (send this).
+  Output: 90161Z-T16-setup-r4.txt in the T16 folder (send this).
   Parameters (used by the 90-161.Z Deployer): -Id, -Logo, -ProbeWaitMinutes (default 15), -NoPause.
 #>
 param([string]$Id, [switch]$Logo, [int]$ProbeWaitMinutes = 15, [switch]$NoPause)
@@ -113,7 +114,8 @@ function Get-SiteAddress([string]$ConfigDir) {
 }
 function Hide-Site([string]$Text, [string]$Site) {
   # The result is e-mailed: no site, tenant or sign-in address may stay in it (review R09 T16).
-  $Text = $Text -replace '[\w.+-]+@[\w.-]+', '<EMAIL>'   # whole address first: the host rules below keep the name part (review R12 MAJOR)
+  $Text = $Text -replace '[\w.+-]+@[\w.-]+', '<EMAIL>'
+  $Text = $Text -replace '[\w.+-]+%40[\w.-]+', '<EMAIL>'   # URL-encoded form (a probe request address, review R15 MAJOR)   # whole address first: the host rules below keep the name part (review R12 MAJOR)
   if ($Site) {
     $Text = $Text -replace [regex]::Escape($Site.TrimEnd('/')), '<SITE>'
     try {
@@ -170,6 +172,38 @@ $ListSecurity = {
     else { Add-Line $Short 'FAIL' ('set did not stick: read=' + $l2.ReadSecurity + ' write=' + $l2.WriteSecurity + '. Fallback: List settings > Advanced settings > Item-level Permissions') }
 }
 
+$FetchResult = {
+    # A result file a flow writes to the default Documents library: copied to the task folder, with the site address,
+    # host and path masked on this computer before it is attached (R13: a probe error kept a request address).
+    # When the round's guide step for that flow was confirmed in the last 2 hours (marker file), it waits for the file.
+    $Item = $args[0]; $Task = $args[1]; $n = $args[2]; $MarkerName = $args[3]; $FlowName = $args[4]
+    $script:stage = 'find library'
+    $rel = Get-DocLibRoot
+    $tdir = Join-Path $root $Task
+    if (-not (Test-Path -LiteralPath $tdir -PathType Container)) { [void](New-Item -ItemType Directory -Path $tdir) }
+    $marker = Join-Path $tdir $MarkerName
+    $wait = (Test-Path -LiteralPath $marker -PathType Leaf) -and ((Get-Item -LiteralPath $marker).LastWriteTime -gt (Get-Date).AddHours(-2))
+    $until = (Get-Date).AddMinutes($(if ($wait) { $ProbeWaitMinutes } else { 0 }))
+    $script:stage = 'copy result'
+    $told = $false
+    while ($true) {
+      $got = $false
+      try { Get-PnPFile -Url ($rel + '/' + $n) -Path $tdir -FileName $n -AsFile -Force -ErrorAction Stop; $got = Test-Path -LiteralPath (Join-Path $tdir $n) -PathType Leaf } catch { $got = $false }
+      if ($got) {
+        $script:stage = 'mask result'
+        $f = Join-Path $tdir $n
+        $text = [System.IO.File]::ReadAllText($f)
+        [System.IO.File]::WriteAllText($f, (ConvertTo-Masked (Hide-Site $text $script:site) $script:secret), (New-Object System.Text.UTF8Encoding $false))
+        Add-Line $Item 'SET' ('copied ' + $n + ' to the ' + $Task + ' folder (site address masked)'); return
+      }
+      if ((Get-Date) -ge $until) { break }
+      if (-not $told) { [Console]::Out.WriteLine('Waiting for "' + $FlowName + '" to save its result (checked every 30 seconds, up to ' + $ProbeWaitMinutes + ' minutes)...'); [Console]::Out.Flush(); $told = $true }   # Write-Host is captured inside Add-Item
+      Start-Sleep -Seconds 30
+    }
+    if ($wait) { Add-Line $Item 'FAIL' ('no ' + $n + ' after ' + $ProbeWaitMinutes + ' minutes. Open the run in Power Automate (' + $FlowName + ' > 28-day run history) and check that it finished') }
+    else { Add-Line $Item 'SKIP' ('no ' + $n + ' in Documents, and its guide step did not run in this round') }
+}
+
 $secret = @()
 $site = ''
 $lines = New-Object System.Collections.Generic.List[string]
@@ -183,7 +217,7 @@ try {
   $root = Split-Path -Parent $dir
   $configDir = Join-Path $root 'Config'
   $site = Get-SiteAddress $configDir
-  $lines.Add('TASK T16 site setup r3, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', logo-switch=' + [bool]$Logo + ', probe-wait-minutes=' + $ProbeWaitMinutes)
+  $lines.Add('TASK T16 site setup r4, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', logo-switch=' + [bool]$Logo + ', probe-wait-minutes=' + $ProbeWaitMinutes)
   $mod = @(Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending)
   if (-not $mod.Count) { throw 'PNP not installed: PnP.PowerShell is not on this computer.' }
   $null = & { Import-Module PnP.PowerShell -RequiredVersion $mod[0].Version -DisableNameChecking } *>&1
@@ -281,28 +315,8 @@ try {
       else { Add-Line 'd-seals' 'SET' ($created + 'uploaded=' + $up) }
     }
     # e. Probe result file.
-    Add-Item 'e-probe-result' {
-      $script:stage = 'find library'
-      $rel = Get-DocLibRoot
-      $t11 = Join-Path $root 'T11'
-      if (-not (Test-Path -LiteralPath $t11 -PathType Container)) { [void](New-Item -ItemType Directory -Path $t11) }
-      $n = '90161Z-T11-rights-result-r3.json'
-      $marker = Join-Path $t11 '90161Z-T11-probe-started.txt'
-      $wait = (Test-Path -LiteralPath $marker -PathType Leaf) -and ((Get-Item -LiteralPath $marker).LastWriteTime -gt (Get-Date).AddHours(-2))
-      $until = (Get-Date).AddMinutes($(if ($wait) { $ProbeWaitMinutes } else { 0 }))
-      $script:stage = 'copy result'
-      $told = $false
-      while ($true) {
-        $got = $false
-        try { Get-PnPFile -Url ($rel + '/' + $n) -Path $t11 -FileName $n -AsFile -Force -ErrorAction Stop; $got = Test-Path -LiteralPath (Join-Path $t11 $n) -PathType Leaf } catch { $got = $false }
-        if ($got) { Add-Line 'e-probe-result' 'SET' 'copied the probe result r3 to the T11 folder'; return }
-        if ((Get-Date) -ge $until) { break }
-        if (-not $told) { [Console]::Out.WriteLine('Waiting for the probe flow to save its result (checked every 30 seconds, up to ' + $ProbeWaitMinutes + ' minutes)...'); [Console]::Out.Flush(); $told = $true }   # Write-Host is captured inside Add-Item
-        Start-Sleep -Seconds 30
-      }
-      if ($wait) { Add-Line 'e-probe-result' 'FAIL' ('no probe result r3 after ' + $ProbeWaitMinutes + ' minutes. Open the run in Power Automate (My flows > 90161Z T11 Rights Probe r3 > 28-day run history) and check that it finished') }
-      else { Add-Line 'e-probe-result' 'SKIP' 'no probe result r3 in Documents, and the probe step did not run in this round' }
-    }
+    Add-Item 'e-probe-result' $FetchResult @('e-probe-result', 'T11', '90161Z-T11-rights-result-r4.json', '90161Z-T11-probe-started.txt', '90161Z T11 Rights Probe r4')
+    Add-Item 'e2-solution-result' $FetchResult @('e2-solution-result', 'T17', '90161Z-T17-solution-result-r1.txt', '90161Z-T17-solution-started.txt', '90161Z T17 Solution Import Test r1')
     # f. Task 2 check.
     Add-Item 'f-task2-lists' {
       $pl = @(Get-PnPList -ErrorAction Stop | Where-Object { $_.Title -like 'PFM *' })
@@ -319,7 +333,7 @@ try {
   $lines.Add('STOPPED: ' + $m.Substring(0, [Math]::Min(300, $m.Length)))
 } finally {
   $masked = @($lines | ForEach-Object { ConvertTo-Masked (Hide-Site $_ $site) $secret })
-  try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-setup-r3.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }
+  try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-setup-r4.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }
   $masked | ForEach-Object { Write-Host $_ }
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }

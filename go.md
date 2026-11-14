@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 14 Nov 26 (Round R14: the new logo, bold white).
+Updated: 14 Nov 26 (Round R15 replaces R14: solution import test, rights for app users, new logo).
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -24,20 +24,20 @@ Steps:
 The script never sends the e-mail; the draft waits in Outlook. Finished task folders are cleaned up by the rounds; a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt (rounds never touch it).
 Sensitivity label: every render gets the label from Config\90161Z-label.json. Never delete the Config folder: without it, renders print "LABEL not set" and have no label. The file I labeled by hand is no longer needed. If Config is lost, run a round, then capture again from its new render (it is already labeled); label a file by hand again only if renders say LABEL FAIL.
 
-## Round R14 r1: the new site logo (open, 14 Nov 26)
+## Round R15 r1: solution import, rights for app users, new logo (open, 14 Nov 26)
 
-**For:** sets the logo I picked (variant A, bold white) in the site header. The step window for Power Automate tasks is also fixed (it can be minimized and sits beside the browser); this round does not use it.
-**Time:** about 5 minutes (estimate).
-**Changes:** on my computer: writes into T14, T16 and Rounds\R14; moves Rounds\R12, the old logo files and the old site setup script to the Recycle Bin. On the new site: uploads the new logo and thumbnail to Site Assets and sets them in the header; checks the permissions, time zone, seals and lists again (no change when already right). Saves one Outlook draft (never sent).
+**For:** answers the last questions before the flow and app build: does a solution import work here (all real flows will ship as one), which groups hold wing users, and can a Read-only wing user add and edit their own rows on a list that gives their group Contribute. It also sets the bold white logo (R14's step; R15 replaces R14).
+**Time:** about 25 minutes (estimate): two imports and runs in Power Automate 10-15, site setup 5 plus waiting for the two flows.
+**Changes:** on my computer: writes into T11, T14, T16, T17 and Rounds\R15; moves Rounds\R13, old probe and setup files to the Recycle Bin. In Power Automate: imports one test solution "90-161.Z solution import test" (one flow, one SharePoint connection reference, one "Site URL" variable) and the flow "90161Z T11 Rights Probe r4"; I run each once. On the new site: the test flow reads the PFM Settings row count and writes one result file; the probe creates a TEST list, library and group, gives the coworker's group Contribute on the TEST list, reads the rights, then deletes all three; site setup sets the logo and copies both result files (site address masked). No e-mail is sent by either flow. Saves one Outlook draft (never sent).
 Steps:
 1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R14-round-r1.ps1
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R15-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-3. Press Enter (or Run). Site setup asks for the site address (filled in from last time) and opens a CAC sign-in.
-4. Open the site and look at the header. If the old logo still shows, press Ctrl+F5 once (the browser keeps old pictures).
-5. The Outlook draft opens. Add one line to the body: "logo OK" or what looks wrong. Send it.
-**Report:** the draft itself. Claude watches the inbox for the subject "90161Z R14".
-**If it fails:** read the "What to do" line in the window. If the logo item says FAIL, its line names the by-hand fallback (Change the look > Header).
+3. Press Enter (or Run). Two small step windows open at the right edge of the screen, one after the other: follow each, then select "Done: the run has started". Each can be minimized.
+4. Site setup asks for the site address (filled in from last time) and opens a CAC sign-in. It waits for both flows; keep the Deployer open.
+5. Open the site and look at the header (Ctrl+F5 if the old logo shows). The Outlook draft opens: add "logo OK" or what looks wrong, then Send.
+**Report:** the draft itself. Claude watches the inbox for the subject "90161Z R15".
+**If it fails:** read the "What to do" line in the window. If the solution import shows an error, copy the error text (no names or site address) into the e-mail and select Skip in that step window. A FAIL line in site setup names the stage and the by-hand fallback.
 
 ## Done
 
