@@ -22,7 +22,7 @@ Updated: 2026-11-14 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
-1. R10 r1 on go.md (build 8fa41cac): page saver for T09/T12 with Copy buttons, T11 form fix, decks built in, windows fit the screen. R09 results processed 14 Nov: docs/reviews/2026-11-14-r09-results.md (PnP web login PASS on the old site: revisiting 1B is the PFM's call). Claude watches Gmail for "90161Z R10". Task 2 r11 on the new site. Open: S2, S3, S5 3-15, S6, S7, S8-S11, F1-F4 (sweep page).
+1. R10 r1 on go.md (build 8fa41cac): page saver for T09/T12 with Copy buttons, T11 form fix, decks built in, windows fit the screen. R09 results processed 14 Nov: docs/reviews/2026-11-14-r09-results.md (PnP web login PASS on the old site; PFM 14 Nov: revisit 1B after a read-only PnP test on the new site in the next round). Claude watches Gmail for "90161Z R10". Task 2 r11 on the new site. Open: S2, S3, S5 3-15, S6, S7, S8-S11, F1-F4 (sweep page).
 2. Task 6 prompt r2 follow-up: list AFI (validator F-032/F-039 fixed 13 Nov).
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
