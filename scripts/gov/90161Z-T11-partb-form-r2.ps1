@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 11 Part B form, r1. Windows PowerShell 5.1, Windows Forms only (no modules).
+  90-161.Z Task 11 Part B form, r2. Windows PowerShell 5.1, Windows Forms only (no modules).
 .DESCRIPTION
   Shows the Part B manual checks (docs/rights-test-plan.md section 6, from 90161Z-T11-partb-rows-r1.json in the T11
   folder) as one table: for each row pick Allowed, Blocked, Error, Not offered or Not done, and add a short note.
@@ -131,7 +131,8 @@ try {
   $c4 = New-Object System.Windows.Forms.DataGridViewComboBoxColumn; $c4.HeaderText = 'Result'; $c4.Width = 120
   [void]$c4.Items.AddRange($Choices)
   $c5 = New-Object System.Windows.Forms.DataGridViewTextBoxColumn; $c5.HeaderText = 'Note (no names)'; $c5.AutoSizeMode = 'Fill'
-  [void]$dg.Columns.AddRange(@($c1, $c2, $c3, $c4, $c5))
+  # Typed array: PowerShell cannot pass object[] to AddRange (R09: the form stopped here).
+  [void]$dg.Columns.AddRange([System.Windows.Forms.DataGridViewColumn[]]@($c1, $c2, $c3, $c4, $c5))
   foreach ($r in $rows) {
     $res = ''; $note = ''
     if ($old.ContainsKey($r.id)) { $res = $old[$r.id][0]; $note = $old[$r.id][1] }
@@ -148,7 +149,7 @@ try {
 
   $save = {
     $out = New-Object System.Collections.Generic.List[string]
-    $out.Add('TASK T11 Part B r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ' (format: check | result | note)')
+    $out.Add('TASK T11 Part B r2, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ' (format: check | result | note)')
     $n = 0
     foreach ($row in $dg.Rows) {
       $res = [string]$row.Cells[3].Value; $note = ([string]$row.Cells[4].Value) -replace '[\r\n|]+', ' '
@@ -166,7 +167,12 @@ try {
   $dg.Add_DataError({ $_.ThrowException = $false })   # a value the list does not hold shows as empty, never as an error box
   $dg.Add_CellValueChanged({ & $save })
   $done.Add_Click({ [void]$dg.EndEdit(); & $save; $form.Close() })   # a note still being typed is saved too
-  $form.Add_Shown({ $form.TopMost = $true; $form.Activate(); $form.TopMost = $false })
+  $form.Add_Shown({
+    # Fit the screen (R09: 1280 x 800 at 150 % scaling is smaller than the window).
+    $wa = [System.Windows.Forms.Screen]::FromControl($form).WorkingArea
+    $form.Width = [Math]::Min($form.Width, [int]($wa.Width * 0.95)); $form.Height = [Math]::Min($form.Height, [int]($wa.Height * 0.95))
+    $form.Left = $wa.Left + [int](($wa.Width - $form.Width) / 2); $form.Top = $wa.Top + [int](($wa.Height - $form.Height) / 2)
+    $form.TopMost = $true; $form.Activate(); $form.TopMost = $false })
   $script:answered = 0
   & $save
   [void]$form.ShowDialog()

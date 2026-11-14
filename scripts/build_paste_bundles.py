@@ -266,6 +266,7 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
   $psi = New-Object System.Diagnostics.ProcessStartInfo
   $psi.FileName = $exe
   $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $dir $Step.File) + '" -Id "' + $script:dodid + '" -NoPause'
+  if ($Step.Args) { $psi.Arguments += ' ' + $Step.Args }   # fixed arguments from the round (for example -Set T12)
   if ($Step.AskParam -and $Answer) {
     # A trailing \ before the closing quote would escape it (command-line rules): trim it, but a drive root keeps its \,
     # doubled so "D:\\" reads back as D:\ (review R08).
@@ -293,7 +294,7 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
     if ($null -eq $line) { break }
     $line = ConvertTo-Masked $line
     # Lines that may name a unit or a file (for example seal details) never reach the report (data boundary).
-    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace ':.*$', ':') + ' (detail hidden: it may name a unit; run the step script by hand to see it)' }
+    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace '^(\S+).*$', '$1') + ' (detail hidden: it may hold a name; run the step script by hand to see it)' }
     if ($line -match '(^|\s)PASS(\s|$)') { $r.Pass++ }
     if ($line -match '(^|\s)(FAIL|FORMAT-FAIL|RENDER-ERROR|MEASURE-ERROR|STOPPED:)(\s|$)') { $r.Fail++ }
     & $Say $line
@@ -318,9 +319,22 @@ function Export-RoundResult([string]$Base, [string[]]$Summary) {
   $count = 1; $missing = @()
   foreach ($c in $collect) {
     if ($c.Step -and -not ($script:ranSteps -contains $c.Step)) { continue }   # a skipped step has nothing to send
+    $src = Join-Path $Base $c.Dir
+    if ($c.Name -match '[*?]') {
+      # A pattern (R10: any saved page counts, whatever its name); top level only, so a browser's "_files" folders stay out.
+      # Several patterns may be joined with ';' ("*.mhtml;*.pdf"): missing only when none of them finds a file.
+      # Windows -Filter '*.htm' also matches '.html': keep each file once. Copies carry the task prefix (T09-..., T12-...) so
+      # two tasks never overwrite each other, and older copies of that task are removed first (review R10).
+      $hits = @(); if (Test-Path -LiteralPath $src -PathType Container) { foreach ($pat in ($c.Name -split ';')) { $hits += @(Get-ChildItem -LiteralPath $src -File -Filter $pat -ErrorAction SilentlyContinue) } }
+      $hits = @($hits | Sort-Object FullName -Unique)
+      Get-ChildItem -LiteralPath $out -File -Filter ($c.Dir + '-*') -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+      foreach ($h in $hits) { Copy-Item -LiteralPath $h.FullName -Destination (Join-Path $out ($c.Dir + '-' + $h.Name)) -Force; $count++ }
+      if (-not $hits.Count) { $missing += ($c.Dir + '\' + $c.Name) }
+      continue
+    }
     $old = Join-Path $out $c.Name
     if (Test-Path -LiteralPath $old -PathType Leaf) { Remove-Item -LiteralPath $old -Force }   # an older copy of the same name must not be sent again
-    $p = Join-Path (Join-Path $Base $c.Dir) $c.Name
+    $p = Join-Path $src $c.Name
     if (Test-Path -LiteralPath $p -PathType Leaf) { Copy-Item -LiteralPath $p -Destination (Join-Path $out $c.Name) -Force; $count++ } else { $missing += ($c.Dir + '\' + $c.Name) }
   }
   $report = Join-Path $out ('90161Z-' + $round + '-report-r1.txt')
@@ -522,7 +536,12 @@ if ($gui) {
     $toBox.Add_Enter({ $form.AcceptButton = $null })
     $toBox.Add_Leave({ $form.AcceptButton = $run })
     $toBox.Add_KeyDown({ if ($_.KeyCode -eq 'Return') { $_.SuppressKeyPress = $true; $run.Focus() | Out-Null } })
-    $form.Add_Shown({ if ($toBox.Text) { $run.Focus() | Out-Null } else { $toBox.Focus() | Out-Null } })
+    $form.Add_Shown({
+      # Fit the screen (R09: 1280 x 800 at 150 % scaling is smaller than the window).
+      $wa = [System.Windows.Forms.Screen]::FromControl($form).WorkingArea
+      $form.Width = [Math]::Min($form.Width, [int]($wa.Width * 0.95)); $form.Height = [Math]::Min($form.Height, [int]($wa.Height * 0.95))
+      $form.Left = $wa.Left + [int](($wa.Width - $form.Width) / 2); $form.Top = $wa.Top + [int](($wa.Height - $form.Height) / 2)
+      if ($toBox.Text) { $run.Focus() | Out-Null } else { $toBox.Focus() | Out-Null } })
     $first = Get-RoundPlan
     $where.Text = 'Writes to: ' + $first.Shown + $(if ($first.Found) { '' } else { '   (NOT found)' })
     $warnings = @()
@@ -650,10 +669,10 @@ def build(b):
             body, kind = "@'\n" + '\n'.join(textwrap.wrap(b64, 100)) + "\n'@", 'base64'
         parts.append("$files += @{ Dir = %s; Name = %s; Kind = '%s'; Sha = '%s'; Data = %s }"
                      % (q(f['dir']), q(src.name), kind, sha, body))
-    steps = ['$steps += @{ Name = %s; Dir = %s; File = %s; Default = $%s; AskParam = %s; AskPrompt = %s; ScreenOnly = %s; Minutes = %d }'
+    steps = ['$steps += @{ Name = %s; Dir = %s; File = %s; Default = $%s; AskParam = %s; AskPrompt = %s; ScreenOnly = %s; Minutes = %d; Args = %s }'
              % (q(s['name']), q(s['dir']), q(s['file']), 'true' if s.get('default', True) else 'false',
                 q(s.get('ask', {}).get('param', '')), q(s.get('ask', {}).get('prompt', '')), q(s.get('screenOnly', '')),
-                int(s.get('minutes', 30)))
+                int(s.get('minutes', 30)), q(s.get('args', '')))
              for s in b['steps']]
     # Data files the round downloads (not code, PFM 3A): repo files from raw main, checked by SHA-256; public pages as they are.
     fetch = []
