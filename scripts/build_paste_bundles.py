@@ -1139,7 +1139,6 @@ if ($gui) {
       $where.Text = 'Writes to: ' + $first.Shown + $(if ($first.Found) { '' } else { '   (NOT found)' })
       $warnings = @()
       if (-not $first.Found) { $warnings += 'OneDrive folder NOT found in this Windows profile: open OneDrive from the Start menu and sign in, then paste and run again.' }
-      if (Test-WordOpen) { $warnings += 'Word is open. Save your documents and close Word before Run (renders use Word).' }
       $warn.Text = ($warnings -join "`r`n"); $warn.Visible = [bool]$warnings.Count
       $est = 0; $known = $true; foreach ($k in $script:appSteps) { $w = Get-StepWeight $hist0 $steps[$k]; $est += $w.Seconds; if (-not $w.Known) { $known = $false } }
       $allLabel.Text = 'Overall: ready. About ' + (Format-Duration $est) + ' for all steps (' + $(if ($known) { 'based on your last runs' } else { 'a guess: no earlier runs' }) + '). Press Enter or select Run.'
@@ -1227,8 +1226,10 @@ if ($gui) {
     $againB.Add_Click({ & $runChecks @('auto') @() })
     $rightsB.Add_Click({ & $runChecks @('signin') @('site-rights') })
     $flowB.Add_Click({ & $runChecks @('guide') @('flow-guide') })
-    # Enter in the grid moves on, as elsewhere (the grid would move to the next row).
-    $checkView.Add_KeyDown({ if ($_.KeyCode -eq 'Return') { $_.Handled = $true; $_.SuppressKeyPress = $true; if ($next.Enabled) { $next.PerformClick() } } })
+    # The grid is read-only and never keeps the focus: it would take Enter for itself (moving to the next row) before the
+    # form's Next button sees it (review PR 26). Focus goes back to Next, so Enter still moves on.
+    $checkView.TabStop = $false
+    $checkView.Add_GotFocus({ if ($next.Enabled) { $next.Focus() | Out-Null } else { $againB.Focus() | Out-Null } })
     # Enter in a box moves on instead of acting (review R06 #3: a stray Enter must not start a cleanup).
     $siteBox.Add_Enter({ $form.AcceptButton = $null })
     $siteBox.Add_Leave({ $form.AcceptButton = $next })
@@ -1335,7 +1336,7 @@ try {
     $pi = 0; if ([int]::TryParse($pick, [ref]$pi) -and $pi -ge 1 -and $pi -le $apps.Count) { Select-App ($pi - 1) }
   }
   Write-Host ('Application: ' + $script:app.Name)
-  # Checks that run on their own; the sign-in and look-and-answer checks need the window (they show NOT RUN).
+  # All checks run here too: the sign-in check opens its own sign-in window; the Power Automate check asks in the console.
   $site0 = Get-SiteUrl (Get-BasePath)
   if (-not (Test-SiteUrl $site0) -and @($script:appChecks | Where-Object { $_ -in 'net-site', 'site-rights' }).Count) {
     $v = ([string](Read-Host 'Type the site address (it starts with https://usaf.dps.mil/sites/), then press Enter')).Trim()

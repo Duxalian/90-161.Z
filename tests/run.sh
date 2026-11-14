@@ -296,7 +296,7 @@ rm -rf "$tp"
 
 # Two bars (PFM 14 Nov 26): progress math and the PROGRESS line rule, from the bundle's own functions (review PR 26).
 pg=$(pwsh -NoProfile -File tests/ps/Test-DeployerProgress.ps1 -Bundle scripts/gov/paste/90161Z-R15-round-r1.ps1 2>&1)
-[ "$pg" = "0.10 0.28 101 | -1 0.375 | True True False" ] && ok "Deployer progress: step and overall fractions, time left, PROGRESS lines ($pg)" || bad "Deployer progress math: got '$pg'"
+[ "$(echo $pg)" = "0.10 0.28 101 | -1 0.375 | True True False gate False True True True" ] && ok "Deployer progress math, PROGRESS lines and the check gate ($(echo $pg))" || bad "Deployer progress math: got '$pg'"
 
 # Enter starts the run (PFM 2026-11-13): the window's AcceptButton is Run; text mode shows the plan, Enter runs, N stops with nothing written.
 ab=$(grep -L 'AcceptButton = \$run' scripts/gov/paste/*.ps1 | wc -l)
