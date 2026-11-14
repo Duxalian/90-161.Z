@@ -33,7 +33,7 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Round R12 r1: site setup, seals and logo by script (open, 14 Nov 26)
+## Round R12 r2: site setup, seals and logo by script (open, 14 Nov 26)
 
 **For:** does by script what I did by hand: Task 2 steps 7-8, Task 14, Task 7 Part B (library, folder, upload, sync, path) and the Task 11 result download. Checks stay the same; the script reads each change back.
 **Time:** about 10 minutes (estimate) for the default steps; Part B form adds about 25.
@@ -41,9 +41,9 @@ Steps:
 Steps:
 1. Keep the 6 e-mails "90161Z T07 seals r1" in the Inbox (the round reads them).
 2. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R12-round-r1.ps1
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R12-round-r2.ps1
 3. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-4. The first 4 steps are checked. Check "T11 Part B" too if I have the time.
+4. Three steps are checked. The render test (T01) is off: it turns on by itself only when the renderer code changed since it last passed (R11). Check "T11 Part B" too if I have the time. If I already ran R12 r1, I do not run r2.
 5. Press Enter (or Run). The site setup step asks for the NEW site address (filled in from last time) and opens a CAC sign-in.
 6. When it ends, open the new site and look at the header: the logo should show (white squares on the blue header). This is the only check by eye.
 7. The Outlook draft opens with the summary and the files. Send it.

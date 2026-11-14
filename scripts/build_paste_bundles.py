@@ -30,6 +30,22 @@ ROOT = Path(__file__).resolve().parent.parent
 TEXT = {'.ps1', '.json', '.txt', '.md', '.csv'}
 
 
+
+def step_default(s):
+    """A step's default tick. "default" may be true/false, or {"passed": <hash>, "paths": [...]}: then the step is on
+    only when those files changed since the round that last passed it (PFM 14 Nov 26: no repeat render test)."""
+    d = s.get('default', True)
+    if isinstance(d, dict):
+        return files_hash(d['paths']) != d['passed']
+    return bool(d)
+
+
+def files_hash(paths):
+    h = hashlib.sha256()
+    for rel in sorted(paths):
+        h.update(rel.encode() + b'\0' + (ROOT / rel).read_bytes() + b'\0')
+    return h.hexdigest()[:16]
+
 def here(text):
     text = text.replace('\r\n', '\n')
     if text.endswith('\n'):
@@ -670,7 +686,7 @@ def build(b):
         parts.append("$files += @{ Dir = %s; Name = %s; Kind = '%s'; Sha = '%s'; Data = %s }"
                      % (q(f['dir']), q(src.name), kind, sha, body))
     steps = ['$steps += @{ Name = %s; Dir = %s; File = %s; Default = $%s; AskParam = %s; AskPrompt = %s; ScreenOnly = %s; Minutes = %d; Args = %s }'
-             % (q(s['name']), q(s['dir']), q(s['file']), 'true' if s.get('default', True) else 'false',
+             % (q(s['name']), q(s['dir']), q(s['file']), 'true' if step_default(s) else 'false',
                 q(s.get('ask', {}).get('param', '')), q(s.get('ask', {}).get('prompt', '')), q(s.get('screenOnly', '')),
                 int(s.get('minutes', 30)), q(s.get('args', '')))
              for s in b['steps']]
