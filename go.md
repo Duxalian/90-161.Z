@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 14 Nov 26 (Round R13 passed; no open task; logo preview next).
+Updated: 14 Nov 26 (Round R14: the new logo, bold white).
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -24,9 +24,20 @@ Steps:
 The script never sends the e-mail; the draft waits in Outlook. Finished task folders are cleaned up by the rounds; a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt (rounds never touch it).
 Sensitivity label: every render gets the label from Config\90161Z-label.json. Never delete the Config folder: without it, renders print "LABEL not set" and have no label. The file I labeled by hand is no longer needed. If Config is lost, run a round, then capture again from its new render (it is already labeled); label a file by hand again only if renders say LABEL FAIL.
 
-## Open tasks
+## Round R14 r1: the new site logo (open, 14 Nov 26)
 
-None right now (14 Nov 26). Claude prepares the logo preview next; a new round appears here when it is ready.
+**For:** sets the logo I picked (variant A, bold white) in the site header. The step window for Power Automate tasks is also fixed (it can be minimized and sits beside the browser); this round does not use it.
+**Time:** about 5 minutes (estimate).
+**Changes:** on my computer: writes into T14, T16 and Rounds\R14; moves Rounds\R12, the old logo files and the old site setup script to the Recycle Bin. On the new site: uploads the new logo and thumbnail to Site Assets and sets them in the header; checks the permissions, time zone, seals and lists again (no change when already right). Saves one Outlook draft (never sent).
+Steps:
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R14-round-r1.ps1
+2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
+3. Press Enter (or Run). Site setup asks for the site address (filled in from last time) and opens a CAC sign-in.
+4. Open the site and look at the header. If the old logo still shows, press Ctrl+F5 once (the browser keeps old pictures).
+5. The Outlook draft opens. Add one line to the body: "logo OK" or what looks wrong. Send it.
+**Report:** the draft itself. Claude watches the inbox for the subject "90161Z R14".
+**If it fails:** read the "What to do" line in the window. If the logo item says FAIL, its line names the by-hand fallback (Change the look > Header).
 
 ## Done
 
