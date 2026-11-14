@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 14 Nov 26 (Round R13: the round now delivers and guides the probe flow, no separate download; seals fix; clearer log text).
+Updated: 14 Nov 26 (Round R13 passed; no open task; logo preview next).
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -24,32 +24,14 @@ Steps:
 The script never sends the e-mail; the draft waits in Outlook. Finished task folders are cleaned up by the rounds; a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt (rounds never touch it).
 Sensitivity label: every render gets the label from Config\90161Z-label.json. Never delete the Config folder: without it, renders print "LABEL not set" and have no label. The file I labeled by hand is no longer needed. If Config is lost, run a round, then capture again from its new render (it is already labeled); label a file by hand again only if renders say LABEL FAIL.
 
-## Round R13 r1: the probe flow, the seals and the site setup in one round (open, 14 Nov 26)
+## Open tasks
 
-**For:** finishes what R12 could not: the probe flow r3 (Task 11 Part A) now comes from the round itself (no separate download), seal prep searches every Outlook mail folder, and the seals upload is fixed. The log text is rewritten to read cleanly.
-**Time:** about 25 minutes (estimate): probe flow import and run 5-10, seal prep 1, site setup 5 plus up to 15 waiting for the probe result.
-**Changes:** on my computer: writes into T01, T07, T11, T14, T15, T16, Config and Rounds\R13; saves the seal attachments from the "90161Z T07 seals" e-mails into T07\Seals (reads Outlook, changes nothing there); moves Rounds\R11, T10, the Part B form and old scripts to the Recycle Bin. In Power Automate: imports one flow, "90161Z T11 Rights Probe r3", and runs it (what it does on the site: Task 11 below). On the new site: checks the permissions and time zone (already set), sets the logo again, creates the library 90-161.Z with the folders Seals and Seals/Prepared, uploads the seals, and copies the probe result to T11. Nothing else. Saves one Outlook draft (never sent).
-Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R13-round-r1.ps1
-2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-3. Three steps are checked: the probe flow, seal prep and site setup. Leave the others off.
-4. Press Enter (or Run). The probe step opens a small window with numbered steps: select Open in browser, import the file (its path is already on the clipboard), run the flow, then select "Done: the run has started".
-5. The site setup step asks for the site address (filled in from last time) and opens a CAC sign-in. It waits for the probe result; keep the window open.
-6. The Outlook draft opens with the summary and the files. Add one line to the body: "logo OK" or what looks wrong in the site header. Send it.
-**Report:** the draft itself. Claude watches the inbox for the subject "90161Z R13".
-**If it fails:** read the "What to do" line in the window. If seal prep says NO IMAGES, send the results anyway and say whether the 6 e-mails "90161Z T07 seals r1" are in Outlook. If Power Automate does not open at the address shown, correct the address in the probe window (it is remembered). A FAIL line in site setup names the stage and the by-hand fallback.
-
-## Task 11: rights and capability test, r3 (open, 14 Nov 26)
-
-**For:** finds what I can and cannot do on the new site, with the office mailbox, in Power Apps, Power Automate and Forms. Every later design step depends on these answers.
-**Time:** Part A runs inside Round R13 (above). Part B is done (17 of 17 rows in R12).
-**Changes:** imports one flow into my Power Automate. On the new site the flow creates test lists and a test group named "PFM Rights Probe ..." and deletes them at the end (they stay in the site recycle bin), and adds one result file to the Documents library. It sends 3 test e-mails to me only: 1 from my mailbox, 2 from the office mailbox (subjects start "90161Z TEST"), then reads how they arrived. Nothing else.
-Report: the round's e-mail. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
-**If it fails:** if the import asks for a connection I cannot make, send its name. If the run stops early, delete anything named "PFM Rights Probe ..." by hand and send the name of the step that failed and its error text (no names). A red step in the run is a result, not a failure: the run goes on.
+None right now (14 Nov 26). Claude prepares the logo preview next; a new round appears here when it is ready.
 
 ## Done
 
+- Round R13 (14 Nov 26): passed. Probe flow r3 imported and run from the Deployer window (no separate download); 17 of 17 seals prepared and uploaded with the prepared copies (34 files); site setup 0 problems. Task 11 is complete (Part A in R13, Part B in R12). The logo still needs work (only a thin white border shows). Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r13-results.md
 - Round R12 (14 Nov 26): window, inventory, renderer, PnP test passed; site setup set the time zone (Central) and the logo, item-level permissions were already right, 12 lists and 88 rows counted; Task 11 Part B finished (17 of 17). Seal prep found no seal e-mails and the seals upload failed: fixed in R13. Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r12-results.md
 - Task 2, the 12 lists on the new site (14 Nov 26): R11 counted 12 PFM lists there. Round R12 sets "edit own rows" and the time zone by script and counts lists and rows, so I do not read the flow result.
