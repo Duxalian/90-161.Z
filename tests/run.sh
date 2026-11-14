@@ -257,7 +257,7 @@ ob="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"; mkdir -p "$ob/T
 touch "$ob/T02/90161Z-T02-provision-lists-r9.zip" "$ob/T02/Provision-Lists.ps1" "$ob/T13/90161Z-T13-label-capture-r2.ps1" "$ob/T13/my-notes.docx" \
   "$ob/Rounds/R09/90161Z-R09-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r4.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
 echo "public sample" > "$tp/fx.bin"; printf '## Fix first: Round R99 r1, test (open, 1 Jan 26)\n' > "$tp/go.md"
-swap() { sed -e "s#^\$goUrl = '.*'#\$goUrl = 'file://$tp/go.md'#" -e "s#Url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/#Url = 'file://$PWD/#" -e "s#Url = 'https://www\.[^']*'#Url = 'file://$tp/fx.bin'#" -e "s#^\$bookmarkUrl = '.*'#\$bookmarkUrl = 'file://$tp/go.md'#" -e "s#url = 'https://make\.powerautomate[^']*'#url = 'file://$tp/fx.bin'#I" -e "s#Read-Host 'Press Enter to start the round, or type N and press Enter to stop with no changes'#''#" -e "s#Read-Host 'Press Enter when the flow run has started, or type S and press Enter to skip this step'#''#" -e "s#\$checkGate = \$true#\$checkGate = \$false#" -e "s#Read-Host 'Type the site address[^']*'#''#" -e "s#Read-Host 'Did you see both[^']*'#'Y'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
+swap() { sed -e "s#^\$goUrl = '.*'#\$goUrl = 'file://$tp/go.md'#" -e "s#Url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/#Url = 'file://$PWD/#" -e "s#Url = 'https://www\.[^']*'#Url = 'file://$tp/fx.bin'#" -e "s#url = 'https://make\.powerautomate[^']*'#url = 'file://$tp/fx.bin'#I" -e "s#Read-Host 'Press Enter to start the round, or type N and press Enter to stop with no changes'#''#" -e "s#Read-Host 'Press Enter when the flow run has started, or type S and press Enter to skip this step'#''#" -e "s#\$checkGate = \$true#\$checkGate = \$false#" -e "s#Read-Host 'Type the site address[^']*'#''#" -e "s#Read-Host 'Did you see both[^']*'#'Y'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
   swap "$b" > "$tp/b.ps1"; USERPROFILE="$tp/u/test1234" pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
   # Text mode runs the default steps that need no folder (the optional steps are skipped).
@@ -270,7 +270,7 @@ for b in scripts/gov/paste/*.ps1; do
   ! { grep -v '^Working folder: ' "$tp/out.txt" | grep -q "test1234"; } && ! grep -q "test1234" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
   grep -q "^Working folder: $tp/u/test1234/" "$tp/out.txt" || { echo "real path not shown"; pf=$((pf+1)); }
   grep -q "^What to do: Open Outlook" "$tp/out.txt" || { echo "no plain-words help after the draft fallback"; pf=$((pf+1)); }
-  grep -q "^A newer round, R99, is on the bookmark page" "$tp/out.txt" || { echo "newer-round banner missing"; pf=$((pf+1)); }
+  grep -q "^A newer round, R99, is in the repository" "$tp/out.txt" || { echo "newer-round banner missing"; pf=$((pf+1)); }
   # Choose and Check screens (PFM 14 Nov 26): the report names the application and counts the checks; text mode cannot
   # sign in, so the sign-in check is NOT RUN, and no check line holds the DODID.
   rp="$base/Rounds/$r/90161Z-$r-report-r1.txt"
@@ -302,7 +302,7 @@ pg=$(pwsh -NoProfile -File tests/ps/Test-DeployerProgress.ps1 -Bundle scripts/go
 ab=$(grep -L 'AcceptButton = \$run' scripts/gov/paste/*.ps1 | wc -l)
 te=$(mktemp -d); mkdir -p "$te/u/test1234/OneDrive - United States Air Force"; tw=0
 for b in scripts/gov/paste/*.ps1; do
-  sed -e "s#Read-Host 'Press Enter to start the round, or type N and press Enter to stop with no changes'#'N'#" -e "s#Read-Host 'Type the site address[^']*'#''#" -e "s#Read-Host 'Did you see both[^']*'#'Y'#" -e "s#^\$bookmarkUrl = '.*'#\$bookmarkUrl = 'file:///dev/null'#" -e "s#Url = 'https://make\.powerautomate[^']*'#Url = 'file:///dev/null'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$te/u'#" "$b" > "$te/b.ps1"
+  sed -e "s#Read-Host 'Press Enter to start the round, or type N and press Enter to stop with no changes'#'N'#" -e "s#Read-Host 'Type the site address[^']*'#''#" -e "s#Read-Host 'Did you see both[^']*'#'Y'#" -e "s#Url = 'https://make\.powerautomate[^']*'#Url = 'file:///dev/null'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$te/u'#" "$b" > "$te/b.ps1"
   # PFM 14 Nov 26: with the check gate on, a FAILED or NOT RUN check stops the deploy before anything is written.
   USERPROFILE="$te/u/test1234" pwsh -NoProfile -File "$te/b.ps1" > "$te/out.txt" 2>&1; [ -e "$te/u/test1234/OneDrive - United States Air Force/90-161.Z" ] && tw=$((tw+1))
   grep -q "^You cannot deploy yet: a check is FAILED or NOT RUN" "$te/out.txt" || { echo "check gate did not stop the deploy"; tw=$((tw+1)); }

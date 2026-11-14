@@ -6,9 +6,8 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R15, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = 'b156c2ce'
+$buildId = '2771331d'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
-$bookmarkUrl = 'https://rhope-ops.github.io/90-161.Z/'
 $round = 'R15'
 $usersRoot = 'C:\Users'
 $files = @()
@@ -3236,7 +3235,7 @@ function Add-RoundHistory([string]$Base, [string]$Step, [string]$Status, [int]$S
   } catch { $null = $_ }   # history is a convenience: never stop a round for it
 }
 function Get-NewerRound {
-  # Reads go.md (the bookmark page's source; data, not code) and returns the highest round number listed in an open task
+  # Reads go.md in the repository (the bookmark page's source; data, not code) and returns the highest round number listed in an open task
   # heading when it is newer than this one, else ''. Short timeout; any failure is silent, so it never blocks a run.
   try {
     $rq = [System.Net.WebRequest]::Create($goUrl)
@@ -3269,7 +3268,7 @@ $helpRules = @(
   @{ Re = 'being used by another process|cannot access the file'; Text = 'A file is open in another program. Close Word and any file from the 90-161.Z folder, then press Run again.' },
   @{ Re = 'RPC_E_CALL_REJECTED|0x80010001|0x8001010A|server busy'; Text = 'Word was busy. Close every Word window, wait 10 seconds, then press Run again.' },
   @{ Re = 'ran longer than'; Text = 'A step ran too long. Close Word (check the taskbar), then press Run again. If it happens twice, send the results as they are.' },
-  @{ Re = 'LABEL (FAIL|not set)'; Text = 'The sensitivity label was not set. Keep the Config folder; see "Sensitivity label" on the bookmark page.' },
+  @{ Re = 'LABEL (FAIL|not set)'; Text = 'The sensitivity label was not set. Keep the Config folder; see "Sensitivity label" in the repository (go.md).' },
   @{ Re = 'denied|UnauthorizedAccess'; Text = 'Windows blocked a file. Check that the 90-161.Z folder is in your own OneDrive and not read-only, then run again.' },
   @{ Re = 'Outlook draft could not be created'; Text = 'Open Outlook (classic), then press Make e-mail draft. Or send by hand: the results folder is open and the summary is on the clipboard.' },
   @{ Re = 'FORMAT-FAIL'; Text = 'The renderer found a format problem. Send the results as they are; Claude fixes it.' },
@@ -3382,7 +3381,7 @@ function Save-RoundDownload([string]$Base, [scriptblock]$Say) {
     } catch {
       $bad++
       if (Test-Path -LiteralPath $path -PathType Leaf) { try { Remove-Item -LiteralPath $path -Force } catch { $null = $_ } }   # no partial file left behind
-      & $Say ('  Download failed   ' + $f.Dir + '\' + $f.Name + ': ' + (ConvertTo-Masked $_.Exception.Message) + ' (save it from the bookmark page instead)')
+      & $Say ('  Download failed   ' + $f.Dir + '\' + $f.Name + ': ' + (ConvertTo-Masked $_.Exception.Message) + ' (save it from the repository instead)')
     } finally { $wc.Dispose() }
   }
   $line = 'Downloads: ' + $ok + ' saved, ' + $bad + ' failed.'
@@ -3732,20 +3731,20 @@ function Invoke-Round([bool]$Clean, [bool[]]$Selected, [string]$To, [scriptblock
 # Kind: auto = runs on its own when the Check screen opens; signin = needs a CAC sign-in (button); guide = the PFM looks
 # in another program and answers (button). Advisory: a problem is a WARNING, never a FAILED.
 $checkDefs = @(
-  @{ Id = 'ps'; Group = 'This computer'; Name = 'PowerShell is version 5.1 or newer'; Kind = 'auto' },
-  @{ Id = 'lang'; Group = 'This computer'; Name = 'PowerShell is not limited'; Kind = 'auto' },
-  @{ Id = 'onedrive'; Group = 'This computer'; Name = 'Your OneDrive folder is set up'; Kind = 'auto' },
-  @{ Id = 'disk'; Group = 'This computer'; Name = 'There is enough free disk space'; Kind = 'auto' },
-  @{ Id = 'write'; Group = 'This computer'; Name = 'Files can be saved in OneDrive'; Kind = 'auto' },
-  @{ Id = 'child'; Group = 'This computer'; Name = 'The Deployer can run its scripts'; Kind = 'auto' },
-  @{ Id = 'outlook'; Group = 'This computer'; Name = 'Outlook can make the results e-mail'; Kind = 'auto'; Advisory = $true },
-  @{ Id = 'word'; Group = 'This computer'; Name = 'Word is installed'; Kind = 'auto' },
-  @{ Id = 'pnp'; Group = 'This computer'; Name = 'The SharePoint tool (PnP.PowerShell 1.12.0) is installed'; Kind = 'auto' },
-  @{ Id = 'net-bookmark'; Group = 'Network'; Name = 'The bookmark page can be reached'; Kind = 'auto'; Advisory = $true },
+  @{ Id = 'ps'; Group = 'Local'; Name = 'PowerShell is version 5.1 or newer'; Kind = 'auto' },
+  @{ Id = 'lang'; Group = 'Local'; Name = 'PowerShell is not limited'; Kind = 'auto' },
+  @{ Id = 'onedrive'; Group = 'Local'; Name = 'Your OneDrive folder is set up'; Kind = 'auto' },
+  @{ Id = 'disk'; Group = 'Local'; Name = 'There is enough free disk space'; Kind = 'auto' },
+  @{ Id = 'write'; Group = 'Local'; Name = 'Files can be saved in OneDrive'; Kind = 'auto' },
+  @{ Id = 'child'; Group = 'Local'; Name = 'The Deployer can run its scripts'; Kind = 'auto' },
+  @{ Id = 'outlook'; Group = 'Local'; Name = 'Outlook can make the results e-mail'; Kind = 'auto'; Advisory = $true },
+  @{ Id = 'word'; Group = 'Local'; Name = 'Word is installed'; Kind = 'auto' },
+  @{ Id = 'pnp'; Group = 'Local'; Name = 'The SharePoint tool (PnP.PowerShell 1.12.0) is installed'; Kind = 'auto' },
+  @{ Id = 'net-bookmark'; Group = 'Network'; Name = 'The repository can be reached'; Kind = 'auto'; Advisory = $true },
   @{ Id = 'net-site'; Group = 'Network'; Name = 'Your SharePoint site can be reached'; Kind = 'auto' },
   @{ Id = 'net-flow'; Group = 'Network'; Name = 'Power Automate can be reached'; Kind = 'auto' },
-  @{ Id = 'site-rights'; Group = 'Your access'; Name = 'You can change the site (sign in with your CAC)'; Kind = 'signin' },
-  @{ Id = 'flow-guide'; Group = 'Your access'; Name = 'You can import flows in Power Automate (you look)'; Kind = 'guide' }
+  @{ Id = 'site-rights'; Group = 'Access'; Name = 'You can change the site (sign in with your CAC)'; Kind = 'signin' },
+  @{ Id = 'flow-guide'; Group = 'Access'; Name = 'You can import flows in Power Automate (you look)'; Kind = 'guide' }
 )
 function Get-CheckDef([string]$Id) { foreach ($d in $checkDefs) { if ($d.Id -eq $Id) { return $d } }; return $null }
 function Get-SiteUrl([string]$Base) {
@@ -3754,6 +3753,7 @@ function Get-SiteUrl([string]$Base) {
   if (Test-Path -LiteralPath $p -PathType Leaf) { try { return ([string](Get-Content -LiteralPath $p -TotalCount 1)).Trim() } catch { return '' } }
   return ''
 }
+$sitePrefix = 'https://usaf.dps.mil/sites/'   # the DAF SharePoint address every site starts with; the box starts with it
 function Test-SiteUrl([string]$Url) { return ($Url -match '^https://[^/\s"]+/sites/[^/\s"]+/?$') }
 function Save-SiteUrl([string]$Base, [string]$Url) {
   $p = Get-ConfigFile $Base '90161Z-site.txt'
@@ -3917,17 +3917,17 @@ function Invoke-Check($Def, [string]$Base, [string]$Site, [scriptblock]$Tick) {
       }
       'pnp' {
         $m = @(Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending)
-        if (-not $m.Count) { $one = Format-CheckResult 'FAILED' 'not installed' 'The site steps need this tool. Use the other way for those steps on the bookmark page.' }
+        if (-not $m.Count) { $one = Format-CheckResult 'FAILED' 'not installed' 'The site steps need this tool. Use the other way for those steps in the repository.' }
         elseif ([string]$m[0].Version -eq '1.12.0') { $one = Format-CheckResult 'PASSED' 'version [1.12.0]' '' }
         else { $one = Format-CheckResult 'WARNING' ('version [' + $m[0].Version + ']. We tested [1.12.0]') 'It may work. If a site step fails, send the results as they are.' }
       }
       'net-bookmark' {
-        $w = Test-WebReach $bookmarkUrl
+        $w = Test-WebReach $goUrl   # the file the "newer round" notice reads
         if ($w.Ok) { $one = Format-CheckResult 'PASSED' ('reached' + $(if ($w.Code) { ', code [' + $w.Code + ']' } else { '' })) '' }
-        else { $one = Format-CheckResult 'WARNING' ('not reached: ' + $w.Why) 'Only the "newer round" notice needs it. You can still deploy.' }
+        else { $one = Format-CheckResult 'WARNING' ('not reached: ' + $w.Why) 'Only the "newer round" notice needs it. You can still deploy. The repository is [https://github.com/rhope-ops/90-161.Z].' }
       }
       'net-site' {
-        if (-not (Test-SiteUrl $Site)) { $one = Format-CheckResult 'NOT RUN' 'no site address' 'Type the site address in the "Site address" box. It starts with [https://] and has [/sites/] in it. Then select "Run checks again".' }
+        if (-not (Test-SiteUrl $Site)) { $one = Format-CheckResult 'NOT RUN' 'no site address' 'Type the rest of the site address after [https://usaf.dps.mil/sites/] in the "Site address" box. Then select "Run checks again".' }
         else {
           $w = Test-WebReach $Site
           if ($w.Ok) { $one = Format-CheckResult 'PASSED' ('reached' + $(if ($w.Code -in 401, 403) { ', code [' + $w.Code + ']. It asks you to sign in; that is normal' } elseif ($w.Code) { ', code [' + $w.Code + ']' } else { '' })) '' }
@@ -3957,7 +3957,7 @@ function Invoke-Check($Def, [string]$Base, [string]$Site, [scriptblock]$Tick) {
           } else {
             $miss = @($rightsNeeded | Where-Object { -not $have[$_] } | ForEach-Object { $rightWords[$_] })
             $got = @($have.Keys | Sort-Object | Where-Object { $have[$_] } | ForEach-Object { $rightWords[$_] })
-            if ($miss.Count) { $one = Format-CheckResult 'FAILED' ('missing: ' + ($miss -join ', ')) 'Ask a site owner to add you to the site "Owners" group. Or use the steps on the bookmark page that do not need this access.' }
+            if ($miss.Count) { $one = Format-CheckResult 'FAILED' ('missing: ' + ($miss -join ', ')) 'Ask a site owner to add you to the site "Owners" group. Or use the steps in the repository that do not need this access.' }
             else { $one = Format-CheckResult 'PASSED' ('you can ' + ($got -join ', ')) '' }
           }
         }
@@ -3968,7 +3968,7 @@ function Invoke-Check($Def, [string]$Base, [string]$Site, [scriptblock]$Tick) {
           Write-Host ('  Open Power Automate (' + $fp.Url + '). Look at the left menu for "Solutions" (it may be under "More"), then select "My flows" and look for "Import".')
           $a = ([string](Read-Host 'Did you see both "Solutions" and "Import"? Type Y or N and press Enter')).Trim()
           if ($a -match '^[Yy]') { $one = Format-CheckResult 'PASSED' 'confirmed by you' '' }
-          else { $one = Format-CheckResult 'FAILED' 'you did not see "Solutions" or "Import"' 'Ask your Power Automate administrator for permission to make flows. Or use the other way on the bookmark page.' }
+          else { $one = Format-CheckResult 'FAILED' 'you did not see "Solutions" or "Import"' 'Ask your Power Automate administrator for permission to make flows. Or use the other way in the repository.' }
         }
         else {
           $fp = Get-FlowPortal $Base
@@ -3980,7 +3980,7 @@ function Invoke-Check($Def, [string]$Base, [string]$Site, [scriptblock]$Tick) {
               '4. Come back here. Select Yes if you saw both, No if one is missing.') }
           $a = Show-GuideDialog $g '' $fp.Url $fp.Config
           if ($a -eq 'OK') { $one = Format-CheckResult 'PASSED' 'confirmed by you' '' }
-          elseif ($a -eq 'No') { $one = Format-CheckResult 'FAILED' 'you did not see "Solutions" or "Import"' 'Ask your Power Automate administrator for permission to make flows. Or use the other way on the bookmark page.' }
+          elseif ($a -eq 'No') { $one = Format-CheckResult 'FAILED' 'you did not see "Solutions" or "Import"' 'Ask your Power Automate administrator for permission to make flows. Or use the other way in the repository.' }
           else { $one = Format-CheckResult 'NOT RUN' 'not answered' 'Select "Check Power Automate" when you are ready.' }
         }
       }
@@ -4101,7 +4101,7 @@ if ($gui) {
     $banner.Margin = New-Object System.Windows.Forms.Padding(3, 2, 3, 6)
     try { $banner.ForeColor = Get-CheckColor 'NOT RUN' } catch { $null = $_ }
     $newer = Get-NewerRound
-    if ($newer) { $banner.Text = 'A newer round, ' + $newer + ', is on the bookmark page. Close this window and run ' + $newer + ' instead.   ' + $banner.Text; try { $banner.ForeColor = Get-CheckColor 'FAILED' } catch { $null = $_ } }
+    if ($newer) { $banner.Text = 'A newer round, ' + $newer + ', is in the repository. Close this window and run ' + $newer + ' instead.   ' + $banner.Text; try { $banner.ForeColor = Get-CheckColor 'FAILED' } catch { $null = $_ } }
     $body = New-Object System.Windows.Forms.Panel
     $body.Dock = 'Fill'; $body.Margin = New-Object System.Windows.Forms.Padding(0)
     $nav = New-Object System.Windows.Forms.FlowLayoutPanel
@@ -4131,13 +4131,14 @@ if ($gui) {
     $pCheck = & $mkRows @('AutoSize', 'AutoSize', 'AutoSize', 'Percent', 'AutoSize', 'AutoSize')
     $checkHead = & $mkLabel ''
     try { $checkHead.Font = New-Object System.Drawing.Font($form.Font.FontFamily, [single]11, $bold) } catch { $null = $_ }
-    $checkWhat = & $mkLabel 'The checks do not change anything. They make one test file and one short script, then delete them at once. If you type the site address, it is saved on this computer only (Config\90161Z-site.txt).'
+    $checkWhat = & $mkLabel ('The checks do not change anything. They make one test file and one short script, then delete them at once.' + "`r`n" + 'If you type the site address, it is saved on this computer only (Config\90161Z-site.txt).')
     $sitePanel = New-Object System.Windows.Forms.FlowLayoutPanel
     $sitePanel.AutoSize = $true; $sitePanel.WrapContents = $true; $sitePanel.Dock = 'Fill'
     $siteLabel = & $mkLabel 'Site address:'
     $siteLabel.Margin = New-Object System.Windows.Forms.Padding(3, 7, 3, 3)
     $siteBox = New-Object System.Windows.Forms.TextBox
-    $siteBox.Width = 520; $siteBox.Text = Get-SiteUrl $basePath; $siteBox.AccessibleName = 'Site address, starts with https://'
+    $siteBox.Width = 520; $siteBox.Text = Get-SiteUrl $basePath; if (-not $siteBox.Text) { $siteBox.Text = $sitePrefix }   # PFM 14 Nov 26: start the box with the DAF SharePoint address
+    $siteBox.Add_GotFocus({ $siteBox.SelectionStart = $siteBox.Text.Length; $siteBox.SelectionLength = 0 }); $siteBox.AccessibleName = 'Site address, starts with https://'
     $sitePanel.Controls.AddRange(@($siteLabel, $siteBox))
     $checkView = New-Object System.Windows.Forms.ListView
     $checkView.View = 'Details'; $checkView.FullRowSelect = $true; $checkView.HideSelection = $false; $checkView.Dock = 'Fill'; $checkView.ShowItemToolTips = $true
@@ -4408,7 +4409,7 @@ try {
   Write-Host ('90-161.Z Deployer - ' + $round + ' - build ' + $buildId)
   Write-Host (Get-LastRoundText (Read-RoundHistory (Get-BasePath)))
   $newer = Get-NewerRound
-  if ($newer) { Write-Host ('A newer round, ' + $newer + ', is on the bookmark page. Type N and press Enter to stop, then run ' + $newer + '.') }
+  if ($newer) { Write-Host ('A newer round, ' + $newer + ', is in the repository. Type N and press Enter to stop, then run ' + $newer + '.') }
   if ($apps.Count -gt 1) {
     for ($i = 0; $i -lt $apps.Count; $i++) { Write-Host ('  ' + ($i + 1) + '. ' + $apps[$i].Name) }
     $pick = ([string](Read-Host ('Type the number of the application to deploy (1 to ' + $apps.Count + ') and press Enter'))).Trim()
@@ -4418,7 +4419,7 @@ try {
   # Checks that run on their own; the sign-in and look-and-answer checks need the window (they show NOT RUN).
   $site0 = Get-SiteUrl (Get-BasePath)
   if (-not (Test-SiteUrl $site0) -and @($script:appChecks | Where-Object { $_ -in 'net-site', 'site-rights' }).Count) {
-    $v = ([string](Read-Host 'Type the site address (it starts with https:// and has /sites/ in it), then press Enter')).Trim()
+    $v = ([string](Read-Host 'Type the site address (it starts with https://usaf.dps.mil/sites/), then press Enter')).Trim()
     if (Test-SiteUrl $v) { $site0 = $v }
   }
   foreach ($id in $script:appChecks) {
