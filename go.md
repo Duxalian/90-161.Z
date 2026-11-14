@@ -100,25 +100,6 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T
 Part B: run the current round with "T11 Outlook check" and "T11 Part B" checked (see its task). The round reads the test e-mails, opens the form for the 17 checks only a person can do, and attaches the result file.
 Report: the round's e-mail. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
 **If it fails:** if the import asks for a connection I cannot make, send its name. If the run stops early, delete anything named "PFM Rights Probe ..." by hand and send the name of the step that failed and its error text (no names). A red step in the run is a result, not a failure: the run goes on.
-## Task 10: decision briefs, r5 (open, 12 Nov 26)
-
-**For:** a last check of the three briefs before they go to their audiences.
-**Time:** about 15 minutes (estimate).
-Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T10
-**Changes:** saves 3 files into T10. Nothing else.
-- Command brief r5 (10 slides): 7 questions for my commanders, each answered Yes, No or Pending evaluation, with an answer sheet. Script delivery is gone (the ISSM approved it); question 7 is now the top two risks.
-- Installer brief r6 (22 slides): for a PFM installing it at their own wing. R02 says each wing's ISSM must approve paste and run; ours did.
-  r6 (13 Nov 26) only replaces the old owner name in 5 links and updates the decision count; if I already checked r5, I save r6 and only check that it opens.
-- Adoption brief r2 (12 slides): the path to ANG-wide use. Use only after other wing PFMs show interest.
-Steps:
-1. The current round (R08 or later) saves the three files into the T10 folder and checks each in PowerPoint (90161Z-T10-check-r1.txt). Without a round, save them:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-command-brief-r5.pptx
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-installer-brief-r6.pptx
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/brief/90161Z-T10-adoption-brief-r2.pptx
-2. Open each in PowerPoint. Check that it opens without a repair message and that no text runs off a slide.
-Report: reply in the Claude chat: the changes I want, and whether each brief may go to its audience.
-**If it fails:** if a file shows a repair message, name the brief.
-
 ## Task 7: real seals, Part B, r1 (open, 11 Nov 26)
 
 **For:** prepares every unit's real shield for the publication covers. Decided: each unit's own shield (1C) in the project library (2A, 12 Nov 26), every seal prepared to the same 1.20 in box, centered. Part A (fake seals) passed in Round R01.
@@ -138,6 +119,9 @@ Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 901
 
 ## Done
 
+- Task 10, decision briefs (14 Nov 26): R11 checked all 3 (overflow 0, past-edge 0) and I opened them in PowerPoint: they open normally. Closed.
+- Round R11 (13 Nov 26): window, inventory (142 items), renderer, brief check (3 of 3), PnP on the new site (manage lists, site and permissions; 12 PFM lists) passed; the Outlook check stopped (E_ABORT, the Outlook access prompt): R12 moves it into the probe flow. Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r11-results.md
 - Round R10 (13 Nov 26): window, inventory, renderer, brief check (3 of 3), PnP web login passed; Task 9 pages (3 of 3) and Task 12 documents (3 of 3) received; Task 11 form worked (2 of 18 rows answered). Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r10-results.md
 - Task 9, e-Publishing pages (13 Nov 26, in R10): 3 of 3 saved with the list; Claude writes the reader next.
