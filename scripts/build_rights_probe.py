@@ -116,8 +116,9 @@ CHECKS = [
     ("W09", "Create a folder", "POST", f"_api/web/lists/getbytitle('{TEST_LIB}')/rootfolder/folders/add(url='ProbeFolder')", None, None, None),
     ("W10", "Give the folder its own permissions (per-action Working Files)", "POST",
      f"_api/web/lists/getbytitle('{TEST_LIB}')/rootfolder/folders/getbyurl('ProbeFolder')/ListItemAllFields/breakroleinheritance(copyRoleAssignments=false,clearSubscopes=true)", None, None, None),
-    ("W11", "Give the coworker's first SharePoint group Contribute on the TEST list", "POST",
-     f"_api/web/lists/getbytitle('{TEST_LIST}')/roleassignments/addroleassignment(principalid=@{{first(coalesce(body('G04_ids'), json('[0]')))}},roledefid=1073741827)", None, None, None),
+    ("W11", "Give the coworker's first group that is not Owners or Members Contribute on the TEST list (group ID kept)", "POST",
+     f"_api/web/lists/getbytitle('{TEST_LIST}')/roleassignments/addroleassignment(principalid=@{{first(coalesce(body('G04_read'), json('[0]')))}},roledefid=1073741827)", None, None,
+     "granted to group @{string(first(coalesce(body('G04_read'), json('[0]'))))}"),
     ("R12b", "Coworker's permission mask on the TEST list after W11 (Add, Edit, Delete own items?)", "GET",
      f"_api/web/lists/getbytitle('{TEST_LIST}')/getusereffectivepermissions(@u)?@u='@{{" + COWORKER + "}'", None, None, None),
     ("X01", "Cleanup: delete the test list", "POST", f"_api/web/lists/getbytitle('{TEST_LIST}')", None,
@@ -185,8 +186,15 @@ ALL = ["Succeeded", "Failed", "Skipped", "TimedOut"]
 MAIL = REV <= 3   # r4: the mail checks were answered in r3
 # r4: SharePoint echoes the request address in errors ("source"); replace the typed site, its path and its host.
 _SITE = "trim(triggerBody()?['text'])"
-SITE_HIDE = (f"replace(replace(replace({{x}}, if(empty({_SITE}), '<none>', {_SITE}), '<SITE>'), "
-             f"if(empty({_SITE}), '<none>', uriPath({_SITE})), '<SITE-PATH>'), if(empty({_SITE}), '<none>', uriHost({_SITE})), '<HOST>')")
+_CO = "trim(coalesce(triggerBody()?['text_1'], ''))"
+# Also the coworker's address, typed and URL-encoded (%40), in both cases: it is part of the R11/R12/R12b/G04 request
+# addresses that SharePoint echoes (review R15 MAJOR). The path is replaced only when it is more than "/".
+_PATH = f"if(or(empty({_SITE}), equals(uriPath({_SITE}), '/')), '<none>', uriPath({_SITE}))"
+SITE_HIDE = (f"replace(replace(replace(replace(replace(replace(replace({{x}}, if(empty({_SITE}), '<none>', {_SITE}), '<SITE>'), "
+             f"{_PATH}, '<SITE-PATH>'), if(empty({_SITE}), '<none>', uriHost({_SITE})), '<HOST>'), "
+             f"if(empty({_CO}), '<none>', {_CO}), '<COWORKER>'), if(empty({_CO}), '<none>', toLower({_CO})), '<COWORKER>'), "
+             f"if(empty({_CO}), '<none>', encodeUriComponent({_CO})), '<COWORKER>'), "
+             f"if(empty({_CO}), '<none>', encodeUriComponent(toLower({_CO}))), '<COWORKER>')")
 HOST = {"apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "HttpRequest"}
 AUTH = {"value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']", "type": "Raw"}
 
@@ -228,6 +236,11 @@ def build():
             xname, xact = EXTRA[cid]
             actions[xname] = dict(xact, runAfter={cid: ALL})
             after = xname
+        if cid == "G04":
+            actions["G04_read"] = {"runAfter": {after: ALL}, "type": "Query", "inputs": {
+                "from": "@coalesce(body('G04_ids'), json('[]'))",
+                "where": "@and(not(equals(item(), body('R07')?['Id'])), not(equals(item(), body('R14')?['Id'])))"}}
+            after = "G04_read"
         actions[f"Record_{cid}"] = record(cid, what, keep, site=True)
         actions[f"Record_{cid}"]["runAfter"] = {after: ALL}
         prev = f"Record_{cid}"
