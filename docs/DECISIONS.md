@@ -5,6 +5,7 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-14 | Revisit 1B (no PnP): R09 PnP web login PASS (manage lists, manage site). Next round adds a read-only PnP test on the new site; if it passes, optional Deployer steps for lists, permissions and logo; Power Automate stays the fallback. | PFM | docs/reviews/2026-11-14-r09-results.md |
 | 2026-11-14 | The new site is a separate site collection. Second-look findings F1-F5 wait for the PFM's go; S8-S11 added to the sweep page. | PFM | docs/reviews/2026-11-13-sweep-decisions.md |
 | 2026-11-14 | New site exists, approved for CUI. Tasks 11, 14 use it; Task 8 (edit own rows) moves into the T02 r11 flow, by hand if it reports NOT SET. Hold any step that needs a PnP check. | PFM | docs/power-automate-provisioning.md |
 | 2026-11-14 | Sweep answers: (S1) the lists go on a new site: T02 r10 builds all 12 from scratch, no upgrade flow; (S4) 33 coverage rows N/A; (S5A) a flow routes endorsements, Legal after the others; R09 goes live. S2, S3, S5 rest, S6, S7 open. | PFM | docs/reviews/2026-11-13-sweep-decisions.md |
