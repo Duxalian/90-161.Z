@@ -39,8 +39,8 @@ Steps:
 **Time:** about 5 minutes (estimate) for the default steps; Task 9 adds about 20 minutes, Task 12 about 5, Task 11 Part B about 35.
 **Changes:** writes into T01, T07, T09, T10, T11, T12, T14, T15, T16, Config and Rounds\R10. Moves Rounds\R09 and the old Task 9 and Task 11 scripts to the Recycle Bin. Opens PowerPoint without a window and closes it. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build BUILDID.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/COMMIT/scripts/gov/paste/90161Z-R10-round-r1.ps1
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 8fa41cac.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/2802903e069d98d59321d4473ed3468267b55dba/scripts/gov/paste/90161Z-R10-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
 3. The first three steps are checked. Check "T09 e-Publishing pages", "T12 color documents" or "T11 Part B" when I have the time for them.
 4. Press Enter (or Run). T09 and T12 each open a window that says why, what to save and where: use its Copy buttons in the Save window, then press Done. T11 opens a table: pick a result per row, short notes without names, Save and close.
