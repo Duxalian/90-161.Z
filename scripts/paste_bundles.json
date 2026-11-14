@@ -79,7 +79,8 @@
             "6. Come back here and select \"Done: the run has started\". The round continues; the site setup step",
             "   collects the probe result when the flow finishes (it waits up to 15 minutes).",
             "If the address is wrong for your tenant, correct it in the box; the Deployer remembers it."
-          ]
+          ],
+          "url_source": "Microsoft Learn, Power Automate US Government (https://learn.microsoft.com/power-automate/us-govt): DoD maker portal; editable in the window, remembered in Config (agent value, PFM to confirm in R13)"
         },
         {
           "name": "T07 Seal preparation",

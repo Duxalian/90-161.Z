@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R13, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = 'd47192f0'
+$buildId = 'e90686fb'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R13'
 $usersRoot = 'C:\Users'
@@ -4505,6 +4505,8 @@ function Invoke-GuideStep([string]$Base, $Step, [scriptblock]$Say) {
     $urlFile = Get-ConfigFile $Base $Step.UrlConfig
     if (Test-Path -LiteralPath $urlFile -PathType Leaf) { try { $v = ([string](Get-Content -LiteralPath $urlFile -TotalCount 1)).Trim(); if ($v -match '^https://') { $url = $v } } catch { $null = $_ } }
   }
+  # An old marker from an earlier run would make site setup wait for a result that is not coming (review R13 #2).
+  if ($Step.Marker) { $old = Join-Path $dir $Step.Marker; if (Test-Path -LiteralPath $old -PathType Leaf) { try { Remove-Item -LiteralPath $old -Force } catch { $null = $_ } } }
   & $Say ('    File ready: ' + $Step.Dir + '\' + $Step.File)
   if ($script:textMode) {
     foreach ($l in @($Step.Guide)) { & $Say ('    ' + $l) }

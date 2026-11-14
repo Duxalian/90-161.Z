@@ -412,6 +412,8 @@ function Invoke-GuideStep([string]$Base, $Step, [scriptblock]$Say) {
     $urlFile = Get-ConfigFile $Base $Step.UrlConfig
     if (Test-Path -LiteralPath $urlFile -PathType Leaf) { try { $v = ([string](Get-Content -LiteralPath $urlFile -TotalCount 1)).Trim(); if ($v -match '^https://') { $url = $v } } catch { $null = $_ } }
   }
+  # An old marker from an earlier run would make site setup wait for a result that is not coming (review R13 #2).
+  if ($Step.Marker) { $old = Join-Path $dir $Step.Marker; if (Test-Path -LiteralPath $old -PathType Leaf) { try { Remove-Item -LiteralPath $old -Force } catch { $null = $_ } } }
   & $Say ('    File ready: ' + $Step.Dir + '\' + $Step.File)
   if ($script:textMode) {
     foreach ($l in @($Step.Guide)) { & $Say ('    ' + $l) }
