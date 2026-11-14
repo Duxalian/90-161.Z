@@ -7,6 +7,9 @@ environmentvariabledefinitions/<schema>/environmentvariabledefinition.xml. Publi
 A def holds displayName, description, connections (connector names), triggers, actions; "@parameters('<display> (<schema>)')" reads a
 solution environment variable (type Text), so no site address is in the repo. Deterministic (uuid5 IDs, fixed zip timestamps, stored),
 so --check can compare the committed zip with a fresh build. Never hand-edit the zip. Not imported until the PFM reviews it.
+TEST (R15, PFM 14 Nov 26: test a solution import before the flow build): the same builder also writes
+flow/solution/90161Z-T17-solution-test-r1.zip from flow/solution/test-defs/*.json: unique name PFM90161ZTEST, only the
+environment variables its flows use; one harmless manual flow that reads one list count and writes one result file.
 Strings that start with "@" are expressions on purpose here (build_flow_package.literal() is for static data only).
 """
 import argparse, io, json, pathlib, re, sys, uuid, zipfile
@@ -14,6 +17,7 @@ from xml.sax.saxutils import escape, quoteattr
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DEFS, OUT = ROOT / "flow" / "solution" / "defs", ROOT / "flow" / "solution" / "90161Z-flows-solution-r1.zip"
+TEST_DEFS, TEST_OUT = ROOT / "flow" / "solution" / "test-defs", ROOT / "flow" / "solution" / "90161Z-T17-solution-test-r1.zip"
 NS = uuid.UUID("6f1c2b4e-9d0a-4c5e-8b7a-90161a000001")
 SCHEMA = "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#"
 STAMP = (2026, 1, 1, 0, 0, 0)
@@ -48,9 +52,9 @@ def guid(kind, name):
     return str(uuid.uuid5(NS, f"{kind}:{name}")).upper()
 
 
-def load():
+def load(defs=DEFS):
     out = []
-    for src in sorted(DEFS.glob("*.json")):
+    for src in sorted(defs.glob("*.json")):
         d = json.loads(src.read_text(encoding="utf-8"))
         for k in ("displayName", "triggers", "actions", "connections"):
             if k not in d:
@@ -81,8 +85,11 @@ def workflow_json(d, used):
         "templateName": None}, "schemaVersion": "1.0.0.0"}
 
 
-def build() -> bytes:
-    flows = load()
+def build(test=False) -> bytes:
+    flows = load(TEST_DEFS if test else DEFS)
+    unique, title = (UNIQUE + "TEST", "90-161.Z solution import test") if test else (UNIQUE, "90-161.Z flows")
+    used_env = {k for _, _, u in flows for k in u}
+    env = [e for e in ENV if ENV_KEY[e[0]] in used_env] if test else ENV   # the test solution carries only what it uses
     files, wf_xml, root_components = {}, [], []
     for src, d, used in flows:
         wid = guid("workflow", src.stem)
@@ -112,7 +119,7 @@ def build() -> bytes:
             "      <iscustomizable>1</iscustomizable>\n      <promptingbehavior>0</promptingbehavior>\n"
             "      <statecode>0</statecode>\n      <statuscode>1</statuscode>\n    </connectionreference>")
         root_components.append(f'      <RootComponent type="10018" schemaName="{conn_logical(c)}" behavior="0" />')
-    for s, disp, default in ENV:
+    for s, disp, default in env:
         files[f"environmentvariabledefinitions/{s}/environmentvariabledefinition.xml"] = (
             '<?xml version="1.0" encoding="utf-8"?>\n'
             f'<environmentvariabledefinition schemaname="{s}">\n'
@@ -132,8 +139,8 @@ def build() -> bytes:
     files["solution.xml"] = (
         '<?xml version="1.0" encoding="utf-8"?>\n'
         f'<ImportExportXml version="9.2.0.0" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" {XSI}>\n'
-        f"  <SolutionManifest>\n    <UniqueName>{UNIQUE}</UniqueName>\n"
-        '    <LocalizedNames>\n      <LocalizedName description="90-161.Z flows" languagecode="1033" />\n    </LocalizedNames>\n'
+        f"  <SolutionManifest>\n    <UniqueName>{unique}</UniqueName>\n"
+        f'    <LocalizedNames>\n      <LocalizedName description="{title}" languagecode="1033" />\n    </LocalizedNames>\n'
         "    <Descriptions />\n"
         f"    <Version>{VERSION}</Version>\n    <Managed>0</Managed>\n    <Publisher>\n      <UniqueName>{PUBLISHER}</UniqueName>\n"
         '      <LocalizedNames>\n        <LocalizedName description="90-161.Z" languagecode="1033" />\n      </LocalizedNames>\n'
@@ -160,13 +167,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="exit 1 if the committed zip differs from a fresh build")
     a = ap.parse_args()
-    data = build()
-    if a.check:
-        if not OUT.exists() or OUT.read_bytes() != data:
-            print(f"STALE {OUT.relative_to(ROOT)}"); sys.exit(1)
-        print(f"OK {OUT.relative_to(ROOT)} up to date"); return
-    OUT.write_bytes(data)
-    print(f"BUILT {OUT.relative_to(ROOT)} bytes={len(data)}")
+    for test, out in ((False, OUT), (True, TEST_OUT)):
+        data = build(test)
+        if a.check:
+            if not out.exists() or out.read_bytes() != data:
+                print(f"STALE {out.relative_to(ROOT)}"); sys.exit(1)
+            print(f"OK {out.relative_to(ROOT)} up to date"); continue
+        out.write_bytes(data)
+        print(f"BUILT {out.relative_to(ROOT)} bytes={len(data)}")
 
 
 if __name__ == "__main__":

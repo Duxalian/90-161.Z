@@ -14,12 +14,12 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 | # | Right | Needed for | Expected | Conf | Test | Fallback |
 |---|---|---|---|---|---|---|
 | S1 | Read items | Everyone using the app | U, O, A | H | R11, R12 | - |
-| S2 | Add and edit own items | Requests, coordinator answers | U (Contribute or Edit) | H | R11, R12 | Changes through a flow on the PFM's connection |
+| S2 | Add and edit own items | Requests, coordinator answers; the app (wing users have Read on the site, PFM 14 Nov 26) | U after the list gives its group Contribute, with item-level "own items" | H | R11, R12, W11, R12b (r4) | Changes through a flow on the PFM's connection |
 | S3 | Create lists, columns, views | Setup part 1, upgrades | O, A; also U when Members have "Edit" (Edit includes Manage Lists) | M | R06, R07b, R11, W01-W02 | A site owner runs setup part 1 |
 | S4 | Give a list its own permissions | Settings and log read-only for members (P2) | O, A | H | W04, W05 | A site owner follows a checklist |
 | S5 | Item-level permissions on a list | Edit own rows (DECISIONS 12 Nov) | O, A (Manage Lists) | H | W03, R09a, R09b | Changes through flows only |
 | S6 | Create a SharePoint group | SharePoint-only group option (P6) | O, A | H | W07 | Use an existing group |
-| S7 | Resolve an AD or Entra group on the site | AD group option (P6) | O, A | M | R13 | Add the group by hand in Site permissions |
+| S7 | Resolve an AD or Entra group on the site | AD group option (P6) | O, A | M | R13 (r3); G01, G03 (r4: counts by type, the AD group has no e-mail) | Add the group by hand in Site permissions |
 | S8 | Give a folder its own permissions | Per-action Working Files folders | O, A | H | W08-W10 | One shared Working Files folder, PFM-only |
 | S9 | Set version limits | Storage control | O, A | H | W03 | Leave defaults |
 | S10 | Read a coworker's effective rights | Setup checks without a second login | O, A | M | R11, R12 | Ask a coworker to run the probe |
@@ -70,7 +70,7 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 | D1 | Look up people (Office 365 Users) | Person pickers, AO lookup | K, data policy | M | U01 | SharePoint person fields only |
 | D2 | Create an M365 group | M365 group option | Tenant setting | L | M17 (look only) | Use an existing group |
 | D3 | Create or change an AD security group | AD group option | Communications squadron only | H | Not testable | Ask the squadron |
-| D4 | See a group's type when picking it | Setup explanation | K | M | R13, M07 | Setup asks the PFM |
+| D4 | See a group's type when picking it | Setup explanation | K | M | R13, M07; G01-G04 (r4) | Setup asks the PFM |
 
 ## 5. Gov computer
 
@@ -117,7 +117,7 @@ PFM 14 Nov 26: the probes also record what later projects can use. All read-only
 
 ## Reading the result
 
-The probe writes 90161Z-T11-rights-result-r1.json into the site's default library and shows the same list in the run's Result step. Each row: check ID, HTTP status, and either a short answer or an error. Status 200 or 201 = allowed; 403 = not allowed; 404 = the thing does not exist on that site. Permission masks (High, Low) are decoded in the cloud against SharePoint's PermissionKind values (for example ManageLists 12, ManagePermissions 26). Answers are requested without metadata, so the file holds no site address and no names, but it describes the site: e-mail it as go.md Task 11 says; it never goes into this public repository. R13 leaves the group in the site's hidden user list (harmless). Deleted TEST lists sit in the site recycle bin for 93 days. An M365 group may not resolve by e-mail address in R13; then the type is checked in M07.
+The probe writes 90161Z-T11-rights-result-r<N>.json into the site's default library (r4: the Deployer's site setup copies it and masks the site address, host and path before it is attached) and shows the same list in the run's Result step. Each row: check ID, HTTP status, and either a short answer or an error. Status 200 or 201 = allowed; 403 = not allowed; 404 = the thing does not exist on that site. Permission masks (High, Low) are decoded in the cloud against SharePoint's PermissionKind values (for example ManageLists 12, ManagePermissions 26). Answers are requested without metadata, so the file holds no site address and no names, but it describes the site: e-mail it as go.md Task 11 says; it never goes into this public repository. R13 leaves the group in the site's hidden user list (harmless). Deleted TEST lists sit in the site recycle bin for 93 days. An M365 group may not resolve by e-mail address in R13; then the type is checked in M07.
 
 ## After the results
 
