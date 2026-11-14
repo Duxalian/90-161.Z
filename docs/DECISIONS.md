@@ -5,6 +5,8 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-14 | All text the PFM or a user sees (Deployer window, packages, imports, descriptions, subtitles) is plain, simple English. | PFM | scripts/build_paste_bundles.py |
+| 2026-11-14 | Deployer window: Choose app > Check > Deploy; embedded catalog only (3A stays); two bars (PROGRESS lines, else time); checks: computer, network, site rights (PnP sign-in), Power Automate. | PFM | scripts/build_paste_bundles.py |
 | 2026-11-14 | Site logo = variant A, bold white (lines 60% thicker than r1; replaces option D's header logo). Thumbnail stays navy, same bold lines. | PFM | https://claude.ai/artifact/AZUqwxiPwSruC65eH1uhHx |
 | 2026-11-14 | Wing users have only Read on the site; anyone using the app enters data through it. Open: how the app writes (list-level rights or a flow), see NEXT_PROMPT. | PFM | docs/reviews/2026-11-14-r13-results.md |
 | 2026-11-14 | The Deployer delivers every file a round needs (no separate downloads) and guides steps done in another program (R13: probe flow import); its log text reads professionally. | PFM | docs/reviews/2026-11-14-r12-results.md |
