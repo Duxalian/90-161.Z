@@ -251,7 +251,7 @@ swap() { sed -e "s#^\$goUrl = '.*'#\$goUrl = 'file://$tp/go.md'#" -e "s#Url = 'h
 for b in scripts/gov/paste/*.ps1; do
   swap "$b" > "$tp/b.ps1"; USERPROFILE="$tp/u/test1234" pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
   # Text mode runs the default steps that need no folder (the optional steps are skipped).
-  n=$(python3 -c "import json;print(sum(1 for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b' for s in b['steps'] if s.get('default', True) and 'ask' not in s))")
+  n=$(python3 -c "import json,pathlib;f='scripts/build_paste_bundles.py';ns={'__file__':str(pathlib.Path(f).resolve())};exec(open(f).read().split(chr(10)+'def here')[0],ns);print(sum(1 for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b' for s in b['steps'] if ns['step_default'](s) and 'ask' not in s))")
   r=$(python3 -c "import json;print([b['round'] for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'][0])")
   base="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"
   st=$(grep -c '^STEP .* running' "$tp/out.txt"); sm=$(grep -c ': \(OK\|CHECK\) (PASS' "$tp/out.txt")
@@ -289,6 +289,17 @@ for b in scripts/gov/paste/*.ps1; do
 done; rm -rf "$te"
 [ "$ab" -eq 0 ] && [ "$tw" -eq 0 ] && ok "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw; Enter path = round bundle test)" || bad "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw)"
 
+# Step default by file hash (PFM 14 Nov 26): a step with default {passed, paths} is ticked only when those files changed.
+sd=$(python3 - <<'PYEOF'
+import pathlib
+src = pathlib.Path('scripts/build_paste_bundles.py').read_text()
+ns = {'__file__': str(pathlib.Path('scripts/build_paste_bundles.py').resolve())}; exec(src.split('\ndef here')[0], ns)
+p = ['samples/publication.sample.json']; h = ns['files_hash'](p)
+print(ns['step_default']({'default': {'passed': h, 'paths': p}}), ns['step_default']({'default': {'passed': 'x', 'paths': p}}),
+      ns['step_default']({}), ns['step_default']({'default': False}))
+PYEOF
+)
+[ "$sd" = "False True True False" ] && ok "step default follows changed files (unchanged off, changed on)" || bad "step default by hash: $sd"
 # No DODID question in rounds (PFM 2026-11-13): the profile folder is the DODID.
 dq=0; for b in scripts/gov/paste/*.ps1; do sed -n '/round runner (generated/,$p' "$b" | grep -qE "Read-Host 'DODID|idBox" && dq=$((dq+1)); done
 [ "$dq" -eq 0 ] && ok "rounds ask no DODID (bundles that ask: $dq)" || bad "rounds ask no DODID (bundles that ask: $dq)"

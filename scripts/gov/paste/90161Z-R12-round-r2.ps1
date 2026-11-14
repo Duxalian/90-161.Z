@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R12, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = '843ad3b5'
+$buildId = '4aba2bff'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R12'
 $usersRoot = 'C:\Users'
@@ -4136,15 +4136,15 @@ AQAAAA==
 $fetch = @()
 
 $steps = @()
-$steps += @{ Name = 'T15 environment inventory r2 (read-only)'; Dir = 'T15'; File = '90161Z-T15-env-inventory-r2.ps1'; Default = $true; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 30; Args = '' }
-$steps += @{ Name = 'T01 renderer test r9'; Dir = 'T01'; File = '90161Z-T01-renderer-test-r9.ps1'; Default = $true; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 30; Args = '' }
+$steps += @{ Name = 'T15 environment inventory r2 (read-only)'; Dir = 'T15'; File = '90161Z-T15-env-inventory-r2.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 30; Args = '' }
+$steps += @{ Name = 'T01 renderer test r9'; Dir = 'T01'; File = '90161Z-T01-renderer-test-r9.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 30; Args = '' }
 $steps += @{ Name = 'T07 seal prep r4 (uses T07\Seals, else the Outlook mail "90161Z T07 seals")'; Dir = 'T07'; File = '90161Z-T07-seal-prep-r4.ps1'; Default = $true; AskParam = ''; AskPrompt = ''; ScreenOnly = '^seal\d+ detail:'; Minutes = 30; Args = '' }
 $steps += @{ Name = 'T16 site setup r1 (CAC sign-in; sets permissions, time zone, logo, seals; asks the site address)'; Dir = 'T16'; File = '90161Z-T16-site-setup-r1.ps1'; Default = $true; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 20; Args = '-Logo' }
 $steps += @{ Name = 'T11 Part B manual checks form (17 rows, about 25 min)'; Dir = 'T11'; File = '90161Z-T11-partb-form-r2.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 180; Args = '' }
 $steps += @{ Name = 'T16 PnP test and SharePoint inventory r2 (read-only; asks the site address; CAC sign-in)'; Dir = 'T16'; File = '90161Z-T16-pnp-signin-test-r2.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 20; Args = '' }
 $collect = @()
 $collect += @{ Dir = 'T15'; Name = '90161Z-T15-inventory-r2.txt'; Step = 'T15 environment inventory r2 (read-only)' }
-$collect += @{ Dir = 'T01'; Name = 'SAMPLEWINGI99-101.pdf'; Step = '' }
+$collect += @{ Dir = 'T01'; Name = 'SAMPLEWINGI99-101.pdf'; Step = 'T01 renderer test r9' }
 $collect += @{ Dir = 'T07'; Name = '90161Z-T07-result-r1.txt'; Step = 'T07 seal prep r4 (uses T07\Seals, else the Outlook mail "90161Z T07 seals")' }
 $collect += @{ Dir = 'T16'; Name = '90161Z-T16-setup-r1.txt'; Step = 'T16 site setup r1 (CAC sign-in; sets permissions, time zone, logo, seals; asks the site address)' }
 $collect += @{ Dir = 'T16'; Name = '90161Z-T16-pnp-result-r2.txt'; Step = 'T16 PnP test and SharePoint inventory r2 (read-only; asks the site address; CAC sign-in)' }

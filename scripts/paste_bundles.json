@@ -1,8 +1,8 @@
 {
-  "_doc": "Source for scripts/build_paste_bundles.py. Each bundle is one round: a self-contained PowerShell text the PFM copies from its raw page and pastes into Windows PowerShell ISE (F5). It writes the files, then opens the 90-161.Z Deployer (a window; text prompts if no window can open): steps run one by one with a live log and PASS/FAIL counts, then one results folder (Rounds\\\\<round>: a report file plus copies of the PDFs, to attach to one e-mail; zips do not cross the boundary) and a summary for the clipboard. It runs only the steps inside it (PFM 3A). Never hand-edit scripts/gov/paste/*.ps1: change this file or the sources and rebuild.",
+  "_doc": "Source for scripts/build_paste_bundles.py. Each bundle is one round: a self-contained PowerShell text the PFM copies from its raw page and pastes into Windows PowerShell ISE (F5). It writes the files, then opens the 90-161.Z Deployer (a window; text prompts if no window can open): steps run one by one with a live log and PASS/FAIL counts, then one results folder (Rounds\\\\<round>: a report file plus copies of the PDFs, to attach to one e-mail; zips do not cross the boundary) and a summary for the clipboard. It runs only the steps inside it (PFM 3A). A step's \"default\" may be {passed, paths}: the step is ticked only when those files changed since the round that passed it; after a round passes it, set passed to the new hash (PFM 14 Nov 26). Never hand-edit scripts/gov/paste/*.ps1: change this file or the sources and rebuild.",
   "bundles": [
     {
-      "out": "scripts/gov/paste/90161Z-R12-round-r1.ps1",
+      "out": "scripts/gov/paste/90161Z-R12-round-r2.ps1",
       "round": "R12",
       "title": "Round R12: site setup by script (permissions, time zone, logo, seals library, probe result fetch); seal prep reads the Outlook mail; T10 removed",
       "files": [
@@ -67,12 +67,22 @@
         {
           "name": "T15 environment inventory r2 (read-only)",
           "dir": "T15",
-          "file": "90161Z-T15-env-inventory-r2.ps1"
+          "file": "90161Z-T15-env-inventory-r2.ps1",
+          "default": {
+            "passed": "efa7c16a1024658e",
+            "passed_in": "R11 (13 Nov 26, PASS 142 items)",
+            "paths": ["scripts/gov/90161Z-T15-env-inventory-r2.ps1"]
+          }
         },
         {
           "name": "T01 renderer test r9",
           "dir": "T01",
-          "file": "90161Z-T01-renderer-test-r9.ps1"
+          "file": "90161Z-T01-renderer-test-r9.ps1",
+          "default": {
+            "passed": "8977d2239d3dc7d8",
+            "passed_in": "R11 (13 Nov 26, 4 of 4)",
+            "paths": ["samples/publication.sample.json", "scripts/gov/New-Publication.ps1", "scripts/gov/Publication.Common.ps1", "scripts/gov/Test-Publication.ps1", "scripts/gov/90161Z-T01-renderer-test-r9.ps1"]
+          }
         },
         {
           "name": "T07 seal prep r4 (uses T07\\Seals, else the Outlook mail \"90161Z T07 seals\")",
@@ -110,7 +120,8 @@
         },
         {
           "dir": "T01",
-          "name": "SAMPLEWINGI99-101.pdf"
+          "name": "SAMPLEWINGI99-101.pdf",
+          "step": "T01 renderer test r9"
         },
         {
           "dir": "T07",

@@ -5,6 +5,7 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-14 | Passed steps (T01 render test, T15 inventory) run in a round only when their files changed since the round that last passed them (hash in scripts/paste_bundles.json); still tickable by hand. | PFM | scripts/build_paste_bundles.py |
 | 2026-11-14 | Remove manual gov-device work wherever a script can do it without weaker checks (R12: PnP site setup, seal prep from T07\Seals, probe flow reads its own test mails). | PFM | docs/reviews/2026-11-14-r11-results.md |
 | 2026-11-14 | Unit seals are not CUI or controlled: Claude may correct them (upscale, clean, feather) and return them by e-mail. They still never go in this repo. | PFM | docs/reviews/2026-11-14-r11-results.md |
 | 2026-11-14 | Logo option D: site logo = mark r1 with no fill (blue header); thumbnail = navy mark with no fill (white cards). The blue tile is dropped. | PFM | assets/logo/ |
