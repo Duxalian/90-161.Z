@@ -289,8 +289,8 @@
       "fetch": [],
       "apps": [
         {
-          "name": "90-161.Z: publications tracker (test round R15)",
-          "summary": "Tests the flow import, then sets up your site: logo, settings and an access test.",
+          "name": "90-161.Z: Publications and Forms Management",
+          "summary": "Test round R15. Tests the flow import, then sets up your site: logo, settings and an access test.",
           "steps": [
             "T17 Solution import test",
             "T11 Rights probe r4: import and run the flow",

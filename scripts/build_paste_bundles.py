@@ -811,7 +811,7 @@ function Invoke-Check($Def, [string]$Base, [string]$Site, [scriptblock]$Tick) {
       }
       'word' {
         if ($env:OS -eq 'Windows_NT' -and [type]::GetTypeFromProgID('Word.Application')) {
-          if (Test-WordOpen) { $one = Format-CheckResult 'WARNING' 'installed and open now' 'Save your work and close Word before you deploy.' }
+          if (Test-WordOpen) { $one = Format-CheckResult 'FAILED' 'installed and open now' 'Save your work and close Word. Then select "Run checks again".' }   # PFM 14 Nov 26: blocks (1B)
           else { $one = Format-CheckResult 'PASSED' 'installed' '' }
         } else { $one = Format-CheckResult 'FAILED' 'not found' 'This application needs Word on this computer.' }
       }
@@ -1355,6 +1355,7 @@ try {
 '''
 
 # Checks every application runs (the rest come from its steps' "needs"). Ids must exist in the engine's $checkDefs.
+APP_NAME = '90-161.Z: Publications and Forms Management'   # full name; 90-161.Z is the short name (PFM 14 Nov 26)
 BASE_CHECKS = ['ps', 'lang', 'onedrive', 'disk', 'write', 'child', 'outlook', 'net-bookmark']
 CHECK_IDS = re.findall(r"@\{ Id = '([a-z-]+)'", ENGINE)
 
@@ -1363,7 +1364,7 @@ def app_lines(b):
     """The embedded catalog (PFM 14 Nov 26: the chooser lists only applications inside the paste; no fetch, PFM 3A).
     "apps" in the JSON: [{name, summary, steps: [step names]}]; without it, one application with every step."""
     names = [s['name'] for s in b['steps']]
-    apps = b.get('apps') or [{'name': b.get('app', '90-161.Z'), 'summary': b['title'], 'steps': names}]
+    apps = b.get('apps') or [{'name': b.get('app', APP_NAME), 'summary': b['title'], 'steps': names}]
     out = []
     for a in apps:
         idx = [names.index(n) for n in a['steps']]

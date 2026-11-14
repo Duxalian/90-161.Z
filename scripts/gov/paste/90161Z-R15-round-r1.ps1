@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R15, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = 'c5af9db4'
+$buildId = 'b156c2ce'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $bookmarkUrl = 'https://rhope-ops.github.io/90-161.Z/'
 $round = 'R15'
@@ -3170,7 +3170,7 @@ $cleanup += @{ Path = 'T16\90161Z-T16-site-setup-r3.ps1'; Kind = 'glob' }
 $cleanup += @{ Path = 'T16\90161Z-T16-setup-r3.txt'; Kind = 'glob' }
 $known = @('90161Z-T01-renderer-test-r9.ps1', '90161Z-T06-extract-test-r3.ps1', '90161Z-T06-messy-draft-r1.docx', '90161Z-T07-seal-prep-r5.ps1', '90161Z-T07-seal-test-r5.ps1', '90161Z-T07-testseal-round-r1.png', '90161Z-T07-testseal-soft-r1.png', '90161Z-T07-testseal-tall-r1.png', '90161Z-T07-testseal-tiny-r1.png', '90161Z-T09-save-pages-r2.ps1', '90161Z-T10-brief-check-r2.ps1', '90161Z-T11-partb-form-r2.ps1', '90161Z-T13-label-capture-r2.ps1', '90161Z-T15-env-inventory-r2.ps1', '90161Z-T16-pnp-signin-test-r2.ps1', '90161Z-T16-site-setup-r4.ps1', 'New-Publication.ps1', 'Provision-Lists.ps1', 'Publication.Common.ps1', 'Test-Environment.ps1', 'Test-PSGallery.ps1', 'Test-PnPConnection.ps1', 'Test-Publication.ps1', 'lists', 'publication.sample.json')
 $apps = @()
-$apps += @{ Name = '90-161.Z: publications tracker (test round R15)'; Summary = 'Tests the flow import, then sets up your site: logo, settings and an access test.'; Steps = @(0, 1, 2); Checks = @('ps', 'lang', 'onedrive', 'disk', 'write', 'child', 'outlook', 'pnp', 'net-bookmark', 'net-site', 'net-flow', 'site-rights', 'flow-guide') }
+$apps += @{ Name = '90-161.Z: Publications and Forms Management'; Summary = 'Test round R15. Tests the flow import, then sets up your site: logo, settings and an access test.'; Steps = @(0, 1, 2); Checks = @('ps', 'lang', 'onedrive', 'disk', 'write', 'child', 'outlook', 'pnp', 'net-bookmark', 'net-site', 'net-flow', 'site-rights', 'flow-guide') }
 
 # ---------------- 90-161.Z Deployer (generated; same engine in every round bundle) ----------------
 function Get-Secret([string]$Id, [string]$Leaf) {
@@ -3911,7 +3911,7 @@ function Invoke-Check($Def, [string]$Base, [string]$Site, [scriptblock]$Tick) {
       }
       'word' {
         if ($env:OS -eq 'Windows_NT' -and [type]::GetTypeFromProgID('Word.Application')) {
-          if (Test-WordOpen) { $one = Format-CheckResult 'WARNING' 'installed and open now' 'Save your work and close Word before you deploy.' }
+          if (Test-WordOpen) { $one = Format-CheckResult 'FAILED' 'installed and open now' 'Save your work and close Word. Then select "Run checks again".' }   # PFM 14 Nov 26: blocks (1B)
           else { $one = Format-CheckResult 'PASSED' 'installed' '' }
         } else { $one = Format-CheckResult 'FAILED' 'not found' 'This application needs Word on this computer.' }
       }
