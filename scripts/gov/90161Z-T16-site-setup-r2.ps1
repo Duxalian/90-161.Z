@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 16 site setup, r1. Windows PowerShell 5.1, the installed PnP.PowerShell 1.12.0 (no other module).
+  90-161.Z Task 16 site setup, r2. Windows PowerShell 5.1, the installed PnP.PowerShell 1.12.0 (no other module).
 .DESCRIPTION
   What it is for: sets up the new SharePoint site in one run, so the PFM does not click it by hand (DECISIONS 14 Nov 26:
   optional Deployer PnP write steps, allowed because the read-only PnP test passed). About 10 minutes (an estimate).
@@ -15,17 +15,20 @@
        the site logo and the logo thumbnail (PFM 14 Nov 26, option D). Fallback if it reports FAIL: site Settings > Change the look > Header.
     d. Seals: creates the document library "90-161.Z" and its folders "Seals" and "Seals/Prepared" when missing (no unique
        permissions); uploads the images from T07\Seals and T07\Seals\Prepared. An image already there is replaced.
-    e. Probe result: if "90161Z-T11-rights-result-r3.json" (else r2) is in the site's default Documents library, copies it to
-       the T11 folder (reads the site, writes only the T11 folder).
+       r2 (R12 FAIL "File Not Found"): the folder paths come from the library's own root folder (its address can differ
+       from its title), and Resolve-PnPFolder makes missing folders; a FAIL line names the stage that failed.
+    e. Probe result: copies "90161Z-T11-rights-result-r3.json" from the site's default Documents library to the T11 folder
+       (reads the site, writes only the T11 folder). r2: when the round's probe step was confirmed in the last 2 hours
+       (T11\90161Z-T11-probe-started.txt), it waits for the file, checking every 30 seconds for up to 15 minutes.
     f. Task 2 check: counts the PFM lists and their rows (read-only).
   Each item is checked on its own and prints PASS (already right), SET (changed and read back), SKIP (nothing to do) or
   FAIL; one item never stops the others. Counts only: no list, seal or file names are written (seal names are unit names).
   The site address is kept only on this computer in Config\90161Z-site.txt; every output line shows it as <SITE> and the DODID
   as <DODID>. Error text is cut to 160 characters.
-  Output: 90161Z-T16-setup-r1.txt in the T16 folder (send this).
-  Parameters (used by the 90-161.Z Deployer): -Id, -Logo, -NoPause.
+  Output: 90161Z-T16-setup-r2.txt in the T16 folder (send this).
+  Parameters (used by the 90-161.Z Deployer): -Id, -Logo, -ProbeWaitMinutes (default 15), -NoPause.
 #>
-param([string]$Id, [switch]$Logo, [switch]$NoPause)
+param([string]$Id, [switch]$Logo, [int]$ProbeWaitMinutes = 15, [switch]$NoPause)
 $task = 'T16'
 $LogoName = '90161Z-T14-site-logo-r1.png'
 $ThumbName = '90161Z-T14-site-logo-thumb-r1.png'
@@ -137,11 +140,13 @@ function Hide-Site([string]$Text, [string]$Site) {
 
 function Add-Item([string]$Name, [scriptblock]$Body, [string[]]$Arg) {
   # One checked item: its lines are added by $Body through Add-Line; an error becomes one FAIL line and the next item runs.
-  Write-Host ('ITEM ' + $Name + ' ...')
+  Write-Host ('Checking ' + $Name + '...')
+  $script:stage = ''
   try { $null = & { & $Body @Arg } *>&1 }
   catch {
     $m = ConvertTo-Masked (Hide-Site (([string]$_.Exception.Message) -replace '\s+', ' ') $script:site) $script:secret
-    $script:lines.Add('ITEM ' + $Name + ' FAIL ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
+    $at = $(if ($script:stage) { ' at stage "' + $script:stage + '"' } else { '' })
+    $script:lines.Add('ITEM ' + $Name + ' FAIL' + $at + ' ' + $_.Exception.GetType().Name + ': ' + $m.Substring(0, [Math]::Min(160, $m.Length)))
   }
 }
 function Add-Line([string]$Name, [string]$Status, [string]$Text) {
@@ -178,12 +183,12 @@ try {
   $root = Split-Path -Parent $dir
   $configDir = Join-Path $root 'Config'
   $site = Get-SiteAddress $configDir
-  $lines.Add('TASK T16 site setup r1, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', logo-switch=' + [bool]$Logo)
+  $lines.Add('TASK T16 site setup r2, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', logo-switch=' + [bool]$Logo + ', probe-wait-minutes=' + $ProbeWaitMinutes)
   $mod = @(Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending)
   if (-not $mod.Count) { throw 'PNP not installed: PnP.PowerShell is not on this computer.' }
   $null = & { Import-Module PnP.PowerShell -RequiredVersion $mod[0].Version -DisableNameChecking } *>&1
   $lines.Add('PNP module=' + $mod[0].Version + ' powershell=' + $PSVersionTable.PSVersion)
-  Write-Host 'Connecting with web login: a sign-in window may open; sign in with your CAC...'
+  Write-Host 'Connecting to the site. If a sign-in window opens, sign in with your CAC.'
   $connected = $false
   try {
     $null = & { Connect-PnPOnline -Url $site -UseWebLogin -ErrorAction Stop } *>&1
@@ -250,37 +255,53 @@ try {
     }
     # d. Seals library, folders and uploads.
     Add-Item 'd-seals' {
+      $script:stage = 'library'
       $created = ''
-      $lib = Get-PnPList -Identity '90-161.Z' -ErrorAction SilentlyContinue
-      if (-not $lib) { $null = New-PnPList -Title '90-161.Z' -Template DocumentLibrary -Url '90-161.Z' -ErrorAction Stop; $created = 'library created; ' }
-      foreach ($pair in @(@('90-161.Z', 'Seals'), @('90-161.Z/Seals', 'Prepared'))) {
-        $full = $pair[0] + '/' + $pair[1]
-        $fo = Get-PnPFolder -Url $full -ErrorAction SilentlyContinue
-        if (-not $fo) { $null = Add-PnPFolder -Name $pair[1] -Folder $pair[0] -ErrorAction Stop; $created += 'folder ' + $pair[1] + ' created; ' }
+      $lib = Get-PnPList -Identity '90-161.Z' -Includes RootFolder -ErrorAction SilentlyContinue
+      if (-not $lib) {
+        $null = New-PnPList -Title '90-161.Z' -Template DocumentLibrary -Url '90-161.Z' -ErrorAction Stop; $created = 'library created; '
+        $lib = Get-PnPList -Identity '90-161.Z' -Includes RootFolder -ErrorAction Stop
       }
+      # Site-relative library path from its root folder: the address SharePoint gave it, whatever the title.
+      $webUrl = (Get-PnPWeb -Includes ServerRelativeUrl -ErrorAction Stop).ServerRelativeUrl.TrimEnd('/')
+      $libRel = $lib.RootFolder.ServerRelativeUrl.Substring($webUrl.Length).TrimStart('/')
+      $script:stage = 'folders'
+      foreach ($sub in @('Seals', 'Seals/Prepared')) { $null = Resolve-PnPFolder -SiteRelativePath ($libRel + '/' + $sub) -ErrorAction Stop }
+      $script:stage = 'upload'
       $up = 0; $bad = 0; $found = 0
-      foreach ($pair in @(@((Join-Path $root 'T07\Seals'), '90-161.Z/Seals'), @((Join-Path $root 'T07\Seals\Prepared'), '90-161.Z/Seals/Prepared'))) {
+      foreach ($pair in @(@((Join-Path $root 'T07\Seals'), ($libRel + '/Seals')), @((Join-Path $root 'T07\Seals\Prepared'), ($libRel + '/Seals/Prepared')))) {
         if (-not (Test-Path -LiteralPath $pair[0] -PathType Container)) { continue }
         foreach ($f in @(Get-ChildItem -LiteralPath $pair[0] -File | Where-Object { $Images -contains $_.Extension.ToLowerInvariant() })) {
           $found++
           try { $null = Add-PnPFile -Path $f.FullName -Folder $pair[1] -ErrorAction Stop; $up++ } catch { $bad++ }
         }
       }
-      if ($found -eq 0) { Add-Line 'd-seals' 'SKIP' ($created + 'no local images in T07\Seals yet (run the seal prep step first)') }
+      if ($found -eq 0) { Add-Line 'd-seals' 'SKIP' ($created + 'library and folders ready; no seal images in T07\Seals to upload yet') }
       elseif ($bad -gt 0) { Add-Line 'd-seals' 'FAIL' ($created + 'uploaded=' + $up + ' not-uploaded=' + $bad) }
       else { Add-Line 'd-seals' 'SET' ($created + 'uploaded=' + $up) }
     }
     # e. Probe result file.
     Add-Item 'e-probe-result' {
+      $script:stage = 'find library'
       $rel = Get-DocLibRoot
       $t11 = Join-Path $root 'T11'
       if (-not (Test-Path -LiteralPath $t11 -PathType Container)) { [void](New-Item -ItemType Directory -Path $t11) }
-      foreach ($n in @('90161Z-T11-rights-result-r3.json', '90161Z-T11-rights-result-r2.json')) {
+      $n = '90161Z-T11-rights-result-r3.json'
+      $marker = Join-Path $t11 '90161Z-T11-probe-started.txt'
+      $wait = (Test-Path -LiteralPath $marker -PathType Leaf) -and ((Get-Item -LiteralPath $marker).LastWriteTime -gt (Get-Date).AddHours(-2))
+      $until = (Get-Date).AddMinutes($(if ($wait) { $ProbeWaitMinutes } else { 0 }))
+      $script:stage = 'copy result'
+      $told = $false
+      while ($true) {
         $got = $false
         try { Get-PnPFile -Url ($rel + '/' + $n) -Path $t11 -FileName $n -AsFile -Force -ErrorAction Stop; $got = Test-Path -LiteralPath (Join-Path $t11 $n) -PathType Leaf } catch { $got = $false }
-        if ($got) { Add-Line 'e-probe-result' 'SET' ('copied ' + $n.Substring(0, $n.Length - 5) + ' to the T11 folder'); return }
+        if ($got) { Add-Line 'e-probe-result' 'SET' 'copied the probe result r3 to the T11 folder'; return }
+        if ((Get-Date) -ge $until) { break }
+        if (-not $told) { [Console]::Out.WriteLine('Waiting for the probe flow to save its result (checked every 30 seconds, up to ' + $ProbeWaitMinutes + ' minutes)...'); [Console]::Out.Flush(); $told = $true }   # Write-Host is captured inside Add-Item
+        Start-Sleep -Seconds 30
       }
-      Add-Line 'e-probe-result' 'SKIP' 'no result file in the default library yet (run the probe flow first)'
+      if ($wait) { Add-Line 'e-probe-result' 'FAIL' ('no probe result r3 after ' + $ProbeWaitMinutes + ' minutes. Open the run in Power Automate (My flows > 90161Z T11 Rights Probe r3 > 28-day run history) and check that it finished') }
+      else { Add-Line 'e-probe-result' 'SKIP' 'no probe result r3 in Documents, and the probe step did not run in this round' }
     }
     # f. Task 2 check.
     Add-Item 'f-task2-lists' {
@@ -298,7 +319,7 @@ try {
   $lines.Add('STOPPED: ' + $m.Substring(0, [Math]::Min(300, $m.Length)))
 } finally {
   $masked = @($lines | ForEach-Object { ConvertTo-Masked (Hide-Site $_ $site) $secret })
-  try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-setup-r1.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }
+  try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-setup-r2.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }
   $masked | ForEach-Object { Write-Host $_ }
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }

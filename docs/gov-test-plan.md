@@ -62,7 +62,7 @@ Files (T06 folder): `prompts/90161Z-T06-extract-prompt-r2.txt` (the prompt; r2 r
 
 ## Task 7: seals (r3)
 
-Part A uses 4 fake seals from `scripts/build_test_seals.py` (EXPECTED there). No current round bundle holds Part A (the T07 paste bundle was retired with the R rounds); a later round adds it. `90161Z-T07-seal-test-r4.ps1` runs the seal prep, then renders the T01 sample with the tall and the round prepared seal.
+Part A uses 4 fake seals from `scripts/build_test_seals.py` (EXPECTED there). No current round bundle holds Part A (the T07 paste bundle was retired with the R rounds); a later round adds it. `90161Z-T07-seal-test-r5.ps1` runs the seal prep, then renders the T01 sample with the tall and the round prepared seal.
 
 | # | Check | Pass |
 |---|---|---|
