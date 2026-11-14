@@ -67,7 +67,12 @@
         {
           "name": "T15 environment inventory r2 (read-only)",
           "dir": "T15",
-          "file": "90161Z-T15-env-inventory-r2.ps1"
+          "file": "90161Z-T15-env-inventory-r2.ps1",
+          "default": {
+            "passed": "efa7c16a1024658e",
+            "passed_in": "R11 (13 Nov 26, PASS 142 items)",
+            "paths": ["scripts/gov/90161Z-T15-env-inventory-r2.ps1"]
+          }
         },
         {
           "name": "T01 renderer test r9",

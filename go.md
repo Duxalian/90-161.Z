@@ -43,7 +43,7 @@ Steps:
 2. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R12-round-r2.ps1
 3. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-4. Three steps are checked. The render test (T01) is off: it turns on by itself only when the renderer code changed since it last passed (R11). Check "T11 Part B" too if I have the time. If I already ran R12 r1, I do not run r2.
+4. Two steps are checked (seal prep, site setup). Steps that already passed (render test T01, inventory T15) are off: each turns on by itself only when its code changed since it last passed (R11). Check "T11 Part B" too if I have the time. If I already ran R12 r1, I do not run r2.
 5. Press Enter (or Run). The site setup step asks for the NEW site address (filled in from last time) and opens a CAC sign-in.
 6. When it ends, open the new site and look at the header: the logo should show (white squares on the blue header). This is the only check by eye.
 7. The Outlook draft opens with the summary and the files. Send it.
