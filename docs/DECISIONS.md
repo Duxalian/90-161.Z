@@ -5,6 +5,11 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-14 | App name: 90-161.Z: Publications and Forms Management (short name 90-161.Z). The Word-open check blocks a deploy (1B); other warnings do not. | PFM | scripts/build_paste_bundles.py |
+| 2026-11-14 | No deploy unless every check passes (FAILED or NOT RUN blocks; WARNING does not; no "deploy anyway"). Check text: sentence case, screen names in "quotes", reported values in [brackets]. | PFM | https://claude.ai/artifact/RY4rWNuBP3rwAai9v3uWD8 |
+| 2026-11-14 | Plain-English sweep: go.md and Deployer step notes in R16; each flow, package and solution at its next revision. Deployer first screen stays minimal. | PFM | scripts/build_paste_bundles.py |
+| 2026-11-14 | All text the PFM or a user sees (Deployer window, packages, imports, descriptions, subtitles) is plain, simple English. | PFM | scripts/build_paste_bundles.py |
+| 2026-11-14 | Deployer window: Choose app > Check > Deploy; embedded catalog only (3A stays); two bars (PROGRESS lines, else time); checks: computer, network, site rights (PnP sign-in), Power Automate. | PFM | scripts/build_paste_bundles.py |
 | 2026-11-14 | R15: solution XML comes from a real export (PFM makes one, Deployer masks and sends the XML); site setup sets header logo and thumbnail apart; probe r5 grants the coworker's user ID. | PFM | docs/reviews/2026-11-14-r15-results.md |
 | 2026-11-14 | Site logo = variant A, bold white (lines 60% thicker than r1; replaces option D's header logo). Thumbnail stays navy, same bold lines. | PFM | https://claude.ai/artifact/AZUqwxiPwSruC65eH1uhHx |
 | 2026-11-14 | Wing users have only Read on the site; anyone using the app enters data through it. Open: how the app writes (list-level rights or a flow), see NEXT_PROMPT. | PFM | docs/reviews/2026-11-14-r13-results.md |
