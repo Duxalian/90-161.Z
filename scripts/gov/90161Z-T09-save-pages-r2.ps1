@@ -144,7 +144,7 @@ try {
     $p = New-Object System.Windows.Forms.FlowLayoutPanel; $p.AutoSize = $true; $p.WrapContents = $true
     $tb = New-Object System.Windows.Forms.TextBox; $tb.ReadOnly = $true; $tb.Text = $value; $tb.Width = 560
     $b = New-Object System.Windows.Forms.Button; $b.Text = $caption; $b.AutoSize = $true; $b.MinimumSize = New-Object System.Drawing.Size(110, 30)
-    $b.Add_Click({ try { [System.Windows.Forms.Clipboard]::SetText($tb.Text); $this.Text = 'Copied' } catch { $this.Text = 'Busy: again' } }.GetNewClosure())
+    $b.Add_Click({ try { [System.Windows.Forms.Clipboard]::SetText($tb.Text); $b.Text = 'Copied' } catch { $b.Text = 'Busy: again' } }.GetNewClosure())
     $p.Controls.AddRange(@($tb, $b)); $p }
   & $add (& $label $s.Why $true)
   foreach ($h in $s.How) { & $add (& $label $h $false) }

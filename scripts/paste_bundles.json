@@ -101,7 +101,8 @@
           "file": "90161Z-T09-save-pages-r2.ps1",
           "default": false,
           "minutes": 90,
-          "args": "-Set T09"
+          "args": "-Set T09",
+          "screenOnly": "^PAGE "
         },
         {
           "name": "T12 color documents (window with Open buttons; about 5 min)",
@@ -109,7 +110,8 @@
           "file": "90161Z-T09-save-pages-r2.ps1",
           "default": false,
           "minutes": 60,
-          "args": "-Set T12"
+          "args": "-Set T12",
+          "screenOnly": "^PAGE "
         },
         {
           "name": "T11 Part B manual checks form (about 35 min)",

@@ -294,7 +294,7 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
     if ($null -eq $line) { break }
     $line = ConvertTo-Masked $line
     # Lines that may name a unit or a file (for example seal details) never reach the report (data boundary).
-    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace ':.*$', ':') + ' (detail hidden: it may name a unit; run the step script by hand to see it)' }
+    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace '^(\S+).*$', '$1') + ' (detail hidden: it may hold a name; run the step script by hand to see it)' }
     if ($line -match '(^|\s)PASS(\s|$)') { $r.Pass++ }
     if ($line -match '(^|\s)(FAIL|FORMAT-FAIL|RENDER-ERROR|MEASURE-ERROR|STOPPED:)(\s|$)') { $r.Fail++ }
     & $Say $line
@@ -323,8 +323,12 @@ function Export-RoundResult([string]$Base, [string[]]$Summary) {
     if ($c.Name -match '[*?]') {
       # A pattern (R10: any saved page counts, whatever its name); top level only, so a browser's "_files" folders stay out.
       # Several patterns may be joined with ';' ("*.mhtml;*.pdf"): missing only when none of them finds a file.
+      # Windows -Filter '*.htm' also matches '.html': keep each file once. Copies carry the task prefix (T09-..., T12-...) so
+      # two tasks never overwrite each other, and older copies of that task are removed first (review R10).
       $hits = @(); if (Test-Path -LiteralPath $src -PathType Container) { foreach ($pat in ($c.Name -split ';')) { $hits += @(Get-ChildItem -LiteralPath $src -File -Filter $pat -ErrorAction SilentlyContinue) } }
-      foreach ($h in $hits) { Copy-Item -LiteralPath $h.FullName -Destination (Join-Path $out $h.Name) -Force; $count++ }
+      $hits = @($hits | Sort-Object FullName -Unique)
+      Get-ChildItem -LiteralPath $out -File -Filter ($c.Dir + '-*') -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+      foreach ($h in $hits) { Copy-Item -LiteralPath $h.FullName -Destination (Join-Path $out ($c.Dir + '-' + $h.Name)) -Force; $count++ }
       if (-not $hits.Count) { $missing += ($c.Dir + '\' + $c.Name) }
       continue
     }

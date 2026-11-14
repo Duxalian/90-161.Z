@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R10, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = '9d2d5ba0'
+$buildId = '8fa41cac'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R10'
 $usersRoot = 'C:\Users'
@@ -2412,7 +2412,7 @@ try {
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }
 '@ }
-$files += @{ Dir = 'T09'; Name = '90161Z-T09-save-pages-r2.ps1'; Kind = 'text'; Sha = '32a48251e91d'; Data = @'
+$files += @{ Dir = 'T09'; Name = '90161Z-T09-save-pages-r2.ps1'; Kind = 'text'; Sha = 'e5fdddb681a3'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z page saver, r2 (Task 9 e-Publishing pages; Task 12 color documents). Windows PowerShell 5.1, Windows Forms only.
@@ -2559,7 +2559,7 @@ try {
     $p = New-Object System.Windows.Forms.FlowLayoutPanel; $p.AutoSize = $true; $p.WrapContents = $true
     $tb = New-Object System.Windows.Forms.TextBox; $tb.ReadOnly = $true; $tb.Text = $value; $tb.Width = 560
     $b = New-Object System.Windows.Forms.Button; $b.Text = $caption; $b.AutoSize = $true; $b.MinimumSize = New-Object System.Drawing.Size(110, 30)
-    $b.Add_Click({ try { [System.Windows.Forms.Clipboard]::SetText($tb.Text); $this.Text = 'Copied' } catch { $this.Text = 'Busy: again' } }.GetNewClosure())
+    $b.Add_Click({ try { [System.Windows.Forms.Clipboard]::SetText($tb.Text); $b.Text = 'Copied' } catch { $b.Text = 'Busy: again' } }.GetNewClosure())
     $p.Controls.AddRange(@($tb, $b)); $p }
   & $add (& $label $s.Why $true)
   foreach ($h in $s.How) { & $add (& $label $h $false) }
@@ -2611,7 +2611,7 @@ try {
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }
 '@ }
-$files += @{ Dir = 'T12'; Name = '90161Z-T09-save-pages-r2.ps1'; Kind = 'text'; Sha = '32a48251e91d'; Data = @'
+$files += @{ Dir = 'T12'; Name = '90161Z-T09-save-pages-r2.ps1'; Kind = 'text'; Sha = 'e5fdddb681a3'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z page saver, r2 (Task 9 e-Publishing pages; Task 12 color documents). Windows PowerShell 5.1, Windows Forms only.
@@ -2758,7 +2758,7 @@ try {
     $p = New-Object System.Windows.Forms.FlowLayoutPanel; $p.AutoSize = $true; $p.WrapContents = $true
     $tb = New-Object System.Windows.Forms.TextBox; $tb.ReadOnly = $true; $tb.Text = $value; $tb.Width = 560
     $b = New-Object System.Windows.Forms.Button; $b.Text = $caption; $b.AutoSize = $true; $b.MinimumSize = New-Object System.Drawing.Size(110, 30)
-    $b.Add_Click({ try { [System.Windows.Forms.Clipboard]::SetText($tb.Text); $this.Text = 'Copied' } catch { $this.Text = 'Busy: again' } }.GetNewClosure())
+    $b.Add_Click({ try { [System.Windows.Forms.Clipboard]::SetText($tb.Text); $b.Text = 'Copied' } catch { $b.Text = 'Busy: again' } }.GetNewClosure())
     $p.Controls.AddRange(@($tb, $b)); $p }
   & $add (& $label $s.Why $true)
   foreach ($h in $s.How) { & $add (& $label $h $false) }
@@ -5865,8 +5865,8 @@ $steps = @()
 $steps += @{ Name = 'T15 environment inventory r1 (read-only)'; Dir = 'T15'; File = '90161Z-T15-env-inventory-r1.ps1'; Default = $true; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 30; Args = '' }
 $steps += @{ Name = 'T01 renderer test r9'; Dir = 'T01'; File = '90161Z-T01-renderer-test-r9.ps1'; Default = $true; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 30; Args = '' }
 $steps += @{ Name = 'T10 brief check r2'; Dir = 'T10'; File = '90161Z-T10-brief-check-r2.ps1'; Default = $true; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 30; Args = '' }
-$steps += @{ Name = 'T09 e-Publishing pages (window explains; about 20 min)'; Dir = 'T09'; File = '90161Z-T09-save-pages-r2.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 90; Args = '-Set T09' }
-$steps += @{ Name = 'T12 color documents (window with Open buttons; about 5 min)'; Dir = 'T12'; File = '90161Z-T09-save-pages-r2.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 60; Args = '-Set T12' }
+$steps += @{ Name = 'T09 e-Publishing pages (window explains; about 20 min)'; Dir = 'T09'; File = '90161Z-T09-save-pages-r2.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = '^PAGE '; Minutes = 90; Args = '-Set T09' }
+$steps += @{ Name = 'T12 color documents (window with Open buttons; about 5 min)'; Dir = 'T12'; File = '90161Z-T09-save-pages-r2.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = '^PAGE '; Minutes = 60; Args = '-Set T12' }
 $steps += @{ Name = 'T11 Part B manual checks form (about 35 min)'; Dir = 'T11'; File = '90161Z-T11-partb-form-r2.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 180; Args = '' }
 $steps += @{ Name = 'T07 seal prep r3 (only after the shields are uploaded and synced)'; Dir = 'T07'; File = '90161Z-T07-seal-prep-r3.ps1'; Default = $false; AskParam = 'SealDir'; AskPrompt = 'Pick the synced Seals folder (in the 90-161.Z library). Cancel skips seal prep.'; ScreenOnly = '^seal\d+ detail:'; Minutes = 30; Args = '' }
 $steps += @{ Name = 'T16 PnP sign-in test (read-only; sign-in windows, CAC)'; Dir = 'T16'; File = '90161Z-T16-pnp-signin-test-r1.ps1'; Default = $false; AskParam = ''; AskPrompt = ''; ScreenOnly = ''; Minutes = 20; Args = '' }
@@ -6144,7 +6144,7 @@ function Invoke-RoundStep([string]$Base, $Step, [scriptblock]$Say, [scriptblock]
     if ($null -eq $line) { break }
     $line = ConvertTo-Masked $line
     # Lines that may name a unit or a file (for example seal details) never reach the report (data boundary).
-    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace ':.*$', ':') + ' (detail hidden: it may name a unit; run the step script by hand to see it)' }
+    if ($Step.ScreenOnly -and $line -match $Step.ScreenOnly) { $line = ($line -replace '^(\S+).*$', '$1') + ' (detail hidden: it may hold a name; run the step script by hand to see it)' }
     if ($line -match '(^|\s)PASS(\s|$)') { $r.Pass++ }
     if ($line -match '(^|\s)(FAIL|FORMAT-FAIL|RENDER-ERROR|MEASURE-ERROR|STOPPED:)(\s|$)') { $r.Fail++ }
     & $Say $line
@@ -6173,8 +6173,12 @@ function Export-RoundResult([string]$Base, [string[]]$Summary) {
     if ($c.Name -match '[*?]') {
       # A pattern (R10: any saved page counts, whatever its name); top level only, so a browser's "_files" folders stay out.
       # Several patterns may be joined with ';' ("*.mhtml;*.pdf"): missing only when none of them finds a file.
+      # Windows -Filter '*.htm' also matches '.html': keep each file once. Copies carry the task prefix (T09-..., T12-...) so
+      # two tasks never overwrite each other, and older copies of that task are removed first (review R10).
       $hits = @(); if (Test-Path -LiteralPath $src -PathType Container) { foreach ($pat in ($c.Name -split ';')) { $hits += @(Get-ChildItem -LiteralPath $src -File -Filter $pat -ErrorAction SilentlyContinue) } }
-      foreach ($h in $hits) { Copy-Item -LiteralPath $h.FullName -Destination (Join-Path $out $h.Name) -Force; $count++ }
+      $hits = @($hits | Sort-Object FullName -Unique)
+      Get-ChildItem -LiteralPath $out -File -Filter ($c.Dir + '-*') -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+      foreach ($h in $hits) { Copy-Item -LiteralPath $h.FullName -Destination (Join-Path $out ($c.Dir + '-' + $h.Name)) -Force; $count++ }
       if (-not $hits.Count) { $missing += ($c.Dir + '\' + $c.Name) }
       continue
     }
