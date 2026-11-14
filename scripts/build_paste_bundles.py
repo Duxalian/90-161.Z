@@ -654,7 +654,7 @@ function Get-SiteUrl([string]$Base) {
   if (Test-Path -LiteralPath $p -PathType Leaf) { try { return ([string](Get-Content -LiteralPath $p -TotalCount 1)).Trim() } catch { return '' } }
   return ''
 }
-function Test-SiteUrl([string]$Url) { return ($Url -match '^https://[^/\s]+/sites/[^/\s]+') }
+function Test-SiteUrl([string]$Url) { return ($Url -match '^https://[^/\s"]+/sites/[^/\s"]+/?$') }
 function Save-SiteUrl([string]$Base, [string]$Url) {
   $p = Get-ConfigFile $Base '90161Z-site.txt'
   $dir = Split-Path -Parent $p
@@ -737,6 +737,7 @@ param([string]$Site)
 try {
   $mod = @(Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending)
   if (-not $mod.Count) { 'RESULT no-pnp'; exit 3 }
+  $pin = @($mod | Where-Object { [string]$_.Version -eq '1.12.0' }); if ($pin.Count) { $mod = $pin }   # the tested version first (2.x needs PowerShell 7)
   $null = & { Import-Module PnP.PowerShell -RequiredVersion $mod[0].Version -DisableNameChecking } *>&1
   $null = & { Connect-PnPOnline -Url $Site -UseWebLogin -ErrorAction Stop } *>&1
   $script:web = $null
@@ -888,7 +889,7 @@ function Get-CheckSummary($Results) {
     $c[$r.State]++
     if ($r.State -ne 'PASSED') { $rest += ('  ' + $r.State + ': ' + $d.Name + ' (' + $r.Detail + ')') }
   }
-  return @(('Checks: passed ' + $c.PASSED + ', warnings ' + $c.WARNING + ', failed ' + $c.FAILED + ', not run ' + $c['NOT RUN'] + '.')) + $rest
+  return @(@(('Checks: passed ' + $c.PASSED + ', warnings ' + $c.WARNING + ', failed ' + $c.FAILED + ', not run ' + $c['NOT RUN'] + '.')) + $rest) | ForEach-Object { ConvertTo-Masked $_ }
 }
 function Get-CheckBlock($Results) {
   # True when a check that is not advisory FAILED: the Deploy button waits for the override box.
@@ -912,9 +913,12 @@ function Get-Progress {
   $f = -1.0
   if ($p.Frac -ge 0) { $f = [double]$p.Frac }
   elseif ($p.Cur -gt 0 -and $p.CurKnown) { $f = [math]::Min(0.95, $el / $p.Cur) }
-  $fa = $f; if ($fa -lt 0 -and $p.Cur -gt 0) { $fa = [math]::Min(0.9, $el / $p.Cur) }; if ($fa -lt 0) { $fa = 0 }
-  $all = 0.0; if ($p.Total -gt 0) { $all = [math]::Min(1, ($p.Done + $p.Cur * $fa) / $p.Total) }
-  $left = [math]::Max(0, $p.Total - $p.Done - [math]::Max($p.Cur * $fa, [math]::Min($el, $p.Cur)))
+  $fa = $f; if ($fa -lt 0 -and $p.Cur -gt 0) { $fa = [math]::Min(0.9, $el / $p.Cur) }; if ($fa -lt 0) { $fa = 0.0 }
+  $all = 0.0; if ($p.Total -gt 0) { $all = [math]::Min(1.0, ($p.Done + $p.Cur * $fa) / $p.Total) }
+  # Time left in this step: from the script's own fraction when it reports one, else the weight minus the time so far.
+  $curLeft = [math]::Max(0.0, $p.Cur - $el)
+  if ($p.Frac -gt 0) { $curLeft = $el * (1 - $p.Frac) / $p.Frac }
+  $left = [math]::Max(0.0, $p.Total - $p.Done - $p.Cur) + $curLeft
   return @{ Step = $f; All = $all; Left = $left; Known = $p.Known; Elapsed = $el }
 }
 function Get-ProgressText($G, [string]$Name) {
@@ -928,7 +932,7 @@ function Get-ProgressText($G, [string]$Name) {
 }
 $script:secret = @(); $script:dodid = ''; $script:child = $null; $script:runLog = $null; $script:resultsDir = ''; $script:draftMade = $false; $script:textMode = $false; $script:helped = @{}; $stepMinutes = 30
 $script:statusBase = ''; $script:stepStart = $null; $script:stepEst = 0; $script:noWindowWhy = ''; $script:ranSteps = @(); $script:prog = $null; $script:roundStart = Get-Date
-$script:checkResults = @{}; $script:checkOverride = $false
+$script:checkResults = @{}; $script:checkOverride = $false; $script:closing = $false
 function Select-App([int]$I) {
   # The chosen application: its steps and the checks they need (the embedded catalog; PFM 14 Nov 26: no fetch, 3A).
   $script:app = $apps[$I]; $script:appSteps = @($script:app.Steps); $script:appChecks = @($script:app.Checks); $script:checkResults = @{}
@@ -1133,8 +1137,10 @@ if ($gui) {
       $site = $siteBox.Text.Trim()
       if (Test-SiteUrl $site) { try { if ($site -ne (Get-SiteUrl $basePath)) { Save-SiteUrl $basePath $site } } catch { $null = $_ } }
       $againB.Enabled = $false; $rightsB.Enabled = $false; $flowB.Enabled = $false; $next.Enabled = $false; $back.Enabled = $false
+      try {
       for ($i = 0; $i -lt $script:appChecks.Count; $i++) {
         $id = $script:appChecks[$i]; $d = Get-CheckDef $id
+        if ($form.IsDisposed -or $script:closing) { return }   # the window was closed during a check
         if ($Kinds -notcontains $d.Kind) { continue }
         if ($Only -and $Only -notcontains $id) { continue }
         & $setRow $i (Format-CheckResult 'RUNNING' 'checking now' '')
@@ -1143,8 +1149,9 @@ if ($gui) {
         $script:checkResults[$id] = $r
         & $setRow $i $r
       }
-      $againB.Enabled = $true; $rightsB.Enabled = $true; $flowB.Enabled = $true; $back.Enabled = $true
-      & $showCheckState }
+      } finally {
+        if (-not ($form.IsDisposed -or $script:closing)) { $againB.Enabled = $true; $rightsB.Enabled = $true; $flowB.Enabled = $true; $back.Enabled = $true; & $showCheckState }
+      } }
     $fillChecks = {
       $checkHead.Text = 'Check that you can deploy ' + $script:app.Name
       $checkView.Items.Clear()
@@ -1213,9 +1220,9 @@ if ($gui) {
       # Both bars from Get-Progress. Unknown step progress: a moving bar (a still bar at 0 when animations are off).
       if (-not $script:prog -or -not $script:stepStart) { return }
       $g = Get-Progress; $t = Get-ProgressText $g $script:statusBase
-      $bar.Value = [int]([math]::Max(0, [math]::Min(1000, $g.All * 1000)))
+      $bar.Value = [int]([math]::Max(0.0, [math]::Min(1000.0, $g.All * 1000)))
       if ($g.Step -lt 0 -and -not $calm) { if ([string]$stepBar.Style -ne 'Marquee') { $stepBar.Style = 'Marquee'; $stepBar.MarqueeAnimationSpeed = 40 } }
-      else { if ([string]$stepBar.Style -ne 'Continuous') { $stepBar.Style = 'Continuous' }; $stepBar.Value = [int]([math]::Max(0, [math]::Min(1000, $g.Step * 1000))) }
+      else { if ([string]$stepBar.Style -ne 'Continuous') { $stepBar.Style = 'Continuous' }; $stepBar.Value = [int]([math]::Max(0.0, [math]::Min(1000.0, $g.Step * 1000))) }
       $allLabel.Text = $t.All; $stepLabel.Text = $t.Step }
     $tick = { & $paint; [System.Windows.Forms.Application]::DoEvents() }
     $onStep = { param($k, $line) $i = $script:listIndex[$k]; if ($null -ne $i) { $list.Items[$i] = $line; $list.SetItemChecked($i, $true) }; & $paint }
@@ -1275,7 +1282,7 @@ if ($gui) {
       catch { & $say ('The clipboard is busy. Select Copy summary again. (' + $_.Exception.Message + ')') }
     })
     $open.Add_Click({ if ($script:resultsDir) { Start-Process -FilePath 'explorer.exe' -ArgumentList ('"' + $script:resultsDir + '"') } })
-    $form.Add_FormClosing({ if ($script:child -and -not $script:child.HasExited) { try { $script:child.Kill() } catch { $null = $_ } } })
+    $form.Add_FormClosing({ $script:closing = $true; if ($script:child -and -not $script:child.HasExited) { try { $script:child.Kill() } catch { $null = $_ } } })
     [void]$form.ShowDialog()
     return
   } catch {
