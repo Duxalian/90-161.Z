@@ -4,7 +4,7 @@
 .DESCRIPTION
   Uses this computer's profile folder as the DODID (no question), goes to the Task 7 folder
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z\T07, checks the 4 fake test seals in its
-  TestSeals subfolder and the renderer scripts in the T01 folder, runs 90161Z-T07-seal-prep-r4.ps1 on the test
+  TestSeals subfolder and the renderer scripts in the T01 folder, runs 90161Z-T07-seal-prep-r5.ps1 on the test
   seals, then renders the T01 sample twice (tall seal, round seal) as final .docx and PDF in the T07 folder.
   Saves the output to 90161Z-T07-test-result-r3.txt. The DODID, profile folder name and user name are replaced
   by <DODID> in all output.
@@ -12,7 +12,7 @@
 #>
 param([string]$Id, [switch]$NoPause)
 $task = 'T07'
-$need = @('90161Z-T07-seal-prep-r4.ps1', 'TestSeals\90161Z-T07-testseal-round-r1.png', 'TestSeals\90161Z-T07-testseal-tall-r1.png', 'TestSeals\90161Z-T07-testseal-soft-r1.png', 'TestSeals\90161Z-T07-testseal-tiny-r1.png')
+$need = @('90161Z-T07-seal-prep-r5.ps1', 'TestSeals\90161Z-T07-testseal-round-r1.png', 'TestSeals\90161Z-T07-testseal-tall-r1.png', 'TestSeals\90161Z-T07-testseal-soft-r1.png', 'TestSeals\90161Z-T07-testseal-tiny-r1.png')
 $needT01 = @('Publication.Common.ps1', 'Test-Publication.ps1', 'New-Publication.ps1', 'publication.sample.json')   # Task 1 r5 files
 
 # >>> task-common: generated from scripts/gov/src/task-common.ps1 by scripts/build_task_scripts.py (do not edit)
@@ -95,14 +95,14 @@ try {
   $log = Join-Path $dir '90161Z-T07-test-result-r3.txt'
   $testDir = Join-Path $dir 'TestSeals'
   $lines = New-Object System.Collections.Generic.List[string]
-  $lines.Add('TASK ' + $task + ' seal test r4, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
+  $lines.Add('TASK ' + $task + ' seal test r5, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm'))
 
   # Step 1: seal prep on the fake test seals (no questions; it writes its own result file).
   Write-Host 'STEP 1 seal prep running...'
   $lines.Add('STEP 1 seal prep')
   $prepResult = '90161Z-T07-testprep-result-r1.txt'
   $ErrorActionPreference = 'Continue'
-  & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir '90161Z-T07-seal-prep-r4.ps1') -Id $id -SealDir $testDir -ResultName $prepResult -NoPause *> $null
+  & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir '90161Z-T07-seal-prep-r5.ps1') -Id $id -SealDir $testDir -ResultName $prepResult -NoPause *> $null
   $ErrorActionPreference = 'Stop'
   $prepPath = Join-Path $dir $prepResult
   if (Test-Path -LiteralPath $prepPath) { foreach ($l in Get-Content -LiteralPath $prepPath) { $lines.Add($l) } } else { $lines.Add('STEP 1 seal prep wrote no result file') }

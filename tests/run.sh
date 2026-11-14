@@ -247,30 +247,30 @@ ob="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"; mkdir -p "$ob/T
 touch "$ob/T02/90161Z-T02-provision-lists-r9.zip" "$ob/T02/Provision-Lists.ps1" "$ob/T13/90161Z-T13-label-capture-r2.ps1" "$ob/T13/my-notes.docx" \
   "$ob/Rounds/R09/90161Z-R09-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r4.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
 echo "public sample" > "$tp/fx.bin"; printf '## Fix first: Round R99 r1, test (open, 1 Jan 26)\n' > "$tp/go.md"
-swap() { sed -e "s#^\$goUrl = '.*'#\$goUrl = 'file://$tp/go.md'#" -e "s#Url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/#Url = 'file://$PWD/#" -e "s#Url = 'https://www\.[^']*'#Url = 'file://$tp/fx.bin'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
+swap() { sed -e "s#^\$goUrl = '.*'#\$goUrl = 'file://$tp/go.md'#" -e "s#Url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/#Url = 'file://$PWD/#" -e "s#Url = 'https://www\.[^']*'#Url = 'file://$tp/fx.bin'#" -e "s#Read-Host 'Press Enter to start the round, or type N and press Enter to stop with no changes'#''#" -e "s#Read-Host 'Press Enter when the flow run has started, or type S and press Enter to skip this step'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
   swap "$b" > "$tp/b.ps1"; USERPROFILE="$tp/u/test1234" pwsh -NoProfile -File "$tp/b.ps1" > "$tp/out.txt" 2>&1
   # Text mode runs the default steps that need no folder (the optional steps are skipped).
   n=$(python3 -c "import json,pathlib;f='scripts/build_paste_bundles.py';ns={'__file__':str(pathlib.Path(f).resolve())};exec(open(f).read().split(chr(10)+'def here')[0],ns);print(sum(1 for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b' for s in b['steps'] if ns['step_default'](s) and 'ask' not in s))")
   r=$(python3 -c "import json;print([b['round'] for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'][0])")
   base="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"
-  st=$(grep -c '^STEP .* running' "$tp/out.txt"); sm=$(grep -c ': \(OK\|CHECK\) (PASS' "$tp/out.txt")
-  [ "$st" -eq "$n" ] && [ "$sm" -eq "$n" ] && [ -f "$base/Rounds/$r/90161Z-$r-report-r1.txt" ] && grep -q "^RESULTS Rounds" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && grep -q "full log" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && pr=$((pr+1)) || { cat "$tp/out.txt" | tail -20; }
+  st=$(grep -c '^Step [0-9]* of [0-9]*: ' "$tp/out.txt"); sm=$(grep -c '^  Result: \(PASSED\|NEEDS REVIEW\) (' "$tp/out.txt")
+  [ "$st" -eq "$n" ] && [ "$sm" -eq "$n" ] && [ -f "$base/Rounds/$r/90161Z-$r-report-r1.txt" ] && grep -q "^Results folder: Rounds" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && grep -q "full log" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && pr=$((pr+1)) || { cat "$tp/out.txt" | tail -20; }
   # The screen shows the real path (PFM 13 Nov); everything else, and the report, masks it.
-  ! { grep -v '^WRITES TO ' "$tp/out.txt" | grep -q "test1234"; } && ! grep -q "test1234" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
-  grep -q "^WRITES TO $tp/u/test1234/" "$tp/out.txt" || { echo "real path not shown"; pf=$((pf+1)); }
-  grep -q "^WHAT TO DO: Open Outlook" "$tp/out.txt" || { echo "no plain-words help after the draft fallback"; pf=$((pf+1)); }
-  grep -q "^NEWER ROUND R99 is on the bookmark page" "$tp/out.txt" || { echo "newer-round banner missing"; pf=$((pf+1)); }
-  grep -q "^NOTE: no window, text mode: " "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "report does not name the no-window cause"; pf=$((pf+1)); }
+  ! { grep -v '^Working folder: ' "$tp/out.txt" | grep -q "test1234"; } && ! grep -q "test1234" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "DODID not masked"; pf=$((pf+1)); }
+  grep -q "^Working folder: $tp/u/test1234/" "$tp/out.txt" || { echo "real path not shown"; pf=$((pf+1)); }
+  grep -q "^What to do: Open Outlook" "$tp/out.txt" || { echo "no plain-words help after the draft fallback"; pf=$((pf+1)); }
+  grep -q "^A newer round, R99, is on the bookmark page" "$tp/out.txt" || { echo "newer-round banner missing"; pf=$((pf+1)); }
+  grep -q "^Note: no window could open, so the round runs in text mode" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "report does not name the no-window cause"; pf=$((pf+1)); }
   # Downloads: repo files must match their SHA-256; public files land and are attached; the skipped step's file is not expected.
   nf=$(python3 -c "import json;print(sum(len(b.get('fetch',[])) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
-  [ "$nf" -eq 0 ] || grep -q "^FETCH files=$nf failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "downloads: want FETCH files=$nf failed=0"; grep "^FETCH" "$base/Rounds/$r/90161Z-$r-report-r1.txt"; pf=$((pf+1)); }
+  [ "$nf" -eq 0 ] || grep -q "^Downloads: $nf saved, 0 failed" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "downloads: want Downloads: $nf saved, 0 failed"; grep "^Downloads" "$base/Rounds/$r/90161Z-$r-report-r1.txt"; pf=$((pf+1)); }
   ! grep -q "90161Z-T11-partb-r1.txt" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "a skipped step's file was expected"; pf=$((pf+1)); }
   [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R09" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r4.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r2.ps1" ] \
     && [ -f "$ob/T07/90161Z-T07-key-r1.txt" ] && [ -f "$ob/T09/90161Z-T09-page-r1.htm" ] \
-    && grep -q "^CLEANUP to Recycle Bin: files=5 folders=2 kept-other=1 failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" \
-    && grep -q "^LEFT .*T13(1, 1 other)" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && head -1 "$base/Rounds/$r/90161Z-$r-report-r1.txt" | tr -d "\r" | grep -q "90161Z $r CHECK$" \
-    && grep -q "^\"$r\",\"ROUND\"," "$base/Config/90161Z-history.csv" && pc=$((pc+1)) || { echo "cleanup/summary"; grep -E "^(CLEANUP|LEFT|90161Z)" "$base/Rounds/$r/90161Z-$r-report-r1.txt"; ls -R "$ob" | head -30; }
+    && grep -qF "Clean-up: moved to the Recycle Bin: 5 files, 2 folders; kept (not made by 90-161.Z): 1 files; failed: 0." "$base/Rounds/$r/90161Z-$r-report-r1.txt" \
+    && grep -qF "T13 1 (1 other)" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && head -1 "$base/Rounds/$r/90161Z-$r-report-r1.txt" | tr -d "\r" | grep -q "90161Z $r NEEDS REVIEW$" \
+    && grep -q "^\"$r\",\"ROUND\"," "$base/Config/90161Z-history.csv" && pc=$((pc+1)) || { echo "cleanup/summary"; grep -E "^(Clean-up|Files left|90161Z)" "$base/Rounds/$r/90161Z-$r-report-r1.txt"; ls -R "$ob" | head -30; }
 done
 while IFS=$'\t' read -r dir src; do
   got="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z/${dir//\\//}/$(basename "$src")"
@@ -278,13 +278,13 @@ while IFS=$'\t' read -r dir src; do
 done < <(python3 -c "import json;[print(f['dir']+'\t'+f['src']) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] for f in b['files']]")
 rm -rf "$tp"
 [ $pr -eq 1 ] && [ $pf -eq 0 ] && ok "round bundle text mode: files exact, steps run, report in results folder, DODID masked, real path on screen (rounds=$pr mismatches=$pf)" || bad "round bundle: rounds ok=$pr mismatches=$pf"
-[ $pc -eq 1 ] && ok "Deployer cleanup: only 90-161.Z files recycled, other files and their folder kept, summary has CLEANUP, LEFT, subject CHECK, history row" || bad "Deployer cleanup and summary (see output above)"
+[ $pc -eq 1 ] && ok "Deployer cleanup: only 90-161.Z files recycled, other files and their folder kept, summary has the clean-up line, files left, subject NEEDS REVIEW, history row" || bad "Deployer cleanup and summary (see output above)"
 
 # Enter starts the run (PFM 2026-11-13): the window's AcceptButton is Run; text mode shows the plan, Enter runs, N stops with nothing written.
 ab=$(grep -L 'AcceptButton = \$run' scripts/gov/paste/*.ps1 | wc -l)
 te=$(mktemp -d); mkdir -p "$te/u/test1234/OneDrive - United States Air Force"; tw=0
 for b in scripts/gov/paste/*.ps1; do
-  sed -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#'N'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$te/u'#" "$b" > "$te/b.ps1"
+  sed -e "s#Read-Host 'Press Enter to start the round, or type N and press Enter to stop with no changes'#'N'#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$te/u'#" "$b" > "$te/b.ps1"
   USERPROFILE="$te/u/test1234" pwsh -NoProfile -File "$te/b.ps1" > /dev/null 2>&1; [ -e "$te/u/test1234/OneDrive - United States Air Force/90-161.Z" ] && tw=$((tw+1))
 done; rm -rf "$te"
 [ "$ab" -eq 0 ] && [ "$tw" -eq 0 ] && ok "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw; Enter path = round bundle test)" || bad "Enter starts the run (bundles without Enter=Run: $ab; writes after N: $tw)"
@@ -308,14 +308,14 @@ dq=0; for b in scripts/gov/paste/*.ps1; do sed -n '/round runner (generated/,$p'
 fa=$(grep -ohE "(New-Object System\.Drawing\.Font|\[System\.Drawing\.Font\]::new)\([^)]*,[^)]*, *[\"'][A-Za-z]+[\"'] *\)" scripts/gov/paste/*.ps1 scripts/build_paste_bundles.py | wc -l)
 amb=$(pwsh -NoProfile -c 'Add-Type -AssemblyName System.Drawing.Common; try { $null = New-Object System.Drawing.Font("Segoe UI", 10, "Bold"); "bound" } catch { if ($_.Exception.Message -match "ambiguous") { "ambiguous" } else { "bound" } }' 2>&1 | tail -1)
 [ "$fa" -eq 0 ] && [ "$amb" = "ambiguous" ] && ok "Deployer fonts: no string enum in Font() (found: $fa; pwsh confirms the string form is $amb)" || bad "Deployer fonts: string enum in Font() found=$fa (pwsh: $amb)"
-for t16 in scripts/gov/90161Z-T16-pnp-signin-test-r2.ps1 scripts/gov/90161Z-T16-site-setup-r1.ps1; do
+for t16 in scripts/gov/90161Z-T16-pnp-signin-test-r2.ps1 scripts/gov/90161Z-T16-site-setup-r2.ps1; do
 # T16 PnP retest: the e-mailed result must hold no site, tenant, sign-in address, GUID or .mil host (review R09 T16).
 hs=$(pwsh -NoProfile -c '$src = Get-Content '"$t16"' -Raw; Invoke-Expression ([regex]::Match($src, "(?s)function Hide-Site.*?\n}\n").Value); $at = [string][char]64; Hide-Site ("x jane.doe.1234567890" + $at + "fakeco.onmicrosoft.us said no; bob" + $at + "unit.example.m" + "il https://login.microsoftonline.us/0a1b2c3d-1111-2222-3333-444455556666/o fakeco.onmicrosoft.us https://fakeco.sharepoint.us/sites/pfmtest/_api fakeco-admin.sharepoint.us /sites/pfmtest/_api %2Fsites%2Fpfmtest pfmtest") "https://fakeco.sharepoint.us/sites/pfmtest"' 2>&1)
 ! echo "$hs" | grep -qiE "fakeco|0a1b2c3d|pfmtest|https?://|jane|bob" && ok "$(basename $t16) hides site, tenant, sign-in address and GUID" || { echo "$hs"; bad "T16 masking"; }
 done
 # R05 (PFM 2026-11-13): every bundle makes an Outlook draft and never sends it; off Windows it falls back to folder + clipboard.
 nd=$(grep -L 'ComObject Outlook.Application' scripts/gov/paste/*.ps1 | wc -l); ns=$(grep -ciE '\.Send\(|\.Send\b *$' scripts/gov/paste/*.ps1 | awk -F: '{s+=$NF} END{print s+0}')
-grep -q '\$script:draftMade = (-not \$why)' scripts/build_paste_bundles.py && grep -q "Outlook draft not made" scripts/build_paste_bundles.py; fb=$?
+grep -q '\$script:draftMade = (-not \$why)' scripts/build_paste_bundles.py && grep -q "Outlook draft could not be created" scripts/build_paste_bundles.py; fb=$?
 [ "$nd" -eq 0 ] && [ "$ns" -eq 0 ] && [ "$fb" -eq 0 ] && ok "Outlook draft step, never sent (bundles without draft: $nd; Send calls: $ns; fallback present)" || bad "Outlook draft step (without draft: $nd; Send calls: $ns; fallback rc=$fb)"
 
 rm -rf "$vd"

@@ -1,11 +1,12 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 7 seal prep, r4 (L-007, L-007a). Windows PowerShell 5.1, System.Drawing only (no modules).
+  90-161.Z Task 7 seal prep, r5 (L-007, L-007a). Windows PowerShell 5.1, System.Drawing only (no modules).
 .DESCRIPTION
-  Uses this computer's profile folder as the DODID (no question). r4 (PFM 14 Nov 26, fewer manual steps): with no
-  -SealDir it uses the T07\Seals folder; when that has no images it looks in the default Outlook Inbox (last 14 days,
-  newest first) for every mail whose subject starts "90161Z T07 seals" (Claude sends seals split over several mails) and
-  saves their image attachments into T07\Seals; for a file name in more than one mail, the newest mail wins.
+  Uses this computer's profile folder as the DODID (no question). With no -SealDir it uses the T07\Seals folder; when
+  that has no images it searches Outlook (r5, R12: the mails were not found in the Inbox itself) in the Inbox, every
+  Inbox subfolder and Junk E-mail (last 30 days, newest first) for every mail whose subject starts "90161Z T07 seals"
+  (Claude sends seals split over several mails) and saves their image attachments into T07\Seals; for a file name in
+  more than one mail, the newest mail wins.
   Outlook is read by Subject and Attachments only (never sender or recipient properties, which raise the Outlook
   address prompt). It changes nothing in Outlook. Writes: files in T07\Seals, T07\Seals\Prepared, the result and key
   files. For each image in the seal folder:
@@ -184,35 +185,44 @@ try {
     if (-not (Test-Path -LiteralPath $sealDir -PathType Container)) { [void](New-Item -ItemType Directory -Path $sealDir) }
     $have = @(Get-ChildItem -LiteralPath $sealDir -File -ErrorAction SilentlyContinue | Where-Object { $Extensions -contains $_.Extension.ToLowerInvariant() })
     if ($have.Count -eq 0) {
-      Write-Host 'No images in T07\Seals: looking in the Outlook Inbox for a mail "90161Z T07 seals" (last 14 days)...'
-      $saved = 0; $found = 0; $failed = 0
+      Write-Host 'No seal images in T07\Seals. Searching Outlook (Inbox, its subfolders and Junk E-mail, last 30 days) for mail "90161Z T07 seals".'
+      $saved = 0; $found = 0; $failed = 0; $searched = 0
       try {
         $ol = New-Object -ComObject Outlook.Application
-        $inbox = $ol.GetNamespace('MAPI').GetDefaultFolder(6)
-        $items = $inbox.Items
-        $items.Sort('[ReceivedTime]', $true)
-        $cut = (Get-Date).AddDays(-14)
-        foreach ($m in $items) {
-          try {
-            if ($m.Class -ne 43) { continue }
-            if ($m.ReceivedTime -lt $cut) { break }
-            if (([string]$m.Subject).Trim() -notlike '90161Z T07 seals*') { continue }
-            $found++
-            foreach ($att in $m.Attachments) {
-              $leafName = Split-Path -Leaf ([string]$att.FileName)
-              $target = Join-Path $sealDir $leafName
-              if ($leafName -match '^image\d+\.') { continue }   # signature and inline pictures, not seals
-              if ($Extensions -contains [System.IO.Path]::GetExtension($leafName).ToLowerInvariant() -and
-                  -not (Test-Path -LiteralPath $target -PathType Leaf)) {   # newest mail wins for a file name
-                try { $att.SaveAsFile($target); $saved++ } catch { $failed++ }
+        $ns = $ol.GetNamespace('MAPI')
+        $queue = New-Object System.Collections.Queue
+        $queue.Enqueue($ns.GetDefaultFolder(6))   # Inbox, then its subfolders
+        $folders = @()
+        while ($queue.Count) { $f = $queue.Dequeue(); $folders += $f; try { foreach ($sub in $f.Folders) { $queue.Enqueue($sub) } } catch { $null = $_ } }
+        try { $folders += $ns.GetDefaultFolder(23) } catch { $null = $_ }   # Junk E-mail
+        $cut = (Get-Date).AddDays(-30)
+        foreach ($folder in $folders) {
+          $searched++
+          $items = $folder.Items
+          try { $items.Sort('[ReceivedTime]', $true) } catch { continue }
+          foreach ($m in $items) {
+            try {
+              if ($m.Class -ne 43) { continue }
+              if ($m.ReceivedTime -lt $cut) { break }
+              if (([string]$m.Subject).Trim() -notlike '90161Z T07 seals*') { continue }
+              $found++
+              foreach ($att in $m.Attachments) {
+                $leafName = Split-Path -Leaf ([string]$att.FileName)
+                $target = Join-Path $sealDir $leafName
+                if ($leafName -match '^image\d+\.') { continue }   # signature and inline pictures, not seals
+                if ($Extensions -contains [System.IO.Path]::GetExtension($leafName).ToLowerInvariant() -and
+                    -not (Test-Path -LiteralPath $target -PathType Leaf)) {   # newest mail wins for a file name
+                  try { $att.SaveAsFile($target); $saved++ } catch { $failed++ }
+                }
               }
-            }
-          } catch { $null = $_ }
+            } catch { $null = $_ }
+          }
         }
+        Write-Host ('Outlook search complete: ' + $searched + ' folders searched, ' + $found + ' matching e-mails, ' + $saved + ' images saved.')
       } catch {
-        Write-Host ('Outlook not readable: ' + (ConvertTo-Masked ([string]$_.Exception.Message) $secret))
+        Write-Host ('Outlook could not be read: ' + (ConvertTo-Masked ([string]$_.Exception.Message) $secret))
       }
-      $lines.Add('OUTLOOK mail-found=' + $found + ' images-saved=' + $saved + ' save-failed=' + $failed)
+      $lines.Add('OUTLOOK folders-searched=' + $searched + ' mail-found=' + $found + ' images-saved=' + $saved + ' save-failed=' + $failed)
     }
   }
   if (-not (Test-Path -LiteralPath $sealDir -PathType Container)) { throw 'SEAL FOLDER not found at the path given.' }
@@ -220,13 +230,13 @@ try {
   if (-not (Test-Path -LiteralPath $prep)) { New-Item -ItemType Directory -Path $prep | Out-Null }
 
   $files = @(Get-ChildItem -LiteralPath $sealDir -File | Where-Object { $Extensions -contains $_.Extension.ToLowerInvariant() } | Sort-Object Name)
-  if ($files.Count -eq 0) { throw 'NO IMAGES: the seal folder is empty and no Outlook mail "90161Z T07 seals" with images was found. Save the shield images into T07\Seals (or mail them to yourself with that subject), then run again.' }
+  if ($files.Count -eq 0) { throw 'NO IMAGES: T07\Seals is empty and Outlook holds no e-mail "90161Z T07 seals" with images (Inbox, subfolders and Junk E-mail searched). Tell Claude the seal e-mails did not arrive, or save the seal images into T07\Seals and run the round again.' }
 
   $log = Join-Path $dir $ResultName
   $keyFile = Join-Path $dir ([System.IO.Path]::GetFileNameWithoutExtension($ResultName) -replace 'result', 'key')
   $keyFile = $keyFile + '.txt'
   $keys = New-Object System.Collections.Generic.List[string]
-  $lines.Add('TASK T07 seal prep r4, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', box ' + $BoxPx + ' px at ' + $BoxDpi + ' dpi')
+  $lines.Add('TASK T07 seal prep r5, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', box ' + $BoxPx + ' px at ' + $BoxDpi + ' dpi')
   $keys.Add('Key for 90161Z-T07-result-r1.txt. Keep this file on this computer; do not send it.')
   $n = 0; $pass = 0; $warn = 0; $fail = 0
   $outNames = @{}

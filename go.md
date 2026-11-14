@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 14 Nov 26 (Round R12: the site steps, logo and seals now run by script; Task 11 r3; Tasks 2, 7, 10 and 14 closed or moved into the round).
+Updated: 14 Nov 26 (Round R13: the round now delivers and guides the probe flow, no separate download; seals fix; clearer log text).
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -12,61 +12,46 @@ Never send real publication content, names, site addresses or group names. Reply
 ## How a paste task (round) works
 
 **For:** a round is one block of text I paste into PowerShell ISE. It opens the 90-161.Z Deployer window, saves its own files, runs the tests and makes the results e-mail. The ISSM allows this for scripts that use no elevated credentials (13 Nov 26).
-**Changes:** it writes only into my own OneDrive folder 90-161.Z (the window shows the full path in bold): the task folders it needs (for example T01), Config and its results folder Rounds\<round>. It makes missing folders and replaces files of the same name. From R06 on it also moves finished files to the Recycle Bin (only files 90-161.Z made). Before Run, the window lists every file, marked (new), (replaces the file there) or RECYCLE.
+**Changes:** it writes only into my own OneDrive folder 90-161.Z (the window shows the full path in bold): the task folders it needs (for example T01), Config and its results folder Rounds\<round>. It makes missing folders and replaces files of the same name. From R06 on it also moves finished files to the Recycle Bin (only files 90-161.Z made). Before Run, the window lists every file, marked New, Replace or Recycle. Every file a task needs comes inside the round: there are no separate downloads (14 Nov 26). A step marked "(needs you)" opens a small window with numbered steps for work in another program, such as a flow import.
 Steps:
 1. Press Copy script next to the round's link in its task below. If it says blocked: open the link, press Ctrl+A, then Ctrl+C.
 2. Start menu: type ISE and open Windows PowerShell ISE as myself (not "Run as administrator").
 3. File > New. Click in the white script pane. Press Ctrl+V, then F5.
 4. The 90-161.Z Deployer window opens. Check the bold "Writes to" line: it shows my OneDrive 90-161.Z folder, or says NOT found. The first time, type the e-mail address the results go to in "Send results to" (it is remembered).
 5. Press Enter (or Run). Word steps take a few minutes each. Keep the window open until the log says DONE.
-6. At DONE an Outlook draft opens with the address, the subject (OK or CHECK), the summary and all result files. Send it. If no draft opens, the results folder opens and the e-mail text is on the clipboard: new e-mail, Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
-**If it fails:** the window shows a line that starts with WHAT TO DO under the problem: do that. Otherwise send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
+6. At DONE an Outlook draft opens with the address, the subject (PASSED or NEEDS REVIEW), the summary and all result files. Send it. If no draft opens, the results folder opens and the e-mail text is on the clipboard: new e-mail, Ctrl+V in the body, cut the first line into the subject, drag in all files from the folder. No zip: zips do not cross the boundary.
+**If it fails:** the window shows a line that starts with "What to do" under the problem: do that. Otherwise send the line that starts with STOPPED. The report file in Rounds\<round> also holds it. Do not work around it. If no window opens, the same steps run as text in ISE and the results folder opens by itself.
 The script never sends the e-mail; the draft waits in Outlook. Finished task folders are cleaned up by the rounds; a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt (rounds never touch it).
 Sensitivity label: every render gets the label from Config\90161Z-label.json. Never delete the Config folder: without it, renders print "LABEL not set" and have no label. The file I labeled by hand is no longer needed. If Config is lost, run a round, then capture again from its new render (it is already labeled); label a file by hand again only if renders say LABEL FAIL.
 
-## How a download task works
+## Round R13 r1: the probe flow, the seals and the site setup in one round (open, 14 Nov 26)
 
-**For:** some tasks need files saved from a link, or steps on the SharePoint site.
+**For:** finishes what R12 could not: the probe flow r3 (Task 11 Part A) now comes from the round itself (no separate download), seal prep also searches Outlook subfolders and Junk E-mail, and the seals upload is fixed. The log text is rewritten to read cleanly.
+**Time:** about 25 minutes (estimate): probe flow import and run 5-10, seal prep 1, site setup 5 plus up to 15 waiting for the probe result.
+**Changes:** on my computer: writes into T01, T07, T11, T14, T15, T16, Config and Rounds\R13; saves the seal attachments from the "90161Z T07 seals" e-mails into T07\Seals (reads Outlook, changes nothing there); moves Rounds\R11, T10, the Part B form and old scripts to the Recycle Bin. In Power Automate: imports one flow, "90161Z T11 Rights Probe r3", and runs it (what it does on the site: Task 11 below). On the new site: checks the permissions and time zone (already set), sets the logo again, creates the library 90-161.Z with the folders Seals and Seals/Prepared, uploads the seals, and copies the probe result to T11. Nothing else. Saves one Outlook draft (never sent).
 Steps:
-1. Copy each link into the address bar (the Copy link button copies it).
-2. Save the file with Ctrl+S into the task's folder. The folder box in each task has a Copy button: paste its path into the Save dialog's address bar (%USERPROFILE% becomes my profile folder).
-3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
-**If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
-
-## Round R12 r2: site setup, seals and logo by script (open, 14 Nov 26)
-
-**For:** does by script what I did by hand: Task 2 steps 7-8, Task 14, Task 7 Part B (library, folder, upload, sync, path) and the Task 11 result download. Checks stay the same; the script reads each change back.
-**Time:** about 10 minutes (estimate) for the default steps; Part B form adds about 25.
-**Changes:** on my computer: writes into T01, T07, T11, T14, T15, T16, Config and Rounds\R12; saves the seal attachments from the "90161Z T07 seals" e-mails into T07\Seals (reads Outlook, changes nothing there); moves Rounds\R11 and old scripts to the Recycle Bin. On the new site: sets "edit own rows" on PFM Publications and PFM Endorsements, sets the time zone to Central, uploads the logo and its thumbnail to Site Assets and sets them in the header, creates the library 90-161.Z with the folder Seals and uploads the seals and prepared seals, and downloads the Task 11 result file if it exists. Nothing else. Saves one Outlook draft (never sent).
-Steps:
-1. Keep the 6 e-mails "90161Z T07 seals r1" in the Inbox (the round reads them).
-2. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R12-round-r2.ps1
-3. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-4. Two steps are checked (seal prep, site setup). Steps that already passed (render test T01, inventory T15) are off: each turns on by itself only when its code changed since it last passed (R11). Check "T11 Part B" too if I have the time. If I already ran R12 r1, I do not run r2.
-5. Press Enter (or Run). The site setup step asks for the NEW site address (filled in from last time) and opens a CAC sign-in.
-6. When it ends, open the new site and look at the header: the logo should show (white squares on the blue header). This is the only check by eye.
-7. The Outlook draft opens with the summary and the files. Send it.
-**Report:** the draft itself, plus one line in the e-mail body: "logo OK" or what looks wrong. Claude watches the inbox for the subject.
-**If it fails:** read the WHAT TO DO line in the window. A FAIL line in the site setup names the by-hand fallback (for example Change the look > Header); do only that item by hand.
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R13-round-r1.ps1
+2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
+3. Three steps are checked: the probe flow, seal prep and site setup. Leave the others off.
+4. Press Enter (or Run). The probe step opens a small window with numbered steps: select Open in browser, import the file (its path is already on the clipboard), run the flow, then select "Done: the run has started".
+5. The site setup step asks for the site address (filled in from last time) and opens a CAC sign-in. It waits for the probe result; keep the window open.
+6. The Outlook draft opens with the summary and the files. Add one line to the body: "logo OK" or what looks wrong in the site header. Send it.
+**Report:** the draft itself. Claude watches the inbox for the subject "90161Z R13".
+**If it fails:** read the "What to do" line in the window. If seal prep says NO IMAGES, send the results anyway and say whether the 6 e-mails "90161Z T07 seals r1" are in Outlook. If Power Automate does not open at the address shown, correct the address in the probe window (it is remembered). A FAIL line in site setup names the stage and the by-hand fallback.
 
 ## Task 11: rights and capability test, r3 (open, 14 Nov 26)
 
-**For:** finds what I can and cannot do on the new site, with the office mailbox, in Power Apps, Power Automate and Forms. Every later design step depends on these answers. r3 also reads its own test e-mails, so the round needs no Outlook check and no mailbox box.
-**Time:** about 35 minutes (estimate): Part A 10, Part B (in a round) 25.
-Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T11
+**For:** finds what I can and cannot do on the new site, with the office mailbox, in Power Apps, Power Automate and Forms. Every later design step depends on these answers.
+**Time:** Part A runs inside Round R13 (above). Part B is done (17 of 17 rows in R12).
 **Changes:** imports one flow into my Power Automate. On the new site the flow creates test lists and a test group named "PFM Rights Probe ..." and deletes them at the end (they stay in the site recycle bin), and adds one result file to the Documents library. It sends 3 test e-mails to me only: 1 from my mailbox, 2 from the office mailbox (subjects start "90161Z TEST"), then reads how they arrived. Nothing else.
-Part A, the probe flow (best before Round R12, so the round fetches the result):
-1. Save this file into the T11 folder:
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T11-rights-probe-r3.zip
-2. Power Automate: My flows > Import > Import Package (Legacy). Pick the file. For each connection (SharePoint, Office 365 Users, Office 365 Outlook) pick my existing one, or Create new if I have none. Import.
-3. Run "90161Z T11 Rights Probe r3". Site address: the new site. Coworker e-mail: one regular member of that site (not an owner). Wing group e-mail: the group that gives wing members access, if it has one. Office mailbox e-mail: the office shared mailbox (the organizational mailbox the office sends from, not mine). The run takes a few minutes longer than r2 (it waits 2 minutes for the test e-mails).
-Part B: check "T11 Part B" in the round. The form keeps my answers, so I can answer some rows each round.
 Report: the round's e-mail. No names, site address or group names in the notes: write "my AD group", "the office mailbox".
 **If it fails:** if the import asks for a connection I cannot make, send its name. If the run stops early, delete anything named "PFM Rights Probe ..." by hand and send the name of the step that failed and its error text (no names). A red step in the run is a result, not a failure: the run goes on.
 
 ## Done
 
+- Round R12 (14 Nov 26): window, inventory, renderer, PnP test passed; site setup set the time zone (Central) and the logo, item-level permissions were already right, 12 lists and 88 rows counted; Task 11 Part B finished (17 of 17). Seal prep found no seal e-mails and the seals upload failed: fixed in R13. Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r12-results.md
 - Task 2, the 12 lists on the new site (14 Nov 26): R11 counted 12 PFM lists there. Round R12 sets "edit own rows" and the time zone by script and counts lists and rows, so I do not read the flow result.
 - Task 14 and Task 7 Part B (14 Nov 26): moved into Round R12 (logo, Seals folder, upload, prep). Claude corrected the 17 seals and sent them in 6 e-mails "90161Z T07 seals r1".
 - Task 10, decision briefs (14 Nov 26): R11 checked all 3 (overflow 0, past-edge 0) and I opened them in PowerPoint: they open normally. Closed.

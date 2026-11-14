@@ -22,10 +22,10 @@ Updated: 2026-11-14 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
-1. R12 r1 on go.md (14 Nov): T16 site setup r1 by PnP (edit-own-rows, time zone Central, logo option D, library 90-161.Z/Seals + upload, probe result fetch, list/row counts), T07 seal prep r4 (reads the 6 "90161Z T07 seals r1" mails), Part B form optional. Task 11 r3: probe flow r3 adds E05 (reads its test mails; Outlook COM check removed after R11 E_ABORT). R11 results: docs/reviews/2026-11-14-r11-results.md. Unverified on the tenant: Set-PnPWebHeader thumbnail parameter, CSOM time zone setter, E05 Graph filter. Claude watches Gmail for "90161Z R12". Next after R12: T09 reader, T12 colors. Open: S2, S3, S5 3-15, S6, S7, S8-S11, F1-F4 (sweep page).
+1. R13 r1 on go.md (14 Nov): probe flow r3 guided by the Deployer (zip written to T11, Power Automate opened, path on the clipboard; DoD address make.powerautomate.appsplatform.us from Microsoft Learn, editable, PFM confirms in R13), seal prep r5 (Inbox subfolders and Junk E-mail), site setup r2 (seals path from the library root folder; waits up to 15 min for the probe result). New log text (PASSED / NEEDS REVIEW). R12 results: docs/reviews/2026-11-14-r12-results.md. Open with the PFM: did the 6 seal e-mails arrive; logo look. Claude watches Gmail for "90161Z R13". T01, T15, T16 PnP test output text not cleaned yet (steps off). Next after R13: T09 reader, T12 colors. Open: S2, S3, S5 3-15, S6, S7, S8-S11, F1-F4 (sweep page).
 2. Task 6 prompt r2 follow-up: list AFI (validator F-032/F-039 fixed 13 Nov).
-3. Seals: Claude corrected 17 unit seals (1,200 px, glow removed, 2 px feather; tool in the session scratchpad, not in the repo) and mailed them in 6 parts; R12 preps and uploads them.
-4. Logo option D (PFM 14 Nov): mark r1 no fill on the blue header, navy thumbnail (assets/logo, scripts/build_logo.py); R12 sets both. After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
+3. Seals: Claude corrected 17 unit seals (1,200 px, glow removed, 2 px feather; tool in the session scratchpad, not in the repo) and mailed them in 6 parts; R12 did not find them in the Inbox; R13 searches wider.
+4. Logo option D (PFM 14 Nov): mark r1 no fill on the blue header, navy thumbnail (assets/logo, scripts/build_logo.py); R12 set the logo (read back); the PFM's look check is open. After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
 5. Result e-mails: delete only after the PFM confirms (AGENTS.md Project rules).
 
 ## Next design (after Task 5)
