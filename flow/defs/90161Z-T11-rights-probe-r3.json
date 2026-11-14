@@ -2615,7 +2615,7 @@
       "type": "OpenApiConnection",
       "inputs": {
         "parameters": {
-          "Uri": "/v1.0/me/messages?$filter=startswith(subject,'90161Z TEST E0')&$select=subject,from,sender&$top=20",
+          "Uri": "/v1.0/me/messages?$filter=receivedDateTime%20ge%20@{trigger()?['startTime']}%20and%20startswith(subject,%2790161Z%20TEST%20E0%27)&$orderby=receivedDateTime%20desc&$select=subject,from,sender&$top=20",
           "Method": "GET"
         },
         "host": {

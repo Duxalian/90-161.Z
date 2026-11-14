@@ -6,7 +6,7 @@
   C:\Users\<DODID>\OneDrive - United States Air Force\90-161.Z (replacing older copies), runs the steps,
   and saves its results in Rounds\R12, then opens an Outlook draft with them (never sent). No download, no admin rights.
 #>
-$buildId = 'a33e75f8'
+$buildId = '843ad3b5'
 $goUrl = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md'
 $round = 'R12'
 $usersRoot = 'C:\Users'
@@ -1601,7 +1601,7 @@ try {
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }
 '@ }
-$files += @{ Dir = 'T07'; Name = '90161Z-T07-seal-prep-r4.ps1'; Kind = 'text'; Sha = 'b5da2cd13fd9'; Data = @'
+$files += @{ Dir = 'T07'; Name = '90161Z-T07-seal-prep-r4.ps1'; Kind = 'text'; Sha = '1dcdc7161b0a'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 7 seal prep, r4 (L-007, L-007a). Windows PowerShell 5.1, System.Drawing only (no modules).
@@ -1789,7 +1789,7 @@ try {
     $have = @(Get-ChildItem -LiteralPath $sealDir -File -ErrorAction SilentlyContinue | Where-Object { $Extensions -contains $_.Extension.ToLowerInvariant() })
     if ($have.Count -eq 0) {
       Write-Host 'No images in T07\Seals: looking in the Outlook Inbox for a mail "90161Z T07 seals" (last 14 days)...'
-      $saved = 0; $found = 0
+      $saved = 0; $found = 0; $failed = 0
       try {
         $ol = New-Object -ComObject Outlook.Application
         $inbox = $ol.GetNamespace('MAPI').GetDefaultFolder(6)
@@ -1805,9 +1805,10 @@ try {
             foreach ($att in $m.Attachments) {
               $leafName = Split-Path -Leaf ([string]$att.FileName)
               $target = Join-Path $sealDir $leafName
+              if ($leafName -match '^image\d+\.') { continue }   # signature and inline pictures, not seals
               if ($Extensions -contains [System.IO.Path]::GetExtension($leafName).ToLowerInvariant() -and
                   -not (Test-Path -LiteralPath $target -PathType Leaf)) {   # newest mail wins for a file name
-                $att.SaveAsFile($target); $saved++
+                try { $att.SaveAsFile($target); $saved++ } catch { $failed++ }
               }
             }
           } catch { $null = $_ }
@@ -1815,7 +1816,7 @@ try {
       } catch {
         Write-Host ('Outlook not readable: ' + (ConvertTo-Masked ([string]$_.Exception.Message) $secret))
       }
-      $lines.Add('OUTLOOK mail-found=' + $found + ' images-saved=' + $saved)
+      $lines.Add('OUTLOOK mail-found=' + $found + ' images-saved=' + $saved + ' save-failed=' + $failed)
     }
   }
   if (-not (Test-Path -LiteralPath $sealDir -PathType Container)) { throw 'SEAL FOLDER not found at the path given.' }
@@ -2166,7 +2167,7 @@ AMYf8BcBAHiszAhg/AG/EQCA58qIAMYf8B8BAASgyAhg/IEwEABAIIqIAMYfCAcBAAQkzwhg/IGwEABA
 iA8BAERo1whg/IE4EQBApJav2vheEwHb112+5IMCIDoEAAAAEUoEAABEhwAAACBCBAAAABEiAAAAiBABAABAhAgAAAAiRAAAABAh
 AgAAgAgRAAAARIgAAAAgQgQAAAARIgAAAIgQAQAAQIT+AwAA//832hzRAAAABklEQVQDAMuMdof1uCh+AAAAAElFTkSuQmCC
 '@ }
-$files += @{ Dir = 'T16'; Name = '90161Z-T16-pnp-signin-test-r2.ps1'; Kind = 'text'; Sha = '2194c9e3aa67'; Data = @'
+$files += @{ Dir = 'T16'; Name = '90161Z-T16-pnp-signin-test-r2.ps1'; Kind = 'text'; Sha = 'cbdb1a5c1525'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 16 PnP test and SharePoint inventory, r2. Read-only. Windows PowerShell 5.1, the installed PnP.PowerShell 1.x.
@@ -2266,6 +2267,7 @@ function Get-SiteAddress([string]$ConfigDir) {
 }
 function Hide-Site([string]$Text, [string]$Site) {
   # The result is e-mailed: no site, tenant or sign-in address may stay in it (review R09 T16).
+  $Text = $Text -replace '[\w.+-]+@[\w.-]+', '<EMAIL>'   # whole address first: the host rules below keep the name part (review R12 MAJOR)
   if ($Site) {
     $Text = $Text -replace [regex]::Escape($Site.TrimEnd('/')), '<SITE>'
     try {
@@ -2364,7 +2366,7 @@ try {
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }
 '@ }
-$files += @{ Dir = 'T16'; Name = '90161Z-T16-site-setup-r1.ps1'; Kind = 'text'; Sha = '68fbc9e48939'; Data = @'
+$files += @{ Dir = 'T16'; Name = '90161Z-T16-site-setup-r1.ps1'; Kind = 'text'; Sha = '553cbc467745'; Data = @'
 <#
 .SYNOPSIS
   90-161.Z Task 16 site setup, r1. Windows PowerShell 5.1, the installed PnP.PowerShell 1.12.0 (no other module).
@@ -2477,6 +2479,7 @@ function Get-SiteAddress([string]$ConfigDir) {
 }
 function Hide-Site([string]$Text, [string]$Site) {
   # The result is e-mailed: no site, tenant or sign-in address may stay in it (review R09 T16).
+  $Text = $Text -replace '[\w.+-]+@[\w.-]+', '<EMAIL>'   # whole address first: the host rules below keep the name part (review R12 MAJOR)
   if ($Site) {
     $Text = $Text -replace [regex]::Escape($Site.TrimEnd('/')), '<SITE>'
     try {

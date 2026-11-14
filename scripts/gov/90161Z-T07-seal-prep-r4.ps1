@@ -185,7 +185,7 @@ try {
     $have = @(Get-ChildItem -LiteralPath $sealDir -File -ErrorAction SilentlyContinue | Where-Object { $Extensions -contains $_.Extension.ToLowerInvariant() })
     if ($have.Count -eq 0) {
       Write-Host 'No images in T07\Seals: looking in the Outlook Inbox for a mail "90161Z T07 seals" (last 14 days)...'
-      $saved = 0; $found = 0
+      $saved = 0; $found = 0; $failed = 0
       try {
         $ol = New-Object -ComObject Outlook.Application
         $inbox = $ol.GetNamespace('MAPI').GetDefaultFolder(6)
@@ -201,9 +201,10 @@ try {
             foreach ($att in $m.Attachments) {
               $leafName = Split-Path -Leaf ([string]$att.FileName)
               $target = Join-Path $sealDir $leafName
+              if ($leafName -match '^image\d+\.') { continue }   # signature and inline pictures, not seals
               if ($Extensions -contains [System.IO.Path]::GetExtension($leafName).ToLowerInvariant() -and
                   -not (Test-Path -LiteralPath $target -PathType Leaf)) {   # newest mail wins for a file name
-                $att.SaveAsFile($target); $saved++
+                try { $att.SaveAsFile($target); $saved++ } catch { $failed++ }
               }
             }
           } catch { $null = $_ }
@@ -211,7 +212,7 @@ try {
       } catch {
         Write-Host ('Outlook not readable: ' + (ConvertTo-Masked ([string]$_.Exception.Message) $secret))
       }
-      $lines.Add('OUTLOOK mail-found=' + $found + ' images-saved=' + $saved)
+      $lines.Add('OUTLOOK mail-found=' + $found + ' images-saved=' + $saved + ' save-failed=' + $failed)
     }
   }
   if (-not (Test-Path -LiteralPath $sealDir -PathType Container)) { throw 'SEAL FOLDER not found at the path given.' }

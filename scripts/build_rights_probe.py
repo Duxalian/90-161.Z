@@ -146,7 +146,7 @@ MAIL_CHECKS = [
      {"emailMessage/To": ME, "emailMessage/From": OFFICE, "emailMessage/Subject": "90161Z TEST E04 from field",
       "emailMessage/Body": TEST_BODY, "emailMessage/Importance": "Normal"}, "-"),
     ("E05", "After 2 minutes: did E01, E03, E04 arrive, and how (from-me, sent-as-office, on-behalf-of-office, other)", "shared_office365", "HttpRequest",
-     {"Uri": "/v1.0/me/messages?$filter=startswith(subject,'90161Z TEST E0')&$select=subject,from,sender&$top=20", "Method": "GET"},
+     {"Uri": "/v1.0/me/messages?$filter=receivedDateTime%20ge%20@{trigger()?['startTime']}%20and%20startswith(subject,%2790161Z%20TEST%20E0%27)&$orderby=receivedDateTime%20desc&$select=subject,from,sender&$top=20", "Method": "GET"},
      "@{" + E05_KEEP + "}"),
 ]
 # Error text can quote the addresses: replace both before the text is kept.
