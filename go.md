@@ -55,7 +55,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/2704ec23c8e81de39315f823f0c
 **For:** builds all 12 PFM lists, their columns, views and starting rows on the new site (decided 14 Nov 26), and sets "edit own rows" on PFM Publications and PFM Endorsements (this replaces the old Task 8).
 **Time:** about 20 minutes (estimate): 5 to import, about 15 for the run.
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T02
-**Changes:** imports one flow into my Power Automate. On the new site only: creates 12 lists named PFM ..., adds 88 rows (series, settings, offices, process steps) and changes the item-level permissions of 2 of those lists. Nothing on the old site. Nothing runs on the computer.
+**Changes:** imports one flow into my Power Automate. On the new site only: creates 12 lists named PFM ..., adds 88 rows (series, settings, offices, process steps) changes the item-level permissions of 2 of those lists, and (step 8, by hand) sets the site time zone to Central. Nothing on the old site. Nothing runs on the computer.
 Steps:
 1. Save this file into the T02 folder (steps in "How a download task works"):
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T02-provision-lists-r11.zip

@@ -32,6 +32,8 @@ Why F02 uses a recurrence: the 6-month review task opens on a date, not on an ed
 - a. The gate runs on an edit of the Publications row. An endorser answer alone does not start it; the PFM's "All Comments Adjudicated = Yes" edit does. Option: a second trigger on PFM Endorsements (or a child flow) if answers arrive after that edit.
 - b. Steps are found by StepNumber 6 and 7 (seed data). A wing that renumbers its steps must change the flow.
 - c. The Privacy office is mandatory, so it also gets a Formal Coordination row, although step 5 is a separate Privacy review. Option: skip the Privacy role at step 6 when a Privacy Review row exists.
+- e. If PFM Offices has no active mandatory office (other than Legal), F05 creates no rows and the step waits with no warning. Option: log or e-mail the PFM.
+- f. Any existing Formal row counts as "created". If a run stops part way through, later runs do not add the missing rows; the PFM adds them by hand. Any answer other than Not Started (for example Concur With Comment) counts as answered.
 - d. The flow creates the rows, so with "edit own rows" (10A) endorsers answer through an app flow (not built yet).
 
 ## Open design choices
