@@ -5,6 +5,7 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-14 | R15: solution XML comes from a real export (PFM makes one, Deployer masks and sends the XML); site setup sets header logo and thumbnail apart; probe r5 grants the coworker's user ID. | PFM | docs/reviews/2026-11-14-r15-results.md |
 | 2026-11-14 | Site logo = variant A, bold white (lines 60% thicker than r1; replaces option D's header logo). Thumbnail stays navy, same bold lines. | PFM | https://claude.ai/artifact/AZUqwxiPwSruC65eH1uhHx |
 | 2026-11-14 | Wing users have only Read on the site; anyone using the app enters data through it. Open: how the app writes (list-level rights or a flow), see NEXT_PROMPT. | PFM | docs/reviews/2026-11-14-r13-results.md |
 | 2026-11-14 | The Deployer delivers every file a round needs (no separate downloads) and guides steps done in another program (R13: probe flow import); its log text reads professionally. | PFM | docs/reviews/2026-11-14-r12-results.md |

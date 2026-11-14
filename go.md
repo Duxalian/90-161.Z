@@ -1,6 +1,6 @@
 # 90-161.Z: tasks for my work computer
 
-Updated: 14 Nov 26 (Round R15 replaces R14: solution import test, rights for app users, new logo).
+Updated: 14 Nov 26 (R15 results recorded; Round R16 is being built).
 rhope-ops.github.io/90-161.Z
 Fallback (plain text):
 raw.githubusercontent.com/rhope-ops/90-161.Z/main/go.md
@@ -24,23 +24,14 @@ Steps:
 The script never sends the e-mail; the draft waits in Outlook. Finished task folders are cleaned up by the rounds; a later round makes any folder it needs again. Keep T07 if it holds 90161Z-T07-key-r1.txt (rounds never touch it).
 Sensitivity label: every render gets the label from Config\90161Z-label.json. Never delete the Config folder: without it, renders print "LABEL not set" and have no label. The file I labeled by hand is no longer needed. If Config is lost, run a round, then capture again from its new render (it is already labeled); label a file by hand again only if renders say LABEL FAIL.
 
-## Round R15 r1: solution import, rights for app users, new logo (open, 14 Nov 26)
+## Next round R16 (being built, 14 Nov 26)
 
-**For:** answers the last questions before the flow and app build: does a solution import work here (all real flows will ship as one), which groups hold wing users, and can a Read-only wing user add and edit their own rows on a list that gives their group Contribute. It also sets the bold white logo (R14's step; R15 replaces R14).
-**Time:** about 25 minutes (estimate): two imports and runs in Power Automate 10-15, site setup 5 plus waiting for the two flows.
-**Changes:** on my computer: writes into T11, T14, T16, T17 and Rounds\R15; moves Rounds\R13, old probe and setup files to the Recycle Bin. In Power Automate: imports one test solution "90-161.Z solution import test" (one flow, one SharePoint connection reference, one "Site URL" variable) and the flow "90161Z T11 Rights Probe r4"; I run each once. On the new site: the test flow reads the PFM Settings row count and writes one result file; the probe creates a TEST list, library and group, gives the coworker's group Contribute on the TEST list, reads the rights, then deletes all three; site setup sets the logo and copies both result files (site address masked). No e-mail is sent by either flow. Saves one Outlook draft (never sent).
-Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C).
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/scripts/gov/paste/90161Z-R15-round-r1.ps1
-2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-3. Press Enter (or Run). Two small step windows open at the right edge of the screen, one after the other: follow each, then select "Done: the run has started". Each can be minimized.
-4. Site setup asks for the site address (filled in from last time) and opens a CAC sign-in. It waits for both flows; keep the Deployer open.
-5. Open the site and look at the header (Ctrl+F5 if the old logo shows). The Outlook draft opens: add "logo OK" or what looks wrong, then Send.
-**Report:** the draft itself. Claude watches the inbox for the subject "90161Z R15".
-**If it fails:** read the "What to do" line in the window. If the solution import shows an error, copy the error text (no names or site address) into the e-mail and select Skip in that step window. A FAIL line in site setup names the stage and the by-hand fallback.
+**For:** fixes R15's three open points: the solution import (one small solution you make and export by hand, about 5 minutes, an estimate), the header logo and thumbnail, and the Contribute test for app users. The task appears here when it is ready.
 
 ## Done
 
+- Round R15 (14 Nov 26): needs review. Probe r4 and site setup r4 ran; the solution import stopped with an XML error (skipped); the header logo was not set and the thumbnail got the header file; the Contribute test found no group to test. All three go into R16. Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r15-results.md
 - Round R13 (14 Nov 26): passed. Probe flow r3 imported and run from the Deployer window (no separate download); 17 of 17 seals prepared and uploaded with the prepared copies (34 files); site setup 0 problems. Task 11 is complete (Part A in R13, Part B in R12). The logo still needs work (only a thin white border shows). Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r13-results.md
 - Round R12 (14 Nov 26): window, inventory, renderer, PnP test passed; site setup set the time zone (Central) and the logo, item-level permissions were already right, 12 lists and 88 rows counted; Task 11 Part B finished (17 of 17). Seal prep found no seal e-mails and the seals upload failed: fixed in R13. Details:
