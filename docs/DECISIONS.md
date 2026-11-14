@@ -5,6 +5,7 @@ One table (PFM C, 2026-11-13; replaces the B2A short index + archive pair): one 
 
 | Date | Decision | By | Detail |
 |---|---|---|---|
+| 2026-11-14 | Automate T11 Part B: probe flow r2 + Outlook checks in the round; up to 3 test mails from the office mailbox, to the PFM only; probe adds the coworker as flow co-owner, then removes them. | PFM | docs/rights-test-plan.md |
 | 2026-11-14 | Revisit 1B (no PnP): R09 PnP web login PASS (manage lists, manage site). Next round adds a read-only PnP test on the new site; if it passes, optional Deployer steps for lists, permissions and logo; Power Automate stays the fallback. | PFM | docs/reviews/2026-11-14-r09-results.md |
 | 2026-11-14 | The new site is a separate site collection. Second-look findings F1-F5 wait for the PFM's go; S8-S11 added to the sweep page. | PFM | docs/reviews/2026-11-13-sweep-decisions.md |
 | 2026-11-14 | New site exists, approved for CUI. Tasks 11, 14 use it; Task 8 (edit own rows) moves into the T02 r11 flow, by hand if it reports NOT SET. Hold any step that needs a PnP check. | PFM | docs/power-automate-provisioning.md |
