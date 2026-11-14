@@ -22,7 +22,7 @@ Updated: 2026-11-14 by Claude. Keep this file at 40 lines or fewer and state onl
 ## Waiting on the PFM (go.md)
 
 0. Renderer round 2: evidence docs/reviews/2026-11-12-gov-results-t01r5-t06-t07.md, R01-R04 results in docs/reviews/ (all passed).
-1. R09 live (build 83c168c9); Claude watches Gmail for "90161Z R09" until about 21:10 CT 13 Nov; after that "email received" restarts it. Task 2 r11 on the new site. Open: S2, S3, S5 3-15, S6, S7 in docs/reviews/2026-11-13-sweep-decisions.md (PFM: decide later).
+1. R09 results e-mail arrived 13 Nov 19:59 CT (after the watch ended), not processed: the PFM said later; "email received" starts it. Its rights results are for the old site. Task 2 r11 on the new site. Open: S2, S3, S5 3-15, S6, S7, S8-S11, F1-F4 (sweep page; no preference 13 Nov 20:10 CT).
 2. Task 6 prompt r2 follow-up: list AFI; validator F-032/F-039 false positives.
 3. Task 7 Part B: real seals in library 90-161.Z, folder Seals; r1 needs the pasted path.
 4. Task 14 site logo (assets/logo, scripts/build_logo.py). After T11 results: design the site home page as a preview, then a page/header flow (DECISIONS 2026-11-13).
