@@ -1,6 +1,6 @@
 {
-  "displayName": "90161Z T11 Rights Probe r2",
-  "description": "Tests what the person who runs it, and an optional coworker, can do on a SharePoint site, and what they can do with the office mailbox. Creates TEST objects, then deletes them; sends 3 test mails to the person who runs it. Records status codes, permission masks and license names only, no names.",
+  "displayName": "90161Z T11 Rights Probe r3",
+  "description": "Tests what the person who runs it, and an optional coworker, can do on a SharePoint site, and what they can do with the office mailbox. Creates TEST objects, then deletes them; sends 3 test mails to the person who runs it, waits 2 minutes and reads how they arrived (no addresses kept). Records status codes, permission masks and license names only, no names.",
   "connections": [
     "shared_sharepointonline",
     "shared_office365users",
@@ -40,7 +40,7 @@
               "type": "string",
               "x-ms-dynamically-added": true,
               "x-ms-content-hint": "TEXT",
-              "description": "The office's shared mailbox. If empty, E02-E04 fail; that is expected"
+              "description": "The office's shared mailbox. If empty, E02-E05 fail; that is expected"
             }
           },
           "required": [
@@ -2479,7 +2479,7 @@
         "name": "Results",
         "value": {
           "id": "E02",
-          "what": "Read the office mailbox inbox (E2, E5, with T11 Outlook check O1)",
+          "what": "Read the office mailbox inbox (E2, E5)",
           "code": "@{outputs('E02')?['statusCode']}",
           "out": "-",
           "err": "@{replace(replace(toLower(if(greaterOrEquals(int(coalesce(outputs('E02')?['statusCode'], 0)), 400), take(string(body('E02')), 600), '')), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')}"
@@ -2586,9 +2586,88 @@
         }
       }
     },
-    "Write_Result_File": {
+    "Delay_E05": {
       "runAfter": {
         "Record_E04": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "Wait",
+      "inputs": {
+        "interval": {
+          "count": 2,
+          "unit": "Minute"
+        }
+      }
+    },
+    "E05": {
+      "runAfter": {
+        "Delay_E05": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "parameters": {
+          "Uri": "/v1.0/me/messages?$filter=receivedDateTime%20ge%20@{trigger()?['startTime']}%20and%20startswith(subject,%2790161Z%20TEST%20E0%27)&$orderby=receivedDateTime%20desc&$select=subject,from,sender&$top=20",
+          "Method": "GET"
+        },
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+          "connectionName": "shared_office365",
+          "operationId": "HttpRequest"
+        },
+        "authentication": {
+          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+          "type": "Raw"
+        }
+      }
+    },
+    "E05_how": {
+      "type": "Select",
+      "inputs": {
+        "from": "@coalesce(body('E05')?['value'], json('[]'))",
+        "select": "@concat(substring(item()?['subject'], add(indexOf(item()?['subject'], 'TEST E0'), 5), 3), ':', if(and(equals(toLower(coalesce(item()?['from']?['emailAddress']?['address'], '<none>')), toLower(coalesce(body('U01')?['mail'], '<me>'))), equals(toLower(coalesce(item()?['sender']?['emailAddress']?['address'], '<none>')), toLower(coalesce(body('U01')?['mail'], '<me>')))), 'from-me', if(and(equals(toLower(coalesce(item()?['from']?['emailAddress']?['address'], '<none>')), toLower(coalesce(triggerBody()?['text_3'], '<office>'))), equals(toLower(coalesce(item()?['sender']?['emailAddress']?['address'], '<none>')), toLower(coalesce(triggerBody()?['text_3'], '<office>')))), 'sent-as-office', if(and(equals(toLower(coalesce(item()?['from']?['emailAddress']?['address'], '<none>')), toLower(coalesce(triggerBody()?['text_3'], '<office>'))), equals(toLower(coalesce(item()?['sender']?['emailAddress']?['address'], '<none>')), toLower(coalesce(body('U01')?['mail'], '<me>')))), 'on-behalf-of-office', 'other'))))"
+      },
+      "runAfter": {
+        "E05": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      }
+    },
+    "Record_E05": {
+      "runAfter": {
+        "E05_how": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      },
+      "type": "AppendToArrayVariable",
+      "inputs": {
+        "name": "Results",
+        "value": {
+          "id": "E05",
+          "what": "After 2 minutes: did E01, E03, E04 arrive, and how (from-me, sent-as-office, on-behalf-of-office, other)",
+          "code": "@{outputs('E05')?['statusCode']}",
+          "out": "@{concat(concat('E01 arrived=', contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E01:'), ' how=', if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E01:'), if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E01:from-me'), 'from-me', if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E01:sent-as-office'), 'sent-as-office', if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E01:on-behalf-of-office'), 'on-behalf-of-office', 'other'))), 'none')), '; ', concat('E03 arrived=', contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E03:'), ' how=', if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E03:'), if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E03:from-me'), 'from-me', if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E03:sent-as-office'), 'sent-as-office', if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E03:on-behalf-of-office'), 'on-behalf-of-office', 'other'))), 'none')), '; ', concat('E04 arrived=', contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E04:'), ' how=', if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E04:'), if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E04:from-me'), 'from-me', if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E04:sent-as-office'), 'sent-as-office', if(contains(join(coalesce(body('E05_how'), json('[]')), ','), 'E04:on-behalf-of-office'), 'on-behalf-of-office', 'other'))), 'none')))}",
+          "err": "@{replace(replace(toLower(if(greaterOrEquals(int(coalesce(outputs('E05')?['statusCode'], 0)), 400), take(string(body('E05')), 600), '')), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')}"
+        }
+      }
+    },
+    "Write_Result_File": {
+      "runAfter": {
+        "Record_E05": [
           "Succeeded",
           "Failed",
           "Skipped",
@@ -2600,7 +2679,7 @@
         "parameters": {
           "dataset": "@triggerBody()['text']",
           "parameters/method": "POST",
-          "parameters/uri": "_api/web/DefaultDocumentLibrary/RootFolder/Files/add(url='90161Z-T11-rights-result-r2.json',overwrite=true)",
+          "parameters/uri": "_api/web/DefaultDocumentLibrary/RootFolder/Files/add(url='90161Z-T11-rights-result-r3.json',overwrite=true)",
           "parameters/headers": {
             "Accept": "application/json;odata=nometadata",
             "Content-Type": "application/json;odata=verbose"

@@ -7,7 +7,7 @@ const dir = path.join(__dirname, '..', 'assets', 'logo');
   // PNG names follow the gov-device rule 90161Z-T<NN>-<slug>-r<N>: go.md task 14 links them.
   for (const [svg, size, out] of [['90161Z-mark.svg', 512, '90161Z-T14-site-logo-r1.png'],
                                   ['90161Z-mark.svg', 64, '90161Z-T14-site-logo-small-r1.png'],
-                                  ['90161Z-mark-tile.svg', 512, '90161Z-T14-site-logo-tile-r1.png']]) {
+                                  ['90161Z-mark-navy.svg', 512, '90161Z-T14-site-logo-thumb-r1.png']]) {
     const p = await b.newPage({viewport: {width: size, height: size}});
     const s = fs.readFileSync(path.join(dir, svg), 'utf8').replace('width="512" height="512"', `width="${size}" height="${size}"`);
     await p.setContent(`<html><body style="margin:0;background:transparent">${s}</body></html>`);

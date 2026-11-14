@@ -23,12 +23,12 @@
     },
     {
       "id": "M08",
-      "do": "Share the flow \"90161Z T11 Rights Probe r2\" run-only with one coworker; open \"Manage run-only permissions\"; then remove them",
+      "do": "Share the flow \"90161Z T11 Rights Probe r3\" run-only with one coworker; open \"Manage run-only permissions\"; then remove them",
       "note": "Whether \"Use this connection\" is offered for SharePoint and Outlook"
     },
     {
       "id": "M09",
-      "do": "Add a coworker as co-owner of the flow \"90161Z T11 Rights Probe r2\" and of \"90161Z TEST\"; then remove them",
+      "do": "Add a coworker as co-owner of the flow \"90161Z T11 Rights Probe r3\" and of \"90161Z TEST\"; then remove them",
       "note": "Allowed or not"
     },
     {

@@ -2,9 +2,9 @@
   "_doc": "Source for scripts/build_paste_bundles.py. Each bundle is one round: a self-contained PowerShell text the PFM copies from its raw page and pastes into Windows PowerShell ISE (F5). It writes the files, then opens the 90-161.Z Deployer (a window; text prompts if no window can open): steps run one by one with a live log and PASS/FAIL counts, then one results folder (Rounds\\\\<round>: a report file plus copies of the PDFs, to attach to one e-mail; zips do not cross the boundary) and a summary for the clipboard. It runs only the steps inside it (PFM 3A). Never hand-edit scripts/gov/paste/*.ps1: change this file or the sources and rebuild.",
   "bundles": [
     {
-      "out": "scripts/gov/paste/90161Z-R11-round-r1.ps1",
-      "round": "R11",
-      "title": "Round R11: Task 11 automated (Outlook check after the probe flow r2; Part B form 17 rows incl. Forms and Power Apps; wider T15 and T16 inventory); T09 and T12 steps removed (done in R10)",
+      "out": "scripts/gov/paste/90161Z-R12-round-r1.ps1",
+      "round": "R12",
+      "title": "Round R12: site setup by script (permissions, time zone, logo, seals library, probe result fetch); seal prep reads the Outlook mail; T10 removed",
       "files": [
         {
           "dir": "T01",
@@ -31,12 +31,8 @@
           "src": "scripts/gov/90161Z-T15-env-inventory-r2.ps1"
         },
         {
-          "dir": "T10",
-          "src": "scripts/gov/90161Z-T10-brief-check-r2.ps1"
-        },
-        {
           "dir": "T07",
-          "src": "scripts/gov/90161Z-T07-seal-prep-r3.ps1"
+          "src": "scripts/gov/90161Z-T07-seal-prep-r4.ps1"
         },
         {
           "dir": "T14",
@@ -44,11 +40,15 @@
         },
         {
           "dir": "T14",
-          "src": "assets/logo/90161Z-T14-site-logo-tile-r1.png"
+          "src": "assets/logo/90161Z-T14-site-logo-thumb-r1.png"
         },
         {
           "dir": "T16",
           "src": "scripts/gov/90161Z-T16-pnp-signin-test-r2.ps1"
+        },
+        {
+          "dir": "T16",
+          "src": "scripts/gov/90161Z-T16-site-setup-r1.ps1"
         },
         {
           "dir": "T11",
@@ -57,22 +57,6 @@
         {
           "dir": "T11",
           "src": "scripts/gov/data/90161Z-T11-partb-rows-r1.json"
-        },
-        {
-          "dir": "T10",
-          "src": "docs/brief/90161Z-T10-command-brief-r5.pptx"
-        },
-        {
-          "dir": "T10",
-          "src": "docs/brief/90161Z-T10-installer-brief-r6.pptx"
-        },
-        {
-          "dir": "T10",
-          "src": "docs/brief/90161Z-T10-adoption-brief-r2.pptx"
-        },
-        {
-          "dir": "T11",
-          "src": "scripts/gov/90161Z-T11-outlook-check-r1.ps1"
         },
         {
           "dir": "T11",
@@ -91,16 +75,17 @@
           "file": "90161Z-T01-renderer-test-r9.ps1"
         },
         {
-          "name": "T10 brief check r2",
-          "dir": "T10",
-          "file": "90161Z-T10-brief-check-r2.ps1"
+          "name": "T07 seal prep r4 (uses T07\\Seals, else the Outlook mail \"90161Z T07 seals\")",
+          "dir": "T07",
+          "file": "90161Z-T07-seal-prep-r4.ps1",
+          "screenOnly": "^seal\\d+ detail:"
         },
         {
-          "name": "T11 Outlook check (read-only; after the probe flow r2 ran)",
-          "dir": "T11",
-          "file": "90161Z-T11-outlook-check-r1.ps1",
-          "default": false,
-          "minutes": 10
+          "name": "T16 site setup r1 (CAC sign-in; sets permissions, time zone, logo, seals; asks the site address)",
+          "dir": "T16",
+          "file": "90161Z-T16-site-setup-r1.ps1",
+          "args": "-Logo",
+          "minutes": 20
         },
         {
           "name": "T11 Part B manual checks form (17 rows, about 25 min)",
@@ -110,18 +95,7 @@
           "minutes": 180
         },
         {
-          "name": "T07 seal prep r3 (only after the shields are uploaded and synced)",
-          "dir": "T07",
-          "file": "90161Z-T07-seal-prep-r3.ps1",
-          "default": false,
-          "ask": {
-            "param": "SealDir",
-            "prompt": "Pick the synced Seals folder (in the 90-161.Z library). Cancel skips seal prep."
-          },
-          "screenOnly": "^seal\\d+ detail:"
-        },
-        {
-          "name": "T16 PnP test and SharePoint inventory r2 (read-only; asks the new site address; CAC sign-in)",
+          "name": "T16 PnP test and SharePoint inventory r2 (read-only; asks the site address; CAC sign-in)",
           "dir": "T16",
           "file": "90161Z-T16-pnp-signin-test-r2.ps1",
           "default": false,
@@ -139,19 +113,19 @@
           "name": "SAMPLEWINGI99-101.pdf"
         },
         {
-          "dir": "T10",
-          "name": "90161Z-T10-check-r1.txt",
-          "step": "T10 brief check r2"
+          "dir": "T07",
+          "name": "90161Z-T07-result-r1.txt",
+          "step": "T07 seal prep r4 (uses T07\\Seals, else the Outlook mail \"90161Z T07 seals\")"
         },
         {
-          "dir": "T11",
-          "name": "90161Z-T11-outlook-r1.txt",
-          "step": "T11 Outlook check (read-only; after the probe flow r2 ran)"
+          "dir": "T16",
+          "name": "90161Z-T16-setup-r1.txt",
+          "step": "T16 site setup r1 (CAC sign-in; sets permissions, time zone, logo, seals; asks the site address)"
         },
         {
-          "dir": "T11",
-          "name": "90161Z-T11-rights-result-r2.json",
-          "step": "T11 Outlook check (read-only; after the probe flow r2 ran)"
+          "dir": "T16",
+          "name": "90161Z-T16-pnp-result-r2.txt",
+          "step": "T16 PnP test and SharePoint inventory r2 (read-only; asks the site address; CAC sign-in)"
         },
         {
           "dir": "T11",
@@ -159,14 +133,9 @@
           "step": "T11 Part B manual checks form (17 rows, about 25 min)"
         },
         {
-          "dir": "T07",
-          "name": "90161Z-T07-result-r1.txt",
-          "step": "T07 seal prep r3 (only after the shields are uploaded and synced)"
-        },
-        {
-          "dir": "T16",
-          "name": "90161Z-T16-pnp-result-r2.txt",
-          "step": "T16 PnP test and SharePoint inventory r2 (read-only; asks the new site address; CAC sign-in)"
+          "dir": "T11",
+          "name": "90161Z-T11-rights-result-r3.json",
+          "step": "T16 site setup r1 (CAC sign-in; sets permissions, time zone, logo, seals; asks the site address)"
         }
       ],
       "cleanup": [
@@ -256,6 +225,14 @@
         },
         {
           "path": "T15\\90161Z-T15-inventory-r1.txt",
+          "kind": "glob"
+        },
+        {
+          "path": "T07\\90161Z-T07-seal-prep-r3.ps1",
+          "kind": "glob"
+        },
+        {
+          "path": "T11\\90161Z-T11-outlook-check-r1.ps1",
           "kind": "glob"
         }
       ],

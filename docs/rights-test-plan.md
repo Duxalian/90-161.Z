@@ -3,9 +3,9 @@
 PFM decision (12 Nov): every assumption about rights is tested on the tenant before the design relies on it, with a fallback for each. This file lists each right the design needs, who is expected to have it, how it is tested, and the fallback. "Expected" comes from Microsoft documentation or this project's earlier tests; confidence is marked H (high), M (medium) or L (low). A row counts as proven only after a test on the DoD tenant. Results are gov-network test details, so they go in the private project log, never in this public repo (AGENTS.md Project rules); the repo records only the design rule that follows.
 
 How it is tested:
-- **Probe flow** (go.md Task 11): flow/packages/90161Z-T11-rights-probe-r2.zip, built from scripts/build_rights_probe.py. 43 SharePoint checks (R = read, W = write on TEST objects, X = cleanup) and 6 mail and people checks (U = Office 365 Users, E = Outlook; r2, PFM 14 Nov 26). It runs as the PFM and also asks SharePoint what a named coworker could do (R11, R12), so one person can test the regular-user view. E01, E03 and E04 send one test mail each to the PFM only (approved 14 Nov 26).
-- **Outlook check** (round step "T11 Outlook check"): scripts/gov/90161Z-T11-outlook-check-r1.ps1, read-only. O1 opens the office mailbox inbox; O2 reads how the probe's test mails arrived (from me, sent as, on behalf of).
-- **Manual checks** (M rows): steps in Power Apps, Power Automate and the browser that the probe and the Outlook check cannot do (they need Dataverse, the share dialogs or the browser). Each says what to click and what to write down; nothing is created that stays, and nothing is shared with Everyone.
+- **Probe flow** (go.md Task 11): flow/packages/90161Z-T11-rights-probe-r3.zip, built from scripts/build_rights_probe.py. 43 SharePoint checks (R = read, W = write on TEST objects, X = cleanup) and 7 mail and people checks (U = Office 365 Users, E = Outlook; r2, PFM 14 Nov 26; E05 added in r3). It runs as the PFM and also asks SharePoint what a named coworker could do (R11, R12), so one person can test the regular-user view. E01, E03 and E04 send one test mail each to the PFM only (approved 14 Nov 26).
+- **How the test mails arrived** (E05, probe r3): the Outlook COM check stopped at the Outlook address prompt (R11), so the flow does it: after a 2-minute delay it reads the test mails in the PFM's mailbox (Graph: subject, from, sender) and records for E01, E03 and E04 whether each arrived and how (from-me, sent-as-office, on-behalf-of-office, other), by comparing the from and sender addresses to the PFM's and the office address in lower case. No address is written.
+- **Manual checks** (M rows): steps in Power Apps, Power Automate and the browser that the probe cannot do (they need Dataverse, the share dialogs or the browser). Each says what to click and what to write down; nothing is created that stays, and nothing is shared with Everyone.
 
 Roles: **U** regular site member · **O** site owner (Full Control) · **A** site collection admin (the PFM) · **K** maker in the Default environment (any licensed user, by default) · **MB** rights on the office mailbox · admin roles (tenant SharePoint, Power Platform, Exchange) are outside a PFM's reach.
 
@@ -57,10 +57,10 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 
 | # | Right | Needed for | Expected | Conf | Test | Fallback |
 |---|---|---|---|---|---|---|
-| E1 | Send from own mailbox in a flow | All notices | K | H | E01, O2 | - |
-| E2 | Open the office mailbox (Full Access) | Reading 847s, replies | MB | M | O1, E02 | Forwarding rule set by the mailbox owner |
-| E3 | Send as the office mailbox from a flow | Notices from the office (P4A) | MB Send As (Exchange admins grant) | M | E03, O2 | Send from the PFM, office box on copy and as Reply-To |
-| E4 | Send on behalf of the office mailbox | Same | MB Send on Behalf | M | E04, O2 | Same as E3 |
+| E1 | Send from own mailbox in a flow | All notices | K | H | E01, E05 | - |
+| E2 | Open the office mailbox (Full Access) | Reading 847s, replies | MB | M | E02 | Forwarding rule set by the mailbox owner |
+| E3 | Send as the office mailbox from a flow | Notices from the office (P4A) | MB Send As (Exchange admins grant) | M | E03, E05 | Send from the PFM, office box on copy and as Reply-To |
+| E4 | Send on behalf of the office mailbox | Same | MB Send on Behalf | M | E04, E05 | Same as E3 |
 | E5 | Start a flow when mail arrives in the office mailbox | 847 intake, result capture | MB Full Access | M | E02 (rights), M16 (trigger) | PFM forwards by hand |
 
 ## 4. Directory and groups
@@ -81,7 +81,7 @@ Roles: **U** regular site member · **O** site owner (Full Control) · **A** sit
 
 ## 6. Manual checks (go.md Task 11, part B)
 
-Write down only what each check shows (allowed, blocked, error text without names). Do not keep anything you create; delete it at the end. Done in R10 (results in the private log): M03. Done by the probe r2 and the Outlook check from r2 on: M11 (U02), M12 (E01), M13 (O1), M14 (E03), M15 (E04).
+Write down only what each check shows (allowed, blocked, error text without names). Do not keep anything you create; delete it at the end. Done in R10 (results in the private log): M03. Done by the probe from r2 on: M11 (U02), M12 (E01), M13 (O1), M14 (E03), M15 (E04).
 
 | # | Do | Write down |
 |---|---|---|
@@ -89,8 +89,8 @@ Write down only what each check shows (allowed, blocked, error text without name
 | M05 | In a new solution: New, More, Environment variable, Data type Data source, Connector SharePoint, Parameter type Site | Allowed, or not offered |
 | M06 | Power Apps: create a blank canvas app, save it as "90161Z TEST" | Saved |
 | M07 | Share "90161Z TEST": type the wing's AD group, an M365 group name, a SharePoint group name, and look for "Everyone". Do not press Share | Which kinds show up |
-| M08 | Share the flow "90161Z T11 Rights Probe r2" run-only with one coworker; open "Manage run-only permissions"; then remove them | Whether "Use this connection" is offered for SharePoint and Outlook |
-| M09 | Add a coworker as co-owner of the flow "90161Z T11 Rights Probe r2" and of "90161Z TEST"; then remove them | Allowed or not |
+| M08 | Share the flow "90161Z T11 Rights Probe r3" run-only with one coworker; open "Manage run-only permissions"; then remove them | Whether "Use this connection" is offered for SharePoint and Outlook |
+| M09 | Add a coworker as co-owner of the flow "90161Z T11 Rights Probe r3" and of "90161Z TEST"; then remove them | Allowed or not |
 | M10 | Power Platform admin center or the environment picker: is "New environment" or "Create developer environment" offered (do not create) | Offered or not |
 | M16 | New automated flow: When a new email arrives in a shared mailbox (V2), office mailbox; save; send a test mail to the office box | Flow ran or error |
 | M17 | Outlook: New, Group (look only) | Offered or not |
