@@ -1387,7 +1387,7 @@
           "id": "R22",
           "what": "Term store readable (managed metadata)",
           "code": "@{outputs('R22')?['statusCode']}",
-          "out": "@{take(string(body('R22')), 3000)}",
+          "out": "@{body('R22')?['defaultLanguageTag']}",
           "err": "@{if(greaterOrEquals(int(coalesce(outputs('R22')?['statusCode'], 0)), 400), take(string(body('R22')), 600), '')}"
         }
       }
@@ -2324,7 +2324,7 @@
           "what": "Office 365 Users: read my own profile (D1)",
           "code": "@{outputs('U01')?['statusCode']}",
           "out": "@{if(empty(body('U01')?['mail']), 'no mail address', 'mail address found')}",
-          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('U01')?['statusCode'], 0)), 400), take(string(body('U01')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+          "err": "@{replace(replace(toLower(if(greaterOrEquals(int(coalesce(outputs('U01')?['statusCode'], 0)), 400), take(string(body('U01')), 600), '')), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')}"
         }
       }
     },
@@ -2354,9 +2354,24 @@
         }
       }
     },
-    "Record_U02": {
+    "U02_names": {
+      "type": "Select",
+      "inputs": {
+        "from": "@coalesce(body('U02')?['value'], json('[]'))",
+        "select": "@item()?['skuPartNumber']"
+      },
       "runAfter": {
         "U02": [
+          "Succeeded",
+          "Failed",
+          "Skipped",
+          "TimedOut"
+        ]
+      }
+    },
+    "Record_U02": {
+      "runAfter": {
+        "U02_names": [
           "Succeeded",
           "Failed",
           "Skipped",
@@ -2370,8 +2385,8 @@
           "id": "U02",
           "what": "My license names (P16, was M11)",
           "code": "@{outputs('U02')?['statusCode']}",
-          "out": "@{replace(replace(take(string(body('U02')), 3000), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}",
-          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('U02')?['statusCode'], 0)), 400), take(string(body('U02')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+          "out": "@{join(body('U02_names'), ', ')}",
+          "err": "@{replace(replace(toLower(if(greaterOrEquals(int(coalesce(outputs('U02')?['statusCode'], 0)), 400), take(string(body('U02')), 600), '')), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')}"
         }
       }
     },
@@ -2420,7 +2435,7 @@
           "what": "Send a mail from my mailbox to me (E1, was M12)",
           "code": "@{outputs('E01')?['statusCode']}",
           "out": "-",
-          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('E01')?['statusCode'], 0)), 400), take(string(body('E01')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+          "err": "@{replace(replace(toLower(if(greaterOrEquals(int(coalesce(outputs('E01')?['statusCode'], 0)), 400), take(string(body('E01')), 600), '')), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')}"
         }
       }
     },
@@ -2467,7 +2482,7 @@
           "what": "Read the office mailbox inbox (E2, E5, with T11 Outlook check O1)",
           "code": "@{outputs('E02')?['statusCode']}",
           "out": "-",
-          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('E02')?['statusCode'], 0)), 400), take(string(body('E02')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+          "err": "@{replace(replace(toLower(if(greaterOrEquals(int(coalesce(outputs('E02')?['statusCode'], 0)), 400), take(string(body('E02')), 600), '')), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')}"
         }
       }
     },
@@ -2517,7 +2532,7 @@
           "what": "Send from the office mailbox, shared-mailbox action (E3, was M14)",
           "code": "@{outputs('E03')?['statusCode']}",
           "out": "-",
-          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('E03')?['statusCode'], 0)), 400), take(string(body('E03')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+          "err": "@{replace(replace(toLower(if(greaterOrEquals(int(coalesce(outputs('E03')?['statusCode'], 0)), 400), take(string(body('E03')), 600), '')), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')}"
         }
       }
     },
@@ -2567,7 +2582,7 @@
           "what": "Send with From = the office mailbox (E4, was M15)",
           "code": "@{outputs('E04')?['statusCode']}",
           "out": "-",
-          "err": "@{replace(replace(if(greaterOrEquals(int(coalesce(outputs('E04')?['statusCode'], 0)), 400), take(string(body('E04')), 600), ''), if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')}"
+          "err": "@{replace(replace(toLower(if(greaterOrEquals(int(coalesce(outputs('E04')?['statusCode'], 0)), 400), take(string(body('E04')), 600), '')), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')}"
         }
       }
     },

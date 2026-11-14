@@ -3,7 +3,7 @@
 PFM decision (12 Nov): every assumption about rights is tested on the tenant before the design relies on it, with a fallback for each. This file lists each right the design needs, who is expected to have it, how it is tested, and the fallback. "Expected" comes from Microsoft documentation or this project's earlier tests; confidence is marked H (high), M (medium) or L (low). A row counts as proven only after a test on the DoD tenant. Results are gov-network test details, so they go in the private project log, never in this public repo (AGENTS.md Project rules); the repo records only the design rule that follows.
 
 How it is tested:
-- **Probe flow** (go.md Task 11): flow/packages/90161Z-T11-rights-probe-r2.zip, built from scripts/build_rights_probe.py. 31 SharePoint checks (R = read, W = write on TEST objects, X = cleanup) and 6 mail and people checks (U = Office 365 Users, E = Outlook; r2, PFM 14 Nov 26). It runs as the PFM and also asks SharePoint what a named coworker could do (R11, R12), so one person can test the regular-user view. E01, E03 and E04 send one test mail each to the PFM only (approved 14 Nov 26).
+- **Probe flow** (go.md Task 11): flow/packages/90161Z-T11-rights-probe-r2.zip, built from scripts/build_rights_probe.py. 43 SharePoint checks (R = read, W = write on TEST objects, X = cleanup) and 6 mail and people checks (U = Office 365 Users, E = Outlook; r2, PFM 14 Nov 26). It runs as the PFM and also asks SharePoint what a named coworker could do (R11, R12), so one person can test the regular-user view. E01, E03 and E04 send one test mail each to the PFM only (approved 14 Nov 26).
 - **Outlook check** (round step "T11 Outlook check"): scripts/gov/90161Z-T11-outlook-check-r1.ps1, read-only. O1 opens the office mailbox inbox; O2 reads how the probe's test mails arrived (from me, sent as, on behalf of).
 - **Manual checks** (M rows): steps in Power Apps, Power Automate and the browser that the probe and the Outlook check cannot do (they need Dataverse, the share dialogs or the browser). Each says what to click and what to write down; nothing is created that stays, and nothing is shared with Everyone.
 
@@ -85,7 +85,7 @@ Write down only what each check shows (allowed, blocked, error text without name
 
 | # | Do | Write down |
 |---|---|---|
-| M04 | Power Apps: Solutions, Import solution, choose 90161Z-flows-solution-r1.zip (the round saves it in T11; the T05 sample is gone) | Imported, or the error |
+| M04 | Power Apps: Solutions, Import solution, choose 90161Z-flows-solution-r1.zip (the round saves it in T11; the T05 sample is gone). Under Advanced settings, clear "Enable plug-in steps and flows" so its flows stay off | Imported, or the error |
 | M05 | In a new solution: New, More, Environment variable, Data type Data source, Connector SharePoint, Parameter type Site | Allowed, or not offered |
 | M06 | Power Apps: create a blank canvas app, save it as "90161Z TEST" | Saved |
 | M07 | Share "90161Z TEST": type the wing's AD group, an M365 group name, a SharePoint group name, and look for "Everyone". Do not press Share | Which kinds show up |

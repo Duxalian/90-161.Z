@@ -4,7 +4,7 @@
     {
       "out": "scripts/gov/paste/90161Z-R11-round-r1.ps1",
       "round": "R11",
-      "title": "Round R11: Task 11 automated (Outlook check after the probe flow r2; Part B form down to 12 rows); T09 and T12 steps removed (done in R10)",
+      "title": "Round R11: Task 11 automated (Outlook check after the probe flow r2; Part B form 17 rows incl. Forms and Power Apps; wider T15 and T16 inventory); T09 and T12 steps removed (done in R10)",
       "files": [
         {
           "dir": "T01",
@@ -103,7 +103,7 @@
           "minutes": 10
         },
         {
-          "name": "T11 Part B manual checks form (12 rows, about 20 min)",
+          "name": "T11 Part B manual checks form (17 rows, about 25 min)",
           "dir": "T11",
           "file": "90161Z-T11-partb-form-r2.ps1",
           "default": false,
@@ -156,7 +156,7 @@
         {
           "dir": "T11",
           "name": "90161Z-T11-partb-r1.txt",
-          "step": "T11 Part B manual checks form (12 rows, about 20 min)"
+          "step": "T11 Part B manual checks form (17 rows, about 25 min)"
         },
         {
           "dir": "T07",

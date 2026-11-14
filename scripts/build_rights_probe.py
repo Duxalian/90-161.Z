@@ -67,7 +67,8 @@ CHECKS = [
     ("R20", "Storage used and quota", "GET", "_api/site/usage", None, None, None),
     ("R21", "Tenant app catalog exists (for SPFx web parts)", "GET", "_api/SP_TenantSettings_Current", None, None,
      "@{if(empty(body('R21')?['CorporateCatalogUrl']), 'no app catalog', 'app catalog exists')}"),
-    ("R22", "Term store readable (managed metadata)", "GET", "_api/v2.1/termStore?$select=defaultLanguageTag", None, None, None),
+    ("R22", "Term store readable (managed metadata)", "GET", "_api/v2.1/termStore?$select=defaultLanguageTag", None, None,
+     "@{body('R22')?['defaultLanguageTag']}"),   # keep: an OData v4 reply can carry the site URL in @odata.context
     ("R23", "Content types on the site (count)", "GET", "_api/web/contenttypes?$select=Name&$top=500", None, None,
      "@{length(coalesce(body('R23')?['value'], json('[]')))}"),
     ("R24", "Site pages library and modern pages allowed", "GET",
@@ -110,7 +111,7 @@ MAIL_CHECKS = [
     ("U01", "Office 365 Users: read my own profile (D1)", "shared_office365users", "MyProfile_V2", {},
      "@{if(empty(body('U01')?['mail']), 'no mail address', 'mail address found')}"),
     ("U02", "My license names (P16, was M11)", "shared_office365users", "HttpRequest",
-     {"Uri": "/v1.0/me/licenseDetails?$select=skuPartNumber", "Method": "GET"}, None),
+     {"Uri": "/v1.0/me/licenseDetails?$select=skuPartNumber", "Method": "GET"}, "@{join(body('U02_names'), ', ')}"),
     ("E01", "Send a mail from my mailbox to me (E1, was M12)", "shared_office365", "SendEmailV2",
      {"emailMessage/To": ME, "emailMessage/Subject": "90161Z TEST E01 my mailbox", "emailMessage/Body": TEST_BODY,
       "emailMessage/Importance": "Normal"}, "-"),
@@ -125,8 +126,12 @@ MAIL_CHECKS = [
 ]
 # Error text can quote the addresses: replace both before the text is kept.
 # if(empty()): replace() refuses an empty old value, and an optional field left empty can be '' or null.
-HIDE = ("replace(replace({x}, if(empty(triggerBody()?['text_3']), '<none>', triggerBody()?['text_3']), '<OFFICE>'), "
-        "if(empty(body('U01')?['mail']), '<none>', body('U01')?['mail']), '<ME>')")
+# toLower first: an error can spell an address in other capitals than the one typed.
+HIDE = ("replace(replace(toLower({x}), if(empty(triggerBody()?['text_3']), '<none>', toLower(triggerBody()?['text_3'])), '<OFFICE>'), "
+        "if(empty(body('U01')?['mail']), '<none>', toLower(body('U01')?['mail'])), '<ME>')")
+# Only the license names leave U02: the Graph reply also carries the user's object ID.
+EXTRA = {"U02": ("U02_names", {"type": "Select", "inputs": {"from": "@coalesce(body('U02')?['value'], json('[]'))",
+                                                            "select": "@item()?['skuPartNumber']"}})}
 ALL = ["Succeeded", "Failed", "Skipped", "TimedOut"]
 HOST = {"apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "HttpRequest"}
 AUTH = {"value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']", "type": "Raw"}
@@ -165,7 +170,13 @@ def build():
         prev = f"Record_{cid}"
     for cid, what, conn, operation, params, keep in MAIL_CHECKS:
         actions[cid] = op(conn, operation, params, {prev: ALL})
+        after = cid
+        if cid in EXTRA:
+            xname, xact = EXTRA[cid]
+            actions[xname] = dict(xact, runAfter={cid: ALL})
+            after = xname
         actions[f"Record_{cid}"] = record(cid, what, keep, hide=True)
+        actions[f"Record_{cid}"]["runAfter"] = {after: ALL}
         prev = f"Record_{cid}"
     actions["Write_Result_File"] = http("POST", f"_api/web/DefaultDocumentLibrary/RootFolder/Files/add(url='{RESULT_FILE}',overwrite=true)",
                                         None, None, {prev: ALL})

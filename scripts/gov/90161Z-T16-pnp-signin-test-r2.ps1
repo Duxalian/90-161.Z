@@ -173,7 +173,8 @@ try {
     Add-Inv 'app-catalog' { if (Get-PnPTenantAppCatalogUrl -ErrorAction Stop) { 'exists' } else { 'none' } }
     Add-Inv 'site-designs-readable' { @(Get-PnPSiteDesign -ErrorAction Stop).Count }
     Add-Inv 'power-platform-environments' { @(Get-PnPPowerPlatformEnvironment -ErrorAction Stop).Count }
-    Add-Inv 'flows-listable' { @(Get-PnPFlow -ErrorAction Stop).Count }
+    # Get-PnPFlow needs -Environment (without it PowerShell would wait for input).
+    Add-Inv 'flows-listable' { $e = @(Get-PnPPowerPlatformEnvironment -ErrorAction Stop)[0]; if (-not $e) { throw [System.InvalidOperationException]::new('no environment') }; @(Get-PnPFlow -Environment $e -ErrorAction Stop).Count }
   } catch {
     # Hide first, then cut (a cut inside an address would defeat the hiding). "not connected", not FAIL: a sign-in that
     # does not connect is a finding, not a broken round.
