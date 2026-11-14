@@ -243,9 +243,9 @@ out=$(python3 scripts/build_paste_bundles.py --check 2>&1 | tail -1)
 # log) with no DODID. The window path (Windows Forms) cannot run here: lint only.
 tp=$(mktemp -d); mkdir -p "$tp/u/test1234/OneDrive - United States Air Force"; pf=0; pr=0; pc=0
 # R06 cleanup fixture: finished folders with our files and one file 90-161.Z did not make (must stay).
-ob="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"; mkdir -p "$ob/T02" "$ob/T13" "$ob/Rounds/R06" "$ob/T07" "$ob/T09"
+ob="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z"; mkdir -p "$ob/T02" "$ob/T13" "$ob/Rounds/R09" "$ob/T07" "$ob/T09"
 touch "$ob/T02/90161Z-T02-provision-lists-r9.zip" "$ob/T02/Provision-Lists.ps1" "$ob/T13/90161Z-T13-label-capture-r2.ps1" "$ob/T13/my-notes.docx" \
-  "$ob/Rounds/R06/90161Z-R06-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r4.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
+  "$ob/Rounds/R09/90161Z-R09-report-r1.txt" "$ob/T07/90161Z-T07-seal-test-r4.ps1" "$ob/T07/90161Z-T07-key-r1.txt" "$ob/T09/90161Z-T09-page-r1.htm"
 echo "public sample" > "$tp/fx.bin"; printf '## Fix first: Round R99 r1, test (open, 1 Jan 26)\n' > "$tp/go.md"
 swap() { sed -e "s#^\$goUrl = '.*'#\$goUrl = 'file://$tp/go.md'#" -e "s#Url = 'https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/#Url = 'file://$PWD/#" -e "s#Url = 'https://www\.[^']*'#Url = 'file://$tp/fx.bin'#" -e "s#Read-Host 'Press Enter to run (N then Enter stops, nothing written)'#''#" -e "s#^\$usersRoot = 'C:\\\\Users'#\$usersRoot = '$tp/u'#" "$1"; }
 for b in scripts/gov/paste/*.ps1; do
@@ -264,9 +264,9 @@ for b in scripts/gov/paste/*.ps1; do
   grep -q "^NOTE: no window, text mode: " "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "report does not name the no-window cause"; pf=$((pf+1)); }
   # Downloads: repo files must match their SHA-256; public files land and are attached; the skipped step's file is not expected.
   nf=$(python3 -c "import json;print(sum(len(b.get('fetch',[])) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] if b['out']=='$b'))")
-  grep -q "^FETCH files=$nf failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "downloads: want FETCH files=$nf failed=0"; grep "^FETCH" "$base/Rounds/$r/90161Z-$r-report-r1.txt"; pf=$((pf+1)); }
+  [ "$nf" -eq 0 ] || grep -q "^FETCH files=$nf failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "downloads: want FETCH files=$nf failed=0"; grep "^FETCH" "$base/Rounds/$r/90161Z-$r-report-r1.txt"; pf=$((pf+1)); }
   ! grep -q "90161Z-T07-result-r1.txt" "$base/Rounds/$r/90161Z-$r-report-r1.txt" || { echo "a skipped step's file was expected"; pf=$((pf+1)); }
-  [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R06" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r4.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r2.ps1" ] \
+  [ ! -e "$ob/T02" ] && [ ! -e "$ob/Rounds/R09" ] && [ ! -e "$ob/T07/90161Z-T07-seal-test-r4.ps1" ] && [ -f "$ob/T13/my-notes.docx" ] && [ ! -e "$ob/T13/90161Z-T13-label-capture-r2.ps1" ] \
     && [ -f "$ob/T07/90161Z-T07-key-r1.txt" ] && [ -f "$ob/T09/90161Z-T09-page-r1.htm" ] \
     && grep -q "^CLEANUP to Recycle Bin: files=5 folders=2 kept-other=1 failed=0" "$base/Rounds/$r/90161Z-$r-report-r1.txt" \
     && grep -q "^LEFT .*T13(1, 1 other)" "$base/Rounds/$r/90161Z-$r-report-r1.txt" && head -1 "$base/Rounds/$r/90161Z-$r-report-r1.txt" | tr -d "\r" | grep -q "90161Z $r CHECK$" \
@@ -274,7 +274,7 @@ for b in scripts/gov/paste/*.ps1; do
 done
 while IFS=$'\t' read -r dir src; do
   got="$tp/u/test1234/OneDrive - United States Air Force/90-161.Z/${dir//\\//}/$(basename "$src")"
-  case "$src" in *.png) cmp -s "$got" "$src" || pf=$((pf+1));; *) cmp -s <(tail -c +4 "$got" | tr -d '\r') <(swap "$src") || pf=$((pf+1));; esac
+  case "$src" in *.png|*.pptx) cmp -s "$got" "$src" || pf=$((pf+1));; *) cmp -s <(tail -c +4 "$got" | tr -d '\r') <(swap "$src") || pf=$((pf+1));; esac
 done < <(python3 -c "import json;[print(f['dir']+'\t'+f['src']) for b in json.load(open('scripts/paste_bundles.json'))['bundles'] for f in b['files']]")
 rm -rf "$tp"
 [ $pr -eq 1 ] && [ $pf -eq 0 ] && ok "round bundle text mode: files exact, steps run, report in results folder, DODID masked, real path on screen (rounds=$pr mismatches=$pf)" || bad "round bundle: rounds ok=$pr mismatches=$pf"

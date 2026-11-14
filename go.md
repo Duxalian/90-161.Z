@@ -33,22 +33,20 @@ Steps:
 3. Use the file name as it comes: 90161Z-T<task>-<name>-r<revision>. The highest r number is the newest.
 **If it fails:** if a link is dead or a file is blocked, stop and tell Claude which link.
 
-## Fix first: Round R09 r1, inventory, Task 11 form, Task 9 collector (open, 14 Nov 26)
+## Fix first: Round R10 r1, page saver for Tasks 9 and 12, Task 11 form fix (open, 14 Nov 26)
 
-**For:** one round that does every script-able step left: records this computer's setup for other wings (read-only), turns Task 11 Part B into a form, collects the Task 9 pages, and runs everything R08 did. Task scripts no longer ask for the DODID. If R08 is not run yet, run R09 instead.
-**Time:** about 8 minutes (estimate) for the default steps; Task 9 adds about 20 minutes, Task 11 Part B about 35, seal prep about 2.
-**Changes:** writes into T01, T07, T09, T10, T11, T12, T14, T15, Config and Rounds\R09. Reads settings (no change) for the inventory. Downloads 3 briefs (checked) and 3 public documents. Opens PowerPoint without a window and closes it. Moves Rounds\R06 to R08 and the old script revisions to the Recycle Bin. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
+**For:** fixes what R09 showed: Task 9 now says what it wants and has Copy buttons for the folder and file names; Task 12 uses the same window with Open buttons (the sites block scripts); the 3 briefs are built in (GitHub blocked the downloads); the Task 11 form opens; every window fits my screen.
+**Time:** about 5 minutes (estimate) for the default steps; Task 9 adds about 20 minutes, Task 12 about 5, Task 11 Part B about 35.
+**Changes:** writes into T01, T07, T09, T10, T11, T12, T14, T15, T16, Config and Rounds\R10. Moves Rounds\R09 and the old Task 9 and Task 11 scripts to the Recycle Bin. Opens PowerPoint without a window and closes it. Saves one Outlook draft (never sent). Nothing on the SharePoint site.
 Steps:
-1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build 83c168c9.
-https://raw.githubusercontent.com/rhope-ops/90-161.Z/2704ec23c8e81de39315f823f0cdfdf20ac65399/scripts/gov/paste/90161Z-R09-round-r1.ps1
+1. Press Copy script next to this link (if it says blocked: open the link, Ctrl+A, Ctrl+C). The window title will show build BUILDID.
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/COMMIT/scripts/gov/paste/90161Z-R10-round-r1.ps1
 2. Start menu: type ISE, open Windows PowerShell ISE. File > New, click in the white pane, press Ctrl+V, then F5.
-3. Check the steps: the first three are checked. Check "T09 e-Publishing pages" and "T11 Part B" only when I have the time; check seal prep only after the shields are synced (Task 7 steps 1-4). Check "T16 PnP sign-in test" to retest PnP: it asks once for the site address (kept only on this computer), then opens up to 4 sign-in windows; sign in with the CAC each time. It reads permissions only and changes nothing on the site.
-4. If anything in the window overlaps or is cut off, uncheck "This window looked right".
-5. Press Enter (or Run). T09 opens a checklist and the T09 folder: save the 3 pages there (Task 9 steps 1-4), then press Done. T11 opens a table: do each row, pick the result, add a short note without names, then press Save and close (it saves as I go; I can stop and finish in a later round).
-6. The Outlook draft opens with the address, subject 90161Z R09 OK (or CHECK), the summary and the files. Send it.
-7. Then the by-hand parts: Task 14 steps 2-5, Task 10 (judge each brief), Task 11 Part A (the flow import).
+3. The first three steps are checked. Check "T09 e-Publishing pages", "T12 color documents" or "T11 Part B" when I have the time for them.
+4. Press Enter (or Run). T09 and T12 each open a window that says why, what to save and where: use its Copy buttons in the Save window, then press Done. T11 opens a table: pick a result per row, short notes without names, Save and close.
+5. The Outlook draft opens with the summary and the files. Send it.
 **Report:** the draft itself; Claude watches the inbox for the subject.
-**If it fails:** read the WHAT TO DO line in the window. A FETCH FAIL line: save that file from its task below. If the window does not open, let the text run finish and send the draft: the report names the cause.
+**If it fails:** read the WHAT TO DO line in the window. If a window is cut off, uncheck "This window looked right" and send anyway.
 
 ## Task 2: create the 12 lists on the new site, r11 (open, 14 Nov 26)
 
@@ -92,7 +90,7 @@ https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/assets/logo/90161Z-T14
 **Time:** about 45 minutes (estimate): Part A 10, Part B 35.
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T11
 **Changes:** imports one flow into my Power Automate. The flow creates test lists and a test group named "PFM Rights Probe ..." on the site and deletes them at the end; the deleted lists stay in the site recycle bin, where I may empty them. It adds one result file to the site's Documents library.
-Part B runs as a form in Round R09 (check "T11 Part B"); the rows below are the same. Part A, the probe flow:
+Part B runs as a form in the current round (check "T11 Part B"); the rows below are the same. Part A, the probe flow:
 1. Save this file into the T11 folder:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/flow/packages/90161Z-T11-rights-probe-r1.zip
 2. Power Automate: My flows > Import > Import Package (Legacy). Pick the file. For the SharePoint connection, pick my existing one. Import.
@@ -125,7 +123,7 @@ Report: reply in the Claude chat: the changes I want, and whether each brief may
 
 ## Task 12: color sources, r1 (open, 12 Nov 26)
 
-**For:** these 3 public documents set the official Air Force and ANG colors for the briefs and the app. Claude cannot open Air Force websites from the cloud. The current round (R08 or later) downloads all 3 and attaches them to its e-mail: do this task only for a file the round reports as FETCH FAIL.
+**For:** these 3 public documents set the official Air Force and ANG colors for the briefs and the app. Claude cannot open Air Force websites from the cloud, and the sites block scripts (R09), so the current round (check "T12 color documents") opens a window with an Open button per document and Copy buttons for the folder and names, then attaches the files.
 **Time:** about 5 minutes (estimate).
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T12
 **Changes:** saves 3 files into T12. Nothing else.
@@ -142,7 +140,7 @@ Report: one e-mail, subject "90161Z T12 r1": the 3 files. They are public docume
 ## Task 9: e-Publishing pages for the numbering index, r1 (open, 11 Nov 26)
 
 **For:** Claude needs 3 saved e-Publishing pages to write the script that reads publication titles and numbers. Claude cannot open e-Publishing from the cloud. Decided 1A 2A: departmental, Air National Guard and my gaining MAJCOM publications.
-**Time:** about 20 minutes (estimate). Round R09 (check "T09 e-Publishing pages") opens the folder and a checklist and attaches the files: then skip the Report step below.
+**Time:** about 20 minutes (estimate). The current round (check "T09 e-Publishing pages") opens a window that says what to save, with Copy buttons for the folder and names, and attaches the files: then skip the Report step below.
 Folder: %USERPROFILE%\OneDrive - United States Air Force\90-161.Z\T09
 **Changes:** saves 3 files into T09. Nothing else.
 Steps:
@@ -173,6 +171,8 @@ Report: send only 90161Z-T07-result-r1.txt (seals by number, no names). Keep 901
 
 ## Done
 
+- Round R09 (13 Nov 26): window, inventory, renderer and PnP retest passed (PnP web login connected with full list rights); downloads were blocked, Task 9 names did not match, the Task 11 form stopped: fixed in R10. Details:
+https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-14-r09-results.md
 - Round R06, Deployer and cleanup (13 Nov 26): 4 of 4 pass; Copy script worked; cleanup recycled 4 files and 1 folder; the draft opened; the window did not (text mode), fix in R08. Details:
 https://raw.githubusercontent.com/rhope-ops/90-161.Z/main/docs/reviews/2026-11-13-r06-results.md
 - Round R05, Outlook draft (13 Nov 26): 4 of 4 pass; the draft opened with subject, summary and both files; the Window line came back empty (R06 uses a checkbox). Details:
