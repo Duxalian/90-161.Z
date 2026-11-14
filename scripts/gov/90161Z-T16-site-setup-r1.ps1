@@ -10,8 +10,9 @@
     a. Lists "PFM Publications" and "PFM Endorsements": item-level permissions. Sets read = all items (1) and edit =
        only the person's own items (2) when they are not already so.
     b. Site time zone: sets (UTC-06:00) Central Time (US and Canada), id 11, when it is another.
-    c. Site logo (only with -Logo, which the round passes): uploads T14\90161Z-T14-site-logo-tile-r2.png to the Site Assets
-       library and sets it as the site logo and logo thumbnail. Fallback if it reports FAIL: site Settings > Change the look > Header.
+    c. Site logo (only with -Logo, which the round passes): uploads T14\90161Z-T14-site-logo-r1.png (no fill, for the blue
+       header) and T14\90161Z-T14-site-logo-thumb-r1.png (navy, for white cards) to the Site Assets library and sets them as
+       the site logo and the logo thumbnail (PFM 14 Nov 26, option D). Fallback if it reports FAIL: site Settings > Change the look > Header.
     d. Seals: creates the document library "90-161.Z" and its folders "Seals" and "Seals/Prepared" when missing (no unique
        permissions); uploads the images from T07\Seals and T07\Seals\Prepared. An image already there is replaced.
     e. Probe result: if "90161Z-T11-rights-result-r3.json" (else r2) is in the site's default Documents library, copies it to
@@ -26,7 +27,8 @@
 #>
 param([string]$Id, [switch]$Logo, [switch]$NoPause)
 $task = 'T16'
-$TileName = '90161Z-T14-site-logo-tile-r2.png'
+$LogoName = '90161Z-T14-site-logo-r1.png'
+$ThumbName = '90161Z-T14-site-logo-thumb-r1.png'
 $Images = @('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tif', '.tiff')
 
 # >>> task-common: generated from scripts/gov/src/task-common.ps1 by scripts/build_task_scripts.py (do not edit)
@@ -217,23 +219,25 @@ try {
     if (-not $Logo) { Add-Line 'c-logo' 'SKIP' 'switch -Logo not given' }
     else {
       Add-Item 'c-logo' {
-        $tile = Join-Path $root ('T14\' + $TileName)
-        if (-not (Test-Path -LiteralPath $tile -PathType Leaf)) { Add-Line 'c-logo' 'FAIL' ('logo file ' + $TileName + ' is not in the T14 folder'); return }
+        $logoFile = Join-Path $root ('T14\' + $LogoName)
+        $thumbFile = Join-Path $root ('T14\' + $ThumbName)
+        $missing = @(@($logoFile, $thumbFile) | Where-Object { -not (Test-Path -LiteralPath $_ -PathType Leaf) })
+        if ($missing.Count -gt 0) { Add-Line 'c-logo' 'FAIL' ('logo files missing in the T14 folder: ' + (($missing | ForEach-Object { Split-Path -Leaf $_ }) -join ', ')); return }
         $assets = @(Get-PnPList -Includes RootFolder -ErrorAction Stop | Where-Object { $_.Title -eq 'Site Assets' })[0]
         if (-not $assets) { Add-Line 'c-logo' 'FAIL' 'Site Assets library not found. Fallback: Change the look > Header'; return }
-        $f = Add-PnPFile -Path $tile -Folder $assets.RootFolder.ServerRelativeUrl -ErrorAction Stop
-        $url = $f.ServerRelativeUrl
+        $url = (Add-PnPFile -Path $logoFile -Folder $assets.RootFolder.ServerRelativeUrl -ErrorAction Stop).ServerRelativeUrl
+        $thumbUrl = (Add-PnPFile -Path $thumbFile -Folder $assets.RootFolder.ServerRelativeUrl -ErrorAction Stop).ServerRelativeUrl
         $how = ''
         $cmd = Get-Command Set-PnPWebHeader -ErrorAction SilentlyContinue
         if ($cmd -and $cmd.Parameters.ContainsKey('SiteLogoUrl')) {
           try {
             $a = @{ SiteLogoUrl = $url; ErrorAction = 'Stop' }
-            if ($cmd.Parameters.ContainsKey('SiteThumbnailUrl')) { $a.SiteThumbnailUrl = $url }
+            if ($cmd.Parameters.ContainsKey('SiteThumbnailUrl')) { $a.SiteThumbnailUrl = $thumbUrl }
             Set-PnPWebHeader @a; $how = 'Set-PnPWebHeader' + $(if ($a.ContainsKey('SiteThumbnailUrl')) { ' (logo and thumbnail)' } else { ' (logo only)' })
           } catch { $how = '' }
         }
         if (-not $how) {
-          try { Set-PnPSite -LogoFilePath $tile -ErrorAction Stop; $how = 'Set-PnPSite -LogoFilePath' } catch { $how = '' }
+          try { Set-PnPSite -LogoFilePath $logoFile -ErrorAction Stop; $how = 'Set-PnPSite -LogoFilePath' } catch { $how = '' }
         }
         if (-not $how) {
           try { $ctx = Get-PnPContext; $w = $ctx.Web; $w.SiteLogoUrl = $url; $w.Update(); $ctx.ExecuteQuery(); $how = 'CSOM Web.SiteLogoUrl (logo only)' } catch { $how = '' }

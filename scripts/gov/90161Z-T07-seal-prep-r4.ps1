@@ -4,7 +4,8 @@
 .DESCRIPTION
   Uses this computer's profile folder as the DODID (no question). r4 (PFM 14 Nov 26, fewer manual steps): with no
   -SealDir it uses the T07\Seals folder; when that has no images it looks in the default Outlook Inbox (last 14 days,
-  newest first) for a mail whose subject starts "90161Z T07 seals" and saves its image attachments into T07\Seals.
+  newest first) for every mail whose subject starts "90161Z T07 seals" (Claude sends seals split over several mails) and
+  saves their image attachments into T07\Seals; for a file name in more than one mail, the newest mail wins.
   Outlook is read by Subject and Attachments only (never sender or recipient properties, which raise the Outlook
   address prompt). It changes nothing in Outlook. Writes: files in T07\Seals, T07\Seals\Prepared, the result and key
   files. For each image in the seal folder:
@@ -196,14 +197,15 @@ try {
             if ($m.Class -ne 43) { continue }
             if ($m.ReceivedTime -lt $cut) { break }
             if (([string]$m.Subject).Trim() -notlike '90161Z T07 seals*') { continue }
-            $found = 1
+            $found++
             foreach ($att in $m.Attachments) {
               $leafName = Split-Path -Leaf ([string]$att.FileName)
-              if ($Extensions -contains [System.IO.Path]::GetExtension($leafName).ToLowerInvariant()) {
-                $att.SaveAsFile((Join-Path $sealDir $leafName)); $saved++
+              $target = Join-Path $sealDir $leafName
+              if ($Extensions -contains [System.IO.Path]::GetExtension($leafName).ToLowerInvariant() -and
+                  -not (Test-Path -LiteralPath $target -PathType Leaf)) {   # newest mail wins for a file name
+                $att.SaveAsFile($target); $saved++
               }
             }
-            break   # newest matching mail only
           } catch { $null = $_ }
         }
       } catch {
