@@ -7,7 +7,7 @@ SharePoint shows on white cards (PFM 14 Nov 26, option D). Run: python3 scripts/
 import math, pathlib
 
 S, D = 29.0, 39.0          # frame half-side; diamond half-diagonal
-SW, GAP = 5.0, 1.6         # stroke width; clear space each side of the over-stroke
+SW, GAP = 8.0, 1.6         # stroke width (r2, PFM 14 Nov 26: variant A bold white; r1 was 5.0 and showed only a thin border at 64 px); clear space each side of the over-stroke
 OUTER, INNER = "#FFFFFF", "#CFE0FF"          # for the blue header
 NAVY, MID = "#0B3D91", "#4A78C2"               # for white cards (thumbnail)
 VB = 45                    # viewBox half-size (diamond tip + miter = 42.5)

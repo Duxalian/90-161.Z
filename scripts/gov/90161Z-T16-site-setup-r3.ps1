@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  90-161.Z Task 16 site setup, r2. Windows PowerShell 5.1, the installed PnP.PowerShell 1.12.0 (no other module).
+  90-161.Z Task 16 site setup, r3 (R14: logo r2, variant A bold white, PFM 14 Nov 26). Windows PowerShell 5.1, the installed PnP.PowerShell 1.12.0 (no other module).
 .DESCRIPTION
   What it is for: sets up the new SharePoint site in one run, so the PFM does not click it by hand (DECISIONS 14 Nov 26:
   optional Deployer PnP write steps, allowed because the read-only PnP test passed). About 10 minutes (an estimate).
@@ -10,8 +10,8 @@
     a. Lists "PFM Publications" and "PFM Endorsements": item-level permissions. Sets read = all items (1) and edit =
        only the person's own items (2) when they are not already so.
     b. Site time zone: sets (UTC-06:00) Central Time (US and Canada), id 11, when it is another.
-    c. Site logo (only with -Logo, which the round passes): uploads T14\90161Z-T14-site-logo-r1.png (no fill, for the blue
-       header) and T14\90161Z-T14-site-logo-thumb-r1.png (navy, for white cards) to the Site Assets library and sets them as
+    c. Site logo (only with -Logo, which the round passes): uploads T14\90161Z-T14-site-logo-r2.png (no fill, for the blue
+       header) and T14\90161Z-T14-site-logo-thumb-r2.png (navy, for white cards) to the Site Assets library and sets them as
        the site logo and the logo thumbnail (PFM 14 Nov 26, option D). Fallback if it reports FAIL: site Settings > Change the look > Header.
     d. Seals: creates the document library "90-161.Z" and its folders "Seals" and "Seals/Prepared" when missing (no unique
        permissions); uploads the images from T07\Seals and T07\Seals\Prepared. An image already there is replaced.
@@ -25,13 +25,13 @@
   FAIL; one item never stops the others. Counts only: no list, seal or file names are written (seal names are unit names).
   The site address is kept only on this computer in Config\90161Z-site.txt; every output line shows it as <SITE> and the DODID
   as <DODID>. Error text is cut to 160 characters.
-  Output: 90161Z-T16-setup-r2.txt in the T16 folder (send this).
+  Output: 90161Z-T16-setup-r3.txt in the T16 folder (send this).
   Parameters (used by the 90-161.Z Deployer): -Id, -Logo, -ProbeWaitMinutes (default 15), -NoPause.
 #>
 param([string]$Id, [switch]$Logo, [int]$ProbeWaitMinutes = 15, [switch]$NoPause)
 $task = 'T16'
-$LogoName = '90161Z-T14-site-logo-r1.png'
-$ThumbName = '90161Z-T14-site-logo-thumb-r1.png'
+$LogoName = '90161Z-T14-site-logo-r2.png'
+$ThumbName = '90161Z-T14-site-logo-thumb-r2.png'
 $Images = @('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tif', '.tiff')
 
 # >>> task-common: generated from scripts/gov/src/task-common.ps1 by scripts/build_task_scripts.py (do not edit)
@@ -183,7 +183,7 @@ try {
   $root = Split-Path -Parent $dir
   $configDir = Join-Path $root 'Config'
   $site = Get-SiteAddress $configDir
-  $lines.Add('TASK T16 site setup r2, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', logo-switch=' + [bool]$Logo + ', probe-wait-minutes=' + $ProbeWaitMinutes)
+  $lines.Add('TASK T16 site setup r3, ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ', logo-switch=' + [bool]$Logo + ', probe-wait-minutes=' + $ProbeWaitMinutes)
   $mod = @(Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending)
   if (-not $mod.Count) { throw 'PNP not installed: PnP.PowerShell is not on this computer.' }
   $null = & { Import-Module PnP.PowerShell -RequiredVersion $mod[0].Version -DisableNameChecking } *>&1
@@ -319,7 +319,7 @@ try {
   $lines.Add('STOPPED: ' + $m.Substring(0, [Math]::Min(300, $m.Length)))
 } finally {
   $masked = @($lines | ForEach-Object { ConvertTo-Masked (Hide-Site $_ $site) $secret })
-  try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-setup-r2.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }
+  try { Set-Content -LiteralPath (Join-Path $dir '90161Z-T16-setup-r3.txt') -Value $masked -Encoding UTF8 } catch { $null = $_ }
   $masked | ForEach-Object { Write-Host $_ }
   if (-not $NoPause) { [void](Read-Host 'Press Enter to close') }
 }

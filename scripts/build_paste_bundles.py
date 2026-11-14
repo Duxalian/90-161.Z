@@ -356,10 +356,13 @@ function Show-GuideDialog($Step, [string]$File, [string]$Url, [string]$UrlFile) 
   $d.Text = '90-161.Z Deployer - ' + $Step.Name
   $d.AutoScaleDimensions = New-Object System.Drawing.SizeF(96, 96); $d.AutoScaleMode = 'Dpi'
   $d.Font = New-Object System.Drawing.Font('Segoe UI', 10)
-  $d.StartPosition = 'CenterScreen'; $d.ClientSize = New-Object System.Drawing.Size(820, 520); $d.MinimumSize = New-Object System.Drawing.Size(600, 420); $d.MinimizeBox = $false; $d.TopMost = $true
+  # R14 (PFM 14 Nov 26: the R13 window could not be minimized and covered the browser): a normal window that can be
+  # minimized, never always-on-top, placed as a narrow panel at the right edge of the screen so the browser stays visible.
+  $d.StartPosition = 'Manual'; $d.ClientSize = New-Object System.Drawing.Size(460, 640); $d.MinimumSize = New-Object System.Drawing.Size(380, 360)
+  $d.MinimizeBox = $true; $d.MaximizeBox = $false; $d.ShowInTaskbar = $true; $d.TopMost = $false
   $g = New-Object System.Windows.Forms.TableLayoutPanel
   $g.AutoScroll = $true; $g.Padding = New-Object System.Windows.Forms.Padding(12); $g.ColumnCount = 1; $g.RowCount = 5; $g.Dock = 'Fill'
-  $wrap = New-Object System.Drawing.Size(760, 0)
+  $wrap = New-Object System.Drawing.Size(410, 0)
   $head = New-Object System.Windows.Forms.Label
   $head.AutoSize = $true; $head.MaximumSize = $wrap; $head.Text = $Step.Name
   try { $head.Font = New-Object System.Drawing.Font($d.Font.FontFamily, [single]11, [Enum]::Parse(('System.Drawing.FontStyle' -as [type]), 'Bold')) } catch { $null = $_ }
@@ -367,14 +370,14 @@ function Show-GuideDialog($Step, [string]$File, [string]$Url, [string]$UrlFile) 
   $body.AutoSize = $true; $body.MaximumSize = $wrap; $body.Margin = New-Object System.Windows.Forms.Padding(3, 8, 3, 8)
   $body.Text = (@($Step.Guide) -join "`r`n")
   $urlPanel = New-Object System.Windows.Forms.FlowLayoutPanel
-  $urlPanel.AutoSize = $true; $urlPanel.WrapContents = $true
+  $urlPanel.AutoSize = $true; $urlPanel.WrapContents = $true; $urlPanel.MaximumSize = $wrap
   $urlLabel = New-Object System.Windows.Forms.Label
   $urlLabel.Text = 'Address to open:'; $urlLabel.AutoSize = $true; $urlLabel.Margin = New-Object System.Windows.Forms.Padding(3, 7, 3, 3)
   $urlBox = New-Object System.Windows.Forms.TextBox
-  $urlBox.Width = 460; $urlBox.Text = $Url
+  $urlBox.Width = 400; $urlBox.Text = $Url
   $urlPanel.Controls.AddRange(@($urlLabel, $urlBox))
   $btns = New-Object System.Windows.Forms.FlowLayoutPanel
-  $btns.AutoSize = $true; $btns.WrapContents = $true
+  $btns.AutoSize = $true; $btns.WrapContents = $true; $btns.MaximumSize = $wrap
   $mk = { param($text) $b = New-Object System.Windows.Forms.Button; $b.Text = $text; $b.AutoSize = $true; $b.MinimumSize = New-Object System.Drawing.Size(110, 32); $b }
   $openB = & $mk 'Open in browser'
   $copyB = & $mk 'Copy file path'
@@ -397,7 +400,9 @@ function Show-GuideDialog($Step, [string]$File, [string]$Url, [string]$UrlFile) 
   $copyB.Add_Click({ $note.Text = $(if (Copy-TextToClipboard $File) { 'File path copied. Paste it into the File name box of the upload window (Ctrl+V).' } else { 'The clipboard is busy. Select Copy file path again.' }) })
   $showB.Add_Click({ Start-Process -FilePath 'explorer.exe' -ArgumentList ('/select,"' + $File + '"') })
   $d.CancelButton = $skipB
-  $d.Add_Shown({ $openB.Focus() | Out-Null })   # Enter on the focused button opens the browser; Done needs a deliberate click
+  $d.Add_Shown({
+    try { $wa = [System.Windows.Forms.Screen]::FromControl($d).WorkingArea; $d.Height = [Math]::Min($d.Height, $wa.Height); $d.Left = $wa.Right - $d.Width; $d.Top = $wa.Top } catch { $null = $_ }
+    $openB.Focus() | Out-Null })   # Enter on the focused button opens the browser; Done needs a deliberate click
   $res = $d.ShowDialog()
   $d.Dispose()
   return ($res -eq 'OK')
